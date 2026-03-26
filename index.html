@@ -360,12 +360,12 @@ function renderDaily(){
   h += '<div class="tbl-wrap"><table id="tbl-daily">';
   h += '<thead><tr><th style="width:30px;text-align:center;">#</th><th data-col="name" data-dir="asc">제품명 <span class="arr">↕</span></th>';
   h += '<th data-col="cat">카테고리 <span class="arr">↕</span></th>';
-  h += '<th data-col="gmv" class="sorted" data-dir="desc">GMV <span class="arr">▼</span></th>';
-  h += '<th data-col="imp">노출 <span class="arr">↕</span></th>';
+  h += '<th data-col="gmv" class="sorted" data-dir="desc">GMV <span style="font-size:9px;color:#94a3b8;font-weight:400;">(백만원)</span> <span class="arr">▼</span></th>';
+  h += '<th data-col="imp">노출 <span style="font-size:9px;color:#94a3b8;font-weight:400;">(회)</span> <span class="arr">↕</span></th>';
   h += '<th data-col="ctr">CTR(%) <span class="arr">↕</span></th>';
   h += '<th data-col="benchCtr">카테고리 평균 CTR <span class="arr">↕</span></th>';
-  h += '<th data-col="pdp">PDP <span class="arr">↕</span></th>';
-  h += '<th data-col="purchase">구매자수 <span class="arr">↕</span></th>';
+  h += '<th data-col="pdp">PDP <span style="font-size:9px;color:#94a3b8;font-weight:400;">(회)</span> <span class="arr">↕</span></th>';
+  h += '<th data-col="purchase">구매자수 <span style="font-size:9px;color:#94a3b8;font-weight:400;">(건)</span> <span class="arr">↕</span></th>';
   h += '<th data-col="cvr">CVR(%) <span class="arr">↕</span></th>';
   h += '<th data-col="benchCvr">카테고리 평균 CVR <span class="arr">↕</span></th>';
   h += '</tr></thead><tbody>';
@@ -693,9 +693,9 @@ function renderWeekly(){
     h += '<th style="text-align:left;padding:6px 8px;">주차</th>';
     h += '<th style="text-align:left;padding:6px 8px;">프로모션</th>';
     h += '<th style="text-align:left;padding:6px 8px;">행사명</th>';
-    h += '<th style="text-align:right;padding:6px 8px;">PB GMV</th>';
+    h += '<th style="text-align:right;padding:6px 8px;">PB GMV <span style="font-size:9px;color:#94a3b8;font-weight:400;">(백만원)</span></th>';
     h += '<th style="text-align:right;padding:6px 8px;">vs 평시 평균</th>';
-    h += '<th style="text-align:right;padding:6px 8px;">3P GMV</th>';
+    h += '<th style="text-align:right;padding:6px 8px;">3P GMV <span style="font-size:9px;color:#94a3b8;font-weight:400;">(백만원)</span></th>';
     h += '<th style="text-align:right;padding:6px 8px;">vs 평시 평균</th>';
     h += '<th style="text-align:center;padding:6px 8px;">효과 판정</th>';
     h += '</tr></thead><tbody>';
@@ -831,8 +831,8 @@ function renderWeekly(){
     h += '<th style="text-align:left;padding:6px;cursor:pointer;" data-col="name">상품명 <span class="arr">↕</span></th>';
     h += '<th style="text-align:left;padding:6px;cursor:pointer;" data-col="cate">카테고리 <span class="arr">↕</span></th>';
     h += '<th style="text-align:center;padding:6px;cursor:pointer;" data-col="dealCnt">행사 횟수 <span class="arr">↕</span></th>';
-    h += '<th style="text-align:right;padding:6px;cursor:pointer;" data-col="dealAvg">행사일 평균 GMV <span class="arr">↕</span></th>';
-    h += '<th style="text-align:right;padding:6px;cursor:pointer;" data-col="nonAvg">비행사일 평균 GMV <span class="arr">↕</span></th>';
+    h += '<th style="text-align:right;padding:6px;cursor:pointer;" data-col="dealAvg">행사일 평균 GMV <span style="font-size:9px;color:#94a3b8;font-weight:400;">(백만원)</span> <span class="arr">↕</span></th>';
+    h += '<th style="text-align:right;padding:6px;cursor:pointer;" data-col="nonAvg">비행사일 평균 GMV <span style="font-size:9px;color:#94a3b8;font-weight:400;">(백만원)</span> <span class="arr">↕</span></th>';
     h += '<th style="text-align:right;padding:6px;cursor:pointer;" data-col="lift">리프트 <span class="arr">↕</span></th>';
     h += '<th style="text-align:center;padding:6px;cursor:pointer;" data-col="effect">효과 <span class="arr">↕</span></th>';
     h += '</tr></thead><tbody>';
@@ -931,11 +931,11 @@ function renderWeekly(){
     t += '<th style="width:30px;text-align:center;">#</th>';
     t += '<th data-col="name" data-dir="asc">제품명 <span class="arr">↕</span></th>';
     t += '<th data-col="cat">카테고리 <span class="arr">↕</span></th>';
-    t += '<th data-col="gmv" data-dir="desc" class="sorted">GMV <span class="arr">▼</span></th>';
-    t += '<th data-col="imp">노출 <span class="arr">↕</span></th>';
+    t += '<th data-col="gmv" data-dir="desc" class="sorted">GMV <span style="font-size:9px;color:#94a3b8;font-weight:400;">(백만원)</span> <span class="arr">▼</span></th>';
+    t += '<th data-col="imp">노출 <span style="font-size:9px;color:#94a3b8;font-weight:400;">(회)</span> <span class="arr">↕</span></th>';
     t += '<th data-col="ctr">CTR(%) (PV기준) <span class="arr">↕</span></th>';
-    t += '<th data-col="pdp">PDP <span class="arr">↕</span></th>';
-    t += '<th data-col="buy">구매자수 <span class="arr">↕</span></th>';
+    t += '<th data-col="pdp">PDP <span style="font-size:9px;color:#94a3b8;font-weight:400;">(회)</span> <span class="arr">↕</span></th>';
+    t += '<th data-col="buy">구매자수 <span style="font-size:9px;color:#94a3b8;font-weight:400;">(건)</span> <span class="arr">↕</span></th>';
     t += '<th data-col="cvr">CVR(%) (PV기준) <span class="arr">↕</span></th>';
     t += '<th data-col="bench">카테고리 평균 CVR <span class="arr">↕</span></th>';
     t += '<th data-col="priceband-bench">동가격대 3P CVR <span class="arr">↕</span></th>';
@@ -1133,8 +1133,8 @@ function renderWeekly(){
       ins += '<thead><tr style="border-bottom:2px solid #e2e8f0;background:#fffbeb;">';
       ins += '<th style="text-align:left;padding:6px;">상품명</th>';
       ins += '<th style="text-align:center;padding:6px;">행사 횟수</th>';
-      ins += '<th style="text-align:right;padding:6px;">행사일 평균 GMV</th>';
-      ins += '<th style="text-align:right;padding:6px;">비행사일 평균 GMV</th>';
+      ins += '<th style="text-align:right;padding:6px;">행사일 평균 GMV <span style="font-size:9px;color:#94a3b8;">(백만원)</span></th>';
+      ins += '<th style="text-align:right;padding:6px;">비행사일 평균 GMV <span style="font-size:9px;color:#94a3b8;">(백만원)</span></th>';
       ins += '<th style="text-align:right;padding:6px;">리프트</th>';
       ins += '<th style="text-align:center;padding:6px;">효과</th>';
       ins += '</tr></thead><tbody>';
@@ -1357,7 +1357,7 @@ function renderMonthly(){
   // Month-over-month comparison table
   h += '<div class="section"><h4>📊 월별 핵심 지표 비교</h4>';
   h += '<table style="width:100%;border-collapse:collapse;font-size:13px;">';
-  h += '<thead><tr style="border-bottom:2px solid #e2e8f0;"><th style="text-align:left;padding:8px;">월</th><th style="text-align:right;padding:8px;">GMV</th><th style="text-align:right;padding:8px;">가구PB</th><th style="text-align:right;padding:8px;">리빙PB</th><th style="text-align:right;padding:8px;">MoM</th></tr></thead>';
+  h += '<thead><tr style="border-bottom:2px solid #e2e8f0;"><th style="text-align:left;padding:8px;">월</th><th style="text-align:right;padding:8px;">GMV <span style="font-size:9px;color:#94a3b8;font-weight:400;">(백만원)</span></th><th style="text-align:right;padding:8px;">가구PB <span style="font-size:9px;color:#94a3b8;font-weight:400;">(백만원)</span></th><th style="text-align:right;padding:8px;">리빙PB <span style="font-size:9px;color:#94a3b8;font-weight:400;">(백만원)</span></th><th style="text-align:right;padding:8px;">MoM</th></tr></thead>';
   h += '<tbody>';
   months.forEach((m,i)=>{
     const mS2 = ms[m]||{};
@@ -1416,7 +1416,7 @@ function renderMonthly(){
   h += '<th style="text-align:left;padding:8px;">월</th>';
   h += '<th style="text-align:center;padding:8px;">빅프로모 주수</th>';
   h += '<th style="text-align:center;padding:8px;">평시 주수</th>';
-  h += '<th style="text-align:right;padding:8px;">GMV</th>';
+  h += '<th style="text-align:right;padding:8px;">GMV <span style="font-size:9px;color:#94a3b8;font-weight:400;">(백만원)</span></th>';
   h += '<th style="text-align:center;padding:8px;">스오딜 상품수</th>';
   h += '<th style="text-align:center;padding:8px;">스오딜 횟수</th>';
   h += '</tr></thead><tbody>';
@@ -1474,11 +1474,11 @@ function renderMonthly(){
     t += '<th style="width:30px;text-align:center;">#</th>';
     t += '<th data-col="name" data-dir="asc">제품명 <span class="arr">↕</span></th>';
     t += '<th data-col="cat">카테고리 <span class="arr">↕</span></th>';
-    t += '<th data-col="gmv" data-dir="desc" class="sorted">GMV <span class="arr">▼</span></th>';
-    t += '<th data-col="imp">노출 <span class="arr">↕</span></th>';
+    t += '<th data-col="gmv" data-dir="desc" class="sorted">GMV <span style="font-size:9px;color:#94a3b8;font-weight:400;">(백만원)</span> <span class="arr">▼</span></th>';
+    t += '<th data-col="imp">노출 <span style="font-size:9px;color:#94a3b8;font-weight:400;">(회)</span> <span class="arr">↕</span></th>';
     t += '<th data-col="ctr">CTR(%) (PV기준) <span class="arr">↕</span></th>';
-    t += '<th data-col="pdp">PDP <span class="arr">↕</span></th>';
-    t += '<th data-col="buy">구매자수 <span class="arr">↕</span></th>';
+    t += '<th data-col="pdp">PDP <span style="font-size:9px;color:#94a3b8;font-weight:400;">(회)</span> <span class="arr">↕</span></th>';
+    t += '<th data-col="buy">구매자수 <span style="font-size:9px;color:#94a3b8;font-weight:400;">(건)</span> <span class="arr">↕</span></th>';
     t += '<th data-col="cvr">CVR(%) (PV기준) <span class="arr">↕</span></th>';
     t += '<th data-col="bench">카테고리 평균 CVR <span class="arr">↕</span></th>';
     t += '</tr></thead><tbody>';
@@ -1539,8 +1539,8 @@ function renderMonthly(){
       t += '<div class="tbl-wrap"><table id="tbl-monthly-sodeal"><thead><tr>';
       t += '<th style="padding:6px;">상품명</th>';
       t += '<th style="text-align:center;padding:6px;">행사 횟수</th>';
-      t += '<th style="text-align:right;padding:6px;">월간 GMV</th>';
-      t += '<th style="text-align:right;padding:6px;">CVR</th>';
+      t += '<th style="text-align:right;padding:6px;">월간 GMV <span style="font-size:9px;color:#94a3b8;">(백만원)</span></th>';
+      t += '<th style="text-align:right;padding:6px;">CVR <span style="font-size:9px;color:#94a3b8;">(%)</span></th>';
       t += '</tr></thead><tbody>';
       mDealProds.forEach(dp=>{
         t += '<tr>';
