@@ -107,6 +107,12 @@ tr:hover{background:#f1f5f9;}
     <span><span class="cvr-pill cvr-y" style="font-size:11px;padding:2px 8px;">노랑</span> 평균의 80~100%</span>
     <span><span class="cvr-pill cvr-r" style="font-size:11px;padding:2px 8px;">빨강</span> 평균의 80% 미만</span>
   </div>
+  <div style="background:#fff;border-radius:8px;padding:12px 20px;margin:8px 0 0;font-size:11px;color:#64748b;box-shadow:0 1px 3px rgba(0,0,0,.06);line-height:1.7;">
+    <span style="font-weight:700;color:#334155;">📐 벤치마크 산출 기준:</span>
+    <span><b>카테고리 평균 CTR/CVR</b> = 동일 cate_d1/cate_d2의 3P(비PB) 상품 PV 기반 평균. 데이터 소스: ba_preserved.comm_product_perform</span>
+    <span style="margin-left:12px;"><b>동가격대 3P CVR</b> (주간 탭 전용) = 동일 cate_d2 + 동일 가격대(~20만/20~50만/50~100만/100만+)의 3P 상품 주간 CVR 평균</span>
+    <span style="margin-left:12px;"><span class="price-tag" style="font-size:10px;">가격대</span> = 해당 상품의 판매가 기준 가격대 구간</span>
+  </div>
   <div class="panel on" id="panel-daily"></div>
   <div class="panel" id="panel-weekly"></div>
   <div class="panel" id="panel-monthly"></div>
@@ -204,6 +210,29 @@ function renderDaily(){
   // Insights
   h += '<div class="insight-box">';
   h += '<h3>📊 일간 분석 인사이트 — 2026년 3월 24일 (월)</h3>';
+
+  // Promo & deal context for today
+  const todayDate = dd.date;
+  const todayWeekStart = (()=>{const d=new Date(todayDate);d.setDate(d.getDate()-d.getDay());return d.toISOString().slice(0,10);})();
+  const todayPromo = (D.weekly.promoMap||{})[todayWeekStart]||'평시주간';
+  const todayPromoDetail = (D.weekly.promoDetails||{})[todayWeekStart]||'';
+  const allDealDates = D.weekly.productDealDates||{};
+  const todayDealProds = Object.keys(allDealDates).filter(pid=>allDealDates[pid].includes(todayDate));
+  h += '<div class="section"><h4>🎪 오늘의 프로모션/행사 상황</h4>';
+  h += '<p>이번 주: <span class="hl">'+todayPromo+'</span>'+(todayPromoDetail?' ('+todayPromoDetail+')':'')+'. ';
+  if(todayDealProds.length>0){
+    h += '오늘('+todayDate+') 스오딜 진행 상품: <span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-weight:700;">'+todayDealProds.length+'개</span>. ';
+    const dealNames = todayDealProds.slice(0,3).map(pid=>{
+      const pn = prods.find(p=>String(p.id)===String(pid));
+      return pn ? pn.name.substring(0,25) : pid;
+    });
+    h += '대표: '+dealNames.map(n=>'<span class="hl">'+n+'</span>').join(', ');
+    if(todayDealProds.length>3) h += ' 외 '+(todayDealProds.length-3)+'개';
+    h += '.</p>';
+  } else {
+    h += '오늘 스오딜 진행 상품은 없습니다.</p>';
+  }
+  h += '</div>';
 
   // GMV analysis
   h += '<div class="section"><h4>📈 매출 현황</h4>';
@@ -309,9 +338,14 @@ function renderDaily(){
     const bct = s(p.benchCtr,null);
     const cls = cvrCls(cv,bc);
     const ctrCls2 = cvrCls(s(p.ctr,null),bct);
+    const dPbData=D.priceBandData||{};
+    const dPBand=(dPbData.pbPriceBand||{})[p.id]||{};
+    const dDealDates=(D.weekly.productDealDates||{})[p.id]||[];
+    const isDealToday=dDealDates.includes(dd.date);
+    const dPname=p.name+(dPBand.band?'<span class="price-tag">'+dPBand.band+'</span>':'')+(isDealToday?'<span style="background:#fef3c7;color:#92400e;font-size:9px;padding:1px 4px;border-radius:3px;margin-left:4px;">스오딜</span>':'');
     h += '<tr>';
     h += '<td style="text-align:center;color:#94a3b8;font-size:11px;">'+dailyRowNum+'</td>';
-    h += '<td title="'+p.name+'">'+p.name+'</td>';
+    h += '<td title="'+p.name+'">'+dPname+'</td>';
     h += '<td>'+p.cate1+'/'+p.cate2+'</td>';
     h += '<td>'+fM(p.gmv)+'</td>';
     h += '<td>'+fN(p.imp)+'</td>';
@@ -1007,6 +1041,85 @@ function renderMonthly(){
     h += '</tr>';
   });
   h += '</tbody></table></div>';
+
+  // ── 월간 프로모션/스오딜 분석 ──
+  h += '<div class="section"><h4>🎪 월간 프로모션/스오딜 분석</h4>';
+  const moPromoMap = D.weekly.promoMap || {};
+  const moWeeks = D.weekly.weeks || [];
+  const moWs = D.weekly.summary || {};
+  const moDealDates = D.weekly.productDealDates || {};
+
+  // Count promo weeks per month
+  const monthPromoStats = {};
+  months.forEach(m2=>{
+    const mStart = m2;
+    const mEndDate = new Date(m2);
+    mEndDate.setMonth(mEndDate.getMonth()+1);
+    const mEnd = mEndDate.toISOString().slice(0,10);
+    let bigP=0,normal=0,totalW=0,totalDealCount=0;
+    moWeeks.forEach(w=>{
+      if(w>=mStart&&w<mEnd){
+        totalW++;
+        const pt=moPromoMap[w]||'';
+        if(pt==='빅프로모션'||pt==='스페셜브랜드위크') bigP++;
+        else normal++;
+      }
+    });
+    // Count deal days in this month
+    Object.keys(moDealDates).forEach(pid=>{
+      moDealDates[pid].forEach(d=>{if(d>=mStart&&d<mEnd) totalDealCount++;});
+    });
+    // Count unique deal products in this month
+    let dealProdCount = 0;
+    Object.keys(moDealDates).forEach(pid=>{
+      if(moDealDates[pid].some(d=>d>=mStart&&d<mEnd)) dealProdCount++;
+    });
+    monthPromoStats[m2] = {bigP:bigP, normal:normal, totalW:totalW, dealCount:totalDealCount, dealProdCount:dealProdCount};
+  });
+
+  h += '<table style="width:100%;border-collapse:collapse;font-size:13px;">';
+  h += '<thead><tr style="border-bottom:2px solid #e2e8f0;background:#f8fafc;">';
+  h += '<th style="text-align:left;padding:8px;">월</th>';
+  h += '<th style="text-align:center;padding:8px;">빅프로모 주수</th>';
+  h += '<th style="text-align:center;padding:8px;">평시 주수</th>';
+  h += '<th style="text-align:right;padding:8px;">GMV</th>';
+  h += '<th style="text-align:center;padding:8px;">스오딜 상품수</th>';
+  h += '<th style="text-align:center;padding:8px;">스오딜 횟수</th>';
+  h += '</tr></thead><tbody>';
+  months.forEach(m2=>{
+    const st = monthPromoStats[m2]||{};
+    const mS3 = ms[m2]||{};
+    const hasBig = st.bigP>0;
+    const rowBg = hasBig?'background:#fef2f2;':'';
+    h += '<tr style="border-bottom:1px solid #f1f5f9;'+rowBg+'">';
+    h += '<td style="padding:8px;font-weight:600;">'+monthLabel(m2)+'</td>';
+    h += '<td style="text-align:center;padding:8px;"><span style="color:'+(st.bigP>0?'#dc2626':'#64748b')+';font-weight:700;">'+st.bigP+'주</span></td>';
+    h += '<td style="text-align:center;padding:8px;">'+st.normal+'주</td>';
+    h += '<td style="text-align:right;padding:8px;font-weight:600;">'+fMw(s(mS3.total,0))+'백만원</td>';
+    h += '<td style="text-align:center;padding:8px;"><span style="background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:3px;font-weight:600;">'+s(st.dealProdCount,0)+'개</span></td>';
+    h += '<td style="text-align:center;padding:8px;">'+s(st.dealCount,0)+'회</td>';
+    h += '</tr>';
+  });
+  h += '</tbody></table>';
+
+  // Insight text
+  const latestMoStat = monthPromoStats[latest]||{};
+  const prevMoStat = monthPromoStats[prev]||{};
+  h += '<div style="margin-top:12px;padding:12px 16px;background:#f8fafc;border-radius:8px;border-left:3px solid #6366f1;">';
+  h += '<p style="font-weight:700;color:#4338ca;margin-bottom:6px;">💡 월간 프로모션 인사이트</p>';
+  if(latestMoStat.bigP>prevMoStat.bigP){
+    h += '<p style="font-size:13px;color:#475569;">'+monthLabel(latest)+'은 빅프로모션이 <span class="hl">'+latestMoStat.bigP+'주</span>로 전월('+prevMoStat.bigP+'주) 대비 증가했습니다. 프로모션 효과로 인한 매출 상승 기대됩니다.</p>';
+  }else if(latestMoStat.bigP<prevMoStat.bigP){
+    h += '<p style="font-size:13px;color:#475569;">'+monthLabel(latest)+'은 빅프로모션이 <span class="hl">'+latestMoStat.bigP+'주</span>로 전월('+prevMoStat.bigP+'주) 대비 감소했습니다. 평시 기저수요 중심의 실적입니다.</p>';
+  }else{
+    h += '<p style="font-size:13px;color:#475569;">'+monthLabel(latest)+'은 빅프로모션 '+latestMoStat.bigP+'주로 전월과 동일합니다.</p>';
+  }
+  if(latestMoStat.dealProdCount>0){
+    h += '<p style="font-size:13px;color:#475569;margin-top:4px;">스오딜: <span class="hl">'+latestMoStat.dealProdCount+'개 상품</span>이 총 '+latestMoStat.dealCount+'회 참여. '+(prevMoStat.dealProdCount>0?'전월('+prevMoStat.dealProdCount+'개 상품, '+prevMoStat.dealCount+'회) 대비 '+(latestMoStat.dealCount>prevMoStat.dealCount?'확대':'축소')+' 운영.':'')+'</p>';
+  }
+  h += '</div>';
+  h += '</div>';
+
   h += '</div>';
 
   h += '<div id="monthlyTableWrap"></div>';
@@ -1047,9 +1160,12 @@ function renderMonthly(){
       const cls=cvrCls(p.mCvr,p.mBench);
       const ctrN=ctr?parseFloat(ctr):null;
       const ctrCls2=cvrCls(ctrN,null);
+      const moPb=D.priceBandData||{};
+      const moBand=(moPb.pbPriceBand||{})[p.id]||{};
+      const moPname=p.name+(moBand.band?'<span class="price-tag">'+moBand.band+'</span>':'');
       t += '<tr>';
       t += '<td style="text-align:center;color:#94a3b8;font-size:11px;">'+moRowNum+'</td>';
-      t += '<td title="'+p.name+'">'+p.name+'</td>';
+      t += '<td title="'+p.name+'">'+moPname+'</td>';
       t += '<td>'+p.cate1+'/'+p.cate2+'</td>';
       t += '<td>'+fMw(p.mGmv)+'</td>';
       t += '<td>'+fN(p.mImp)+'</td>';
