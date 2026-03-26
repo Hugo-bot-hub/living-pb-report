@@ -93,7 +93,7 @@ tr:hover{background:#f1f5f9;}
 <body>
 <div class="hdr">
   <h1>오늘의집 PB 전체 상품 분석</h1>
-  <div class="sub">PB 상품 <b>103개</b> · 가구PB 81 / 리빙PB 22 · 최종 업데이트 <b>2026-03-25</b></div>
+  <div class="sub">PB 상품 <b>103개</b> · 가구PB 81 / 리빙PB 22 · 최종 업데이트 <b>2026-03-26</b></div>
 </div>
 <div class="tabs" id="tabBar">
   <div class="tab on" data-t="daily">일간 분석</div>
@@ -353,7 +353,7 @@ function renderDaily(){
     else{bn=oCvr2>1.5?'CVR 양호 ('+oCvr2.toFixed(2)+'%)':'CVR 점검 필요 ('+oCvr2.toFixed(2)+'%)';rc=oCvr2>1.5?'현 전략 유지':'PDP/리뷰/가격 점검';}
     h+='<div style="margin:12px 0;padding:16px;background:#f8fafc;border-radius:8px;border-left:3px solid '+(orgName==='가구PB'?'#3b82f6':'#f59e0b')+';">';
     h+='<p style="font-weight:700;font-size:15px;margin-bottom:10px;">'+orgName+'</p>';
-    h+='<table style="width:100%;font-size:13px;border-collapse:collapse;">';
+    h+='<table style="width:100%;font-size:13px;border-collapse:collapse;table-layout:fixed;">';
     h+='<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">노출</td><td style="text-align:right;font-weight:600;">'+fN(oI)+'</td><td style="padding-left:16px;color:#64748b;">PDP</td><td style="text-align:right;font-weight:600;">'+fN(oP2)+'</td><td style="padding-left:16px;color:#64748b;">구매</td><td style="text-align:right;font-weight:600;">'+oB+'명</td></tr>';
     h+='<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">PB CTR</td><td style="text-align:right;font-weight:600;">'+oCtr2.toFixed(2)+'%</td><td style="padding-left:16px;color:#64748b;">3P 평균 CTR</td><td style="text-align:right;font-weight:600;">'+(bCtr2>0?bCtr2.toFixed(2)+'%':'—')+'</td><td style="padding-left:16px;color:#64748b;">Gap</td><td style="text-align:right;font-weight:600;color:'+(bCtr2>0?(oCtr2>=bCtr2?'#16a34a':'#dc2626'):'#64748b')+';">'+(bCtr2>0?(oCtr2-bCtr2>=0?'+':'')+(oCtr2-bCtr2).toFixed(2)+'%p':'—')+'</td></tr>';
     h+='<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">PB CVR</td><td style="text-align:right;font-weight:600;">'+oCvr2.toFixed(2)+'%</td><td style="padding-left:16px;color:#64748b;">3P 평균 CVR'+(hasDailyBench?'':' (주간 기준)')+'</td><td style="text-align:right;font-weight:600;">'+(bCvr2>0?bCvr2.toFixed(2)+'%':'—')+'</td><td style="padding-left:16px;color:#64748b;">Gap</td><td style="text-align:right;font-weight:600;color:'+(bCvr2>0?(oCvr2>=bCvr2?'#16a34a':'#dc2626'):'#64748b')+';">'+(bCvr2>0?(oCvr2-bCvr2>=0?'+':'')+(oCvr2-bCvr2).toFixed(2)+'%p':'—')+'</td></tr>';
@@ -603,7 +603,7 @@ function renderWeekly(){
 
     h += '<div style="margin:12px 0;padding:16px;background:#f8fafc;border-radius:8px;border-left:3px solid '+(orgName==='가구PB'?'#3b82f6':'#f59e0b')+';">';
     h += '<p style="font-weight:700;font-size:15px;margin-bottom:10px;">'+orgName+'</p>';
-    h += '<table style="width:100%;font-size:13px;border-collapse:collapse;">';
+    h += '<table style="width:100%;font-size:13px;border-collapse:collapse;table-layout:fixed;">';
     h += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">노출</td><td style="text-align:right;font-weight:600;">'+fN(oImp)+'</td><td style="padding-left:16px;color:#64748b;">PDP</td><td style="text-align:right;font-weight:600;">'+fN(oPdp)+'</td><td style="padding-left:16px;color:#64748b;">구매</td><td style="text-align:right;font-weight:600;">'+oBuy+'명</td></tr>';
     h += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">PB CTR</td><td style="text-align:right;font-weight:600;">'+oCtr.toFixed(2)+'%</td><td style="padding-left:16px;color:#64748b;">3P 평균 CTR</td><td style="text-align:right;font-weight:600;">'+(bCtr2>0?bCtr2.toFixed(2)+'%':'—')+'</td><td style="padding-left:16px;color:#64748b;">Gap</td><td style="text-align:right;font-weight:600;color:'+(oCtr>=bCtr2?'#16a34a':'#dc2626')+';">'+(bCtr2>0?(oCtr-bCtr2>=0?'+':'')+(oCtr-bCtr2).toFixed(2)+'%p':'—')+'</td></tr>';
     h += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">PB CVR</td><td style="text-align:right;font-weight:600;">'+oCvr.toFixed(2)+'%</td><td style="padding-left:16px;color:#64748b;">3P 평균 CVR</td><td style="text-align:right;font-weight:600;">'+(benchCvr>0?benchCvr.toFixed(2)+'%':'—')+'</td><td style="padding-left:16px;color:#64748b;">Gap</td><td style="text-align:right;font-weight:600;color:'+(oCvr>=benchCvr?'#16a34a':'#dc2626')+';">'+(benchCvr>0?(oCvr-benchCvr>=0?'+':'')+(oCvr-benchCvr).toFixed(2)+'%p':'—')+'</td></tr>';
@@ -815,8 +815,7 @@ function renderWeekly(){
         if(dates.includes(d)){
           dealDayGmvSum+=gVal; dealDayN++;
         } else {
-          // Only count positive GMV non-deal days (exclude cancellation-only days)
-          if(gVal>0){ nonDealDayGmvSum+=gVal; nonDealDayN++; }
+          nonDealDayGmvSum+=gVal; nonDealDayN++;
         }
       });
       const dealDayAvg = dealDayN>0 ? dealDayGmvSum/dealDayN : 0;
@@ -1093,7 +1092,7 @@ function renderWeekly(){
 
       ins += '<div style="margin:12px 0;padding:16px;background:#f8fafc;border-radius:8px;border-left:3px solid '+(orgName==='가구PB'?'#3b82f6':'#f59e0b')+';">';
       ins += '<p style="font-weight:700;font-size:15px;margin-bottom:10px;">'+orgName+' <span style="font-size:12px;font-weight:400;color:#64748b;">'+weekRange(selW)+'</span></p>';
-      ins += '<table style="width:100%;font-size:13px;border-collapse:collapse;">';
+      ins += '<table style="width:100%;font-size:13px;border-collapse:collapse;table-layout:fixed;">';
       ins += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">GMV</td><td style="text-align:right;font-weight:600;">'+fMw(oG)+'백만원</td><td style="padding-left:16px;color:#64748b;">WoW</td><td style="text-align:right;font-weight:600;color:'+(orgWoW>=0?'#16a34a':'#dc2626')+';">'+(orgWoW>=0?'+':'')+orgWoW.toFixed(1)+'%</td></tr>';
       ins += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">PB CVR</td><td style="text-align:right;font-weight:600;">'+oCvr.toFixed(2)+'%</td><td style="padding-left:16px;color:#64748b;">3P CVR</td><td style="text-align:right;font-weight:600;">'+(benchCvr2>0?benchCvr2.toFixed(2)+'%':'—')+'</td></tr>';
       ins += '</table>';
@@ -1117,11 +1116,11 @@ function renderWeekly(){
         let dealGmv=0,dealN=0,nonGmv=0,nonN=0;
         Object.keys(pDGmv).forEach(d=>{
           const gv=pDGmv[d]; if(gv===undefined||gv===null) return;
-          if(dates.includes(d)){dealGmv+=gv;dealN++;}else if(gv>0){nonGmv+=gv;nonN++;}
+          if(dates.includes(d)){dealGmv+=gv;dealN++;}else{nonGmv+=gv;nonN++;}
         });
         const dealAvg=dealN>0?dealGmv/dealN:0;
         const nonAvg=nonN>0?nonGmv/nonN:null;
-        const lift=nonAvg!==null&&nonAvg>0?((dealAvg-nonAvg)/nonAvg*100):null;
+        const lift=nonAvg!==null&&nonAvg!==0?((dealAvg-nonAvg)/nonAvg*100):null;
         wDealProds.push({name:p2.name,cate:p2.cate1+'/'+p2.cate2,dealCount:datesInWeek.length,dealAvg:dealAvg,nonAvg:nonAvg,lift:lift,totalDealGmv:dealGmv});
       }
     });
@@ -1194,7 +1193,27 @@ function renderMonthly(){
   const months = md.months || [];
   const ms = md.summary || {};
   const prods = md.products || [];
-  const bp3m = md.bp3CvrMonthly || {};
+  let bp3m = md.bp3CvrMonthly || {};
+
+  // Fallback: compute monthly bench from weekly bp3Cvr if bp3CvrMonthly is empty
+  if(Object.keys(bp3m).length===0 && D.weekly && D.weekly.bp3Cvr){
+    const wBp3 = D.weekly.bp3Cvr;
+    const wWeeks = D.weekly.weeks || [];
+    bp3m = {};
+    Object.keys(wBp3).forEach(catKey=>{
+      bp3m[catKey] = {};
+      months.forEach(m=>{
+        const mEnd = new Date(m); mEnd.setMonth(mEnd.getMonth()+1);
+        const mEndStr = mEnd.toISOString().slice(0,10);
+        const weeksInMonth = wWeeks.filter(w=>w>=m&&w<mEndStr);
+        if(weeksInMonth.length>0){
+          let sum=0,cnt=0;
+          weeksInMonth.forEach(w=>{const v=wBp3[catKey][w];if(v!==undefined&&v!==null){sum+=v;cnt++;}});
+          if(cnt>0) bp3m[catKey][m] = sum/cnt;
+        }
+      });
+    });
+  }
 
   if(months.length<2) return;
   const latest = months[months.length-1];
@@ -1325,7 +1344,7 @@ function renderMonthly(){
 
     h += '<div style="margin:12px 0;padding:16px;background:#f8fafc;border-radius:8px;border-left:3px solid '+(orgName==='가구PB'?'#3b82f6':'#f59e0b')+';">';
     h += '<p style="font-weight:700;font-size:15px;margin-bottom:10px;">'+orgName+'</p>';
-    h += '<table style="width:100%;font-size:13px;border-collapse:collapse;">';
+    h += '<table style="width:100%;font-size:13px;border-collapse:collapse;table-layout:fixed;">';
     h += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">노출</td><td style="text-align:right;font-weight:600;">'+fN(moI)+'</td><td style="padding-left:16px;color:#64748b;">PDP</td><td style="text-align:right;font-weight:600;">'+fN(moP)+'</td><td style="padding-left:16px;color:#64748b;">구매</td><td style="text-align:right;font-weight:600;">'+moB+'명</td></tr>';
     h += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">PB CTR</td><td style="text-align:right;font-weight:600;">'+moCtr.toFixed(2)+'%</td><td colspan="4"></td></tr>';
     h += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">PB CVR</td><td style="text-align:right;font-weight:600;">'+moCvr.toFixed(2)+'%</td><td style="padding-left:16px;color:#64748b;">3P 평균 CVR</td><td style="text-align:right;font-weight:600;">'+(mBenchCvr>0?mBenchCvr.toFixed(2)+'%':'—')+'</td><td style="padding-left:16px;color:#64748b;">비율</td><td style="text-align:right;font-weight:600;color:'+(mCvrRatio>=80?'#16a34a':'#dc2626')+';">'+(mCvrRatio>0?mCvrRatio.toFixed(0)+'%':'—')+'</td></tr>';
@@ -1466,7 +1485,14 @@ function renderMonthly(){
 
     const sortedProds = prods.map(p=>{
       const md2=(p.monthly||{})[m]||{};
-      return {...p,mGmv:s(md2.gmv,0),mImp:s(md2.imp,0),mPdp:s(md2.pdp,0),mBuy:s(md2.purchase,0),mCvr:s(md2.cvr,null),mBench:s(md2.bench3p,null)};
+      // Use product bench3p if available, otherwise lookup from computed bp3m
+      let benchVal = s(md2.bench3p,null);
+      if(benchVal===null){
+        const catKey = p.cate1+'|'+p.cate2;
+        const bp3mVal = (bp3m[catKey]||{})[m];
+        if(bp3mVal!==undefined&&bp3mVal!==null) benchVal = bp3mVal;
+      }
+      return {...p,mGmv:s(md2.gmv,0),mImp:s(md2.imp,0),mPdp:s(md2.pdp,0),mBuy:s(md2.purchase,0),mCvr:s(md2.cvr,null),mBench:benchVal};
     }).filter(p=>p.mGmv>0||p.mBuy>0||p.mPdp>0||p.mImp>0).sort((a,b)=>b.mGmv-a.mGmv);
 
     let moRowNum = 0;
@@ -1625,7 +1651,7 @@ function renderMonthly(){
 
       mIns += '<div style="margin:12px 0;padding:16px;background:#f8fafc;border-radius:8px;border-left:3px solid '+(orgName==='가구PB'?'#3b82f6':'#f59e0b')+';">';
       mIns += '<p style="font-weight:700;font-size:15px;margin-bottom:10px;">'+orgName+' <span style="font-size:12px;font-weight:400;color:#64748b;">'+monthLabel(selM)+'</span></p>';
-      mIns += '<table style="width:100%;font-size:13px;border-collapse:collapse;">';
+      mIns += '<table style="width:100%;font-size:13px;border-collapse:collapse;table-layout:fixed;">';
       mIns += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">GMV</td><td style="text-align:right;font-weight:600;">'+fMw(moG2)+'백만원</td><td style="padding-left:16px;color:#64748b;">MoM</td><td style="text-align:right;font-weight:600;color:'+(orgMoM2>=0?'#16a34a':'#dc2626')+';">'+(orgMoM2>=0?'+':'')+orgMoM2.toFixed(1)+'%</td></tr>';
       mIns += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">PB CVR</td><td style="text-align:right;font-weight:600;">'+moCvr2.toFixed(2)+'%</td><td style="padding-left:16px;color:#64748b;">3P CVR</td><td style="text-align:right;font-weight:600;">'+(mBenchCvr2>0?mBenchCvr2.toFixed(2)+'%':'—')+'</td></tr>';
       mIns += '</table>';
