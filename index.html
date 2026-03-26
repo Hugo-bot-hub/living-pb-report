@@ -67,7 +67,9 @@ th .arr{color:#94a3b8;margin-left:2px;font-size:10px;}
 th.sorted .arr{color:#2563eb;}
 td{padding:10px 14px;text-align:right;border-bottom:1px solid #f1f5f9;white-space:nowrap;height:44px;}
 td:first-child{text-align:center;width:30px;color:#94a3b8;font-size:11px;}
-td:nth-child(2){text-align:left;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;color:#1e293b;}
+td:nth-child(2){text-align:left;max-width:280px;font-weight:500;color:#1e293b;white-space:normal;line-height:1.4;}
+td:nth-child(2) .pname{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:280px;}
+td:nth-child(2) .ptags{display:block;margin-top:2px;}
 td:nth-child(3){text-align:left;color:#64748b;font-size:12px;max-width:140px;overflow:hidden;text-overflow:ellipsis;}
 tr:nth-child(even){background:#fafbfc;}
 tr:hover{background:#f1f5f9;}
@@ -383,10 +385,10 @@ function renderDaily(){
     const dPBand=(dPbData.pbPriceBand||{})[p.id]||{};
     const dDealDates=(D.weekly.productDealDates||{})[p.id]||[];
     const isDealToday=dDealDates.includes(todayDate);
-    const dPname=p.name+(dPBand.band?'<span class="price-tag">'+dPBand.band+'</span>':'')+(isDealToday?'<span style="background:#fef3c7;color:#92400e;font-size:9px;padding:1px 4px;border-radius:3px;margin-left:4px;">스오딜</span>':'');
+    const dTags=(dPBand.band?'<span class="price-tag">'+dPBand.band+'</span>':'')+(isDealToday?'<span style="background:#fef3c7;color:#92400e;font-size:9px;padding:1px 4px;border-radius:3px;margin-left:4px;">스오딜</span>':'');
     h += '<tr>';
     h += '<td style="text-align:center;color:#94a3b8;font-size:11px;">'+dailyRowNum+'</td>';
-    h += '<td title="'+p.name+'">'+dPname+'</td>';
+    h += '<td title="'+p.name+'"><span class="pname">'+p.name+'</span>'+(dTags?'<span class="ptags">'+dTags+'</span>':'')+'</td>';
     h += '<td>'+p.cate1+'/'+p.cate2+'</td>';
     h += '<td>'+fM(p.gmv)+'</td>';
     h += '<td>'+fN(p.imp)+'</td>';
@@ -962,10 +964,10 @@ function renderWeekly(){
       const ctrCls2=cvrCls(ctrN,null);
       const dealDates=(D.weekly.productDealDates||{})[p.id]||[];
       const hasDeal=dealDates.some(d=>d>=w&&d<(new Date(new Date(w).getTime()+7*86400000)).toISOString().slice(0,10));
-      const pname=p.name+(p.priceBand&&p.priceBand!=='—'?'<span class="price-tag">'+p.priceBand+'</span>':'')+(hasDeal?'<span style="background:#fef3c7;color:#92400e;font-size:9px;padding:1px 4px;border-radius:3px;margin-left:4px;">스오딜</span>':'');
+      const wTags=(p.priceBand&&p.priceBand!=='—'?'<span class="price-tag">'+p.priceBand+'</span>':'')+(hasDeal?'<span style="background:#fef3c7;color:#92400e;font-size:9px;padding:1px 4px;border-radius:3px;margin-left:4px;">스오딜</span>':'');
       t += '<tr>';
       t += '<td style="text-align:center;color:#94a3b8;font-size:11px;">'+wkRowNum+'</td>';
-      t += '<td title="'+p.name+'">'+pname+'</td>';
+      t += '<td title="'+p.name+'"><span class="pname">'+p.name+'</span>'+(wTags?'<span class="ptags">'+wTags+'</span>':'')+'</td>';
       t += '<td>'+p.cate1+'/'+p.cate2+'</td>';
       t += '<td>'+fMw(p.wGmv)+'</td>';
       t += '<td>'+fN(p.wImp)+'</td>';
@@ -1504,10 +1506,10 @@ function renderMonthly(){
       const ctrCls2=cvrCls(ctrN,null);
       const moPb=D.priceBandData||{};
       const moBand=(moPb.pbPriceBand||{})[p.id]||{};
-      const moPname=p.name+(moBand.band?'<span class="price-tag">'+moBand.band+'</span>':'');
+      const moTags=(moBand.band?'<span class="price-tag">'+moBand.band+'</span>':'');
       t += '<tr>';
       t += '<td style="text-align:center;color:#94a3b8;font-size:11px;">'+moRowNum+'</td>';
-      t += '<td title="'+p.name+'">'+moPname+'</td>';
+      t += '<td title="'+p.name+'"><span class="pname">'+p.name+'</span>'+(moTags?'<span class="ptags">'+moTags+'</span>':'')+'</td>';
       t += '<td>'+p.cate1+'/'+p.cate2+'</td>';
       t += '<td>'+fMw(p.mGmv)+'</td>';
       t += '<td>'+fN(p.mImp)+'</td>';
