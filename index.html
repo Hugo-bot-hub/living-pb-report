@@ -66,8 +66,9 @@ th:first-child,th:nth-child(2){text-align:left;}
 th .arr{color:#94a3b8;margin-left:2px;font-size:10px;}
 th.sorted .arr{color:#2563eb;}
 td{padding:10px 14px;text-align:right;border-bottom:1px solid #f1f5f9;white-space:nowrap;height:44px;}
-td:first-child{text-align:left;max-width:320px;overflow:hidden;text-overflow:ellipsis;font-weight:500;color:#1e293b;}
-td:nth-child(2){text-align:left;color:#64748b;font-size:12px;}
+td:first-child{text-align:center;width:30px;color:#94a3b8;font-size:11px;}
+td:nth-child(2){text-align:left;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;color:#1e293b;}
+td:nth-child(3){text-align:left;color:#64748b;font-size:12px;max-width:140px;overflow:hidden;text-overflow:ellipsis;}
 tr:nth-child(even){background:#fafbfc;}
 tr:hover{background:#f1f5f9;}
 .cvr-pill{display:inline-block;padding:3px 10px;border-radius:12px;font-weight:700;font-size:12px;}
@@ -308,34 +309,56 @@ function renderDaily(){
   // 조직별 퍼널 진단
   h += '<div class="section"><h4>🔍 조직별 퍼널 진단 (일간)</h4>';
   const dOrgMap = D.orgMapping || {};
+  // Use weekly bp3Cvr as fallback bench when dailyBench is empty
+  const dBp3 = D.weekly.bp3Cvr || {};
+  // Find the weekly period containing this date for bench lookup
+  const dWeeks = D.weekly.weeks || [];
+  const dCurWeek = dWeeks.find(w=>{const wEnd=new Date(new Date(w).getTime()+7*86400000).toISOString().slice(0,10);return todayDate>=w&&todayDate<wEnd;}) || dWeeks[dWeeks.length-1];
   Object.keys(dOrgMap).forEach(orgName=>{
     const orgCats = dOrgMap[orgName] || [];
-    const orgP = prods.filter(p=>orgCats.includes(p.cate1));
+    // Only use products with actual daily data (from dailyProdsRaw)
+    const orgP = dailyProdsRaw.filter(p=>orgCats.includes(p.cate1));
     let oI=0,oP2=0,oB=0,oG=0;
     orgP.forEach(p=>{oI+=s(p.imp,0);oP2+=s(p.pdp,0);oB+=(p.purchase!==null?s(p.purchase,0):0);oG+=s(p.gmv,0);});
+    // Skip org if no products had daily data
+    if(oI===0&&oP2===0&&oB===0&&oG===0){
+      h+='<div style="margin:12px 0;padding:16px;background:#f8fafc;border-radius:8px;border-left:3px solid '+(orgName==='가구PB'?'#3b82f6':'#f59e0b')+';">';
+      h+='<p style="font-weight:700;font-size:15px;margin-bottom:6px;">'+orgName+'</p>';
+      h+='<p style="font-size:13px;color:#94a3b8;">일간 데이터에 해당 조직 상품이 포함되지 않았습니다. 주간 탭에서 확인하세요.</p>';
+      h+='</div>';
+      return;
+    }
     const oCtr2=oI>0?(oP2/oI*100):0;
     const oCvr2=oP2>0?(oB/oP2*100):0;
+    // Try dailyBench first, fallback to weekly bp3Cvr
     let bCS2=0,bCV2=0,bN2=0;
-    Object.keys(dd.dailyBench||{}).forEach(k=>{
-      const c1=k.split('|')[0];
-      if(orgCats.includes(c1)){const b2=(dd.dailyBench[k]||{})[todayDate];if(b2){bCS2+=s(b2.ctr,0);bCV2+=s(b2.cvr,0);bN2++;}}});
-    const bCtr2=bN2>0?(bCS2/bN2):0;
+    const hasDailyBench = Object.keys(dd.dailyBench||{}).length>0;
+    if(hasDailyBench){
+      Object.keys(dd.dailyBench).forEach(k=>{
+        const c1=k.split('|')[0];
+        if(orgCats.includes(c1)){const b2=(dd.dailyBench[k]||{})[todayDate];if(b2){bCS2+=s(b2.ctr,0);bCV2+=s(b2.cvr,0);bN2++;}}});
+    } else {
+      // Fallback: use weekly bp3Cvr for CVR bench
+      Object.keys(dBp3).forEach(k=>{const c1=k.split('|')[0];if(orgCats.includes(c1)){const v=(dBp3[k]||{})[dCurWeek];if(v!==undefined&&v!==null){bCV2+=v;bN2++;}}});
+    }
+    const bCtr2=bN2>0&&hasDailyBench?(bCS2/bN2):0;
     const bCvr2=bN2>0?(bCV2/bN2):0;
     const cvrR2=bCvr2>0?(oCvr2/bCvr2*100):0;
     let bn='',rc='';
     if(oI<5000){bn='노출 부족';rc='기획전/딜 노출 확보 필요';}
     else if(bCtr2>0&&oCtr2<bCtr2*0.8){bn='CTR 미달 (3P 평균의 '+(oCtr2/bCtr2*100).toFixed(0)+'%)';rc='썸네일/가격표시 최적화 권장';}
-    else if(cvrR2<60){bn='CVR 구조적 문제 (3P 평균의 '+cvrR2.toFixed(0)+'%)';rc='PDP 콘텐츠/리뷰/가격 점검 필요';}
-    else if(cvrR2<80){bn='CVR 소폭 미달 (3P 평균의 '+cvrR2.toFixed(0)+'%)';rc='상세 페이지 개선 여지 있음';}
-    else{bn='퍼널 양호 (3P 평균의 '+cvrR2.toFixed(0)+'%)';rc='현 전략 유지';}
+    else if(bCvr2>0&&cvrR2<60){bn='CVR 구조적 문제 (3P 평균의 '+cvrR2.toFixed(0)+'%)';rc='PDP 콘텐츠/리뷰/가격 점검 필요';}
+    else if(bCvr2>0&&cvrR2<80){bn='CVR 소폭 미달 (3P 평균의 '+cvrR2.toFixed(0)+'%)';rc='상세 페이지 개선 여지 있음';}
+    else if(bCvr2>0){bn='퍼널 양호 (3P 평균의 '+cvrR2.toFixed(0)+'%)';rc='현 전략 유지';}
+    else{bn=oCvr2>1.5?'CVR 양호 ('+oCvr2.toFixed(2)+'%)':'CVR 점검 필요 ('+oCvr2.toFixed(2)+'%)';rc=oCvr2>1.5?'현 전략 유지':'PDP/리뷰/가격 점검';}
     h+='<div style="margin:12px 0;padding:16px;background:#f8fafc;border-radius:8px;border-left:3px solid '+(orgName==='가구PB'?'#3b82f6':'#f59e0b')+';">';
     h+='<p style="font-weight:700;font-size:15px;margin-bottom:10px;">'+orgName+'</p>';
     h+='<table style="width:100%;font-size:13px;border-collapse:collapse;">';
     h+='<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">노출</td><td style="text-align:right;font-weight:600;">'+fN(oI)+'</td><td style="padding-left:16px;color:#64748b;">PDP</td><td style="text-align:right;font-weight:600;">'+fN(oP2)+'</td><td style="padding-left:16px;color:#64748b;">구매</td><td style="text-align:right;font-weight:600;">'+oB+'명</td></tr>';
-    h+='<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">PB CTR</td><td style="text-align:right;font-weight:600;">'+oCtr2.toFixed(2)+'%</td><td style="padding-left:16px;color:#64748b;">3P 평균 CTR</td><td style="text-align:right;font-weight:600;">'+(bCtr2>0?bCtr2.toFixed(2)+'%':'—')+'</td><td style="padding-left:16px;color:#64748b;">Gap</td><td style="text-align:right;font-weight:600;color:'+(oCtr2>=bCtr2?'#16a34a':'#dc2626')+';">'+(bCtr2>0?(oCtr2-bCtr2>=0?'+':'')+(oCtr2-bCtr2).toFixed(2)+'%p':'—')+'</td></tr>';
-    h+='<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">PB CVR</td><td style="text-align:right;font-weight:600;">'+oCvr2.toFixed(2)+'%</td><td style="padding-left:16px;color:#64748b;">3P 평균 CVR</td><td style="text-align:right;font-weight:600;">'+(bCvr2>0?bCvr2.toFixed(2)+'%':'—')+'</td><td style="padding-left:16px;color:#64748b;">Gap</td><td style="text-align:right;font-weight:600;color:'+(oCvr2>=bCvr2?'#16a34a':'#dc2626')+';">'+(bCvr2>0?(oCvr2-bCvr2>=0?'+':'')+(oCvr2-bCvr2).toFixed(2)+'%p':'—')+'</td></tr>';
+    h+='<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">PB CTR</td><td style="text-align:right;font-weight:600;">'+oCtr2.toFixed(2)+'%</td><td style="padding-left:16px;color:#64748b;">3P 평균 CTR</td><td style="text-align:right;font-weight:600;">'+(bCtr2>0?bCtr2.toFixed(2)+'%':'—')+'</td><td style="padding-left:16px;color:#64748b;">Gap</td><td style="text-align:right;font-weight:600;color:'+(bCtr2>0?(oCtr2>=bCtr2?'#16a34a':'#dc2626'):'#64748b')+';">'+(bCtr2>0?(oCtr2-bCtr2>=0?'+':'')+(oCtr2-bCtr2).toFixed(2)+'%p':'—')+'</td></tr>';
+    h+='<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">PB CVR</td><td style="text-align:right;font-weight:600;">'+oCvr2.toFixed(2)+'%</td><td style="padding-left:16px;color:#64748b;">3P 평균 CVR'+(hasDailyBench?'':' (주간 기준)')+'</td><td style="text-align:right;font-weight:600;">'+(bCvr2>0?bCvr2.toFixed(2)+'%':'—')+'</td><td style="padding-left:16px;color:#64748b;">Gap</td><td style="text-align:right;font-weight:600;color:'+(bCvr2>0?(oCvr2>=bCvr2?'#16a34a':'#dc2626'):'#64748b')+';">'+(bCvr2>0?(oCvr2-bCvr2>=0?'+':'')+(oCvr2-bCvr2).toFixed(2)+'%p':'—')+'</td></tr>';
     h+='</table>';
-    h+='<p style="margin-top:10px;"><span style="color:'+(cvrR2>=80?'#16a34a':'#dc2626')+';font-weight:700;">▸ 주요 병목: '+bn+'</span></p>';
+    h+='<p style="margin-top:10px;"><span style="color:'+(cvrR2>=80||(!bCvr2&&oCvr2>1.5)?'#16a34a':'#dc2626')+';font-weight:700;">▸ 주요 병목: '+bn+'</span></p>';
     h+='<p style="color:#475569;font-size:13px;">→ '+rc+'</p>';
     h+='</div>';
   });
@@ -356,7 +379,7 @@ function renderDaily(){
   h += '</tr></thead><tbody>';
 
   let dailyRowNum = 0;
-  const filteredProds = prods.slice().sort((a,b)=>s(b.gmv,0)-s(a.gmv,0));
+  const filteredProds = prods.filter(p=>s(p.gmv,0)>0||s(p.purchase,0)>0||s(p.pdp,0)>0||s(p.imp,0)>0).sort((a,b)=>s(b.gmv,0)-s(a.gmv,0));
   filteredProds.forEach(p=>{
     dailyRowNum++;
     const cv = s(p.cvr,null);
@@ -1078,6 +1101,83 @@ function renderWeekly(){
       ins += '</div>';
     });
     ins += '</div>';
+
+    // 스오딜 분석 (선택된 주 기준)
+    const wDealDates = D.weekly.productDealDates || {};
+    const wDailyGmv = D.weekly.productDailyGmv || {};
+    const wStart = selW;
+    const wEndDate = new Date(new Date(selW).getTime()+7*86400000).toISOString().slice(0,10);
+    const wDealProds = [];
+    Object.entries(wDealDates).forEach(([pid,dates])=>{
+      const datesInWeek = dates.filter(d=>d>=wStart&&d<wEndDate);
+      if(datesInWeek.length>0){
+        const p2 = prods.find(p=>String(p.id)===String(pid));
+        if(!p2) return;
+        const pDGmv = wDailyGmv[pid]||{};
+        let dealGmv=0,dealN=0,nonGmv=0,nonN=0;
+        Object.keys(pDGmv).forEach(d=>{
+          const gv=pDGmv[d]; if(gv===undefined||gv===null) return;
+          if(dates.includes(d)){dealGmv+=gv;dealN++;}else if(gv>0){nonGmv+=gv;nonN++;}
+        });
+        const dealAvg=dealN>0?dealGmv/dealN:0;
+        const nonAvg=nonN>0?nonGmv/nonN:null;
+        const lift=nonAvg!==null&&nonAvg>0?((dealAvg-nonAvg)/nonAvg*100):null;
+        wDealProds.push({name:p2.name,cate:p2.cate1+'/'+p2.cate2,dealCount:datesInWeek.length,dealAvg:dealAvg,nonAvg:nonAvg,lift:lift,totalDealGmv:dealGmv});
+      }
+    });
+
+    if(wDealProds.length>0){
+      wDealProds.sort((a,b)=>b.totalDealGmv-a.totalDealGmv);
+      ins += '<div class="section"><h4>🏷️ 스오딜 성과 분석 ('+weekRange(selW)+')</h4>';
+      ins += '<p>이번 주 스오딜 참여: <span class="hl">'+wDealProds.length+'개 상품</span></p>';
+      ins += '<table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;">';
+      ins += '<thead><tr style="border-bottom:2px solid #e2e8f0;background:#fffbeb;">';
+      ins += '<th style="text-align:left;padding:6px;">상품명</th>';
+      ins += '<th style="text-align:center;padding:6px;">행사 횟수</th>';
+      ins += '<th style="text-align:right;padding:6px;">행사일 평균 GMV</th>';
+      ins += '<th style="text-align:right;padding:6px;">비행사일 평균 GMV</th>';
+      ins += '<th style="text-align:right;padding:6px;">리프트</th>';
+      ins += '<th style="text-align:center;padding:6px;">효과</th>';
+      ins += '</tr></thead><tbody>';
+      wDealProds.slice(0,15).forEach(dp=>{
+        let effLabel='—',effColor='#64748b';
+        if(dp.lift!==null){
+          if(dp.lift>100){effLabel='매우 큼';effColor='#16a34a';}
+          else if(dp.lift>50){effLabel='큼';effColor='#22c55e';}
+          else if(dp.lift>0){effLabel='소폭';effColor='#d97706';}
+          else{effLabel='미미/역효과';effColor='#dc2626';}
+        }
+        ins += '<tr style="border-bottom:1px solid #f1f5f9;">';
+        ins += '<td style="padding:6px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="'+dp.name+'">'+dp.name.substring(0,30)+'</td>';
+        ins += '<td style="text-align:center;padding:6px;"><span style="background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:3px;font-weight:600;">'+dp.dealCount+'회</span></td>';
+        ins += '<td style="text-align:right;padding:6px;font-weight:600;">'+(dp.dealAvg/1000000).toFixed(2)+'백만원</td>';
+        ins += '<td style="text-align:right;padding:6px;color:#64748b;">'+(dp.nonAvg!==null?(dp.nonAvg/1000000).toFixed(2)+'백만원':'데이터 부족')+'</td>';
+        ins += '<td style="text-align:right;padding:6px;font-weight:700;color:'+(dp.lift!==null&&dp.lift>0?'#16a34a':'#dc2626')+';">'+(dp.lift!==null?(dp.lift>0?'+':'')+dp.lift.toFixed(1)+'%':'—')+'</td>';
+        ins += '<td style="text-align:center;padding:6px;font-weight:700;color:'+effColor+';">'+effLabel+'</td>';
+        ins += '</tr>';
+      });
+      ins += '</tbody></table>';
+      // Summary
+      const wHighLift = wDealProds.filter(dp=>dp.lift!==null&&dp.lift>20);
+      const wLowLift = wDealProds.filter(dp=>dp.lift!==null&&dp.lift<=0);
+      ins += '<div style="margin-top:12px;padding:12px 16px;background:#fffbeb;border-radius:8px;border-left:3px solid #f59e0b;">';
+      ins += '<p style="font-weight:700;color:#92400e;margin-bottom:6px;">💡 스오딜 종합 판단</p>';
+      if(wHighLift.length>0){
+        ins += '<p style="font-size:13px;color:#475569;">행사 효과 큰 상품(리프트 20%↑): <span class="up-hl">'+wHighLift.length+'개</span>. ';
+        ins += '대표: <span class="hl">'+wHighLift[0].name.substring(0,25)+'</span>';
+        if(wHighLift.length>1) ins += ', <span class="hl">'+wHighLift[1].name.substring(0,25)+'</span>';
+        ins += '. 지속 행사 참여 권장.</p>';
+      }
+      if(wLowLift.length>0){
+        ins += '<p style="font-size:13px;color:#475569;margin-top:4px;">효과 미미/역효과 상품: <span class="dn-hl">'+wLowLift.length+'개</span>. 스오딜 대신 다른 마케팅 수단 검토.</p>';
+      }
+      if(wHighLift.length===0&&wLowLift.length===0){
+        ins += '<p style="font-size:13px;color:#475569;">비교 데이터 부족. 평시 데이터 축적 후 정확한 리프트 분석 가능.</p>';
+      }
+      ins += '</div>';
+      ins += '</div>';
+    }
+
     ins += '</div>'; // close insight-box
 
     const insWrap = document.getElementById('weeklyInsightWrap');
@@ -1533,6 +1633,25 @@ function renderMonthly(){
       mIns += '</div>';
     });
     mIns += '</div>';
+
+    // 월간 스오딜 인사이트
+    if(mDealProds.length>0){
+      // Count promo weeks in this month
+      const mWeeksInMonth = (D.weekly.weeks||[]).filter(w2=>w2>=selM&&w2<mEnd2);
+      const mPromoMap = D.weekly.promoMap||{};
+      const bigPWeeks = mWeeksInMonth.filter(w2=>(mPromoMap[w2]||'').includes('빅프로모션')||(mPromoMap[w2]||'').includes('프로모션'));
+      mIns += '<div class="section"><h4>🏷️ 스오딜 월간 요약</h4>';
+      mIns += '<p>'+monthLabel(selM)+' 스오딜 참여 상품: <span class="hl">'+mDealProds.length+'개</span>, 총 '+mDealProds.reduce((a,dp)=>a+dp.dealCount,0)+'회 행사.';
+      if(selPrevM){
+        const prevMEnd = new Date(selPrevM);prevMEnd.setMonth(prevMEnd.getMonth()+1);
+        const prevME2 = prevMEnd.toISOString().slice(0,10);
+        let prevDealCnt=0;
+        Object.entries(mDealDates).forEach(([pid,dates])=>{const dc=dates.filter(d=>d>=selPrevM&&d<prevME2);if(dc.length>0)prevDealCnt++;});
+        mIns += ' 전월 '+prevDealCnt+'개 상품 대비 '+(mDealProds.length>prevDealCnt?'확대':'축소')+' 운영.';
+      }
+      mIns += '</p></div>';
+    }
+
     mIns += '</div>'; // close insight-box
 
     const moInsWrap = document.getElementById('monthlyInsightWrap');
