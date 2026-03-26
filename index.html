@@ -59,7 +59,7 @@ body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystem
 /* Table */
 .tbl-wrap{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow-x:auto;margin:20px 0;}
 table{width:100%;border-collapse:collapse;font-size:13px;}
-thead{position:sticky;top:0;z-index:10;}
+thead{z-index:10;}
 th{padding:12px 14px;text-align:right;font-weight:700;color:#475569;background:#f8fafc;border-bottom:2px solid #e2e8f0;white-space:nowrap;cursor:pointer;user-select:none;font-size:13px;}
 th:hover{background:#eef2ff;}
 th:first-child,th:nth-child(2){text-align:left;}
@@ -527,7 +527,6 @@ function renderWeekly(){
   const tp3 = D.weekly.tp3WeeklyGmv || {};
 
   if(promoWeeks.length>0&&nonPromoWeeks.length>0){
-    // PB promo vs non-promo
     let pbPromoGmv=0,pbPromoN=0,pbNonGmv=0,pbNonN=0;
     promoWeeks.forEach(w=>{const wS2=ws[w]||{};pbPromoGmv+=s(wS2.total,0);pbPromoN++;});
     nonPromoWeeks.forEach(w=>{const wS2=ws[w]||{};pbNonGmv+=s(wS2.total,0);pbNonN++;});
@@ -535,7 +534,6 @@ function renderWeekly(){
     const pbNonAvg = pbNonN>0?pbNonGmv/pbNonN:0;
     const pbLift = pbNonAvg>0?((pbPromoAvg-pbNonAvg)/pbNonAvg*100):0;
 
-    // 3P promo vs non-promo (aggregate 가구+패브릭+생활용품)
     let tp3PromoGmv=0,tp3PromoN=0,tp3NonGmv=0,tp3NonN=0;
     promoWeeks.forEach(w=>{
       let wTotal=0;
@@ -563,8 +561,179 @@ function renderWeekly(){
     } else {
       h += '<p style="color:#dc2626;font-weight:600;">⚠️ PB 프로모션 리프트('+pbLift.toFixed(1)+'%)가 3P('+tp3Lift.toFixed(1)+'%)보다 낮습니다. 프로모션 활용도 개선이 필요합니다.</p>';
     }
+
+    // ── 주차별 프로모션 상세 브레이크다운 ──
+    h += '<div style="margin-top:16px;">';
+    h += '<p style="font-weight:700;font-size:13px;margin-bottom:8px;color:#334155;">주차별 프로모션 상세</p>';
+    h += '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
+    h += '<thead><tr style="border-bottom:2px solid #e2e8f0;background:#f8fafc;">';
+    h += '<th style="text-align:left;padding:6px 8px;">주차</th>';
+    h += '<th style="text-align:left;padding:6px 8px;">프로모션</th>';
+    h += '<th style="text-align:left;padding:6px 8px;">행사명</th>';
+    h += '<th style="text-align:right;padding:6px 8px;">PB GMV</th>';
+    h += '<th style="text-align:right;padding:6px 8px;">vs 평시 평균</th>';
+    h += '<th style="text-align:right;padding:6px 8px;">3P GMV</th>';
+    h += '<th style="text-align:right;padding:6px 8px;">vs 평시 평균</th>';
+    h += '<th style="text-align:center;padding:6px 8px;">효과 판정</th>';
+    h += '</tr></thead><tbody>';
+    weeks.forEach(w=>{
+      const pm4=(D.weekly.promoMap||{})[w]||'평시주간';
+      const pd4=(D.weekly.promoDetails||{})[w]||'';
+      const wS4=ws[w]||{};
+      const pbWGmv=s(wS4.total,0);
+      let tp3WGmv=0;
+      Object.keys(tp3).forEach(cat=>{tp3WGmv+=s(tp3[cat][w],0);});
+      const pbVsNon=pbNonAvg>0?((pbWGmv-pbNonAvg)/pbNonAvg*100):0;
+      const tp3VsNon=tp3NonAvg>0?((tp3WGmv-tp3NonAvg)/tp3NonAvg*100):0;
+      let verdict='—',vColor='#64748b';
+      if(pm4==='빅프로모션'||pm4==='스페셜브랜드위크'){
+        if(pbVsNon>tp3VsNon&&pbVsNon>10){verdict='효과 큼';vColor='#16a34a';}
+        else if(pbVsNon>0){verdict='효과 보통';vColor='#d97706';}
+        else{verdict='효과 미미';vColor='#dc2626';}
+      }else if(pm4==='평시주간'){
+        verdict='기저수요';vColor='#64748b';
+      }else{verdict='집계중';vColor='#94a3b8';}
+      const rowBg=pm4==='빅프로모션'?'background:#fef2f2;':pm4==='스페셜브랜드위크'?'background:#eff6ff;':'';
+      h += '<tr style="border-bottom:1px solid #f1f5f9;'+rowBg+'">';
+      h += '<td style="padding:6px 8px;font-weight:600;">'+weekRange(w)+'</td>';
+      h += '<td style="padding:6px 8px;">'+promoTag(w)+'</td>';
+      h += '<td style="padding:6px 8px;color:#64748b;font-size:11px;">'+pd4+'</td>';
+      h += '<td style="text-align:right;padding:6px 8px;font-weight:600;">'+fMw(pbWGmv)+'백만원</td>';
+      h += '<td style="text-align:right;padding:6px 8px;color:'+(pbVsNon>=0?'#16a34a':'#dc2626')+';font-weight:600;">'+(pbVsNon>=0?'+':'')+pbVsNon.toFixed(1)+'%</td>';
+      h += '<td style="text-align:right;padding:6px 8px;font-weight:600;">'+fMw(tp3WGmv)+'백만원</td>';
+      h += '<td style="text-align:right;padding:6px 8px;color:'+(tp3VsNon>=0?'#16a34a':'#dc2626')+';font-weight:600;">'+(tp3VsNon>=0?'+':'')+tp3VsNon.toFixed(1)+'%</td>';
+      h += '<td style="text-align:center;padding:6px 8px;font-weight:700;color:'+vColor+';">'+verdict+'</td>';
+      h += '</tr>';
+    });
+    h += '</tbody></table>';
+    h += '</div>';
+
   } else {
     h += '<p>프로모션/비프로모 주간 비교 데이터가 부족합니다.</p>';
+  }
+  h += '</div>';
+
+  // ── 스오딜 성과 인사이트 ──
+  h += '<div class="section"><h4>🏷️ 스오딜(원데이 행사) 성과 인사이트</h4>';
+  const dealDatesMap = D.weekly.productDealDates || {};
+  const dealProds = Object.keys(dealDatesMap);
+  const totalDealProds = dealProds.length;
+
+  if(totalDealProds > 0){
+    // Count total deal-days across all products
+    let totalDealDays = 0;
+    dealProds.forEach(pid=>{totalDealDays += dealDatesMap[pid].length;});
+
+    // Per-week deal product count
+    const weekDealCounts = {};
+    weeks.forEach(w=>{
+      const wEnd = new Date(new Date(w).getTime()+7*86400000).toISOString().slice(0,10);
+      let cnt = 0;
+      dealProds.forEach(pid=>{
+        if(dealDatesMap[pid].some(d=>d>=w&&d<wEnd)) cnt++;
+      });
+      weekDealCounts[w] = cnt;
+    });
+
+    h += '<p><span class="hl">총 '+totalDealProds+'개 상품</span>이 분석 기간 중 스오딜에 참여했으며, 누적 <span class="hl">'+totalDealDays+'회</span> 원데이 행사가 진행되었습니다 (상품당 평균 '+(totalDealDays/totalDealProds).toFixed(1)+'회).</p>';
+
+    // Week-by-week deal count bars
+    h += '<div style="margin:12px 0;">';
+    h += '<p style="font-weight:600;font-size:12px;color:#64748b;margin-bottom:6px;">주차별 스오딜 참여 상품 수</p>';
+    const maxDC = Math.max(...Object.values(weekDealCounts));
+    weeks.forEach(w=>{
+      const dc = weekDealCounts[w];
+      const pct2 = maxDC>0?(dc/maxDC*100):0;
+      h += '<div style="display:flex;align-items:center;gap:8px;margin:3px 0;">';
+      h += '<span style="min-width:75px;font-size:11px;color:#64748b;text-align:right;">'+weekRange(w)+'</span>';
+      h += '<div style="flex:1;background:#f1f5f9;border-radius:3px;height:20px;overflow:hidden;">';
+      h += '<div style="width:'+pct2.toFixed(1)+'%;height:100%;background:#f59e0b;border-radius:3px;display:flex;align-items:center;padding-left:6px;">';
+      h += '<span style="font-size:10px;font-weight:700;color:#fff;">'+dc+'개</span>';
+      h += '</div></div></div>';
+    });
+    h += '</div>';
+
+    // Top deal products by GMV — compare deal week GMV vs non-deal week GMV per product
+    h += '<p style="font-weight:700;font-size:13px;margin:16px 0 8px;color:#334155;">스오딜 Top 상품 (행사 효과 분석)</p>';
+    const dealProdAnalysis = [];
+    dealProds.forEach(pid=>{
+      const p2 = prods.find(p=>String(p.id)===String(pid));
+      if(!p2) return;
+      const dates = dealDatesMap[pid];
+      let dealWeekGmvSum=0,dealWeekN=0,nonDealWeekGmvSum=0,nonDealWeekN=0;
+      weeks.forEach(w=>{
+        const wEnd=new Date(new Date(w).getTime()+7*86400000).toISOString().slice(0,10);
+        const hasDeal2=dates.some(d=>d>=w&&d<wEnd);
+        const wd3=(p2.weekly||{})[w]||{};
+        const wGmv2=s(wd3.gmv,0);
+        if(wGmv2<=0) return;
+        if(hasDeal2){dealWeekGmvSum+=wGmv2;dealWeekN++;}
+        else{nonDealWeekGmvSum+=wGmv2;nonDealWeekN++;}
+      });
+      const dealAvg=dealWeekN>0?dealWeekGmvSum/dealWeekN:0;
+      const nonAvg=nonDealWeekN>0?nonDealWeekGmvSum/nonDealWeekN:0;
+      const lift2=nonAvg>0?((dealAvg-nonAvg)/nonAvg*100):null;
+      dealProdAnalysis.push({
+        id:pid,name:p2.name,cate:p2.cate1+'/'+p2.cate2,
+        dealCount:dates.length,dealAvg:dealAvg,nonAvg:nonAvg,lift:lift2,
+        totalDealGmv:dealWeekGmvSum
+      });
+    });
+    dealProdAnalysis.sort((a,b)=>b.totalDealGmv-a.totalDealGmv);
+
+    h += '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
+    h += '<thead><tr style="border-bottom:2px solid #e2e8f0;background:#fffbeb;">';
+    h += '<th style="text-align:center;padding:6px;">순위</th>';
+    h += '<th style="text-align:left;padding:6px;">상품명</th>';
+    h += '<th style="text-align:left;padding:6px;">카테고리</th>';
+    h += '<th style="text-align:center;padding:6px;">행사 횟수</th>';
+    h += '<th style="text-align:right;padding:6px;">행사주 평균 GMV</th>';
+    h += '<th style="text-align:right;padding:6px;">비행사주 평균 GMV</th>';
+    h += '<th style="text-align:right;padding:6px;">리프트</th>';
+    h += '<th style="text-align:center;padding:6px;">효과</th>';
+    h += '</tr></thead><tbody>';
+    dealProdAnalysis.slice(0,15).forEach((dp,idx)=>{
+      let effLabel='—',effColor='#64748b';
+      if(dp.lift!==null){
+        if(dp.lift>50){effLabel='매우 큼';effColor='#16a34a';}
+        else if(dp.lift>20){effLabel='큼';effColor='#22c55e';}
+        else if(dp.lift>0){effLabel='소폭';effColor='#d97706';}
+        else{effLabel='미미/역효과';effColor='#dc2626';}
+      }
+      h += '<tr style="border-bottom:1px solid #f1f5f9;">';
+      h += '<td style="text-align:center;padding:6px;color:#94a3b8;">'+(idx+1)+'</td>';
+      h += '<td style="padding:6px;font-weight:500;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="'+dp.name+'">'+dp.name.substring(0,35)+'</td>';
+      h += '<td style="padding:6px;color:#64748b;font-size:11px;">'+dp.cate+'</td>';
+      h += '<td style="text-align:center;padding:6px;"><span style="background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:3px;font-weight:600;">'+dp.dealCount+'회</span></td>';
+      h += '<td style="text-align:right;padding:6px;font-weight:600;">'+fMw(dp.dealAvg)+'백만원</td>';
+      h += '<td style="text-align:right;padding:6px;color:#64748b;">'+(dp.nonAvg>0?fMw(dp.nonAvg)+'백만원':'—')+'</td>';
+      h += '<td style="text-align:right;padding:6px;font-weight:700;color:'+(dp.lift!==null&&dp.lift>0?'#16a34a':'#dc2626')+';">'+(dp.lift!==null?(dp.lift>0?'+':'')+dp.lift.toFixed(1)+'%':'—')+'</td>';
+      h += '<td style="text-align:center;padding:6px;font-weight:700;color:'+effColor+';">'+effLabel+'</td>';
+      h += '</tr>';
+    });
+    h += '</tbody></table>';
+
+    // Summary insight
+    const highLiftProds = dealProdAnalysis.filter(dp=>dp.lift!==null&&dp.lift>20);
+    const lowLiftProds = dealProdAnalysis.filter(dp=>dp.lift!==null&&dp.lift<=0);
+    h += '<div style="margin-top:12px;padding:12px 16px;background:#fffbeb;border-radius:8px;border-left:3px solid #f59e0b;">';
+    h += '<p style="font-weight:700;color:#92400e;margin-bottom:6px;">💡 스오딜 종합 판단</p>';
+    if(highLiftProds.length>0){
+      h += '<p style="font-size:13px;color:#475569;">행사 효과가 큰 상품(리프트 20%↑): <span class="up-hl">'+highLiftProds.length+'개</span>. ';
+      h += '대표적으로 <span class="hl">'+highLiftProds[0].name.substring(0,25)+'</span>';
+      if(highLiftProds.length>1) h += ', <span class="hl">'+highLiftProds[1].name.substring(0,25)+'</span>';
+      h += ' 등이 스오딜 효과가 높습니다. 지속적인 행사 참여가 권장됩니다.</p>';
+    }
+    if(lowLiftProds.length>0){
+      h += '<p style="font-size:13px;color:#475569;margin-top:4px;">행사 효과가 미미하거나 역효과인 상품: <span class="dn-hl">'+lowLiftProds.length+'개</span>. ';
+      h += '해당 상품들은 스오딜 대신 다른 마케팅 수단(리뷰 이벤트, 상세페이지 개선 등)을 검토해야 합니다.</p>';
+    }
+    if(highLiftProds.length===0&&lowLiftProds.length===0){
+      h += '<p style="font-size:13px;color:#475569;">비교 데이터 부족으로 리프트를 산출할 수 없는 상품이 많습니다. 평시 주간 데이터가 쌓이면 정확한 분석이 가능합니다.</p>';
+    }
+    h += '</div>';
+  } else {
+    h += '<p>스오딜 데이터가 없습니다.</p>';
   }
   h += '</div>';
 
