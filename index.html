@@ -175,7 +175,7 @@ function renderDaily(){
 
   let h = '';
 
-  // ── Date navigation (like weekly/monthly) ──
+  // Date navigation
   h += '<div class="period-nav">';
   h += '<button '+(curIdx<=0?'disabled':'')+' id="dailyPrev">← 이전일</button>';
   h += '<span class="period-label">'+todayDate+' ('+dayOfWeek+')</span>';
@@ -190,7 +190,7 @@ function renderDaily(){
   h += '<div class="card"><div class="lbl">평균 전환율 (CVR)</div><div class="val">'+avgCvr+'<span style="font-size:14px;color:#64748b;">%</span></div></div>';
   h += '</div>';
 
-  // Category cards
+  // Category cards with 3P benchmarks
   h += '<div class="cat-grid">';
   const cats = [['가구PB','c-furniture'],['리빙PB','c-living']];
   cats.forEach(([catName,cls])=>{
@@ -203,19 +203,32 @@ function renderDaily(){
     const pur = s(cd.purchase,0);
     const pbCtr = imp>0?(pdp/imp*100).toFixed(2):'—';
     const pbCvr = pdp>0?(pur/pdp*100).toFixed(2):'—';
+    let benchCtrSum=0,benchCvrSum=0,benchN=0;
+    const orgs = (D.orgMapping||{})[catName]||[];
+    orgs.forEach(orgCat=>{
+      const benchKeys=Object.keys(dd.dailyBench||{}).filter(k=>k.startsWith(orgCat+'|'));
+      benchKeys.forEach(k=>{const b=(dd.dailyBench[k]||{})[todayDate];if(b){benchCtrSum+=s(b.ctr,0);benchCvrSum+=s(b.cvr,0);benchN++;}});
+    });
+    const benchCtr = benchN>0?(benchCtrSum/benchN).toFixed(2):'—';
+    const benchCvr = benchN>0?(benchCvrSum/benchN).toFixed(2):'—';
 
     h += '<div class="cat-card '+cls+'">';
     h += '<h3>'+catName+'</h3>';
     h += '<div class="cat-row"><span class="k">GMV ('+todayDate.substring(5)+')</span><span class="v">'+fM(gmv)+' 백만원</span></div>';
     h += '<div class="cat-row"><span class="k">전일 대비</span><span class="v '+chg.c+'">'+chg.t+'</span></div>';
-    h += '<div class="cat-row"><span class="k">PDP UV</span><span class="v">'+fN(pdp)+'</span></div>';
+    h += '<div class="cat-row"><span class="k">PB CTR</span><span class="v">'+pbCtr+'%</span></div>';
+    h += '<div class="cat-row"><span class="k">카테고리 평균 CTR</span><span class="v">'+benchCtr+'%</span></div>';
     h += '<div class="cat-row"><span class="k">PB CVR</span><span class="v">'+pbCvr+'%</span></div>';
-    h += '<div class="cat-row"><span class="k">구매자수</span><span class="v">'+pur+'명</span></div>';
+    h += '<div class="cat-row"><span class="k">카테고리 평균 CVR</span><span class="v">'+benchCvr+'%</span></div>';
     h += '</div>';
   });
   h += '</div>';
 
-  // Promo status
+  // Daily Insights
+  h += '<div class="insight-box">';
+  h += '<h3>📊 일간 분석 인사이트 — '+todayDate+' ('+dayOfWeek+')</h3>';
+
+  // Promo & deal context
   const todayWeekStart = (()=>{const d=new Date(todayDate);const day=d.getDay();const diff=d.getDate()-day+(day===0?-6:1);d.setDate(diff);return d.toISOString().slice(0,10);})();
   const todayPromo = (D.weekly.promoMap||{})[todayWeekStart]||'평시주간';
   const todayPromoDetail = (D.weekly.promoDetails||{})[todayWeekStart]||'';
@@ -237,80 +250,131 @@ function renderDaily(){
   }
   h += '</div>';
 
-  // GMV analysis
+  // GMV / Top 3 analysis
   h += '<div class="section"><h4>📈 매출 현황</h4>';
-  h += '<p>'+todayDate+' ('+dayOfWeek+') PB 전체 GMV는 <span class="hl">'+fM(totalGmv)+' 백만원</span>';
-  if(prevDate) h += ' (전일 대비 <span class="'+totalChg.c+'">'+totalChg.t+'</span>)';
-  h += '.</p></div>';
+  h += '<p>'+todayDate+'('+dayOfWeek+') PB 전체 GMV는 <span class="hl">'+fM(totalGmv)+' 백만원</span>으로, ';
+  if(prevDate){
+    h += '전일('+prevDate.substring(5)+') <span class="hl">'+fM(totalGmvPrev)+' 백만원</span> 대비 ';
+    if(totalChg.c==='down') h += '<span class="dn-hl">'+totalChg.t+'</span> 하락했습니다.</p>';
+    else h += '<span class="up-hl">'+totalChg.t+'</span> 상승했습니다.</p>';
+  } else h += '입니다.</p>';
+  const top3 = prods.filter(p=>p.gmv>0).slice(0,3);
+  h += '<p>상위 매출 제품: ';
+  top3.forEach((p,i)=>{
+    const share = totalGmv>0?(p.gmv/totalGmv*100).toFixed(1):'0';
+    h += '<span class="hl">'+(i+1)+'. '+p.name.substring(0,35)+'</span> ('+fM(p.gmv)+'백만원, '+share+'%)';
+    if(i<2)h+=', ';
+  });
+  h += '. 상위 3개 제품이 전체의 <span class="hl">'+(totalGmv>0?((top3.reduce((a,p)=>a+p.gmv,0))/totalGmv*100).toFixed(1):'0')+'%</span>를 차지합니다.</p>';
+  h += '</div>';
 
-  // Product table
-  h += '<div class="section"><h4>📋 상품별 일간 실적</h4>';
-  h += '<p style="font-size:12px;color:#94a3b8;margin-bottom:4px;">* 기준: '+todayDate+' GMV 내림차순. 클릭하여 정렬 가능.</p>';
-  h += '<div class="tbl-wrap"><table id="tbl-daily"><thead><tr>';
-  h += '<th style="width:30px;text-align:center;cursor:pointer;" data-col="rank"># <span class="arr">↕</span></th>';
-  h += '<th style="text-align:left;cursor:pointer;" data-col="name">상품명 <span class="arr">↕</span></th>';
-  h += '<th style="text-align:left;cursor:pointer;" data-col="cate">카테고리 <span class="arr">↕</span></th>';
-  h += '<th style="text-align:right;cursor:pointer;" data-col="gmv">GMV(백만원) <span class="arr">↕</span></th>';
-  h += '<th style="text-align:right;cursor:pointer;" data-col="chg">전일비 <span class="arr">↕</span></th>';
-  h += '<th style="text-align:right;cursor:pointer;" data-col="imp">노출 <span class="arr">↕</span></th>';
-  h += '<th style="text-align:right;cursor:pointer;" data-col="pdp">PDP UV <span class="arr">↕</span></th>';
-  h += '<th style="text-align:right;cursor:pointer;" data-col="buy">구매자 <span class="arr">↕</span></th>';
-  h += '<th style="text-align:right;cursor:pointer;" data-col="cvr">CVR <span class="arr">↕</span></th>';
-  h += '<th style="text-align:right;cursor:pointer;" data-col="bench">3P CVR <span class="arr">↕</span></th>';
+  // CVR analysis
+  h += '<div class="section"><h4>🎯 전환율 분석</h4>';
+  const goodCvr = prods.filter(p=>p.cvr!==null&&p.benchCvr!==null&&p.cvr>=p.benchCvr&&p.gmv>0);
+  const badCvr = prods.filter(p=>p.cvr!==null&&p.benchCvr!==null&&p.cvr<p.benchCvr*0.5&&p.gmv>0);
+  h += '<p>카테고리 평균 CVR 대비 <span class="up-hl">달성 상품 '+goodCvr.length+'개</span>, <span class="dn-hl">50% 미만 상품 '+badCvr.length+'개</span>입니다. ';
+  if(badCvr.length>0){
+    h += '특히 전환율 개선이 필요한 제품: ';
+    badCvr.slice(0,3).forEach((p,i)=>{
+      h += '<span class="dn-hl">'+p.name.substring(0,25)+'</span>(CVR '+fP(p.cvr)+' vs 카테고리 평균 '+fP(p.benchCvr)+')';
+      if(i<Math.min(2,badCvr.length-1))h+=', ';
+    });
+    h += '. 이 제품들은 노출 대비 구매 전환이 크게 낮아 PDP 콘텐츠 개선 또는 가격 경쟁력 점검이 필요합니다.</p>';
+  } else h += '</p>';
+
+  // CTR analysis
+  h += '</div><div class="section"><h4>👁️ 노출 효율 분석</h4>';
+  const highImpLowCtr = prods.filter(p=>p.imp>10000&&p.ctr!==null&&p.benchCtr!==null&&p.ctr<p.benchCtr).sort((a,b)=>b.imp-a.imp);
+  if(highImpLowCtr.length>0){
+    h += '<p>노출은 높으나 CTR이 카테고리 평균 이하인 제품이 <span class="dn-hl">'+highImpLowCtr.length+'개</span> 있습니다. ';
+    h += '대표적으로 ';
+    highImpLowCtr.slice(0,2).forEach((p,i)=>{
+      h += '<span class="hl">'+p.name.substring(0,25)+'</span>(노출 '+fN(p.imp)+', CTR '+fP(p.ctr)+' vs 평균 '+fP(p.benchCtr)+')';
+      if(i===0&&highImpLowCtr.length>1)h += ', ';
+    });
+    h += '. 썸네일 이미지, 가격 표시, 뱃지 등 리스팅 요소 최적화가 권장됩니다.</p>';
+  }
+  h += '</div>';
+
+  // 조직별 퍼널 진단
+  h += '<div class="section"><h4>🔍 조직별 퍼널 진단 (일간)</h4>';
+  const dOrgMap = D.orgMapping || {};
+  Object.keys(dOrgMap).forEach(orgName=>{
+    const orgCats = dOrgMap[orgName] || [];
+    const orgP = prods.filter(p=>orgCats.includes(p.cate1));
+    let oI=0,oP2=0,oB=0,oG=0;
+    orgP.forEach(p=>{oI+=s(p.imp,0);oP2+=s(p.pdp,0);oB+=(p.purchase!==null?s(p.purchase,0):0);oG+=s(p.gmv,0);});
+    const oCtr2=oI>0?(oP2/oI*100):0;
+    const oCvr2=oP2>0?(oB/oP2*100):0;
+    let bCS2=0,bCV2=0,bN2=0;
+    Object.keys(dd.dailyBench||{}).forEach(k=>{
+      const c1=k.split('|')[0];
+      if(orgCats.includes(c1)){const b2=(dd.dailyBench[k]||{})[todayDate];if(b2){bCS2+=s(b2.ctr,0);bCV2+=s(b2.cvr,0);bN2++;}}});
+    const bCtr2=bN2>0?(bCS2/bN2):0;
+    const bCvr2=bN2>0?(bCV2/bN2):0;
+    const cvrR2=bCvr2>0?(oCvr2/bCvr2*100):0;
+    let bn='',rc='';
+    if(oI<5000){bn='노출 부족';rc='기획전/딜 노출 확보 필요';}
+    else if(bCtr2>0&&oCtr2<bCtr2*0.8){bn='CTR 미달 (3P 평균의 '+(oCtr2/bCtr2*100).toFixed(0)+'%)';rc='썸네일/가격표시 최적화 권장';}
+    else if(cvrR2<60){bn='CVR 구조적 문제 (3P 평균의 '+cvrR2.toFixed(0)+'%)';rc='PDP 콘텐츠/리뷰/가격 점검 필요';}
+    else if(cvrR2<80){bn='CVR 소폭 미달 (3P 평균의 '+cvrR2.toFixed(0)+'%)';rc='상세 페이지 개선 여지 있음';}
+    else{bn='퍼널 양호 (3P 평균의 '+cvrR2.toFixed(0)+'%)';rc='현 전략 유지';}
+    h+='<div style="margin:12px 0;padding:16px;background:#f8fafc;border-radius:8px;border-left:3px solid '+(orgName==='가구PB'?'#3b82f6':'#f59e0b')+';">';
+    h+='<p style="font-weight:700;font-size:15px;margin-bottom:10px;">'+orgName+'</p>';
+    h+='<table style="width:100%;font-size:13px;border-collapse:collapse;">';
+    h+='<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">노출</td><td style="text-align:right;font-weight:600;">'+fN(oI)+'</td><td style="padding-left:16px;color:#64748b;">PDP</td><td style="text-align:right;font-weight:600;">'+fN(oP2)+'</td><td style="padding-left:16px;color:#64748b;">구매</td><td style="text-align:right;font-weight:600;">'+oB+'명</td></tr>';
+    h+='<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">PB CTR</td><td style="text-align:right;font-weight:600;">'+oCtr2.toFixed(2)+'%</td><td style="padding-left:16px;color:#64748b;">3P 평균 CTR</td><td style="text-align:right;font-weight:600;">'+(bCtr2>0?bCtr2.toFixed(2)+'%':'—')+'</td><td style="padding-left:16px;color:#64748b;">Gap</td><td style="text-align:right;font-weight:600;color:'+(oCtr2>=bCtr2?'#16a34a':'#dc2626')+';">'+(bCtr2>0?(oCtr2-bCtr2>=0?'+':'')+(oCtr2-bCtr2).toFixed(2)+'%p':'—')+'</td></tr>';
+    h+='<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px 0;color:#64748b;">PB CVR</td><td style="text-align:right;font-weight:600;">'+oCvr2.toFixed(2)+'%</td><td style="padding-left:16px;color:#64748b;">3P 평균 CVR</td><td style="text-align:right;font-weight:600;">'+(bCvr2>0?bCvr2.toFixed(2)+'%':'—')+'</td><td style="padding-left:16px;color:#64748b;">Gap</td><td style="text-align:right;font-weight:600;color:'+(oCvr2>=bCvr2?'#16a34a':'#dc2626')+';">'+(bCvr2>0?(oCvr2-bCvr2>=0?'+':'')+(oCvr2-bCvr2).toFixed(2)+'%p':'—')+'</td></tr>';
+    h+='</table>';
+    h+='<p style="margin-top:10px;"><span style="color:'+(cvrR2>=80?'#16a34a':'#dc2626')+';font-weight:700;">▸ 주요 병목: '+bn+'</span></p>';
+    h+='<p style="color:#475569;font-size:13px;">→ '+rc+'</p>';
+    h+='</div>';
+  });
+  h += '</div></div>';
+
+  // Full Product Table (all columns)
+  h += '<div class="tbl-wrap"><table id="tbl-daily">';
+  h += '<thead><tr><th style="width:30px;text-align:center;">#</th><th data-col="name" data-dir="asc">제품명 <span class="arr">↕</span></th>';
+  h += '<th data-col="cat">카테고리 <span class="arr">↕</span></th>';
+  h += '<th data-col="gmv" class="sorted" data-dir="desc">GMV <span class="arr">▼</span></th>';
+  h += '<th data-col="imp">노출 <span class="arr">↕</span></th>';
+  h += '<th data-col="ctr">CTR(%) <span class="arr">↕</span></th>';
+  h += '<th data-col="benchCtr">카테고리 평균 CTR <span class="arr">↕</span></th>';
+  h += '<th data-col="pdp">PDP <span class="arr">↕</span></th>';
+  h += '<th data-col="purchase">구매자수 <span class="arr">↕</span></th>';
+  h += '<th data-col="cvr">CVR(%) <span class="arr">↕</span></th>';
+  h += '<th data-col="benchCvr">카테고리 평균 CVR <span class="arr">↕</span></th>';
   h += '</tr></thead><tbody>';
 
-  const filteredProds = prods.filter(p=>p.gmv>0||p.purchase>0);
-  filteredProds.forEach((p,i)=>{
-    const chg = fPct(s(p.gmv,0), s(p.gmvPrev,0));
-    const isDeal = todayDealProds.includes(String(p.id));
-    const cvrCls = p.cvr!==null&&p.benchCvr!==null?(p.cvr>=p.benchCvr?'cvr-above':'cvr-below'):'';
+  let dailyRowNum = 0;
+  const filteredProds = prods.filter(p=>p.gmv>0||p.purchase>0||p.pdp>0||p.imp>0);
+  filteredProds.forEach(p=>{
+    dailyRowNum++;
+    const cv = s(p.cvr,null);
+    const bc = s(p.benchCvr,null);
+    const bct = s(p.benchCtr,null);
+    const cls = cvrCls(cv,bc);
+    const ctrCls2 = cvrCls(s(p.ctr,null),bct);
+    const dPbData=D.priceBandData||{};
+    const dPBand=(dPbData.pbPriceBand||{})[p.id]||{};
+    const dDealDates=(D.weekly.productDealDates||{})[p.id]||[];
+    const isDealToday=dDealDates.includes(todayDate);
+    const dPname=p.name+(dPBand.band?'<span class="price-tag">'+dPBand.band+'</span>':'')+(isDealToday?'<span style="background:#fef3c7;color:#92400e;font-size:9px;padding:1px 4px;border-radius:3px;margin-left:4px;">스오딜</span>':'');
     h += '<tr>';
-    h += '<td style="text-align:center;">'+(i+1)+'</td>';
-    h += '<td style="font-weight:500;">'+p.name.substring(0,30)+(isDeal?'<span style="background:#fef3c7;color:#92400e;padding:1px 4px;border-radius:3px;margin-left:4px;font-size:10px;">스오딜</span>':'')+'</td>';
-    h += '<td>'+p.cate2+'</td>';
-    h += '<td style="text-align:right;font-weight:600;">'+fMw(s(p.gmv,0))+'</td>';
-    h += '<td style="text-align:right;" class="'+chg.c+'">'+chg.t+'</td>';
-    h += '<td style="text-align:right;">'+fN(s(p.imp,0))+'</td>';
-    h += '<td style="text-align:right;">'+fN(s(p.pdp,0))+'</td>';
-    h += '<td style="text-align:right;">'+(p.purchase!==null?p.purchase:'—')+'</td>';
-    h += '<td style="text-align:right;"><span class="cvr-pill '+cvrCls+'">'+(p.cvr!==null?fP(p.cvr):'—')+'</span></td>';
-    h += '<td style="text-align:right;">'+(p.benchCvr!==null?fP(p.benchCvr):'—')+'</td>';
+    h += '<td style="text-align:center;color:#94a3b8;font-size:11px;">'+dailyRowNum+'</td>';
+    h += '<td title="'+p.name+'">'+dPname+'</td>';
+    h += '<td>'+p.cate1+'/'+p.cate2+'</td>';
+    h += '<td>'+fM(p.gmv)+'</td>';
+    h += '<td>'+fN(p.imp)+'</td>';
+    h += '<td><span class="cvr-pill '+ctrCls2+'">'+(p.ctr!==null?fP(p.ctr):'—')+'</span></td>';
+    h += '<td>'+(bct!==null?fP(bct):'—')+gapBadge(s(p.ctr,null),bct)+'</td>';
+    h += '<td>'+fN(p.pdp)+'</td>';
+    h += '<td>'+(p.purchase!==null?p.purchase:'—')+'</td>';
+    h += '<td><span class="cvr-pill '+cls+'">'+(cv!==null?fP(cv):'—')+'</span></td>';
+    h += '<td>'+(bc!==null?fP(bc):'—')+gapBadge(cv,bc)+'</td>';
     h += '</tr>';
   });
-  h += '</tbody></table></div></div>';
-
-  // 스오딜 daily analysis
-  const ddDealMap = D.weekly.productDealDates || {};
-  const ddTodayDeals = Object.entries(ddDealMap).filter(([pid,dates])=>dates.includes(todayDate));
-  if(ddTodayDeals.length>0){
-    h += '<div class="section"><h4>🏷️ 스오딜 일간 분석</h4>';
-    h += '<p style="font-weight:600;margin-bottom:8px;">'+todayDate+' 스오딜 참여 상품 성과</p>';
-    h += '<div class="tbl-wrap"><table class="tbl"><thead><tr>';
-    h += '<th style="padding:6px;">상품명</th>';
-    h += '<th style="text-align:right;padding:6px;">GMV(백만원)</th>';
-    h += '<th style="text-align:right;padding:6px;">전일 대비</th>';
-    h += '<th style="text-align:right;padding:6px;">PDP UV</th>';
-    h += '<th style="text-align:right;padding:6px;">구매자수</th>';
-    h += '<th style="text-align:right;padding:6px;">CVR</th>';
-    h += '<th style="text-align:center;padding:6px;">총 행사횟수</th>';
-    h += '</tr></thead><tbody>';
-    ddTodayDeals.forEach(([pid,dates])=>{
-      const prod = prods.find(p=>String(p.id)===pid);
-      if(!prod) return;
-      const chg = fPct(s(prod.gmv,0), s(prod.gmvPrev,0));
-      const cvr = s(prod.pdp,0)>0?(s(prod.purchase,0)/s(prod.pdp,0)*100).toFixed(2):'—';
-      h += '<tr>';
-      h += '<td style="padding:6px;font-weight:500;">'+prod.name.substring(0,30)+'</td>';
-      h += '<td style="text-align:right;padding:6px;font-weight:600;">'+fMw(s(prod.gmv,0))+'</td>';
-      h += '<td style="text-align:right;padding:6px;" class="'+chg.c+'">'+chg.t+'</td>';
-      h += '<td style="text-align:right;padding:6px;">'+fN(s(prod.pdp,0))+'</td>';
-      h += '<td style="text-align:right;padding:6px;">'+s(prod.purchase,0)+'</td>';
-      h += '<td style="text-align:right;padding:6px;">'+cvr+'%</td>';
-      h += '<td style="text-align:center;padding:6px;"><span style="background:#fef3c7;color:#92400e;padding:1px 6px;border-radius:3px;font-size:12px;font-weight:600;">'+dates.length+'회</span></td>';
-      h += '</tr>';
-    });
-    h += '</tbody></table></div></div>';
-  }
+  h += '</tbody></table></div>';
 
   document.getElementById('panel-daily').innerHTML = h;
   setupSort('tbl-daily', filteredProds);
@@ -321,6 +385,7 @@ function renderDaily(){
   if(prevBtn) prevBtn.onclick = ()=>{ window.__dailyIdx = Math.max(0, curIdx-1); renderDaily(); };
   if(nextBtn) nextBtn.onclick = ()=>{ window.__dailyIdx = Math.min(dailyDates.length-1, curIdx+1); renderDaily(); };
 }
+
 
 function renderWeekly(){
   const wd = D.weekly;
