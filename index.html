@@ -58,19 +58,19 @@ body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystem
 
 /* Table */
 .tbl-wrap{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow-x:auto;margin:20px 0;}
-table{width:100%;border-collapse:collapse;font-size:13px;}
+table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;}
 thead{z-index:10;}
-th{padding:12px 14px;text-align:right;font-weight:700;color:#475569;background:#f8fafc;border-bottom:2px solid #e2e8f0;white-space:nowrap;cursor:pointer;user-select:none;font-size:13px;}
+th{padding:8px 6px;text-align:right;font-weight:700;color:#475569;background:#f8fafc;border-bottom:2px solid #e2e8f0;white-space:nowrap;cursor:pointer;user-select:none;font-size:11px;}
 th:hover{background:#eef2ff;}
 th:first-child,th:nth-child(2){text-align:left;}
-th .arr{color:#94a3b8;margin-left:2px;font-size:10px;}
+th .arr{color:#94a3b8;margin-left:1px;font-size:9px;}
 th.sorted .arr{color:#2563eb;}
-td{padding:10px 14px;text-align:right;border-bottom:1px solid #f1f5f9;white-space:nowrap;height:44px;}
-td:first-child{text-align:center;width:30px;color:#94a3b8;font-size:11px;}
-td:nth-child(2){text-align:left;max-width:280px;font-weight:500;color:#1e293b;white-space:normal;line-height:1.4;}
-td:nth-child(2) .pname{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:280px;}
-td:nth-child(2) .ptags{display:block;margin-top:2px;}
-td:nth-child(3){text-align:left;color:#64748b;font-size:12px;max-width:140px;overflow:hidden;text-overflow:ellipsis;}
+td{padding:7px 6px;text-align:right;border-bottom:1px solid #f1f5f9;white-space:nowrap;height:auto;}
+td:first-child{text-align:center;width:28px;color:#94a3b8;font-size:11px;}
+td:nth-child(2){text-align:left;max-width:220px;font-weight:500;color:#1e293b;white-space:normal;line-height:1.3;overflow:hidden;}
+td:nth-child(2) .pname{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px;font-size:12px;}
+td:nth-child(2) .ptags{display:block;margin-top:1px;}
+td:nth-child(3){text-align:left;color:#64748b;font-size:11px;max-width:100px;overflow:hidden;text-overflow:ellipsis;}
 tr:nth-child(even){background:#fafbfc;}
 tr:hover{background:#f1f5f9;}
 .cvr-pill{display:inline-block;padding:3px 10px;border-radius:12px;font-weight:700;font-size:12px;}
@@ -793,10 +793,10 @@ function renderWeekly(){
     // 스오딜은 1일 행사이므로 행사일 일별 GMV vs 비행사일 일별 GMV로 비교
     h += '<p style="font-weight:700;font-size:13px;margin:16px 0 8px;color:#334155;">스오딜 Top 상품 (행사 효과 분석 — 일별 비교)</p>';
     h += '<p style="font-size:11px;color:#94a3b8;margin:-4px 0 8px;">* 스오딜은 1일 행사이므로, 행사일 GMV vs 비행사일 평균 GMV를 일 단위로 비교합니다.</p>';
-    // Merge productDailyGmv (38일, 20상품) + dailyAll (7일, 전체상품) for comprehensive coverage
+    // Merge productDailyGmv (38일, 20상품, 원단위) + dailyAll (7일, 전체상품, 백만원단위) → 백만원 통일
     const dailyGmvMap = {};
     const _pdg = D.weekly.productDailyGmv || {};
-    Object.keys(_pdg).forEach(pid=>{ dailyGmvMap[pid] = Object.assign({}, _pdg[pid]); });
+    Object.keys(_pdg).forEach(pid=>{ dailyGmvMap[pid]={}; Object.keys(_pdg[pid]).forEach(d=>{ dailyGmvMap[pid][d]=_pdg[pid][d]/1000000; }); });
     if(D.dailyAll){ Object.keys(D.dailyAll).forEach(dt=>{ (D.dailyAll[dt].products||[]).forEach(p=>{ const pid=String(p.id); if(!dailyGmvMap[pid]) dailyGmvMap[pid]={}; if(dailyGmvMap[pid][dt]===undefined) dailyGmvMap[pid][dt]=p.gmv; }); }); }
     const dealProdAnalysis = [];
     dealProds.forEach(pid=>{
@@ -851,9 +851,9 @@ function renderWeekly(){
       h += '<td style="padding:6px;font-weight:500;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="'+dp.name+'">'+dp.name.substring(0,35)+'</td>';
       h += '<td style="padding:6px;color:#64748b;font-size:11px;">'+dp.cate+'</td>';
       h += '<td style="text-align:center;padding:6px;"><span style="background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:3px;font-weight:600;">'+dp.dealCount+'회</span></td>';
-      // 일별 GMV이므로 원 단위 → 백만원 변환 (gmv_total은 원 단위)
-      h += '<td style="text-align:right;padding:6px;font-weight:600;">'+(dp.dealAvg/1000000).toFixed(2)+'백만원</td>';
-      h += '<td style="text-align:right;padding:6px;color:#64748b;">'+(dp.nonAvg!==null?(dp.nonAvg/1000000).toFixed(2)+'백만원':'<span style="color:#94a3b8;font-size:11px">데이터 부족</span>')+'</td>';
+      // dailyGmvMap은 백만원 단위로 통일됨
+      h += '<td style="text-align:right;padding:6px;font-weight:600;">'+dp.dealAvg.toFixed(2)+'</td>';
+      h += '<td style="text-align:right;padding:6px;color:#64748b;">'+(dp.nonAvg!==null?dp.nonAvg.toFixed(2):'<span style="color:#94a3b8;font-size:11px">데이터 부족</span>')+'</td>';
       h += '<td style="text-align:right;padding:6px;font-weight:700;color:'+(dp.lift!==null&&dp.lift>0?'#16a34a':'#dc2626')+';">'+(dp.lift!==null?(dp.lift>0?'+':'')+dp.lift.toFixed(1)+'%':'—')+'</td>';
       h += '<td style="text-align:center;padding:6px;font-weight:700;color:'+effColor+';">'+effLabel+'</td>';
       h += '</tr>';
@@ -1101,10 +1101,10 @@ function renderWeekly(){
 
     // 스오딜 분석 (선택된 주 기준)
     const wDealDates = D.weekly.productDealDates || {};
-    // Merge productDailyGmv + dailyAll
+    // Merge productDailyGmv (원→백만원 변환) + dailyAll (이미 백만원)
     const wDailyGmv = {};
     const _wpdg = D.weekly.productDailyGmv || {};
-    Object.keys(_wpdg).forEach(pid=>{ wDailyGmv[pid] = Object.assign({}, _wpdg[pid]); });
+    Object.keys(_wpdg).forEach(pid=>{ wDailyGmv[pid]={}; Object.keys(_wpdg[pid]).forEach(d=>{ wDailyGmv[pid][d]=_wpdg[pid][d]/1000000; }); });
     if(D.dailyAll){ Object.keys(D.dailyAll).forEach(dt=>{ (D.dailyAll[dt].products||[]).forEach(p=>{ const pid=String(p.id); if(!wDailyGmv[pid]) wDailyGmv[pid]={}; if(wDailyGmv[pid][dt]===undefined) wDailyGmv[pid][dt]=p.gmv; }); }); }
     const wStart = selW;
     const wEndDate = new Date(new Date(selW).getTime()+7*86400000).toISOString().slice(0,10);
@@ -1151,8 +1151,8 @@ function renderWeekly(){
         ins += '<tr style="border-bottom:1px solid #f1f5f9;">';
         ins += '<td style="padding:6px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="'+dp.name+'">'+dp.name.substring(0,30)+'</td>';
         ins += '<td style="text-align:center;padding:6px;"><span style="background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:3px;font-weight:600;">'+dp.dealCount+'회</span></td>';
-        ins += '<td style="text-align:right;padding:6px;font-weight:600;">'+(dp.dealAvg/1000000).toFixed(2)+'백만원</td>';
-        ins += '<td style="text-align:right;padding:6px;color:#64748b;">'+(dp.nonAvg!==null?(dp.nonAvg/1000000).toFixed(2)+'백만원':'데이터 부족')+'</td>';
+        ins += '<td style="text-align:right;padding:6px;font-weight:600;">'+dp.dealAvg.toFixed(2)+'</td>';
+        ins += '<td style="text-align:right;padding:6px;color:#64748b;">'+(dp.nonAvg!==null?dp.nonAvg.toFixed(2):'데이터 부족')+'</td>';
         ins += '<td style="text-align:right;padding:6px;font-weight:700;color:'+(dp.lift!==null&&dp.lift>0?'#16a34a':'#dc2626')+';">'+(dp.lift!==null?(dp.lift>0?'+':'')+dp.lift.toFixed(1)+'%':'—')+'</td>';
         ins += '<td style="text-align:center;padding:6px;font-weight:700;color:'+effColor+';">'+effLabel+'</td>';
         ins += '</tr>';
