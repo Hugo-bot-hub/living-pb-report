@@ -791,7 +791,11 @@ function renderWeekly(){
     // 스오딜은 1일 행사이므로 행사일 일별 GMV vs 비행사일 일별 GMV로 비교
     h += '<p style="font-weight:700;font-size:13px;margin:16px 0 8px;color:#334155;">스오딜 Top 상품 (행사 효과 분석 — 일별 비교)</p>';
     h += '<p style="font-size:11px;color:#94a3b8;margin:-4px 0 8px;">* 스오딜은 1일 행사이므로, 행사일 GMV vs 비행사일 평균 GMV를 일 단위로 비교합니다.</p>';
-    const dailyGmvMap = D.weekly.productDailyGmv || {};
+    // Merge productDailyGmv (38일, 20상품) + dailyAll (7일, 전체상품) for comprehensive coverage
+    const dailyGmvMap = {};
+    const _pdg = D.weekly.productDailyGmv || {};
+    Object.keys(_pdg).forEach(pid=>{ dailyGmvMap[pid] = Object.assign({}, _pdg[pid]); });
+    if(D.dailyAll){ Object.keys(D.dailyAll).forEach(dt=>{ (D.dailyAll[dt].products||[]).forEach(p=>{ const pid=String(p.id); if(!dailyGmvMap[pid]) dailyGmvMap[pid]={}; if(dailyGmvMap[pid][dt]===undefined) dailyGmvMap[pid][dt]=p.gmv; }); }); }
     const dealProdAnalysis = [];
     dealProds.forEach(pid=>{
       const p2 = prods.find(p=>String(p.id)===String(pid));
@@ -1095,7 +1099,11 @@ function renderWeekly(){
 
     // 스오딜 분석 (선택된 주 기준)
     const wDealDates = D.weekly.productDealDates || {};
-    const wDailyGmv = D.weekly.productDailyGmv || {};
+    // Merge productDailyGmv + dailyAll
+    const wDailyGmv = {};
+    const _wpdg = D.weekly.productDailyGmv || {};
+    Object.keys(_wpdg).forEach(pid=>{ wDailyGmv[pid] = Object.assign({}, _wpdg[pid]); });
+    if(D.dailyAll){ Object.keys(D.dailyAll).forEach(dt=>{ (D.dailyAll[dt].products||[]).forEach(p=>{ const pid=String(p.id); if(!wDailyGmv[pid]) wDailyGmv[pid]={}; if(wDailyGmv[pid][dt]===undefined) wDailyGmv[pid][dt]=p.gmv; }); }); }
     const wStart = selW;
     const wEndDate = new Date(new Date(selW).getTime()+7*86400000).toISOString().slice(0,10);
     const wDealProds = [];
