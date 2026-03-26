@@ -158,7 +158,16 @@ function renderDaily(){
   const curIdx = window.__dailyIdx;
   const curDate = dailyDates[curIdx];
   const dd = dailyAll[curDate] || D.daily;
-  const prods = dd.products || [];
+  // Merge: use all weekly products as base, overlay daily metrics
+  const dailyProdsRaw = dd.products || [];
+  const dailyMap = {};
+  dailyProdsRaw.forEach(p=>{ dailyMap[String(p.id)] = p; });
+  const weeklyBase = (D.weekly && D.weekly.products) || [];
+  const prods = weeklyBase.length > dailyProdsRaw.length ? weeklyBase.map(wp=>{
+    const dp = dailyMap[String(wp.id)];
+    if(dp) return dp;
+    return {id:wp.id, name:wp.name, cate1:wp.cate1, cate2:wp.cate2, gmv:0, imp:0, pdp:0, purchase:0, ctr:null, cvr:null, benchCvr:null, gmvPrev:null};
+  }) : dailyProdsRaw;
   const catS = dd.summary || {};
   const totalGmv = s(dd.totalGmv,0);
   const totalGmvPrev = s(dd.totalGmvPrev,0);
@@ -347,7 +356,7 @@ function renderDaily(){
   h += '</tr></thead><tbody>';
 
   let dailyRowNum = 0;
-  const filteredProds = prods.filter(p=>p.gmv>0||p.purchase>0||p.pdp>0||p.imp>0);
+  const filteredProds = prods.slice().sort((a,b)=>s(b.gmv,0)-s(a.gmv,0));
   filteredProds.forEach(p=>{
     dailyRowNum++;
     const cv = s(p.cvr,null);
@@ -923,7 +932,7 @@ function renderWeekly(){
       const catBandCvr=bandCvrMap[p.cate2]||{};
       const pBandData=catBandCvr[pBand.band]||{};
       return {...p,wGmv:s(wd2.gmv,0),wImp:s(wd2.imp,0),wPdp:s(wd2.pdp,0),wBuy:s(wd2.purchase,0),wCvr:s(wd2.cvr,null),wBench:s(wd2.bench3p,null),priceBand:pBand.band||'—',priceBandCvr:pBandData[w]!==undefined?pBandData[w]:null};
-    }).filter(p=>p.wGmv>0).sort((a,b)=>b.wGmv-a.wGmv);
+    }).filter(p=>p.wGmv>0||p.wBuy>0||p.wPdp>0||p.wImp>0).sort((a,b)=>b.wGmv-a.wGmv);
 
     let wkRowNum = 0;
     sortedProds.forEach(p=>{
@@ -1358,7 +1367,7 @@ function renderMonthly(){
     const sortedProds = prods.map(p=>{
       const md2=(p.monthly||{})[m]||{};
       return {...p,mGmv:s(md2.gmv,0),mImp:s(md2.imp,0),mPdp:s(md2.pdp,0),mBuy:s(md2.purchase,0),mCvr:s(md2.cvr,null),mBench:s(md2.bench3p,null)};
-    }).filter(p=>p.mGmv>0).sort((a,b)=>b.mGmv-a.mGmv);
+    }).filter(p=>p.mGmv>0||p.mBuy>0||p.mPdp>0||p.mImp>0).sort((a,b)=>b.mGmv-a.mGmv);
 
     let moRowNum = 0;
     sortedProds.forEach(p=>{
@@ -1394,7 +1403,7 @@ function renderMonthly(){
     Object.entries(mDealDates).forEach(([pid,dates])=>{
       const datesInMonth = dates.filter(d=>d>=mStart2&&d<mEnd2);
       if(datesInMonth.length>0){
-        const prod = data.find(p=>String(p.id)===pid);
+        const prod = sortedProds.find(p=>String(p.id)===pid);
         mDealProds.push({pid:pid, name:prod?prod.name:'상품 '+pid, dealCount:datesInMonth.length, gmv:prod?s(prod.mGmv,0):0, cvr:prod?prod.mCvr:null});
       }
     });
