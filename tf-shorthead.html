@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎯 숏헤드 PB TF 실적 대시보드 v4</title>
+<title>🎯 숏헤드 PB TF 실적 대시보드 v5</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
 <style>
-:root{--bg:#f5f6f8;--card:#fff;--border:#e2e4ea;--text:#1a1d27;--text2:#6b6e7d;--text3:#9a9dad;--accent:#6c5ce7;--green:#00b894;--red:#ff6b6b;--orange:#e6a817;--blue:#3b82f6;--purple:#8b5cf6;--soft:#ff6b6b;--allergy:#00b894;--compA:#e6a817;--compB:#8b5cf6}
+:root{--bg:#f5f6f8;--card:#fff;--border:#e2e4ea;--text:#1a1d27;--text2:#6b6e7d;--text3:#9a9dad;--accent:#6c5ce7;--green:#00b894;--red:#ff6b6b;--orange:#e6a817;--blue:#3b82f6;--purple:#8b5cf6;--soft:#ff6b6b;--allergy:#00b894;--compA:#e6a817;--compB:#8b5cf6;--compC:#3b82f6;--compD:#f97316}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:'Pretendard',sans-serif;font-size:13px;line-height:1.5}
 .top-bar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 28px;display:flex;align-items:center;justify-content:space-between;height:56px}
@@ -26,8 +26,7 @@ body{background:var(--bg);color:var(--text);font-family:'Pretendard',sans-serif;
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
-.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
-@media(max-width:900px){.g2,.g3,.g4,.g5{grid-template-columns:1fr}}
+@media(max-width:900px){.g2,.g3,.g4{grid-template-columns:1fr}}
 .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
 .card.soft{border-top:3px solid var(--soft)}
 .card.allergy{border-top:3px solid var(--allergy)}
@@ -45,7 +44,7 @@ body{background:var(--bg);color:var(--text);font-family:'Pretendard',sans-serif;
 .kpi .chg.up{color:var(--green);font-weight:700}
 .kpi .chg.dn{color:var(--red);font-weight:700}
 .ch{position:relative;width:100%;height:260px}
-.ch.sm{height:200px}.ch.lg{height:340px}
+.ch.sm{height:200px}.ch.lg{height:360px}.ch.xl{height:440px}
 table{width:100%;border-collapse:collapse;font-size:12px}
 th{text-align:left;padding:9px 6px;border-bottom:1px solid var(--border);color:var(--text2);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.3px}
 td{padding:8px 6px;border-bottom:1px solid rgba(0,0,0,.04)}
@@ -78,13 +77,14 @@ tr:hover td{background:rgba(108,92,231,.04)}
 .timeline-item.tf::before{background:var(--accent)}
 .timeline-item .dt{font-size:10px;color:var(--text3);font-weight:600}
 .timeline-item .act{font-weight:500;margin-top:2px}
-.err{background:#fee;border:1px solid #fcc;color:#a00;padding:12px;border-radius:8px}
 .warn-chip{background:rgba(255,107,107,.12);color:var(--soft);font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}
+.err{background:#fee;border:1px solid #fcc;color:#a00;padding:12px;border-radius:8px}
+.cvr-note{background:rgba(230,168,23,.08);border-left:3px solid var(--orange);padding:10px 12px;border-radius:6px;font-size:11px;color:var(--text2);margin:10px 0;line-height:1.5}
 </style>
 </head>
 <body>
 <div class="top-bar">
-  <div class="logo">🎯 숏헤드 PB TF <span class="v-badge">v4</span> <span class="mission">Layer 이불 · TOP 10 자생 궤도</span></div>
+  <div class="logo">🎯 숏헤드 PB TF <span class="v-badge">v5</span> <span class="mission">Layer 이불 · TOP 10 자생 궤도</span></div>
   <div class="meta">PM: Hugo · <span id="last-update">—</span></div>
 </div>
 <div class="tab-nav">
@@ -96,11 +96,12 @@ tr:hover td{background:rgba(108,92,231,.04)}
   <button class="tab-btn" onclick="switchTab(event,'ages')">👥 연령대</button>
 </div>
 
-<!-- Overview -->
 <div id="tab-overview" class="tab-content active">
   <div class="share-banner"><div>📊 <strong>TF 멤버 공유</strong> — 매일 9시 자동 업데이트</div><div><span id="share-url" style="font-family:monospace;font-size:11px">—</span> <button class="copy-btn" onclick="copyShareUrl()">복사</button></div></div>
 
-  <div class="product-header soft">🔴 소프트워싱 이불 <span class="pill soft">전환 살리기</span><span class="pid">오늘의집 layer · 35,900원 · 출시 2026-02-10 · PID 3918642</span></div>
+  <div class="cvr-note">📌 <strong>CVR 기준 주의:</strong> 본 대시보드는 CVR(PV) = 구매건수/PDP뷰수 기준. Notion CPC 딥다이브의 CVR(UV)=구매UV/PDP UV와 다름 (같은 유저 PDP 여러 번 → PV CVR이 UV CVR의 1/2~1/3 수준으로 낮게 나옴). 비교는 같은 기준끼리만.</div>
+
+  <div class="product-header soft">🔴 소프트워싱 이불, 오늘의집 layer, 3918642 <span class="pill soft">전환 살리기</span><span class="pid">35,900원 · 출시 2026-02-10</span></div>
   <div class="g4">
     <div class="kpi soft"><div class="lbl">7일 GMV</div><div class="val" id="o-s-gmv">—</div><div class="sub" id="o-s-gmv-wow">—</div></div>
     <div class="kpi soft"><div class="lbl">월 GMV (MTD)</div><div class="val" id="o-s-mtd">—</div><div class="sub">목표 3,000만(6월)</div></div>
@@ -108,12 +109,12 @@ tr:hover td{background:rgba(108,92,231,.04)}
     <div class="kpi soft"><div class="lbl">CVR(PV) 7일</div><div class="val" id="o-s-cvr">—<small>%</small></div><div class="sub" id="o-s-cvr-vs">vs 경쟁</div></div>
   </div>
   <div class="g3">
-    <div class="card soft"><h3>📊 일간 GMV — 소프트워싱 vs 경쟁사</h3><div class="ch"><canvas id="o-s-gmv-ch"></canvas></div><div class="note">좌축: 🔴 소프트워싱 / 우축: 경쟁사 2개 (Dual-axis)</div></div>
-    <div class="card soft"><h3>📈 일간 CTR — 3상품</h3><div class="ch"><canvas id="o-s-ctr-ch"></canvas></div></div>
-    <div class="card soft"><h3>📈 일간 CVR(PV) — 3상품</h3><div class="ch"><canvas id="o-s-cvr-ch"></canvas></div></div>
+    <div class="card soft"><h3>📊 일간 GMV — vs 경쟁사</h3><div class="ch"><canvas id="o-s-gmv-ch"></canvas></div><div class="note">좌축=자사 / 우축=경쟁사 (Dual-axis)</div></div>
+    <div class="card soft"><h3>📈 일간 CTR</h3><div class="ch"><canvas id="o-s-ctr-ch"></canvas></div></div>
+    <div class="card soft"><h3>📈 일간 CVR(PV)</h3><div class="ch"><canvas id="o-s-cvr-ch"></canvas></div></div>
   </div>
 
-  <div class="product-header allergy">🟢 알러지케어 침구 <span class="pill allergy">외부 확장</span><span class="pid">오늘의집 layer · 49,900원 · PID 3640244</span></div>
+  <div class="product-header allergy">🟢 알러지케어 침구, 오늘의집 layer, 3640244 <span class="pill allergy">외부 확장</span><span class="pid">49,900원</span></div>
   <div class="g4">
     <div class="kpi allergy"><div class="lbl">7일 GMV</div><div class="val" id="o-a-gmv">—</div><div class="sub" id="o-a-gmv-wow">—</div></div>
     <div class="kpi allergy"><div class="lbl">월 GMV (MTD)</div><div class="val" id="o-a-mtd">—</div><div class="sub">목표 8,000만(6월)</div></div>
@@ -121,18 +122,17 @@ tr:hover td{background:rgba(108,92,231,.04)}
     <div class="kpi allergy"><div class="lbl">CVR(PV) 7일</div><div class="val" id="o-a-cvr">—<small>%</small></div><div class="sub" id="o-a-cvr-vs">vs 경쟁</div></div>
   </div>
   <div class="g3">
-    <div class="card allergy"><h3>📊 일간 GMV — 알러지케어 vs 경쟁사</h3><div class="ch"><canvas id="o-a-gmv-ch"></canvas></div></div>
-    <div class="card allergy"><h3>📈 일간 CTR — 3상품</h3><div class="ch"><canvas id="o-a-ctr-ch"></canvas></div></div>
-    <div class="card allergy"><h3>📈 일간 CVR(PV) — 3상품</h3><div class="ch"><canvas id="o-a-cvr-ch"></canvas></div></div>
+    <div class="card allergy"><h3>📊 일간 GMV — vs 경쟁사</h3><div class="ch"><canvas id="o-a-gmv-ch"></canvas></div></div>
+    <div class="card allergy"><h3>📈 일간 CTR</h3><div class="ch"><canvas id="o-a-ctr-ch"></canvas></div></div>
+    <div class="card allergy"><h3>📈 일간 CVR(PV)</h3><div class="ch"><canvas id="o-a-cvr-ch"></canvas></div></div>
   </div>
 
   <div class="sec">🧭 TF 액션 타임라인</div>
   <div class="card"><div class="timeline" id="timeline-all"></div></div>
 </div>
 
-<!-- Soft -->
 <div id="tab-soft" class="tab-content">
-  <div class="sec">🔴 오늘의집 layer 소프트워싱 이불 (3918642)
+  <div class="sec">🔴 소프트워싱 이불, 오늘의집 layer, 3918642
     <span class="period-toggle" style="margin-left:12px">
       <button id="s-p-day" class="active" onclick="setPeriod('soft','day')">일간</button>
       <button id="s-p-week" onclick="setPeriod('soft','week')">주간</button>
@@ -140,21 +140,20 @@ tr:hover td{background:rgba(108,92,231,.04)}
     </span>
   </div>
   <div class="g2">
-    <div class="card soft"><h3 id="s-gmv-title">📊 일간 GMV 추이 — vs 경쟁사 2개</h3><div class="ch lg"><canvas id="s-gmv-ch"></canvas></div></div>
-    <div class="card soft"><h3 id="s-qty-title">📦 일간 판매수량 추이</h3><div class="ch lg"><canvas id="s-qty-ch"></canvas></div></div>
+    <div class="card soft"><h3 id="s-gmv-title">📊 일간 GMV — vs 경쟁사</h3><div class="ch lg"><canvas id="s-gmv-ch"></canvas></div></div>
+    <div class="card soft"><h3 id="s-qty-title">📦 일간 판매수량</h3><div class="ch lg"><canvas id="s-qty-ch"></canvas></div></div>
   </div>
   <div class="g2">
-    <div class="card soft"><h3>📈 일간 CTR 추이 (3상품)</h3><div class="ch"><canvas id="s-ctr-ch"></canvas></div></div>
-    <div class="card soft"><h3>📈 일간 CVR(PV) 추이 (3상품)</h3><div class="ch"><canvas id="s-cvr-ch"></canvas></div></div>
+    <div class="card soft"><h3>📈 일간 CTR (3상품)</h3><div class="ch"><canvas id="s-ctr-ch"></canvas></div></div>
+    <div class="card soft"><h3>📈 일간 CVR(PV) (3상품)</h3><div class="ch"><canvas id="s-cvr-ch"></canvas></div></div>
   </div>
   <div class="sec">⚔️ 1:1 비교 — 최근 30일</div>
-  <div class="card"><table class="vs-table"><thead><tr><th>지표</th><th class="r">🔴 오늘의집 layer 소프트워싱<br><span style="font-weight:400;color:var(--text3)">(3918642)</span></th><th class="r">⚔️ 헬로우슬립 카스테라<br><span style="font-weight:400;color:var(--text3)">(767440)</span></th><th class="r">⚔️ 쁘리엘르 유어메이트<br><span style="font-weight:400;color:var(--text3)">(2636441)</span></th></tr></thead><tbody id="s-vs-tbl"></tbody></table></div>
+  <div class="card"><table class="vs-table"><thead><tr><th>지표</th><th class="r">🔴 소프트워싱 이불<br>오늘의집 layer, 3918642</th><th class="r">⚔️ 카스테라 워싱<br>헬로우슬립, 767440</th><th class="r">⚔️ 유어메이트<br>쁘리엘르, 2636441</th></tr></thead><tbody id="s-vs-tbl"></tbody></table></div>
   <div class="card" style="margin-top:14px"><h3>🧭 액션 타임라인</h3><div class="timeline" id="timeline-soft"></div></div>
 </div>
 
-<!-- Allergy -->
 <div id="tab-allergy" class="tab-content">
-  <div class="sec">🟢 오늘의집 layer 알러지케어 침구 (3640244)
+  <div class="sec">🟢 알러지케어 침구, 오늘의집 layer, 3640244
     <span class="period-toggle" style="margin-left:12px">
       <button id="a-p-day" class="active" onclick="setPeriod('allergy','day')">일간</button>
       <button id="a-p-week" onclick="setPeriod('allergy','week')">주간</button>
@@ -162,89 +161,85 @@ tr:hover td{background:rgba(108,92,231,.04)}
     </span>
   </div>
   <div class="g2">
-    <div class="card allergy"><h3 id="a-gmv-title">📊 일간 GMV 추이 — vs 경쟁사 2개</h3><div class="ch lg"><canvas id="a-gmv-ch"></canvas></div></div>
-    <div class="card allergy"><h3 id="a-qty-title">📦 일간 판매수량 추이</h3><div class="ch lg"><canvas id="a-qty-ch"></canvas></div></div>
+    <div class="card allergy"><h3 id="a-gmv-title">📊 일간 GMV — vs 경쟁사</h3><div class="ch lg"><canvas id="a-gmv-ch"></canvas></div></div>
+    <div class="card allergy"><h3 id="a-qty-title">📦 일간 판매수량</h3><div class="ch lg"><canvas id="a-qty-ch"></canvas></div></div>
   </div>
   <div class="g2">
-    <div class="card allergy"><h3>📈 일간 CTR 추이 (3상품)</h3><div class="ch"><canvas id="a-ctr-ch"></canvas></div></div>
-    <div class="card allergy"><h3>📈 일간 CVR(PV) 추이 (3상품)</h3><div class="ch"><canvas id="a-cvr-ch"></canvas></div></div>
+    <div class="card allergy"><h3>📈 일간 CTR (3상품)</h3><div class="ch"><canvas id="a-ctr-ch"></canvas></div></div>
+    <div class="card allergy"><h3>📈 일간 CVR(PV) (3상품)</h3><div class="ch"><canvas id="a-cvr-ch"></canvas></div></div>
   </div>
   <div class="sec">⚔️ 1:1 비교 — 최근 30일</div>
-  <div class="card"><table class="vs-table"><thead><tr><th>지표</th><th class="r">🟢 오늘의집 layer 알러지케어<br><span style="font-weight:400;color:var(--text3)">(3640244)</span></th><th class="r">⚔️ 헬로우슬립 돈워리 M2<br><span style="font-weight:400;color:var(--text3)">(1930788)</span></th><th class="r">⚔️ 마틸라 가드 M2<br><span style="font-weight:400;color:var(--text3)">(442026)</span></th></tr></thead><tbody id="a-vs-tbl"></tbody></table></div>
+  <div class="card"><table class="vs-table"><thead><tr><th>지표</th><th class="r">🟢 알러지케어 침구<br>오늘의집 layer, 3640244</th><th class="r">⚔️ 돈워리 M2<br>헬로우슬립, 1930788</th><th class="r">⚔️ 가드 M2<br>마틸라, 442026</th></tr></thead><tbody id="a-vs-tbl"></tbody></table></div>
 </div>
 
-<!-- Inflow -->
 <div id="tab-inflow" class="tab-content">
   <div class="sec">🚀 직전 유입 퍼널 (PDP로 들어오기 직전 경로)</div>
-  <div class="insight-box"><strong>핵심 질문:</strong> 검색으로 들어오는가·기획전·PDP추천·홈 중 어디? 자생은 검색·카테고리 비중이 커지는 것, 의존 축소는 광고/기획전 비중이 줄어드는 것.</div>
-  <div class="product-header soft">🔴 소프트워싱 (3918642)</div>
+  <div class="insight-box"><strong>핵심 질문:</strong> 자사 상품 유입이 자생 경로(검색·카테고리)에서 오는지, 의존 경로(광고·기획전)에서 오는지.</div>
+  <div class="product-header soft">🔴 소프트워싱 이불, 오늘의집 layer, 3918642</div>
   <div class="g2">
-    <div class="card"><h3>📊 경로별 노출 비중 (최근 7일 합계)</h3><div class="ch"><canvas id="in-s-pie"></canvas></div></div>
+    <div class="card"><h3>📊 경로별 노출 비중 (최근 7일)</h3><div class="ch"><canvas id="in-s-pie"></canvas></div></div>
     <div class="card"><h3>📈 경로별 CTR</h3><div class="ch"><canvas id="in-s-ctr"></canvas></div></div>
   </div>
-  <div class="card" style="margin-bottom:14px"><h3>상세 표 (소프트워싱 최근 7일)</h3><table><thead><tr><th>경로</th><th class="r">노출</th><th class="r">클릭</th><th class="r">Click UV</th><th class="r">CTR</th><th class="r">비중</th></tr></thead><tbody id="in-s-tbl"></tbody></table></div>
+  <div class="card" style="margin-bottom:14px"><table><thead><tr><th>경로</th><th class="r">노출</th><th class="r">클릭</th><th class="r">Click UV</th><th class="r">CTR</th><th class="r">비중</th></tr></thead><tbody id="in-s-tbl"></tbody></table></div>
 
-  <div class="product-header allergy">🟢 알러지케어 (3640244)</div>
+  <div class="product-header allergy">🟢 알러지케어 침구, 오늘의집 layer, 3640244</div>
   <div class="g2">
-    <div class="card"><h3>📊 경로별 노출 비중 (최근 7일 합계)</h3><div class="ch"><canvas id="in-a-pie"></canvas></div></div>
+    <div class="card"><h3>📊 경로별 노출 비중 (최근 7일)</h3><div class="ch"><canvas id="in-a-pie"></canvas></div></div>
     <div class="card"><h3>📈 경로별 CTR</h3><div class="ch"><canvas id="in-a-ctr"></canvas></div></div>
   </div>
-  <div class="card" style="margin-bottom:14px"><h3>상세 표 (알러지케어 최근 7일)</h3><table><thead><tr><th>경로</th><th class="r">노출</th><th class="r">클릭</th><th class="r">Click UV</th><th class="r">CTR</th><th class="r">비중</th></tr></thead><tbody id="in-a-tbl"></tbody></table></div>
+  <div class="card" style="margin-bottom:14px"><table><thead><tr><th>경로</th><th class="r">노출</th><th class="r">클릭</th><th class="r">Click UV</th><th class="r">CTR</th><th class="r">비중</th></tr></thead><tbody id="in-a-tbl"></tbody></table></div>
 
   <div class="sec">⚔️ 6상품 유입 경로 비교 (최근 7일)</div>
   <div class="card"><table><thead><tr><th>상품</th><th class="r">검색</th><th class="r">PDP추천</th><th class="r">카테고리</th><th class="r">홈</th><th class="r">브랜드관</th><th class="r">기획전</th><th class="r">마이패키지</th><th class="r">광고리스트</th><th class="r">총 노출</th></tr></thead><tbody id="in-cmp-tbl"></tbody></table></div>
 </div>
 
-<!-- SRP -->
 <div id="tab-srp" class="tab-content">
   <div class="sec">🔍 SRP 알고리즘 점수</div>
-  <div class="insight-box"><strong>selling_score</strong>(가중치 1.0, 랭킹 ~70%)가 올라야 오가닉 순위 상승. 카스테라 0.91, 쁘리엘르 0.85, 소프트워싱 0.66(최하위).</div>
+  <div class="insight-box"><strong>selling_score</strong>(ES Function Score 가중치 1.0, 랭킹 ~70%)는 SRP 누적 점수. 자사 점수가 경쟁사 대비 어떻게 변화하는지 트래킹하는 게 자생 궤도 진입 여부의 핵심 지표.</div>
 
-  <div class="product-header soft">🔴 소프트워싱 자사 전체 카테고리 키워드 순위 추이</div>
-  <div class="card soft"><h3>키워드별 일간 평균 순위 (4월)</h3><div class="ch lg"><canvas id="srp-s-rank"></canvas></div><div class="note">순위 역축(위가 좋음). 6개 카테고리 키워드: 차렵이불·이불세트·사계절이불·침구·차렵이불단품·워싱이불</div></div>
+  <div class="sec">📊 selling_score 일간 추이 — 6상품 비교 (주요 4키워드 평균)</div>
+  <div class="card"><div class="ch xl"><canvas id="srp-score-ts"></canvas></div><div class="note">Y축 0.6~1.0. 자사 2상품은 실선, 경쟁사 4상품은 점선. 카스테라(헬로우슬립) 0.91 · 쁘리엘르 0.85 · 가드M2 0.76 · 돈워리 0.77 · 알러지케어 0.72 · 소프트워싱 0.66 순. 3월 중순 대비 모든 상품 점수 하락 추세(시즌 효과).</div></div>
 
-  <div class="product-header allergy">🟢 알러지케어 자사 키워드 순위 추이</div>
-  <div class="card allergy"><h3>키워드별 일간 평균 순위 (4월)</h3><div class="ch lg"><canvas id="srp-a-rank"></canvas></div></div>
+  <div class="sec">🎯 자사 키워드 순위 추이 (자사 2상품 · 주요 4키워드)</div>
+  <div class="card"><div class="ch xl"><canvas id="srp-rank-ts"></canvas></div><div class="note">순위 역축(위쪽=좋음). 🔴 소프트워싱: 차렵이불/이불세트/사계절이불 40~55위 정체. 🟢 알러지케어: "알러지케어" 키워드 4~5위 유지 (TOP 5!)</div></div>
 
-  <div class="sec">🎯 6상품 × 카테고리 키워드 평균순위 (최근 30일)</div>
-  <div class="card"><table><thead><tr><th>상품</th><th class="r">차렵이불</th><th class="r">이불세트</th><th class="r">사계절이불</th><th class="r">침구</th><th class="r">알러지케어</th><th class="r">먼지없는이불</th></tr></thead><tbody id="srp-mat"></tbody></table><div class="note">숫자: 평균순위. 색상: TOP5(초록)·TOP20(주황)·그 이하(빨강)</div></div>
-
-  <div class="sec">📊 selling_score 비교</div>
-  <div class="card"><table><thead><tr><th>상품</th><th class="r">selling_score</th><th>비고</th></tr></thead><tbody id="srp-score-tbl"></tbody></table></div>
+  <div class="sec">📋 6상품 × 카테고리 키워드 평균순위 (최근 30일)</div>
+  <div class="card"><table><thead><tr><th>상품</th><th class="r">차렵이불</th><th class="r">이불세트</th><th class="r">사계절이불</th><th class="r">알러지케어</th></tr></thead><tbody id="srp-mat"></tbody></table><div class="note">1-indexed (1=1위). 색상: TOP 10(초록)·TOP 30(주황)·그 이하(빨강)</div></div>
 </div>
 
-<!-- Ages -->
 <div id="tab-ages" class="tab-content">
-  <div class="sec">👥 실제 구매자 연령대 분포 <span class="warn-chip">2025.01~2026.04 기준</span></div>
+  <div class="sec">👥 실제 구매자 연령대 <span class="warn-chip">2025.01~2026.04 구매자 기준</span></div>
   <div class="insight-box" id="ages-insight"></div>
-  <div class="card"><h3>📊 연령대별 비중 (Stacked 100%)</h3><div class="ch lg"><canvas id="ages-stacked"></canvas></div><div class="note">실제 구매자(본인인증 완료 유저 매칭 4-6%)의 연령 분포. Layer는 샘플 48명으로 참고용.</div></div>
-  <div class="card" style="margin-top:14px"><h3>상세표</h3><table><thead><tr><th>상품</th><th class="r">샘플</th><th class="r">20-24</th><th class="r">25-29</th><th class="r">30-34</th><th class="r">35-39</th><th class="r">40-44</th><th class="r">45-49</th><th class="r">50-54</th><th class="r">55-59</th><th class="r">60+</th><th class="r">25-34 합</th></tr></thead><tbody id="ages-tbl"></tbody></table></div>
+  <div class="card"><h3>📊 연령대별 비중</h3><div class="ch lg"><canvas id="ages-stacked"></canvas></div></div>
+  <div class="card" style="margin-top:14px"><table><thead><tr><th>상품</th><th class="r">샘플</th><th class="r">20-24</th><th class="r">25-29</th><th class="r">30-34</th><th class="r">35-39</th><th class="r">40-44</th><th class="r">45-49</th><th class="r">50-54</th><th class="r">55-59</th><th class="r">60+</th><th class="r">25-34</th></tr></thead><tbody id="ages-tbl"></tbody></table></div>
 </div>
 
 <script>
-const COLORS={soft:'#ff6b6b',allergy:'#00b894',compA:'#e6a817',compB:'#8b5cf6',blue:'#3b82f6',purple:'#6c5ce7',green:'#10b981'};
-const KW_COLORS={'차렵이불':'#ef4444','이불세트':'#f59e0b','사계절이불':'#10b981','침구':'#3b82f6','차렵이불단품':'#8b5cf6','워싱이불':'#ec4899','알러지케어':'#00b894','먼지없는이불':'#6b7280'};
+const COLORS={soft:'#ff6b6b',allergy:'#00b894',compA:'#e6a817',compB:'#8b5cf6',blue:'#3b82f6'};
+const PID_COLOR={'3918642':'#ff6b6b','3640244':'#00b894','767440':'#e6a817','2636441':'#8b5cf6','1930788':'#f97316','442026':'#3b82f6'};
 const INF_COLORS={'검색':'#3b82f6','PDP추천':'#10b981','카테고리':'#f59e0b','홈':'#ef4444','브랜드관':'#8b5cf6','기획전':'#06b6d4','마이패키지':'#ec4899','광고리스트':'#6b7280','오늘의딜':'#f97316','베스트':'#14b8a6','컨텐츠':'#84cc16','기타':'#9ca3af','푸시':'#a78bfa'};
+const KW_COLORS={'차렵이불':'#ef4444','이불세트':'#f59e0b','사계절이불':'#10b981','알러지케어':'#3b82f6'};
 let DATA=null;
 let PERIOD={soft:'day',allergy:'day'};
+const CHARTS={};
 
 function fmtKRW(n){if(n==null||isNaN(n))return '—';if(Math.abs(n)>=100000000)return (n/100000000).toFixed(1)+'억';if(Math.abs(n)>=10000000)return Math.round(n/1000000)+'백만';if(Math.abs(n)>=10000)return Math.round(n/10000)+'만';return n.toLocaleString()}
 function fmtDate(s){return s.substring(5)}
+function fmtWeek(iso){return (parseInt(iso.substring(5,7))).toString()+'/'+parseInt(iso.substring(8,10))+'주'}
 function copyShareUrl(){navigator.clipboard.writeText(location.href.split('?')[0]).then(()=>alert('복사됨'))}
 function switchTab(e,id){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));e.target.classList.add('active');document.getElementById('tab-'+id).classList.add('active');window.dispatchEvent(new Event('resize'))}
 function isoWeek(s){const d=new Date(s+'T00:00:00');const day=(d.getDay()+6)%7;const m=new Date(d);m.setDate(d.getDate()-day);return m.toISOString().substring(0,10)}
-function getWeekNum(iso){const d=new Date(iso+'T00:00:00');const s=new Date(d.getFullYear(),0,1);return Math.ceil(((d-s)/86400000+s.getDay()+1)/7)}
 function monthKey(s){return s.substring(0,7)}
 function aggregate(daily,k){const r={};daily.forEach(x=>{const key=k(x.dt);if(!r[key])r[key]={gmv:0,gp:0,qty:0,imp:0,pdp:0,purchase:0};r[key].gmv+=x.gmv;r[key].gp+=x.gp;r[key].qty+=x.qty;r[key].imp+=x.imp;r[key].pdp+=x.pdp;r[key].purchase+=x.purchase});return r}
 function sumRecent(d,n){return d.slice(-n).reduce((a,r)=>({gmv:a.gmv+r.gmv,imp:a.imp+r.imp,pdp:a.pdp+r.pdp,purchase:a.purchase+r.purchase,qty:a.qty+r.qty}),{gmv:0,imp:0,pdp:0,purchase:0,qty:0})}
-function rankCol(r){if(r==null)return '';if(r<=5)return 'background:rgba(16,185,129,.2);color:#047857';if(r<=20)return 'background:rgba(245,158,11,.2);color:#b45309';return 'background:rgba(239,68,68,.2);color:#b91c1c'}
+function rankCol(r){if(r==null)return '';if(r<=10)return 'background:rgba(16,185,129,.2);color:#047857';if(r<=30)return 'background:rgba(245,158,11,.2);color:#b45309';return 'background:rgba(239,68,68,.2);color:#b91c1c'}
+function mkCh(id,cfg){if(CHARTS[id])CHARTS[id].destroy();CHARTS[id]=new Chart(document.getElementById(id),cfg);return CHARTS[id]}
+function setPeriod(p,mode){PERIOD[p]=mode;const prefix=p==='soft'?'s':'a';['day','week','month'].forEach(m=>document.getElementById(prefix+'-p-'+m).classList.toggle('active',m===mode));renderProductTab(p)}
+
+function shortLabel(pid){const p=DATA.products[pid];return `${p.emoji} ${p.shortName} (${pid})`}
+function fullLabel(pid){return DATA.products[pid].label}
 
 async function load(){try{const res=await fetch('tf-data.json?t='+Date.now());DATA=await res.json();document.getElementById('last-update').textContent='업데이트: '+DATA.meta.lastUpdate;document.getElementById('share-url').textContent=location.href.split('?')[0];render()}catch(e){document.body.innerHTML='<div class="err">'+e.message+'</div>'}}
-
-const CHARTS={};
-function mkCh(id,cfg){if(CHARTS[id])CHARTS[id].destroy();CHARTS[id]=new Chart(document.getElementById(id),cfg);return CHARTS[id]}
-
-function setPeriod(p,mode){PERIOD[p]=mode;const prefix=p==='soft'?'s':'a';['day','week','month'].forEach(m=>document.getElementById(prefix+'-p-'+m).classList.toggle('active',m===mode));renderProductTab(p)}
 
 function render(){
   const d=DATA.daily,soft=d['3918642'],allergy=d['3640244'],cas=d['767440'],puri=d['2636441'],don=d['1930788'],gard=d['442026'];
@@ -254,117 +249,93 @@ function render(){
   const softMtd=soft.filter(r=>r.dt>='2026-04-01').reduce((a,r)=>a+r.gmv,0);
   const allergyMtd=allergy.filter(r=>r.dt>='2026-04-01').reduce((a,r)=>a+r.gmv,0);
 
-  // === OVERVIEW KPI ===
   document.getElementById('o-s-gmv').textContent=fmtKRW(s7.gmv);
   document.getElementById('o-s-gmv-wow').innerHTML='WoW <span class="'+(s7.gmv>=sp7.gmv?'chg up':'chg dn')+'">'+((s7.gmv/sp7.gmv-1)*100).toFixed(1)+'%</span>';
   document.getElementById('o-s-mtd').textContent=fmtKRW(softMtd);
   document.getElementById('o-s-ctr').textContent=(s7.pdp/s7.imp*100).toFixed(2);
-  document.getElementById('o-s-ctr-vs').textContent='카스 '+(c7.pdp/c7.imp*100).toFixed(2)+'% · 쁘리 '+(p7.pdp/p7.imp*100).toFixed(2)+'%';
+  document.getElementById('o-s-ctr-vs').textContent='카스테라 '+(c7.pdp/c7.imp*100).toFixed(2)+'% · 쁘리엘르 '+(p7.pdp/p7.imp*100).toFixed(2)+'%';
   document.getElementById('o-s-cvr').textContent=(s7.purchase/s7.pdp*100).toFixed(2);
-  document.getElementById('o-s-cvr-vs').textContent='카스 '+(c7.purchase/c7.pdp*100).toFixed(2)+'% · 쁘리 '+(p7.purchase/p7.pdp*100).toFixed(2)+'%';
-
+  document.getElementById('o-s-cvr-vs').textContent='카스테라 '+(c7.purchase/c7.pdp*100).toFixed(2)+'% · 쁘리엘르 '+(p7.purchase/p7.pdp*100).toFixed(2)+'%';
   document.getElementById('o-a-gmv').textContent=fmtKRW(a7.gmv);
   document.getElementById('o-a-gmv-wow').innerHTML='WoW <span class="'+(a7.gmv>=ap7.gmv?'chg up':'chg dn')+'">'+((a7.gmv/ap7.gmv-1)*100).toFixed(1)+'%</span>';
   document.getElementById('o-a-mtd').textContent=fmtKRW(allergyMtd);
   document.getElementById('o-a-ctr').textContent=(a7.pdp/a7.imp*100).toFixed(2);
-  document.getElementById('o-a-ctr-vs').textContent='돈워 '+(dn7.pdp/dn7.imp*100).toFixed(2)+'% · 가드 '+(gd7.pdp/gd7.imp*100).toFixed(2)+'%';
+  document.getElementById('o-a-ctr-vs').textContent='돈워리 '+(dn7.pdp/dn7.imp*100).toFixed(2)+'% · 가드M2 '+(gd7.pdp/gd7.imp*100).toFixed(2)+'%';
   document.getElementById('o-a-cvr').textContent=(a7.purchase/a7.pdp*100).toFixed(2);
-  document.getElementById('o-a-cvr-vs').textContent='돈워 '+(dn7.purchase/dn7.pdp*100).toFixed(2)+'% · 가드 '+(gd7.purchase/gd7.pdp*100).toFixed(2)+'%';
+  document.getElementById('o-a-cvr-vs').textContent='돈워리 '+(dn7.purchase/dn7.pdp*100).toFixed(2)+'% · 가드M2 '+(gd7.purchase/gd7.pdp*100).toFixed(2)+'%';
 
-  // === OVERVIEW CHARTS (각 상품 3개 차트) ===
   const casMap={};cas.forEach(r=>casMap[r.dt]=r);
   const puriMap={};puri.forEach(r=>puriMap[r.dt]=r);
   const donMap={};don.forEach(r=>donMap[r.dt]=r);
   const gardMap={};gard.forEach(r=>gardMap[r.dt]=r);
   const r28s=soft.slice(-28),r28a=allergy.slice(-28);
 
+  const softCompGroup=[['767440',casMap,'카스테라 워싱 (767440)',COLORS.compA],['2636441',puriMap,'유어메이트 (2636441)',COLORS.compB]];
+  const allergyCompGroup=[['1930788',donMap,'돈워리 M2 (1930788)',COLORS.compA],['442026',gardMap,'가드 M2 (442026)',COLORS.compB]];
+
+  // GMV Dual-axis
   mkCh('o-s-gmv-ch',{type:'line',data:{labels:r28s.map(r=>fmtDate(r.dt)),datasets:[
-    {label:'🔴 소프트워싱 (3918642)',data:r28s.map(r=>r.gmv),borderColor:COLORS.soft,backgroundColor:COLORS.soft+'22',fill:true,tension:.3,yAxisID:'y'},
-    {label:'⚔️ 카스테라 (767440)',data:r28s.map(r=>(casMap[r.dt]||{}).gmv||0),borderColor:COLORS.compA,borderDash:[5,5],tension:.3,pointRadius:0,yAxisID:'y1'},
-    {label:'⚔️ 쁘리엘르 (2636441)',data:r28s.map(r=>(puriMap[r.dt]||{}).gmv||0),borderColor:COLORS.compB,borderDash:[5,5],tension:.3,pointRadius:0,yAxisID:'y1'}
+    {label:'🔴 소프트워싱 이불 (3918642)',data:r28s.map(r=>r.gmv),borderColor:COLORS.soft,backgroundColor:COLORS.soft+'22',fill:true,tension:.3,yAxisID:'y'},
+    ...softCompGroup.map(([_,m,lbl,col])=>({label:'⚔️ '+lbl,data:r28s.map(r=>(m[r.dt]||{}).gmv||0),borderColor:col,borderDash:[5,5],tension:.3,pointRadius:0,yAxisID:'y1'}))
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{position:'left',ticks:{callback:v=>fmtKRW(v)}},y1:{position:'right',ticks:{callback:v=>fmtKRW(v)},grid:{drawOnChartArea:false}}}}});
   mkCh('o-s-ctr-ch',{type:'line',data:{labels:r28s.map(r=>fmtDate(r.dt)),datasets:[
-    {label:'🔴 소프트워싱',data:r28s.map(r=>r.imp>0?r.pdp/r.imp*100:null),borderColor:COLORS.soft,tension:.3,pointRadius:0},
-    {label:'⚔️ 카스테라',data:r28s.map(r=>{const x=casMap[r.dt];return x&&x.imp>0?x.pdp/x.imp*100:null}),borderColor:COLORS.compA,tension:.3,pointRadius:0},
-    {label:'⚔️ 쁘리엘르',data:r28s.map(r=>{const x=puriMap[r.dt];return x&&x.imp>0?x.pdp/x.imp*100:null}),borderColor:COLORS.compB,tension:.3,pointRadius:0}
+    {label:'🔴 소프트워싱 (3918642)',data:r28s.map(r=>r.imp>0?r.pdp/r.imp*100:null),borderColor:COLORS.soft,tension:.3,pointRadius:0},
+    ...softCompGroup.map(([_,m,lbl,col])=>({label:'⚔️ '+lbl,data:r28s.map(r=>{const x=m[r.dt];return x&&x.imp>0?x.pdp/x.imp*100:null}),borderColor:col,tension:.3,pointRadius:0}))
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{title:{display:true,text:'CTR %'}}}}});
   mkCh('o-s-cvr-ch',{type:'line',data:{labels:r28s.map(r=>fmtDate(r.dt)),datasets:[
-    {label:'🔴 소프트워싱',data:r28s.map(r=>r.pdp>0?r.purchase/r.pdp*100:null),borderColor:COLORS.soft,tension:.3,pointRadius:0},
-    {label:'⚔️ 카스테라',data:r28s.map(r=>{const x=casMap[r.dt];return x&&x.pdp>0?x.purchase/x.pdp*100:null}),borderColor:COLORS.compA,tension:.3,pointRadius:0},
-    {label:'⚔️ 쁘리엘르',data:r28s.map(r=>{const x=puriMap[r.dt];return x&&x.pdp>0?x.purchase/x.pdp*100:null}),borderColor:COLORS.compB,tension:.3,pointRadius:0}
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{title:{display:true,text:'CVR %'}}}}});
+    {label:'🔴 소프트워싱 (3918642)',data:r28s.map(r=>r.pdp>0?r.purchase/r.pdp*100:null),borderColor:COLORS.soft,tension:.3,pointRadius:0},
+    ...softCompGroup.map(([_,m,lbl,col])=>({label:'⚔️ '+lbl,data:r28s.map(r=>{const x=m[r.dt];return x&&x.pdp>0?x.purchase/x.pdp*100:null}),borderColor:col,tension:.3,pointRadius:0}))
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{title:{display:true,text:'CVR(PV) %'}}}}});
 
   mkCh('o-a-gmv-ch',{type:'line',data:{labels:r28a.map(r=>fmtDate(r.dt)),datasets:[
-    {label:'🟢 알러지케어 (3640244)',data:r28a.map(r=>r.gmv),borderColor:COLORS.allergy,backgroundColor:COLORS.allergy+'22',fill:true,tension:.3,yAxisID:'y'},
-    {label:'⚔️ 돈워리 (1930788)',data:r28a.map(r=>(donMap[r.dt]||{}).gmv||0),borderColor:COLORS.compA,borderDash:[5,5],tension:.3,pointRadius:0,yAxisID:'y1'},
-    {label:'⚔️ 가드 M2 (442026)',data:r28a.map(r=>(gardMap[r.dt]||{}).gmv||0),borderColor:COLORS.compB,borderDash:[5,5],tension:.3,pointRadius:0,yAxisID:'y1'}
+    {label:'🟢 알러지케어 침구 (3640244)',data:r28a.map(r=>r.gmv),borderColor:COLORS.allergy,backgroundColor:COLORS.allergy+'22',fill:true,tension:.3,yAxisID:'y'},
+    ...allergyCompGroup.map(([_,m,lbl,col])=>({label:'⚔️ '+lbl,data:r28a.map(r=>(m[r.dt]||{}).gmv||0),borderColor:col,borderDash:[5,5],tension:.3,pointRadius:0,yAxisID:'y1'}))
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{position:'left',ticks:{callback:v=>fmtKRW(v)}},y1:{position:'right',ticks:{callback:v=>fmtKRW(v)},grid:{drawOnChartArea:false}}}}});
   mkCh('o-a-ctr-ch',{type:'line',data:{labels:r28a.map(r=>fmtDate(r.dt)),datasets:[
-    {label:'🟢 알러지케어',data:r28a.map(r=>r.imp>0?r.pdp/r.imp*100:null),borderColor:COLORS.allergy,tension:.3,pointRadius:0},
-    {label:'⚔️ 돈워리',data:r28a.map(r=>{const x=donMap[r.dt];return x&&x.imp>0?x.pdp/x.imp*100:null}),borderColor:COLORS.compA,tension:.3,pointRadius:0},
-    {label:'⚔️ 가드 M2',data:r28a.map(r=>{const x=gardMap[r.dt];return x&&x.imp>0?x.pdp/x.imp*100:null}),borderColor:COLORS.compB,tension:.3,pointRadius:0}
+    {label:'🟢 알러지케어 (3640244)',data:r28a.map(r=>r.imp>0?r.pdp/r.imp*100:null),borderColor:COLORS.allergy,tension:.3,pointRadius:0},
+    ...allergyCompGroup.map(([_,m,lbl,col])=>({label:'⚔️ '+lbl,data:r28a.map(r=>{const x=m[r.dt];return x&&x.imp>0?x.pdp/x.imp*100:null}),borderColor:col,tension:.3,pointRadius:0}))
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{title:{display:true,text:'CTR %'}}}}});
   mkCh('o-a-cvr-ch',{type:'line',data:{labels:r28a.map(r=>fmtDate(r.dt)),datasets:[
-    {label:'🟢 알러지케어',data:r28a.map(r=>r.pdp>0?r.purchase/r.pdp*100:null),borderColor:COLORS.allergy,tension:.3,pointRadius:0},
-    {label:'⚔️ 돈워리',data:r28a.map(r=>{const x=donMap[r.dt];return x&&x.pdp>0?x.purchase/x.pdp*100:null}),borderColor:COLORS.compA,tension:.3,pointRadius:0},
-    {label:'⚔️ 가드 M2',data:r28a.map(r=>{const x=gardMap[r.dt];return x&&x.pdp>0?x.purchase/x.pdp*100:null}),borderColor:COLORS.compB,tension:.3,pointRadius:0}
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{title:{display:true,text:'CVR %'}}}}});
+    {label:'🟢 알러지케어 (3640244)',data:r28a.map(r=>r.pdp>0?r.purchase/r.pdp*100:null),borderColor:COLORS.allergy,tension:.3,pointRadius:0},
+    ...allergyCompGroup.map(([_,m,lbl,col])=>({label:'⚔️ '+lbl,data:r28a.map(r=>{const x=m[r.dt];return x&&x.pdp>0?x.purchase/x.pdp*100:null}),borderColor:col,tension:.3,pointRadius:0}))
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{title:{display:true,text:'CVR(PV) %'}}}}});
 
-  // Timeline
   renderTimeline('timeline-all',DATA.actions);
   renderTimeline('timeline-soft',DATA.actions.filter(a=>a.product===3918642||a.product==='all'));
-
-  // Product tabs
   renderProductTab('soft');
   renderProductTab('allergy');
-
-  // Inflow
   renderInflow();
-  // SRP
   renderSRP();
-  // Ages
   renderAges();
 }
 
 function renderProductTab(p){
   const pid=p==='soft'?'3918642':'3640244';
   const comps=p==='soft'?['767440','2636441']:['1930788','442026'];
-  const names=p==='soft'?['🔴 소프트워싱','⚔️ 카스테라 (767440)','⚔️ 쁘리엘르 (2636441)']:['🟢 알러지케어','⚔️ 돈워리 (1930788)','⚔️ 가드 M2 (442026)'];
+  const names=p==='soft'?['🔴 소프트워싱 이불 (3918642)','⚔️ 카스테라 워싱 (767440)','⚔️ 유어메이트 (2636441)']:['🟢 알러지케어 침구 (3640244)','⚔️ 돈워리 M2 (1930788)','⚔️ 가드 M2 (442026)'];
   const cols=[p==='soft'?COLORS.soft:COLORS.allergy,COLORS.compA,COLORS.compB];
   const data=[DATA.daily[pid],DATA.daily[comps[0]],DATA.daily[comps[1]]];
   const mode=PERIOD[p];
-
-  // aggregate by period
   const keyFn=mode==='day'?(s=>s):(mode==='week'?isoWeek:monthKey);
   const aggs=data.map(d=>aggregate(d,keyFn));
   const allKeys=[...new Set(aggs.flatMap(a=>Object.keys(a)))].sort();
-  const labels=allKeys.map(k=>mode==='week'?'W'+getWeekNum(k):mode==='month'?k:fmtDate(k));
-
+  const labels=allKeys.map(k=>mode==='week'?fmtWeek(k):mode==='month'?k:fmtDate(k));
   const prefix=p==='soft'?'s':'a';
-  document.getElementById(prefix+'-gmv-title').textContent=(mode==='day'?'📊 일간':mode==='week'?'📊 주간':'📊 월간')+' GMV 추이 — vs 경쟁사 2개';
-  document.getElementById(prefix+'-qty-title').textContent=(mode==='day'?'📦 일간':mode==='week'?'📦 주간':'📦 월간')+' 판매수량 추이';
+  document.getElementById(prefix+'-gmv-title').textContent=(mode==='day'?'📊 일간':mode==='week'?'📊 주간':'📊 월간')+' GMV — vs 경쟁사';
+  document.getElementById(prefix+'-qty-title').textContent=(mode==='day'?'📦 일간':mode==='week'?'📦 주간':'📦 월간')+' 판매수량';
 
-  const gmvSets=aggs.map((a,i)=>({
-    label:names[i],data:allKeys.map(k=>a[k]?a[k].gmv:0),
-    borderColor:cols[i],backgroundColor:i===0?cols[i]+'22':'transparent',
-    fill:i===0,tension:.3,borderDash:i>0?[5,5]:[],pointRadius:mode==='day'?0:3,
-    yAxisID:i===0?'y':'y1'
-  }));
+  const gmvSets=aggs.map((a,i)=>({label:names[i],data:allKeys.map(k=>a[k]?a[k].gmv:0),borderColor:cols[i],backgroundColor:i===0?cols[i]+'22':'transparent',fill:i===0,tension:.3,borderDash:i>0?[5,5]:[],pointRadius:mode==='day'?0:3,yAxisID:i===0?'y':'y1'}));
   mkCh(prefix+'-gmv-ch',{type:mode==='day'?'line':'bar',data:{labels,datasets:gmvSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{position:'left',ticks:{callback:v=>fmtKRW(v)}},y1:{position:'right',ticks:{callback:v=>fmtKRW(v)},grid:{drawOnChartArea:false}}}}});
 
-  // Qty
   const qtySets=aggs.map((a,i)=>({label:names[i],data:allKeys.map(k=>a[k]?a[k].qty:0),borderColor:cols[i],backgroundColor:cols[i]+'33',tension:.3,borderDash:i>0?[5,5]:[],pointRadius:mode==='day'?0:3,yAxisID:i===0?'y':'y1'}));
   mkCh(prefix+'-qty-ch',{type:mode==='day'?'line':'bar',data:{labels,datasets:qtySets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{position:'left'},y1:{position:'right',grid:{drawOnChartArea:false}}}}});
 
-  // CTR
   const ctrSets=aggs.map((a,i)=>({label:names[i],data:allKeys.map(k=>{const x=a[k];return x&&x.imp>0?x.pdp/x.imp*100:null}),borderColor:cols[i],tension:.3,pointRadius:mode==='day'?0:3,spanGaps:true}));
   mkCh(prefix+'-ctr-ch',{type:'line',data:{labels,datasets:ctrSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{title:{display:true,text:'CTR %'}}}}});
 
-  // CVR
   const cvrSets=aggs.map((a,i)=>({label:names[i],data:allKeys.map(k=>{const x=a[k];return x&&x.pdp>0?x.purchase/x.pdp*100:null}),borderColor:cols[i],tension:.3,pointRadius:mode==='day'?0:3,spanGaps:true}));
-  mkCh(prefix+'-cvr-ch',{type:'line',data:{labels,datasets:cvrSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{title:{display:true,text:'CVR %'}}}}});
+  mkCh(prefix+'-cvr-ch',{type:'line',data:{labels,datasets:cvrSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{title:{display:true,text:'CVR(PV) %'}}}}});
 
-  // VS table
   const r30=data.map(d=>sumRecent(d,30));
   const tblId=p==='soft'?'s-vs-tbl':'a-vs-tbl';
   const selfCls=p==='soft'?'self':'allergy-self';
@@ -391,15 +362,11 @@ function renderInflow(){
     prows.filter(r=>recent7.includes(r.dt)).forEach(r=>{if(!agg[r.inflow])agg[r.inflow]={imp:0,click:0,uv:0};agg[r.inflow].imp+=r.imp;agg[r.inflow].click+=r.click;agg[r.inflow].uv+=r.click_uv});
     const sorted=Object.entries(agg).sort((a,b)=>b[1].imp-a[1].imp);
     const totalImp=sorted.reduce((s,[,v])=>s+v.imp,0);
-
     mkCh(`in-${prefix}-pie`,{type:'doughnut',data:{labels:sorted.map(([k])=>k),datasets:[{data:sorted.map(([,v])=>v.imp),backgroundColor:sorted.map(([k])=>INF_COLORS[k]||'#888')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:10,font:{size:10}}}}}});
     mkCh(`in-${prefix}-ctr`,{type:'bar',data:{labels:sorted.map(([k])=>k),datasets:[{label:'CTR %',data:sorted.map(([,v])=>v.imp>0?v.click/v.imp*100:0),backgroundColor:sorted.map(([k])=>INF_COLORS[k]||'#888')}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',scales:{x:{ticks:{callback:v=>v+'%'}}},plugins:{legend:{display:false}}}});
-
     const tb=document.getElementById(`in-${prefix}-tbl`);
     tb.innerHTML=sorted.map(([k,v])=>`<tr><td><span class="pill" style="background:${INF_COLORS[k]||'#888'}22;color:${INF_COLORS[k]||'#888'}">${k}</span></td><td class="r">${v.imp.toLocaleString()}</td><td class="r">${v.click.toLocaleString()}</td><td class="r">${v.uv.toLocaleString()}</td><td class="r"><strong>${(v.click/v.imp*100).toFixed(2)}%</strong></td><td class="r">${(v.imp/totalImp*100).toFixed(1)}%</td></tr>`).join('');
   });
-
-  // 6 products compare
   const comp=['3918642','3640244','767440','2636441','1930788','442026'];
   const keys=['검색','PDP추천','카테고리','홈','브랜드관','기획전','마이패키지','광고리스트'];
   const recent7=[...new Set(rows.map(r=>r.dt))].sort().slice(-7);
@@ -410,26 +377,41 @@ function renderInflow(){
     const total=Object.values(agg).reduce((a,b)=>a+b,0);
     const p=DATA.products[pid];
     const cells=keys.map(k=>`<td class="r">${(agg[k]||0).toLocaleString()}</td>`).join('');
-    return `<tr><td><strong>${p.emoji} ${p.brand} ${p.shortName}</strong><br><span style="color:var(--text3);font-size:10px">(${pid})</span></td>${cells}<td class="r"><strong>${total.toLocaleString()}</strong></td></tr>`;
+    return `<tr><td><strong>${p.emoji} ${p.shortName}, ${p.brand}, ${pid}</strong></td>${cells}<td class="r"><strong>${total.toLocaleString()}</strong></td></tr>`;
   }).join('');
 }
 
 function renderSRP(){
-  // Soft all keyword rank trends
-  ['3918642','3640244'].forEach(pid=>{
-    const prefix=pid==='3918642'?'s':'a';
-    const kws=[...new Set(DATA.srpKeywords[pid].map(r=>r.kw))];
-    const dates=[...new Set(DATA.srpKeywords[pid].map(r=>r.dt))].sort();
-    const datasets=kws.map(kw=>{
-      const m={};DATA.srpKeywords[pid].filter(r=>r.kw===kw).forEach(r=>m[r.dt]=r.rank);
-      return {label:'"'+kw+'"',data:dates.map(d=>m[d]||null),borderColor:KW_COLORS[kw]||'#888',tension:.3,spanGaps:true,pointRadius:2};
-    });
-    mkCh(`srp-${prefix}-rank`,{type:'line',data:{labels:dates.map(fmtDate),datasets},options:{responsive:true,maintainAspectRatio:false,scales:{y:{reverse:true,suggestedMin:1,suggestedMax:70,title:{display:true,text:'순위 (위가 좋음)'}}},plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}}}});
+  // 6상품 selling_score 시계열 — 한 차트
+  const ts=DATA.scoreTs;
+  const dates=[...new Set(Object.values(ts).flat().map(r=>r.dt))].sort();
+  const pidOrder=['767440','2636441','442026','1930788','3640244','3918642'];
+  const datasets=pidOrder.map(pid=>{
+    const m={};ts[pid].forEach(r=>m[r.dt]=r.score);
+    const isSelf=pid==='3918642'||pid==='3640244';
+    const p=DATA.products[pid];
+    return {label:`${p.emoji} ${p.shortName} (${pid})`,data:dates.map(d=>m[d]||null),borderColor:PID_COLOR[pid],backgroundColor:PID_COLOR[pid]+'11',tension:.3,borderDash:isSelf?[]:[5,5],borderWidth:isSelf?3:2,pointRadius:0,spanGaps:true};
   });
+  mkCh('srp-score-ts',{type:'line',data:{labels:dates.map(fmtDate),datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:10}}}},scales:{y:{min:0.6,max:1.0,title:{display:true,text:'selling_score (0~1)'}}}}});
 
-  // Matrix
-  const pids=['3918642','3640244','767440','2636441','1930788','442026'];
-  const kwOrder=['차렵이불','이불세트','사계절이불','침구','알러지케어','먼지없는이불'];
+  // 자사 2상품 × 4키워드 순위 — 한 차트
+  const soft=DATA.srpKeywords['3918642'];
+  const allergy=DATA.srpKeywords['3640244'];
+  const allDates=[...new Set([...soft.map(r=>r.dt),...allergy.map(r=>r.dt)])].sort();
+  const rankSets=[];
+  // 소프트워싱 3키워드 (알러지케어 키워드는 없음)
+  ['차렵이불','이불세트','사계절이불'].forEach(kw=>{
+    const m={};soft.filter(r=>r.kw===kw).forEach(r=>m[r.dt]=r.rank);
+    rankSets.push({label:`🔴 소프트워싱 "${kw}" (3918642)`,data:allDates.map(d=>m[d]||null),borderColor:KW_COLORS[kw],tension:.3,spanGaps:true,pointRadius:2,borderWidth:2});
+  });
+  // 알러지케어 "알러지케어"
+  const am={};allergy.filter(r=>r.kw==='알러지케어').forEach(r=>am[r.dt]=r.rank);
+  rankSets.push({label:`🟢 알러지케어 "알러지케어" (3640244)`,data:allDates.map(d=>am[d]||null),borderColor:KW_COLORS['알러지케어'],tension:.3,spanGaps:true,pointRadius:3,borderWidth:3});
+  mkCh('srp-rank-ts',{type:'line',data:{labels:allDates.map(fmtDate),datasets:rankSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:10}}}},scales:{y:{reverse:true,suggestedMin:1,suggestedMax:60,title:{display:true,text:'순위 (위가 좋음, 1-indexed)'}}}}});
+
+  // Matrix - 4 keywords only, 1-indexed
+  const pids=['767440','2636441','442026','1930788','3640244','3918642'];
+  const kwOrder=['차렵이불','이불세트','사계절이불','알러지케어'];
   const mtb=document.getElementById('srp-mat');
   mtb.innerHTML=pids.map(pid=>{
     const p=DATA.products[pid];
@@ -438,19 +420,7 @@ function renderSRP(){
       if(!r)return '<td class="r" style="color:#ccc">—</td>';
       return `<td class="r" style="${rankCol(r.rank)};font-weight:700">${r.rank.toFixed(1)}</td>`;
     }).join('');
-    return `<tr><td><strong>${p.emoji} ${p.brand} ${p.shortName}</strong> (${pid})</td>${cells}</tr>`;
-  }).join('');
-
-  // Score table
-  const stb=document.getElementById('srp-score-tbl');
-  const scoreMap={};
-  DATA.srpMatrix.forEach(r=>{if(!scoreMap[r.pid])scoreMap[r.pid]=[];scoreMap[r.pid].push(r.score)});
-  stb.innerHTML=pids.map(pid=>{
-    const p=DATA.products[pid];
-    const scores=scoreMap[pid]||[];
-    const avgScore=scores.length?scores.reduce((a,b)=>a+b,0)/scores.length:null;
-    const note=pid==='3918642'?'자사 · 출시 2개월·리뷰 154':pid==='3640244'?'자사 · 알러지케어 키워드 4위 안정':pid==='767440'?'⚔️ 카스테라 · selling_score 최고 0.91':pid==='2636441'?'⚔️ 쁘리엘르 · 차렵이불 SRP 3.9위':pid==='1930788'?'⚔️ 돈워리 · 알러지 1.97위':'⚔️ 가드 M2 · 알러지 2.97위';
-    return `<tr><td><strong>${p.emoji} ${p.brand} ${p.shortName}</strong> (${pid})</td><td class="r"><strong>${avgScore?avgScore.toFixed(2):'—'}</strong></td><td>${note}</td></tr>`;
+    return `<tr><td><strong>${p.emoji} ${p.shortName}, ${p.brand}, ${pid}</strong></td>${cells}</tr>`;
   }).join('');
 }
 
@@ -460,7 +430,6 @@ function renderAges(){
   const labs=['20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60+'];
   const cols=['#fecaca','#fca5a5','#f87171','#ef4444','#dc2626','#b91c1c','#991b1b','#7f1d1d','#450a0a'];
   mkCh('ages-stacked',{type:'bar',data:{labels:ages.buyer.map(p=>p.product+(p.warn?' ⚠️':'')),datasets:labs.map((a,i)=>({label:a,data:ages.buyer.map(p=>p.age[a]||0),backgroundColor:cols[i]}))},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true,max:100,ticks:{callback:v=>v+'%'}},y:{stacked:true}},plugins:{legend:{position:'bottom'}}}});
-
   const tb=document.getElementById('ages-tbl');
   tb.innerHTML=ages.buyer.map(p=>{
     const core=((p.age['25-29']||0)+(p.age['30-34']||0)).toFixed(1);
@@ -473,7 +442,6 @@ function renderTimeline(id,items){
   const sorted=[...items].sort((a,b)=>b.date.localeCompare(a.date));
   el.innerHTML=sorted.map(a=>`<div class="timeline-item ${a.type}"><div class="dt">${a.date} <span class="pill ${a.type}">${a.type}</span></div><div class="act">${a.action}</div></div>`).join('');
 }
-
 load();
 </script>
 </body>
