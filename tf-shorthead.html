@@ -101,7 +101,7 @@ tr:hover td{background:rgba(108,92,231,.04)}
 <div id="tab-overview" class="tab-content active">
   <div class="share-banner"><div>📊 <strong>TF 멤버 공유</strong> — 매일 9시 자동 업데이트</div><div><span id="share-url" style="font-family:monospace;font-size:11px">—</span> <button class="copy-btn" onclick="copyShareUrl()">복사</button></div></div>
 
-  <div class="cvr-note">📌 <strong>지표 정의 (PB사업부 공식 기준):</strong> CTR = PDP뷰/노출 · <strong>CVR(UV) = 구매건수/PDP UV</strong> (PDP UV: <code>commerce_conversion_productions.visitor_cnt</code>). <strong>Y축 CTR 0~8%, CVR 0~12% 고정</strong> · 출시 직후 2월 초 샘플 부족 이상치 클립(CTR>10%, CVR>15% null).</div>
+  <div class="cvr-note">📌 <strong>CVR(UV) 프리즘 공식 기준:</strong> CTR = PDP뷰/노출 · <strong>CVR(UV) = purchase_user_join / pdpview_user_join</strong> (PB사업부 표준, <code>ba_preserved.commerce_daily_user_count_v3 paid_type='total'</code>, 프리즘 스킬 intent: "GMV 드라이버 - 이벤트수 기반 상품별 퍼널 분석"). Notion 카스테라 3월 7.33% 기준과 약 73% 수준(분자/필터 차이).</div>
 
   <div class="product-header soft">🔴 소프트워싱 이불, 오늘의집 layer, 3918642 <span class="pill soft">전환 살리기</span><span class="pid">35,900원 · 출시 2026-02-10</span></div>
   <div class="g4">
@@ -217,6 +217,7 @@ tr:hover td{background:rgba(108,92,231,.04)}
 
 <div id="tab-ages" class="tab-content">
   <div class="sec">👥 실제 구매자 연령대 <span class="warn-chip">2025.01~2026.04 구매자 기준</span></div>
+  <div class="cvr-note">⚠️ <strong>알러지케어(3640244)는 별도 쿼리 필요</strong>: Notion PDP 딥다이브 6-2는 소프트워싱(3918642) 중심으로 작성돼 알러지케어 구매자 연령 샘플 미포함. dd_cmn_users_master × 주문 조인 쿼리 준비 중(다음 업데이트). 기존 Layer 데이터는 소프트워싱 기준.</div>
   <div class="insight-box" id="ages-insight"></div>
   <div class="card"><h3>📊 연령대별 비중</h3><div class="ch lg"><canvas id="ages-stacked"></canvas></div></div>
   <div class="card" style="margin-top:14px"><table><thead><tr><th>상품</th><th class="r">샘플</th><th class="r">20-24</th><th class="r">25-29</th><th class="r">30-34</th><th class="r">35-39</th><th class="r">40-44</th><th class="r">45-49</th><th class="r">50-54</th><th class="r">55-59</th><th class="r">60+</th><th class="r">25-34</th></tr></thead><tbody id="ages-tbl"></tbody></table></div>
@@ -239,8 +240,8 @@ function copyShareUrl(){navigator.clipboard.writeText(location.href.split('?')[0
 function switchTab(e,id){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));e.target.classList.add('active');document.getElementById('tab-'+id).classList.add('active');window.dispatchEvent(new Event('resize'))}
 function isoWeek(s){const d=new Date(s+'T00:00:00');const day=(d.getDay()+6)%7;const m=new Date(d);m.setDate(d.getDate()-day);return m.toISOString().substring(0,10)}
 function monthKey(s){return s.substring(0,7)}
-function aggregate(daily,k){const r={};daily.forEach(x=>{const key=k(x.dt);if(!r[key])r[key]={gmv:0,qty:0,imp:0,pdp:0,purchase:0,pdp_uv:0};r[key].gmv+=x.gmv;r[key].qty+=x.qty;r[key].imp+=x.imp;r[key].pdp+=x.pdp;r[key].purchase+=x.purchase;r[key].pdp_uv+=(x.pdp_uv||0)});return r}
-function sumRecent(d,n){return d.slice(-n).reduce((a,r)=>({gmv:a.gmv+r.gmv,imp:a.imp+r.imp,pdp:a.pdp+r.pdp,purchase:a.purchase+r.purchase,qty:a.qty+r.qty,pdp_uv:a.pdp_uv+(r.pdp_uv||0)}),{gmv:0,imp:0,pdp:0,purchase:0,qty:0,pdp_uv:0})}
+function aggregate(daily,k){const r={};daily.forEach(x=>{const key=k(x.dt);if(!r[key])r[key]={gmv:0,qty:0,imp:0,pdp:0,purchase:0,pdp_uv:0,buy_uv:0,imp_uv:0};r[key].gmv+=x.gmv;r[key].qty+=x.qty;r[key].imp+=x.imp;r[key].pdp+=x.pdp;r[key].purchase+=x.purchase;r[key].pdp_uv+=(x.pdp_uv||0);r[key].buy_uv+=(x.buy_uv||0);r[key].imp_uv+=(x.imp_uv||0)});return r}
+function sumRecent(d,n){return d.slice(-n).reduce((a,r)=>({gmv:a.gmv+r.gmv,imp:a.imp+r.imp,pdp:a.pdp+r.pdp,purchase:a.purchase+r.purchase,qty:a.qty+r.qty,pdp_uv:a.pdp_uv+(r.pdp_uv||0),buy_uv:a.buy_uv+(r.buy_uv||0),imp_uv:a.imp_uv+(r.imp_uv||0)}),{gmv:0,imp:0,pdp:0,purchase:0,qty:0,pdp_uv:0,buy_uv:0,imp_uv:0})}
 function rankCol(r){if(r==null)return '';if(r<=10)return 'background:rgba(16,185,129,.2);color:#047857';if(r<=30)return 'background:rgba(245,158,11,.2);color:#b45309';return 'background:rgba(239,68,68,.2);color:#b91c1c'}
 function mkCh(id,cfg){if(CHARTS[id])CHARTS[id].destroy();CHARTS[id]=new Chart(document.getElementById(id),cfg);return CHARTS[id]}
 function setPeriod(p,mode){PERIOD[p]=mode;const prefix=p==='soft'?'s':'a';['day','week','month'].forEach(m=>document.getElementById(prefix+'-p-'+m).classList.toggle('active',m===mode));renderProductTab(p)}
@@ -255,7 +256,7 @@ function clipCTR(r){
 }
 function clipCVR(r){
   if(!r||!r.pdp_uv||r.pdp_uv<=0)return null;
-  const v=r.purchase/r.pdp_uv*100;
+  const v=(r.buy_uv||0)/r.pdp_uv*100;
   if(v>15)return null;
   return v;
 }
@@ -302,15 +303,15 @@ function render(){
   document.getElementById('o-s-mtd').textContent=fmtKRW(softMtd);
   document.getElementById('o-s-ctr').textContent=(s7.pdp/s7.imp*100).toFixed(2);
   document.getElementById('o-s-ctr-vs').textContent='카스테라 '+(c7.pdp/c7.imp*100).toFixed(2)+'% · 쁘리엘르 '+(p7.pdp/p7.imp*100).toFixed(2)+'%';
-  document.getElementById('o-s-cvr').textContent=s7.pdp_uv>0?(s7.purchase/s7.pdp_uv*100).toFixed(2):'—';
-  document.getElementById('o-s-cvr-vs').textContent='카스테라 '+(c7.pdp_uv>0?(c7.purchase/c7.pdp_uv*100).toFixed(2):'—')+'% · 쁘리엘르 '+(p7.pdp_uv>0?(p7.purchase/p7.pdp_uv*100).toFixed(2):'—')+'%';
+  document.getElementById('o-s-cvr').textContent=s7.pdp_uv>0?(s7.buy_uv/s7.pdp_uv*100).toFixed(2):'—';
+  document.getElementById('o-s-cvr-vs').textContent='카스테라 '+(c7.pdp_uv>0?(c7.buy_uv/c7.pdp_uv*100).toFixed(2):'—')+'% · 쁘리엘르 '+(p7.pdp_uv>0?(p7.buy_uv/p7.pdp_uv*100).toFixed(2):'—')+'%';
   document.getElementById('o-a-gmv').textContent=fmtKRW(a7.gmv);
   document.getElementById('o-a-gmv-wow').innerHTML='WoW <span class="'+(a7.gmv>=ap7.gmv?'chg up':'chg dn')+'">'+((a7.gmv/ap7.gmv-1)*100).toFixed(1)+'%</span>';
   document.getElementById('o-a-mtd').textContent=fmtKRW(allergyMtd);
   document.getElementById('o-a-ctr').textContent=(a7.pdp/a7.imp*100).toFixed(2);
   document.getElementById('o-a-ctr-vs').textContent='돈워리 '+(dn7.pdp/dn7.imp*100).toFixed(2)+'% · 가드M2 '+(gd7.pdp/gd7.imp*100).toFixed(2)+'%';
-  document.getElementById('o-a-cvr').textContent=a7.pdp_uv>0?(a7.purchase/a7.pdp_uv*100).toFixed(2):'—';
-  document.getElementById('o-a-cvr-vs').textContent='돈워리 '+(dn7.pdp_uv>0?(dn7.purchase/dn7.pdp_uv*100).toFixed(2):'—')+'% · 가드M2 '+(gd7.pdp_uv>0?(gd7.purchase/gd7.pdp_uv*100).toFixed(2):'—')+'%';
+  document.getElementById('o-a-cvr').textContent=a7.pdp_uv>0?(a7.buy_uv/a7.pdp_uv*100).toFixed(2):'—';
+  document.getElementById('o-a-cvr-vs').textContent='돈워리 '+(dn7.pdp_uv>0?(dn7.buy_uv/dn7.pdp_uv*100).toFixed(2):'—')+'% · 가드M2 '+(gd7.pdp_uv>0?(gd7.buy_uv/gd7.pdp_uv*100).toFixed(2):'—')+'%';
 
   const casMap={};cas.forEach(r=>casMap[r.dt]=r);
   const puriMap={};puri.forEach(r=>puriMap[r.dt]=r);
@@ -401,8 +402,8 @@ function renderProductTab(p){
   const ctrSets=aggs.map((a,i)=>({label:names[i],data:allKeys.map(k=>{const x=a[k];if(!x||x.imp<=0)return null;const v=x.pdp/x.imp*100;return v>10?null:v}),borderColor:cols[i],tension:.3,pointRadius:mode==='day'?0:3,spanGaps:true,borderWidth:i===0?3:2}));
   mkCh(prefix+'-ctr-ch',{type:'line',data:{labels,datasets:ctrSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{min:0,max:8,title:{display:true,text:'CTR %'}}}}});
 
-  // CVR(UV) Y 0~12 고정
-  const cvrSets=aggs.map((a,i)=>({label:names[i],data:allKeys.map(k=>{const x=a[k];if(!x||!x.pdp_uv||x.pdp_uv<=0)return null;const v=x.purchase/x.pdp_uv*100;return v>15?null:v}),borderColor:cols[i],tension:.3,pointRadius:mode==='day'?0:3,spanGaps:true,borderWidth:i===0?3:2}));
+  // CVR(UV) Y 0~12 고정 - 프리즘 공식 buy_uv/pdp_uv
+  const cvrSets=aggs.map((a,i)=>({label:names[i],data:allKeys.map(k=>{const x=a[k];if(!x||!x.pdp_uv||x.pdp_uv<=0)return null;const v=(x.buy_uv||0)/x.pdp_uv*100;return v>15?null:v}),borderColor:cols[i],tension:.3,pointRadius:mode==='day'?0:3,spanGaps:true,borderWidth:i===0?3:2}));
   mkCh(prefix+'-cvr-ch',{type:'line',data:{labels,datasets:cvrSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{min:0,max:12,title:{display:true,text:'CVR(UV) %'}}}}});
 
   // VS table
@@ -416,7 +417,8 @@ function renderProductTab(p){
     ['구매건수',r30[0].purchase.toLocaleString(),r30[1].purchase.toLocaleString(),r30[2].purchase.toLocaleString()],
     ['CTR',(r30[0].pdp/r30[0].imp*100).toFixed(2)+'%',(r30[1].pdp/r30[1].imp*100).toFixed(2)+'%',(r30[2].pdp/r30[2].imp*100).toFixed(2)+'%'],
     ['PDP UV',r30[0].pdp_uv.toLocaleString(),r30[1].pdp_uv.toLocaleString(),r30[2].pdp_uv.toLocaleString()],
-    ['CVR(UV)',r30[0].pdp_uv>0?(r30[0].purchase/r30[0].pdp_uv*100).toFixed(2)+'%':'—',r30[1].pdp_uv>0?(r30[1].purchase/r30[1].pdp_uv*100).toFixed(2)+'%':'—',r30[2].pdp_uv>0?(r30[2].purchase/r30[2].pdp_uv*100).toFixed(2)+'%':'—'],
+    ['구매 UV',r30[0].buy_uv.toLocaleString(),r30[1].buy_uv.toLocaleString(),r30[2].buy_uv.toLocaleString()],
+    ['CVR(UV)',r30[0].pdp_uv>0?(r30[0].buy_uv/r30[0].pdp_uv*100).toFixed(2)+'%':'—',r30[1].pdp_uv>0?(r30[1].buy_uv/r30[1].pdp_uv*100).toFixed(2)+'%':'—',r30[2].pdp_uv>0?(r30[2].buy_uv/r30[2].pdp_uv*100).toFixed(2)+'%':'—'],
     ['판매수량',r30[0].qty.toLocaleString(),r30[1].qty.toLocaleString(),r30[2].qty.toLocaleString()]
   ];
   document.getElementById(tblId).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td class="r ${selfCls}">${r[1]}</td><td class="r comp">${r[2]}</td><td class="r comp">${r[3]}</td></tr>`).join('');
