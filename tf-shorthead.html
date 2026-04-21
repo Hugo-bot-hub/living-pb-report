@@ -217,7 +217,7 @@ tr:hover td{background:rgba(108,92,231,.04)}
 
 <div id="tab-ages" class="tab-content">
   <div class="sec">👥 실제 구매자 연령대 <span class="warn-chip">2025.01~2026.04 구매자 기준</span></div>
-  <div class="cvr-note">⚠️ <strong>알러지케어(3640244)는 별도 쿼리 필요</strong>: Notion PDP 딥다이브 6-2는 소프트워싱(3918642) 중심으로 작성돼 알러지케어 구매자 연령 샘플 미포함. dd_cmn_users_master × 주문 조인 쿼리 준비 중(다음 업데이트). 기존 Layer 데이터는 소프트워싱 기준.</div>
+  <div class="cvr-note">✅ <strong>6상품 모두 적용 (알러지케어 포함)</strong>: <code>commerce_gross_profit_orders × dump_member.verified_users</code> 조인. 본인인증 완료 + 생년월일 매칭 구매자만. 샘플 100 미만 상품은 신뢰 제한 표시.</div>
   <div class="insight-box" id="ages-insight"></div>
   <div class="card"><h3>📊 연령대별 비중</h3><div class="ch lg"><canvas id="ages-stacked"></canvas></div></div>
   <div class="card" style="margin-top:14px"><table><thead><tr><th>상품</th><th class="r">샘플</th><th class="r">20-24</th><th class="r">25-29</th><th class="r">30-34</th><th class="r">35-39</th><th class="r">40-44</th><th class="r">45-49</th><th class="r">50-54</th><th class="r">55-59</th><th class="r">60+</th><th class="r">25-34</th></tr></thead><tbody id="ages-tbl"></tbody></table></div>
