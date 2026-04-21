@@ -101,19 +101,19 @@ tr:hover td{background:rgba(108,92,231,.04)}
 <div id="tab-overview" class="tab-content active">
   <div class="share-banner"><div>📊 <strong>TF 멤버 공유</strong> — 매일 9시 자동 업데이트</div><div><span id="share-url" style="font-family:monospace;font-size:11px">—</span> <button class="copy-btn" onclick="copyShareUrl()">복사</button></div></div>
 
-  <div class="cvr-note">📌 <strong>지표 정의:</strong> CTR = PDP뷰/노출 · CVR(PV) = 구매건수/PDP뷰수. Notion CVR(UV)=구매UV/PDP UV와는 기준 달라 통상 UV CVR의 1/2~1/3. <strong>⚠️ CTR 차트는 Y축 0~8%, CVR 차트는 0~5%로 고정</strong> (출시 직후 2월 초순 샘플 부족 이상치 클립).</div>
+  <div class="cvr-note">📌 <strong>지표 정의 (PB사업부 공식 기준):</strong> CTR = PDP뷰/노출 · <strong>CVR(UV) = 구매건수/PDP UV</strong> (PDP UV: <code>commerce_conversion_productions.visitor_cnt</code>). <strong>Y축 CTR 0~8%, CVR 0~12% 고정</strong> · 출시 직후 2월 초 샘플 부족 이상치 클립(CTR>10%, CVR>15% null).</div>
 
   <div class="product-header soft">🔴 소프트워싱 이불, 오늘의집 layer, 3918642 <span class="pill soft">전환 살리기</span><span class="pid">35,900원 · 출시 2026-02-10</span></div>
   <div class="g4">
     <div class="kpi soft"><div class="lbl">7일 GMV</div><div class="val" id="o-s-gmv">—</div><div class="sub" id="o-s-gmv-wow">—</div></div>
     <div class="kpi soft"><div class="lbl">월 GMV (MTD)</div><div class="val" id="o-s-mtd">—</div><div class="sub">목표 3,000만(6월)</div></div>
     <div class="kpi soft"><div class="lbl">CTR 7일</div><div class="val" id="o-s-ctr">—<small>%</small></div><div class="sub" id="o-s-ctr-vs">vs 경쟁</div></div>
-    <div class="kpi soft"><div class="lbl">CVR(PV) 7일</div><div class="val" id="o-s-cvr">—<small>%</small></div><div class="sub" id="o-s-cvr-vs">vs 경쟁</div></div>
+    <div class="kpi soft"><div class="lbl">CVR(UV) 7일</div><div class="val" id="o-s-cvr">—<small>%</small></div><div class="sub" id="o-s-cvr-vs">vs 경쟁</div></div>
   </div>
   <div class="g3">
     <div class="card soft"><h3>📊 일간 GMV <span class="scale-toggle"><button id="o-s-lin" class="active" onclick="setScale('os','linear')">선형</button><button id="o-s-log" onclick="setScale('os','log')">로그</button></span></h3><div class="ch"><canvas id="o-s-gmv-ch"></canvas></div><div class="note">로그 스케일: 규모 차이 큰 경쟁사와 같은 축 비교 가능</div></div>
     <div class="card soft"><h3>📈 일간 CTR <span style="font-size:10px;color:var(--text3);font-weight:500">(Y축 0~8%)</span></h3><div class="ch"><canvas id="o-s-ctr-ch"></canvas></div></div>
-    <div class="card soft"><h3>📈 일간 CVR(PV) <span style="font-size:10px;color:var(--text3);font-weight:500">(Y축 0~5%)</span></h3><div class="ch"><canvas id="o-s-cvr-ch"></canvas></div></div>
+    <div class="card soft"><h3>📈 일간 CVR(UV) <span style="font-size:10px;color:var(--text3);font-weight:500">(Y축 0~12%)</span></h3><div class="ch"><canvas id="o-s-cvr-ch"></canvas></div></div>
   </div>
 
   <div class="product-header allergy">🟢 알러지케어 침구, 오늘의집 layer, 3640244 <span class="pill allergy">외부 확장</span><span class="pid">49,900원</span></div>
@@ -121,12 +121,12 @@ tr:hover td{background:rgba(108,92,231,.04)}
     <div class="kpi allergy"><div class="lbl">7일 GMV</div><div class="val" id="o-a-gmv">—</div><div class="sub" id="o-a-gmv-wow">—</div></div>
     <div class="kpi allergy"><div class="lbl">월 GMV (MTD)</div><div class="val" id="o-a-mtd">—</div><div class="sub">목표 8,000만(6월)</div></div>
     <div class="kpi allergy"><div class="lbl">CTR 7일</div><div class="val" id="o-a-ctr">—<small>%</small></div><div class="sub" id="o-a-ctr-vs">vs 경쟁</div></div>
-    <div class="kpi allergy"><div class="lbl">CVR(PV) 7일</div><div class="val" id="o-a-cvr">—<small>%</small></div><div class="sub" id="o-a-cvr-vs">vs 경쟁</div></div>
+    <div class="kpi allergy"><div class="lbl">CVR(UV) 7일</div><div class="val" id="o-a-cvr">—<small>%</small></div><div class="sub" id="o-a-cvr-vs">vs 경쟁</div></div>
   </div>
   <div class="g3">
     <div class="card allergy"><h3>📊 일간 GMV <span class="scale-toggle"><button id="o-a-lin" class="active" onclick="setScale('oa','linear')">선형</button><button id="o-a-log" onclick="setScale('oa','log')">로그</button></span></h3><div class="ch"><canvas id="o-a-gmv-ch"></canvas></div></div>
     <div class="card allergy"><h3>📈 일간 CTR <span style="font-size:10px;color:var(--text3);font-weight:500">(Y축 0~8%)</span></h3><div class="ch"><canvas id="o-a-ctr-ch"></canvas></div></div>
-    <div class="card allergy"><h3>📈 일간 CVR(PV) <span style="font-size:10px;color:var(--text3);font-weight:500">(Y축 0~5%)</span></h3><div class="ch"><canvas id="o-a-cvr-ch"></canvas></div></div>
+    <div class="card allergy"><h3>📈 일간 CVR(UV) <span style="font-size:10px;color:var(--text3);font-weight:500">(Y축 0~12%)</span></h3><div class="ch"><canvas id="o-a-cvr-ch"></canvas></div></div>
   </div>
 
   <div class="sec">🧭 TF 액션 타임라인</div>
@@ -144,7 +144,7 @@ tr:hover td{background:rgba(108,92,231,.04)}
   </div>
   <div class="g2">
     <div class="card soft"><h3>📈 일간 CTR (Y축 0~8%)</h3><div class="ch"><canvas id="s-ctr-ch"></canvas></div></div>
-    <div class="card soft"><h3>📈 일간 CVR(PV) (Y축 0~5%)</h3><div class="ch"><canvas id="s-cvr-ch"></canvas></div></div>
+    <div class="card soft"><h3>📈 일간 CVR(UV) (Y축 0~12%)</h3><div class="ch"><canvas id="s-cvr-ch"></canvas></div></div>
   </div>
   <div class="sec">⚔️ 1:1 비교 — 최근 30일</div>
   <div class="card"><table class="vs-table"><thead><tr><th>지표</th><th class="r">🔴 소프트워싱 이불<br>오늘의집 layer, 3918642</th><th class="r">⚔️ 카스테라 워싱<br>헬로우슬립, 767440</th><th class="r">⚔️ 유어메이트<br>쁘리엘르, 2636441</th></tr></thead><tbody id="s-vs-tbl"></tbody></table></div>
@@ -162,7 +162,7 @@ tr:hover td{background:rgba(108,92,231,.04)}
   </div>
   <div class="g2">
     <div class="card allergy"><h3>📈 일간 CTR (Y축 0~8%)</h3><div class="ch"><canvas id="a-ctr-ch"></canvas></div></div>
-    <div class="card allergy"><h3>📈 일간 CVR(PV) (Y축 0~5%)</h3><div class="ch"><canvas id="a-cvr-ch"></canvas></div></div>
+    <div class="card allergy"><h3>📈 일간 CVR(UV) (Y축 0~12%)</h3><div class="ch"><canvas id="a-cvr-ch"></canvas></div></div>
   </div>
   <div class="sec">⚔️ 1:1 비교 — 최근 30일</div>
   <div class="card"><table class="vs-table"><thead><tr><th>지표</th><th class="r">🟢 알러지케어 침구<br>오늘의집 layer, 3640244</th><th class="r">⚔️ 돈워리 M2<br>헬로우슬립, 1930788</th><th class="r">⚔️ 가드 M2<br>마틸라, 442026</th></tr></thead><tbody id="a-vs-tbl"></tbody></table></div>
@@ -199,6 +199,20 @@ tr:hover td{background:rgba(108,92,231,.04)}
 
   <div class="sec">📋 6상품 × 카테고리 키워드 평균순위 (최근 30일)</div>
   <div class="card"><table><thead><tr><th>상품</th><th class="r">이불</th><th class="r">차렵이불</th><th class="r">이불세트</th><th class="r">사계절이불</th><th class="r">알러지케어</th></tr></thead><tbody id="srp-mat"></tbody></table><div class="note">1-indexed. 색상: TOP 10(초록)·TOP 30(주황)·그 이하(빨강)</div></div>
+
+  <div class="sec">🧮 6상품 SRP 알고리즘 피처 비교 (ES Function Score 구성요소)</div>
+  <div class="insight-box"><strong>selling_score 외에 랭킹에 영향을 주는 피처들.</strong> 낮을수록 좋은 건 <strong>qc_rank(검색→PDP 클릭 순위)</strong>, 높을수록 좋은 건 리뷰·뷰·위시·카트 점수 등.</div>
+  <div class="card"><table><thead><tr><th>상품</th><th class="r">리뷰 수</th><th class="r">평점</th><th class="r">위시</th><th class="r">카트(180일)</th><th class="r">click_kw rank(4w)</th><th class="r">오늘출발</th><th class="r">오늘의집 단독</th></tr></thead><tbody id="srp-feat-raw"></tbody></table><div class="note">raw feature 수치. click_kw_rank 낮을수록 좋음(Notion CPC 딥다이브 기준). 소프트워싱은 리뷰 155·카트 294·오늘출발 0 등 구조적 열세.</div></div>
+
+  <div class="sec">📊 주요 피처 점수 시계열 (6상품)</div>
+  <div class="g2">
+    <div class="card"><h3>리뷰 점수 (review_count_180_day_score)</h3><div class="ch"><canvas id="srp-feat-review"></canvas></div></div>
+    <div class="card"><h3>판매량 점수 (sell_cnt_28_day_score)</h3><div class="ch"><canvas id="srp-feat-sell"></canvas></div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><h3>뷰당 판매 점수 (sell_per_view_28_day_score)</h3><div class="ch"><canvas id="srp-feat-spv"></canvas></div></div>
+    <div class="card"><h3>click_keywords 순위 (qc_rank_4w) ↓낮을수록 좋음</h3><div class="ch"><canvas id="srp-feat-qc"></canvas></div></div>
+  </div>
 </div>
 
 <div id="tab-ages" class="tab-content">
@@ -225,8 +239,8 @@ function copyShareUrl(){navigator.clipboard.writeText(location.href.split('?')[0
 function switchTab(e,id){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));e.target.classList.add('active');document.getElementById('tab-'+id).classList.add('active');window.dispatchEvent(new Event('resize'))}
 function isoWeek(s){const d=new Date(s+'T00:00:00');const day=(d.getDay()+6)%7;const m=new Date(d);m.setDate(d.getDate()-day);return m.toISOString().substring(0,10)}
 function monthKey(s){return s.substring(0,7)}
-function aggregate(daily,k){const r={};daily.forEach(x=>{const key=k(x.dt);if(!r[key])r[key]={gmv:0,qty:0,imp:0,pdp:0,purchase:0};r[key].gmv+=x.gmv;r[key].qty+=x.qty;r[key].imp+=x.imp;r[key].pdp+=x.pdp;r[key].purchase+=x.purchase});return r}
-function sumRecent(d,n){return d.slice(-n).reduce((a,r)=>({gmv:a.gmv+r.gmv,imp:a.imp+r.imp,pdp:a.pdp+r.pdp,purchase:a.purchase+r.purchase,qty:a.qty+r.qty}),{gmv:0,imp:0,pdp:0,purchase:0,qty:0})}
+function aggregate(daily,k){const r={};daily.forEach(x=>{const key=k(x.dt);if(!r[key])r[key]={gmv:0,qty:0,imp:0,pdp:0,purchase:0,pdp_uv:0};r[key].gmv+=x.gmv;r[key].qty+=x.qty;r[key].imp+=x.imp;r[key].pdp+=x.pdp;r[key].purchase+=x.purchase;r[key].pdp_uv+=(x.pdp_uv||0)});return r}
+function sumRecent(d,n){return d.slice(-n).reduce((a,r)=>({gmv:a.gmv+r.gmv,imp:a.imp+r.imp,pdp:a.pdp+r.pdp,purchase:a.purchase+r.purchase,qty:a.qty+r.qty,pdp_uv:a.pdp_uv+(r.pdp_uv||0)}),{gmv:0,imp:0,pdp:0,purchase:0,qty:0,pdp_uv:0})}
 function rankCol(r){if(r==null)return '';if(r<=10)return 'background:rgba(16,185,129,.2);color:#047857';if(r<=30)return 'background:rgba(245,158,11,.2);color:#b45309';return 'background:rgba(239,68,68,.2);color:#b91c1c'}
 function mkCh(id,cfg){if(CHARTS[id])CHARTS[id].destroy();CHARTS[id]=new Chart(document.getElementById(id),cfg);return CHARTS[id]}
 function setPeriod(p,mode){PERIOD[p]=mode;const prefix=p==='soft'?'s':'a';['day','week','month'].forEach(m=>document.getElementById(prefix+'-p-'+m).classList.toggle('active',m===mode));renderProductTab(p)}
@@ -240,11 +254,12 @@ function clipCTR(r){
   return v;
 }
 function clipCVR(r){
-  if(!r||r.pdp<=0)return null;
-  const v=r.purchase/r.pdp*100;
-  if(v>6)return null;
+  if(!r||!r.pdp_uv||r.pdp_uv<=0)return null;
+  const v=r.purchase/r.pdp_uv*100;
+  if(v>15)return null;
   return v;
 }
+function logSafe(v){return v>0?v:null}
 
 async function load(){try{const res=await fetch('tf-data.json?t='+Date.now());DATA=await res.json();document.getElementById('last-update').textContent='업데이트: '+DATA.meta.lastUpdate;document.getElementById('share-url').textContent=location.href.split('?')[0];render()}catch(e){document.body.innerHTML='<div class="err">'+e.message+'</div>'}}
 
@@ -257,10 +272,11 @@ function renderOverviewGMV(){
   const r28s=soft.slice(-28),r28a=allergy.slice(-28);
 
   const mkGMV=(id,selfData,compData,selfLabel,compLabels,selfColor,compColors,scaleMode)=>{
+    const safeVal=v=>scaleMode==='log'?(v>0?v:null):v;
     mkCh(id,{type:'line',data:{labels:selfData.map(r=>fmtDate(r.dt)),datasets:[
-      {label:selfLabel,data:selfData.map(r=>r.gmv||null),borderColor:selfColor,backgroundColor:selfColor+'22',fill:scaleMode==='linear',tension:.3,borderWidth:3},
-      ...compData.map((m,i)=>({label:compLabels[i],data:selfData.map(r=>(m[r.dt]||{}).gmv||null),borderColor:compColors[i],backgroundColor:'transparent',borderDash:[5,5],tension:.3,pointRadius:0,borderWidth:2}))
-    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{type:scaleMode,ticks:{callback:v=>fmtKRW(v)},title:{display:true,text:'GMV'+(scaleMode==='log'?' (로그)':'')}}}}});
+      {label:selfLabel,data:selfData.map(r=>safeVal(r.gmv)),borderColor:selfColor,backgroundColor:selfColor+'22',fill:scaleMode==='linear',tension:.3,borderWidth:3,spanGaps:true},
+      ...compData.map((m,i)=>({label:compLabels[i],data:selfData.map(r=>safeVal((m[r.dt]||{}).gmv||0)),borderColor:compColors[i],backgroundColor:'transparent',borderDash:[5,5],tension:.3,pointRadius:0,borderWidth:2,spanGaps:true}))
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{type:scaleMode,min:scaleMode==='log'?1000:undefined,ticks:{callback:v=>fmtKRW(v)},title:{display:true,text:'GMV'+(scaleMode==='log'?' (로그)':'')}}}}});
   };
 
   mkGMV('o-s-gmv-ch',r28s,[casMap,puriMap],
@@ -286,15 +302,15 @@ function render(){
   document.getElementById('o-s-mtd').textContent=fmtKRW(softMtd);
   document.getElementById('o-s-ctr').textContent=(s7.pdp/s7.imp*100).toFixed(2);
   document.getElementById('o-s-ctr-vs').textContent='카스테라 '+(c7.pdp/c7.imp*100).toFixed(2)+'% · 쁘리엘르 '+(p7.pdp/p7.imp*100).toFixed(2)+'%';
-  document.getElementById('o-s-cvr').textContent=(s7.purchase/s7.pdp*100).toFixed(2);
-  document.getElementById('o-s-cvr-vs').textContent='카스테라 '+(c7.purchase/c7.pdp*100).toFixed(2)+'% · 쁘리엘르 '+(p7.purchase/p7.pdp*100).toFixed(2)+'%';
+  document.getElementById('o-s-cvr').textContent=s7.pdp_uv>0?(s7.purchase/s7.pdp_uv*100).toFixed(2):'—';
+  document.getElementById('o-s-cvr-vs').textContent='카스테라 '+(c7.pdp_uv>0?(c7.purchase/c7.pdp_uv*100).toFixed(2):'—')+'% · 쁘리엘르 '+(p7.pdp_uv>0?(p7.purchase/p7.pdp_uv*100).toFixed(2):'—')+'%';
   document.getElementById('o-a-gmv').textContent=fmtKRW(a7.gmv);
   document.getElementById('o-a-gmv-wow').innerHTML='WoW <span class="'+(a7.gmv>=ap7.gmv?'chg up':'chg dn')+'">'+((a7.gmv/ap7.gmv-1)*100).toFixed(1)+'%</span>';
   document.getElementById('o-a-mtd').textContent=fmtKRW(allergyMtd);
   document.getElementById('o-a-ctr').textContent=(a7.pdp/a7.imp*100).toFixed(2);
   document.getElementById('o-a-ctr-vs').textContent='돈워리 '+(dn7.pdp/dn7.imp*100).toFixed(2)+'% · 가드M2 '+(gd7.pdp/gd7.imp*100).toFixed(2)+'%';
-  document.getElementById('o-a-cvr').textContent=(a7.purchase/a7.pdp*100).toFixed(2);
-  document.getElementById('o-a-cvr-vs').textContent='돈워리 '+(dn7.purchase/dn7.pdp*100).toFixed(2)+'% · 가드M2 '+(gd7.purchase/gd7.pdp*100).toFixed(2)+'%';
+  document.getElementById('o-a-cvr').textContent=a7.pdp_uv>0?(a7.purchase/a7.pdp_uv*100).toFixed(2):'—';
+  document.getElementById('o-a-cvr-vs').textContent='돈워리 '+(dn7.pdp_uv>0?(dn7.purchase/dn7.pdp_uv*100).toFixed(2):'—')+'% · 가드M2 '+(gd7.pdp_uv>0?(gd7.purchase/gd7.pdp_uv*100).toFixed(2):'—')+'%';
 
   const casMap={};cas.forEach(r=>casMap[r.dt]=r);
   const puriMap={};puri.forEach(r=>puriMap[r.dt]=r);
@@ -315,7 +331,7 @@ function render(){
   mkCh('o-s-cvr-ch',{type:'line',data:{labels:r28s.map(r=>fmtDate(r.dt)),datasets:[
     {label:'🔴 소프트워싱 이불, 오늘의집 layer, 3918642',data:r28s.map(clipCVR),borderColor:COLORS.soft,tension:.3,pointRadius:0,borderWidth:3,spanGaps:true},
     ...softComps.map(([m,lbl,col])=>({label:lbl,data:r28s.map(r=>clipCVR(m[r.dt])),borderColor:col,tension:.3,pointRadius:0,borderWidth:2,spanGaps:true}))
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{min:0,max:5,title:{display:true,text:'CVR(PV) %'}}}}});
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{min:0,max:12,title:{display:true,text:'CVR(UV) %'}}}}});
   mkCh('o-a-ctr-ch',{type:'line',data:{labels:r28a.map(r=>fmtDate(r.dt)),datasets:[
     {label:'🟢 알러지케어 침구, 오늘의집 layer, 3640244',data:r28a.map(clipCTR),borderColor:COLORS.allergy,tension:.3,pointRadius:0,borderWidth:3,spanGaps:true},
     ...allergyComps.map(([m,lbl,col])=>({label:lbl,data:r28a.map(r=>clipCTR(m[r.dt])),borderColor:col,tension:.3,pointRadius:0,borderWidth:2,spanGaps:true}))
@@ -323,7 +339,7 @@ function render(){
   mkCh('o-a-cvr-ch',{type:'line',data:{labels:r28a.map(r=>fmtDate(r.dt)),datasets:[
     {label:'🟢 알러지케어 침구, 오늘의집 layer, 3640244',data:r28a.map(clipCVR),borderColor:COLORS.allergy,tension:.3,pointRadius:0,borderWidth:3,spanGaps:true},
     ...allergyComps.map(([m,lbl,col])=>({label:lbl,data:r28a.map(r=>clipCVR(m[r.dt])),borderColor:col,tension:.3,pointRadius:0,borderWidth:2,spanGaps:true}))
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{min:0,max:5,title:{display:true,text:'CVR(PV) %'}}}}});
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{min:0,max:12,title:{display:true,text:'CVR(UV) %'}}}}});
 
   renderTimeline('timeline-all',DATA.actions);
   renderTimeline('timeline-soft',DATA.actions.filter(a=>a.product===3918642||a.product==='all'));
@@ -353,38 +369,41 @@ function renderProductTab(p){
 
   // GMV — line 또는 bar (mode=day면 line, else bar)
   const chType=mode==='day'?'line':'bar';
+  const safeVal=v=>scale==='log'?(v>0?v:null):v;
   const gmvSets=aggs.map((a,i)=>({
     label:names[i],
-    data:allKeys.map(k=>a[k]?a[k].gmv:null),
+    data:allKeys.map(k=>a[k]?safeVal(a[k].gmv):null),
     borderColor:cols[i],backgroundColor:cols[i]+(chType==='bar'?'cc':'22'),
     fill:chType==='line'&&i===0,
     tension:.3,
     borderDash:chType==='line'&&i>0?[5,5]:[],
     pointRadius:mode==='day'?0:3,
-    borderWidth:i===0?3:2
+    borderWidth:i===0?3:2,
+    spanGaps:true
   }));
-  mkCh(prefix+'-gmv-ch',{type:chType,data:{labels,datasets:gmvSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{type:scale,ticks:{callback:v=>fmtKRW(v)},title:{display:true,text:'GMV'+(scale==='log'?' (로그)':'')}}}}});
+  mkCh(prefix+'-gmv-ch',{type:chType,data:{labels,datasets:gmvSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{type:scale,min:scale==='log'?1000:undefined,ticks:{callback:v=>fmtKRW(v)},title:{display:true,text:'GMV'+(scale==='log'?' (로그)':'')}}}}});
 
   // qty
   const qtySets=aggs.map((a,i)=>({
     label:names[i],
-    data:allKeys.map(k=>a[k]?a[k].qty:null),
+    data:allKeys.map(k=>a[k]?safeVal(a[k].qty):null),
     borderColor:cols[i],backgroundColor:cols[i]+(chType==='bar'?'cc':'22'),
     tension:.3,
     borderDash:chType==='line'&&i>0?[5,5]:[],
     pointRadius:mode==='day'?0:3,
     borderWidth:i===0?3:2,
-    fill:chType==='line'&&i===0
+    fill:chType==='line'&&i===0,
+    spanGaps:true
   }));
-  mkCh(prefix+'-qty-ch',{type:chType,data:{labels,datasets:qtySets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{type:scale,title:{display:true,text:'판매수량'+(scale==='log'?' (로그)':'')}}}}});
+  mkCh(prefix+'-qty-ch',{type:chType,data:{labels,datasets:qtySets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{type:scale,min:scale==='log'?1:undefined,title:{display:true,text:'판매수량'+(scale==='log'?' (로그)':'')}}}}});
 
   // CTR (Y 0~8 고정)
   const ctrSets=aggs.map((a,i)=>({label:names[i],data:allKeys.map(k=>{const x=a[k];if(!x||x.imp<=0)return null;const v=x.pdp/x.imp*100;return v>10?null:v}),borderColor:cols[i],tension:.3,pointRadius:mode==='day'?0:3,spanGaps:true,borderWidth:i===0?3:2}));
   mkCh(prefix+'-ctr-ch',{type:'line',data:{labels,datasets:ctrSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{min:0,max:8,title:{display:true,text:'CTR %'}}}}});
 
-  // CVR (Y 0~5 고정)
-  const cvrSets=aggs.map((a,i)=>({label:names[i],data:allKeys.map(k=>{const x=a[k];if(!x||x.pdp<=0)return null;const v=x.purchase/x.pdp*100;return v>6?null:v}),borderColor:cols[i],tension:.3,pointRadius:mode==='day'?0:3,spanGaps:true,borderWidth:i===0?3:2}));
-  mkCh(prefix+'-cvr-ch',{type:'line',data:{labels,datasets:cvrSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{min:0,max:5,title:{display:true,text:'CVR(PV) %'}}}}});
+  // CVR(UV) Y 0~12 고정
+  const cvrSets=aggs.map((a,i)=>({label:names[i],data:allKeys.map(k=>{const x=a[k];if(!x||!x.pdp_uv||x.pdp_uv<=0)return null;const v=x.purchase/x.pdp_uv*100;return v>15?null:v}),borderColor:cols[i],tension:.3,pointRadius:mode==='day'?0:3,spanGaps:true,borderWidth:i===0?3:2}));
+  mkCh(prefix+'-cvr-ch',{type:'line',data:{labels,datasets:cvrSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{min:0,max:12,title:{display:true,text:'CVR(UV) %'}}}}});
 
   // VS table
   const r30=data.map(d=>sumRecent(d,30));
@@ -396,7 +415,8 @@ function renderProductTab(p){
     ['PDP뷰',r30[0].pdp.toLocaleString(),r30[1].pdp.toLocaleString(),r30[2].pdp.toLocaleString()],
     ['구매건수',r30[0].purchase.toLocaleString(),r30[1].purchase.toLocaleString(),r30[2].purchase.toLocaleString()],
     ['CTR',(r30[0].pdp/r30[0].imp*100).toFixed(2)+'%',(r30[1].pdp/r30[1].imp*100).toFixed(2)+'%',(r30[2].pdp/r30[2].imp*100).toFixed(2)+'%'],
-    ['CVR(PV)',(r30[0].purchase/r30[0].pdp*100).toFixed(2)+'%',(r30[1].purchase/r30[1].pdp*100).toFixed(2)+'%',(r30[2].purchase/r30[2].pdp*100).toFixed(2)+'%'],
+    ['PDP UV',r30[0].pdp_uv.toLocaleString(),r30[1].pdp_uv.toLocaleString(),r30[2].pdp_uv.toLocaleString()],
+    ['CVR(UV)',r30[0].pdp_uv>0?(r30[0].purchase/r30[0].pdp_uv*100).toFixed(2)+'%':'—',r30[1].pdp_uv>0?(r30[1].purchase/r30[1].pdp_uv*100).toFixed(2)+'%':'—',r30[2].pdp_uv>0?(r30[2].purchase/r30[2].pdp_uv*100).toFixed(2)+'%':'—'],
     ['판매수량',r30[0].qty.toLocaleString(),r30[1].qty.toLocaleString(),r30[2].qty.toLocaleString()]
   ];
   document.getElementById(tblId).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td class="r ${selfCls}">${r[1]}</td><td class="r comp">${r[2]}</td><td class="r comp">${r[3]}</td></tr>`).join('');
@@ -502,6 +522,31 @@ function renderSRP(){
     }).join('');
     return `<tr><td><strong>${p.emoji} ${p.shortName}, ${p.brand}, ${pid}</strong></td>${cells}</tr>`;
   }).join('');
+
+  // Raw features table
+  const fRows=pids.map(pid=>{
+    const p=DATA.products[pid];
+    const f=DATA.srpFeatures[pid];
+    if(!f)return '';
+    return `<tr><td><strong>${p.emoji} ${p.shortName}, ${p.brand}, ${pid}</strong></td><td class="r">${f.review_cnt.toLocaleString()}</td><td class="r">${f.review_avg.toFixed(2)}</td><td class="r">${f.wish_cnt.toLocaleString()}</td><td class="r">${f.card_180d.toLocaleString()}</td><td class="r" style="${rankCol(f.qc_rank_4w)};font-weight:700">${f.qc_rank_4w.toFixed(1)}</td><td class="r">${(f.today_departure*100).toFixed(0)}%</td><td class="r">${f.ohouse_only?'✅':'—'}</td></tr>`;
+  }).join('');
+  document.getElementById('srp-feat-raw').innerHTML=fRows;
+
+  // Feature time series
+  const featTs=DATA.srpFeatureTs;
+  const featDates=[...new Set(Object.values(featTs).flat().map(r=>r.dt))].sort();
+  const mkFeatCh=(id,key,reverse=false)=>{
+    mkCh(id,{type:'line',data:{labels:featDates.map(fmtDate),datasets:pidOrder.map(pid=>{
+      const m={};(featTs[pid]||[]).forEach(r=>m[r.dt]=r[key]);
+      const p=DATA.products[pid];
+      const isSelf=pid==='3918642'||pid==='3640244';
+      return {label:`${p.emoji} ${p.shortName}, ${p.brand}, ${pid}`,data:featDates.map(d=>m[d]||null),borderColor:PID_COLOR[pid],tension:.3,borderDash:isSelf?[]:[5,5],borderWidth:isSelf?3:2,pointRadius:2,spanGaps:true};
+    })},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:reverse?{reverse:true,title:{display:true,text:'rank (낮을수록 좋음)'}}:{title:{display:true,text:'score'}}}}});
+  };
+  mkFeatCh('srp-feat-review','review');
+  mkFeatCh('srp-feat-sell','sell28');
+  mkFeatCh('srp-feat-spv','spv28');
+  mkFeatCh('srp-feat-qc','qc_rank',true);
 }
 
 function renderAges(){
