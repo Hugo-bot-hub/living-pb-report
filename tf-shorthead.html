@@ -101,7 +101,7 @@ tr:hover td{background:rgba(108,92,231,.04)}
 <div id="tab-overview" class="tab-content active">
   <div class="share-banner"><div>📊 <strong>TF 멤버 공유</strong> — 매일 9시 자동 업데이트</div><div><span id="share-url" style="font-family:monospace;font-size:11px">—</span> <button class="copy-btn" onclick="copyShareUrl()">복사</button></div></div>
 
-  <div class="cvr-note">📌 <strong>CVR(UV) 프리즘 공식 기준:</strong> CTR = PDP뷰/노출 · <strong>CVR(UV) = purchase_user_join / pdpview_user_join</strong> (PB사업부 표준, <code>ba_preserved.commerce_daily_user_count_v3 paid_type='total'</code>, 프리즘 스킬 intent: "GMV 드라이버 - 이벤트수 기반 상품별 퍼널 분석"). Notion 카스테라 3월 7.33% 기준과 약 73% 수준(분자/필터 차이).</div>
+  <div class="cvr-note">✅ <strong>CVR(UV) = `purchase_user_join / pdpview_user_join`</strong> — 프리즘 `prism_mkt_kpi_stats` schema_doc 명시 산식 <code>purchaser / pdpviewer</code>의 상품 단위 적용. 원천: <code>ba_preserved.commerce_daily_user_count_v3</code> (base='product', paid_type='total', 회원 `_join`, 당일취소 제외). <strong>3월 카스테라 5.35% · 쁘리엘르 4.09% · 알러지케어 1.67% · 소프트워싱 1.39%</strong>. Notion 문서 (7.33%·1.57%)는 프리즘 공식 산식과 불일치 — Notion 쪽 수정 필요.</div>
 
   <div class="product-header soft">🔴 소프트워싱 이불, 오늘의집 layer, 3918642 <span class="pill soft">전환 살리기</span><span class="pid">35,900원 · 출시 2026-02-10</span></div>
   <div class="g4">
