@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>🎯 숏헤드 PB TF 실적 대시보드</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--border:#e2e4ea;--text:#1a1d27;--text2:#6b6e7d;--text3:#9a9dad;
+  --accent:#6c5ce7;--green:#00b894;--red:#ff6b6b;--orange:#e6a817;--blue:#3b82f6;
+  --soft:#ff6b6b;--allergy:#00b894}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Pretendard',-apple-system,sans-serif;font-size:13px;line-height:1.5}
+
+.top-bar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 28px;display:flex;align-items:center;justify-content:space-between;height:56px}
+.top-bar .logo{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+.top-bar .logo .mission{color:var(--text2);font-weight:500;font-size:11px;margin-left:8px}
+.top-bar .meta{font-size:11px;color:var(--text2);display:flex;gap:12px;align-items:center}
+.top-bar .meta .date{font-weight:600;color:var(--text)}
+
+.tab-nav{display:flex;gap:0;background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;position:sticky;top:56px;z-index:99;overflow-x:auto}
+.tab-btn{padding:12px 18px;font-size:12px;font-weight:600;color:var(--text2);background:none;border:none;cursor:pointer;position:relative;white-space:nowrap;font-family:inherit}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--accent)}
+.tab-btn.active::after{content:'';position:absolute;bottom:0;left:10px;right:10px;height:2px;background:var(--accent);border-radius:1px}
+
+.tab-content{display:none;padding:20px 28px 40px;animation:fadeIn .25s}
+.tab-content.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+.g23{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:16px}
+@media(max-width:900px){.g2,.g3,.g4,.g5,.g23{grid-template-columns:1fr}}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.card.soft{border-top:3px solid var(--soft)}
+.card.allergy{border-top:3px solid var(--allergy)}
+.card h3{font-size:13px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.card .note{font-size:10px;color:var(--text3);margin-top:8px}
+
+.sec{font-size:14px;font-weight:700;margin:22px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.sec:first-child{margin-top:0}
+
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.kpi .lbl{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;font-weight:600}
+.kpi .val{font-size:22px;font-weight:700;line-height:1.2}
+.kpi .val small{font-size:11px;color:var(--text2);font-weight:500}
+.kpi .sub{font-size:10px;color:var(--text3);margin-top:3px}
+.kpi.soft{border-left:3px solid var(--soft)}
+.kpi.allergy{border-left:3px solid var(--allergy)}
+
+.progress{height:6px;background:var(--border);border-radius:3px;margin-top:6px;overflow:hidden}
+.progress .bar{height:100%;background:var(--accent);border-radius:3px;transition:width .5s}
+.progress .bar.green{background:var(--green)}
+.progress .bar.red{background:var(--red)}
+
+.ch{position:relative;width:100%;height:260px}
+.ch.sm{height:200px}
+.ch.lg{height:320px}
+
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{text-align:left;padding:8px 6px;border-bottom:1px solid var(--border);color:var(--text2);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.3px}
+td{padding:7px 6px;border-bottom:1px solid rgba(0,0,0,.04)}
+tr:hover td{background:rgba(108,92,231,.04)}
+.r{text-align:right}
+.c{text-align:center}
+
+.pill{display:inline-block;padding:2px 7px;border-radius:99px;font-size:10px;font-weight:600}
+.pill.soft{background:rgba(255,107,107,.12);color:var(--soft)}
+.pill.allergy{background:rgba(0,184,148,.12);color:var(--allergy)}
+.pill.competitor{background:rgba(230,168,23,.12);color:var(--orange)}
+.pill.up{background:rgba(0,184,148,.12);color:var(--green)}
+.pill.dn{background:rgba(255,107,107,.12);color:var(--red)}
+.pill.tf{background:rgba(108,92,231,.12);color:var(--accent)}
+.pill.promo{background:rgba(59,130,246,.12);color:var(--blue)}
+
+.vs-table th:first-child{width:140px}
+.vs-table .self{background:rgba(255,107,107,.04);font-weight:600}
+.vs-table .allergy-self{background:rgba(0,184,148,.04);font-weight:600}
+.vs-table .comp{color:var(--text2)}
+.vs-table .gap{font-size:11px}
+.vs-table .gap.bad{color:var(--red);font-weight:600}
+.vs-table .gap.good{color:var(--green);font-weight:600}
+
+.timeline{position:relative;padding-left:20px;border-left:2px solid var(--border)}
+.timeline-item{position:relative;padding:8px 0 8px 16px;font-size:12px}
+.timeline-item::before{content:'';position:absolute;left:-25px;top:14px;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--card)}
+.timeline-item.launch::before{background:var(--green)}
+.timeline-item.price::before{background:var(--orange)}
+.timeline-item.promo::before{background:var(--blue)}
+.timeline-item.tf::before{background:var(--accent)}
+.timeline-item .dt{font-size:10px;color:var(--text3);font-weight:600}
+.timeline-item .act{font-weight:500;margin-top:2px}
+
+.target-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.04)}
+.target-row:last-child{border-bottom:none}
+.target-row .lbl{flex:0 0 120px;font-size:11px;color:var(--text2);font-weight:600}
+.target-row .cur,.target-row .tgt{flex:0 0 90px;font-size:12px;font-weight:600}
+.target-row .cur{color:var(--text)}
+.target-row .arrow{color:var(--text3)}
+.target-row .tgt{color:var(--accent)}
+.target-row .tgt.moonshot{color:var(--red)}
+
+.share-banner{background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;padding:12px 18px;border-radius:10px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px}
+.share-banner a{color:#fff;text-decoration:underline;font-weight:600}
+.share-banner .copy-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit}
+.share-banner .copy-btn:hover{background:rgba(255,255,255,.3)}
+
+.loading{text-align:center;padding:60px;color:var(--text2)}
+.err{background:#fee;border:1px solid #fcc;color:#a00;padding:12px;border-radius:8px;margin:20px 0;font-size:12px}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="logo">🎯 숏헤드 PB TF <span class="mission">Layer 이불 · TOP 10 자생 궤도(월 1억+)</span></div>
+  <div class="meta">
+    <span>PM: Hugo</span>
+    <span class="date" id="last-update">—</span>
+  </div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+  <button class="tab-btn" onclick="switchTab('soft')">🔴 소프트워싱</button>
+  <button class="tab-btn" onclick="switchTab('allergy')">🟢 알러지케어</button>
+  <button class="tab-btn" onclick="switchTab('tracking')">📅 주간 트래킹</button>
+</div>
+
+<div id="tab-overview" class="tab-content active">
+  <div class="share-banner">
+    <div>📊 <strong>TF 멤버 공유 링크</strong> — 브라우저에 이 URL 그대로 붙여넣으면 누구나 접속 가능합니다. 데일리 자동 업데이트.</div>
+    <div><span id="share-url" style="font-family:monospace;font-size:11px">—</span> <button class="copy-btn" onclick="copyShareUrl()">복사</button></div>
+  </div>
+
+  <div class="sec">📌 두 상품 현재 실적 요약</div>
+  <div class="g2">
+    <div class="card soft">
+      <h3>🔴 소프트워싱 이불 <span class="pill soft">전환 살리기</span></h3>
+      <div class="g3" style="margin-bottom:10px">
+        <div class="kpi soft"><div class="lbl">최근 7일 GMV</div><div class="val" id="soft-gmv-7d">—</div><div class="sub" id="soft-gmv-7d-wow">—</div></div>
+        <div class="kpi soft"><div class="lbl">CTR</div><div class="val" id="soft-ctr">—<small>%</small></div><div class="sub" id="soft-ctr-vs">vs 경쟁사</div></div>
+        <div class="kpi soft"><div class="lbl">CVR (PV)</div><div class="val" id="soft-cvr">—<small>%</small></div><div class="sub" id="soft-cvr-vs">vs 경쟁사</div></div>
+      </div>
+      <div class="target-row"><div class="lbl">월 GMV 현재</div><div class="cur" id="soft-cur-gmv">—</div><div class="arrow">→</div><div class="tgt">3,000만 (6월)</div><div class="arrow">→</div><div class="tgt moonshot">1억 (9월)</div></div>
+      <div class="target-row"><div class="lbl">카테 순위</div><div class="cur">TOP 50+</div><div class="arrow">→</div><div class="tgt">TOP 30</div><div class="arrow">→</div><div class="tgt moonshot">TOP 10</div></div>
+    </div>
+    <div class="card allergy">
+      <h3>🟢 알러지케어 침구 <span class="pill allergy">외부 확장</span></h3>
+      <div class="g3" style="margin-bottom:10px">
+        <div class="kpi allergy"><div class="lbl">최근 7일 GMV</div><div class="val" id="allergy-gmv-7d">—</div><div class="sub" id="allergy-gmv-7d-wow">—</div></div>
+        <div class="kpi allergy"><div class="lbl">CTR</div><div class="val" id="allergy-ctr">—<small>%</small></div><div class="sub" id="allergy-ctr-vs">vs 경쟁사</div></div>
+        <div class="kpi allergy"><div class="lbl">CVR (PV)</div><div class="val" id="allergy-cvr">—<small>%</small></div><div class="sub" id="allergy-cvr-vs">vs 경쟁사</div></div>
+      </div>
+      <div class="target-row"><div class="lbl">월 GMV 현재</div><div class="cur" id="allergy-cur-gmv">—</div><div class="arrow">→</div><div class="tgt">8,000만 (6월)</div><div class="arrow">→</div><div class="tgt moonshot">1억 (9월)</div></div>
+      <div class="target-row"><div class="lbl">카테 순위</div><div class="cur">23위</div><div class="arrow">→</div><div class="tgt">TOP 15</div><div class="arrow">→</div><div class="tgt moonshot">TOP 10</div></div>
+    </div>
+  </div>
+
+  <div class="sec">📈 주간 GMV 추이 (4개 상품)</div>
+  <div class="card"><div class="ch lg"><canvas id="ov-weekly"></canvas></div></div>
+
+  <div class="sec">📅 일간 GMV (최근 28일, 자사 vs 경쟁사)</div>
+  <div class="g2">
+    <div class="card"><h3>🔴 소프트워싱 vs ⚔️ 카스테라 (×1/30 스케일)</h3><div class="ch"><canvas id="ov-daily-soft"></canvas></div><div class="note">경쟁사 카스테라 GMV를 1/30 스케일로 표시 (규모 차이로 인해)</div></div>
+    <div class="card"><h3>🟢 알러지케어 vs ⚔️ 돈워리 M2</h3><div class="ch"><canvas id="ov-daily-allergy"></canvas></div></div>
+  </div>
+
+  <div class="sec">🧭 TF 액션 타임라인</div>
+  <div class="card"><div class="timeline" id="timeline-all"></div></div>
+</div>
+
+<div id="tab-soft" class="tab-content">
+  <div class="sec">🔴 소프트워싱 이불 (PID 3918642)</div>
+  <div class="g5">
+    <div class="kpi soft"><div class="lbl">출시 후 누적 GMV</div><div class="val" id="soft-cum-gmv">—</div><div class="sub" id="soft-cum-days">—일</div></div>
+    <div class="kpi soft"><div class="lbl">월간 GMV (현월)</div><div class="val" id="soft-mtd-gmv">—</div><div class="sub" id="soft-mtd-vs-prev">전월 대비</div></div>
+    <div class="kpi soft"><div class="lbl">주간 GMV (W17)</div><div class="val" id="soft-wk-gmv">—</div><div class="sub" id="soft-wk-wow">WoW</div></div>
+    <div class="kpi soft"><div class="lbl">CTR (최근 7일)</div><div class="val" id="soft-ctr-7d">—<small>%</small></div><div class="sub">목표 2.5~2.8%</div></div>
+    <div class="kpi soft"><div class="lbl">CVR PV (최근 7일)</div><div class="val" id="soft-cvr-7d">—<small>%</small></div><div class="sub">카스테라 기준 2.0%+</div></div>
+  </div>
+
+  <div class="g2">
+    <div class="card soft"><h3>일간 GMV 추이 (출시~현재)</h3><div class="ch"><canvas id="soft-gmv-trend"></canvas></div></div>
+    <div class="card soft"><h3>일간 CTR / CVR(PV) 추이</h3><div class="ch"><canvas id="soft-funnel"></canvas></div></div>
+  </div>
+
+  <div class="sec">⚔️ 카스테라 (767440) 1:1 비교 — 최근 30일</div>
+  <div class="card">
+    <table class="vs-table">
+      <thead><tr><th>지표</th><th class="r">🔴 소프트워싱</th><th class="r">⚔️ 카스테라</th><th class="r">GAP</th></tr></thead>
+      <tbody id="soft-vs-table"></tbody>
+    </table>
+  </div>
+
+  <div class="g23">
+    <div class="card soft"><h3>주간 GMV 비교</h3><div class="ch"><canvas id="soft-vs-weekly"></canvas></div></div>
+    <div class="card">
+      <h3>🧭 액션 타임라인</h3>
+      <div class="timeline" id="timeline-soft"></div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-allergy" class="tab-content">
+  <div class="sec">🟢 알러지케어 침구 (PID 3640244)</div>
+  <div class="g5">
+    <div class="kpi allergy"><div class="lbl">2/1~현재 누적 GMV</div><div class="val" id="allergy-cum-gmv">—</div><div class="sub" id="allergy-cum-days">—일</div></div>
+    <div class="kpi allergy"><div class="lbl">월간 GMV (현월)</div><div class="val" id="allergy-mtd-gmv">—</div><div class="sub" id="allergy-mtd-vs-prev">전월 대비</div></div>
+    <div class="kpi allergy"><div class="lbl">주간 GMV (W17)</div><div class="val" id="allergy-wk-gmv">—</div><div class="sub" id="allergy-wk-wow">WoW</div></div>
+    <div class="kpi allergy"><div class="lbl">CTR (최근 7일)</div><div class="val" id="allergy-ctr-7d">—<small>%</small></div><div class="sub">목표 2.4~2.6%</div></div>
+    <div class="kpi allergy"><div class="lbl">CVR PV (최근 7일)</div><div class="val" id="allergy-cvr-7d">—<small>%</small></div><div class="sub">돈워리 기준 참고</div></div>
+  </div>
+
+  <div class="g2">
+    <div class="card allergy"><h3>일간 GMV 추이 (2/1~현재)</h3><div class="ch"><canvas id="allergy-gmv-trend"></canvas></div></div>
+    <div class="card allergy"><h3>일간 CTR / CVR(PV) 추이</h3><div class="ch"><canvas id="allergy-funnel"></canvas></div></div>
+  </div>
+
+  <div class="sec">⚔️ 돈워리 M2 (1930788) 1:1 비교 — 최근 30일</div>
+  <div class="card">
+    <table class="vs-table">
+      <thead><tr><th>지표</th><th class="r">🟢 알러지케어</th><th class="r">⚔️ 돈워리 M2</th><th class="r">GAP</th></tr></thead>
+      <tbody id="allergy-vs-table"></tbody>
+    </table>
+  </div>
+
+  <div class="g23">
+    <div class="card allergy"><h3>주간 GMV 비교</h3><div class="ch"><canvas id="allergy-vs-weekly"></canvas></div></div>
+    <div class="card">
+      <h3>🧭 외부 유입 트래킹 (Phase 2)</h3>
+      <div style="padding:12px;background:rgba(0,184,148,.06);border-radius:8px;font-size:11px;line-height:1.6">
+        <strong>Phase 2 목표:</strong> 커뮤니티 → 스니저 → 바이럴 → 확산<br>
+        <strong>외부 유입 구매:</strong> 0건 → <span style="color:var(--allergy);font-weight:700">월 50건+ (6월) → 월 200건+ (9월)</span><br>
+        <em style="color:var(--text3)">※ 외부유입 트래킹 설계 후 데이터 연동 예정</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-tracking" class="tab-content">
+  <div class="sec">📅 주간 트래킹표 (W16~)</div>
+  <div class="card soft">
+    <h3>🔴 소프트워싱 주간 성과</h3>
+    <table>
+      <thead><tr><th>주차</th><th class="r">GMV</th><th class="r">노출</th><th class="r">PDP뷰</th><th class="r">CTR</th><th class="r">CVR(PV)</th><th class="r">qty</th><th>주요 액션</th></tr></thead>
+      <tbody id="soft-weekly-table"></tbody>
+    </table>
+  </div>
+  <div class="card allergy" style="margin-top:14px">
+    <h3>🟢 알러지케어 주간 성과</h3>
+    <table>
+      <thead><tr><th>주차</th><th class="r">GMV</th><th class="r">노출</th><th class="r">PDP뷰</th><th class="r">CTR</th><th class="r">CVR(PV)</th><th class="r">qty</th><th>주요 액션</th></tr></thead>
+      <tbody id="allergy-weekly-table"></tbody>
+    </table>
+  </div>
+
+  <div class="sec" style="margin-top:24px">📊 월간 추이</div>
+  <div class="card">
+    <table>
+      <thead><tr><th>월</th><th class="r">🔴 소프트워싱 GMV</th><th class="r">🔴 qty</th><th class="r">🟢 알러지케어 GMV</th><th class="r">🟢 qty</th><th class="r">⚔️ 카스테라</th><th class="r">⚔️ 돈워리</th></tr></thead>
+      <tbody id="monthly-table"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const COLORS={soft:'#ff6b6b',allergy:'#00b894',comp1:'#e6a817',comp2:'#3b82f6'};
+let DATA=null;
+
+function fmtKRW(n){
+  if(n==null||isNaN(n))return '—';
+  if(Math.abs(n)>=100000000)return (n/100000000).toFixed(1)+'억';
+  if(Math.abs(n)>=10000000)return Math.round(n/1000000)+'백만';
+  if(Math.abs(n)>=10000)return Math.round(n/10000)+'만';
+  return n.toLocaleString();
+}
+function fmtPct(n,digits=2){return n==null||isNaN(n)?'—':n.toFixed(digits)}
+function fmtDate(s){return s.substring(5)}
+function copyShareUrl(){
+  navigator.clipboard.writeText(location.href).then(()=>alert('링크 복사됨!'));
+}
+function switchTab(id){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+  window.dispatchEvent(new Event('resize'));
+}
+
+// ISO week calculation (monday-based)
+function isoWeek(dtStr){
+  const d=new Date(dtStr+'T00:00:00');
+  const day=(d.getDay()+6)%7; // monday=0
+  const monday=new Date(d);monday.setDate(d.getDate()-day);
+  return monday.toISOString().substring(0,10);
+}
+
+function aggregate(daily,keyFn){
+  const result={};
+  daily.forEach(r=>{
+    const k=keyFn(r.dt);
+    if(!result[k])result[k]={gmv:0,gp:0,qty:0,imp:0,pdp:0,purchase:0};
+    result[k].gmv+=r.gmv;result[k].gp+=r.gp;result[k].qty+=r.qty;
+    result[k].imp+=r.imp;result[k].pdp+=r.pdp;result[k].purchase+=r.purchase;
+  });
+  return result;
+}
+
+function sumRecent(daily,days){
+  const arr=daily.slice(-days);
+  return arr.reduce((a,r)=>({gmv:a.gmv+r.gmv,imp:a.imp+r.imp,pdp:a.pdp+r.pdp,purchase:a.purchase+r.purchase,qty:a.qty+r.qty,gp:a.gp+r.gp}),{gmv:0,imp:0,pdp:0,purchase:0,qty:0,gp:0});
+}
+
+async function load(){
+  try{
+    const res=await fetch('tf-data.json?t='+Date.now());
+    DATA=await res.json();
+    document.getElementById('last-update').textContent='마지막 업데이트: '+DATA.meta.lastUpdate;
+    document.getElementById('share-url').textContent=location.href.split('?')[0];
+    render();
+  }catch(e){
+    document.body.innerHTML='<div class="err">데이터 로드 실패: '+e.message+'<br>tf-data.json 파일 확인 필요</div>';
+  }
+}
+
+function render(){
+  const soft=DATA.daily['3918642'],allergy=DATA.daily['3640244'],cas=DATA.daily['767440'],don=DATA.daily['1930788'];
+
+  // ============ OVERVIEW ============
+  const s7=sumRecent(soft,7),sp7=sumRecent(soft.slice(0,-7),7);
+  const a7=sumRecent(allergy,7),ap7=sumRecent(allergy.slice(0,-7),7);
+  const c7=sumRecent(cas,7),d7=sumRecent(don,7);
+
+  document.getElementById('soft-gmv-7d').textContent=fmtKRW(s7.gmv);
+  document.getElementById('soft-gmv-7d-wow').textContent='WoW '+((s7.gmv/sp7.gmv-1)*100).toFixed(1)+'%';
+  document.getElementById('soft-ctr').textContent=((s7.pdp/s7.imp)*100).toFixed(2);
+  document.getElementById('soft-ctr-vs').textContent='카스테라 '+((c7.pdp/c7.imp)*100).toFixed(2)+'%';
+  document.getElementById('soft-cvr').textContent=((s7.purchase/s7.pdp)*100).toFixed(2);
+  document.getElementById('soft-cvr-vs').textContent='카스테라 '+((c7.purchase/c7.pdp)*100).toFixed(2)+'%';
+  const softMtd=soft.filter(r=>r.dt>='2026-04-01').reduce((a,r)=>a+r.gmv,0);
+  document.getElementById('soft-cur-gmv').textContent=fmtKRW(softMtd);
+
+  document.getElementById('allergy-gmv-7d').textContent=fmtKRW(a7.gmv);
+  document.getElementById('allergy-gmv-7d-wow').textContent='WoW '+((a7.gmv/ap7.gmv-1)*100).toFixed(1)+'%';
+  document.getElementById('allergy-ctr').textContent=((a7.pdp/a7.imp)*100).toFixed(2);
+  document.getElementById('allergy-ctr-vs').textContent='돈워리 '+((d7.pdp/d7.imp)*100).toFixed(2)+'%';
+  document.getElementById('allergy-cvr').textContent=((a7.purchase/a7.pdp)*100).toFixed(2);
+  document.getElementById('allergy-cvr-vs').textContent='돈워리 '+((d7.purchase/d7.pdp)*100).toFixed(2)+'%';
+  const allergyMtd=allergy.filter(r=>r.dt>='2026-04-01').reduce((a,r)=>a+r.gmv,0);
+  document.getElementById('allergy-cur-gmv').textContent=fmtKRW(allergyMtd);
+
+  // Weekly overlay chart (4 products)
+  const softWk=aggregate(soft,isoWeek),allergyWk=aggregate(allergy,isoWeek);
+  const casWk=aggregate(cas,isoWeek),donWk=aggregate(don,isoWeek);
+  const allWeeks=[...new Set([...Object.keys(softWk),...Object.keys(allergyWk),...Object.keys(casWk),...Object.keys(donWk)])].sort();
+  new Chart(document.getElementById('ov-weekly'),{type:'line',data:{labels:allWeeks.map(w=>'W'+getWeekNum(w)+' ('+w.substring(5)+')'),datasets:[
+    {label:'🔴 소프트워싱',data:allWeeks.map(w=>softWk[w]?.gmv||0),borderColor:COLORS.soft,backgroundColor:COLORS.soft+'22',tension:.3},
+    {label:'🟢 알러지케어',data:allWeeks.map(w=>allergyWk[w]?.gmv||0),borderColor:COLORS.allergy,backgroundColor:COLORS.allergy+'22',tension:.3},
+    {label:'⚔️ 카스테라',data:allWeeks.map(w=>casWk[w]?.gmv||0),borderColor:COLORS.comp1,borderDash:[5,5],tension:.3,pointRadius:0},
+    {label:'⚔️ 돈워리 M2',data:allWeeks.map(w=>donWk[w]?.gmv||0),borderColor:COLORS.comp2,borderDash:[5,5],tension:.3,pointRadius:0},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{y:{ticks:{callback:v=>fmtKRW(v)}}}}});
+
+  // Daily recent 28 - soft vs 카스테라 (1/30 scale)
+  const recent=soft.slice(-28);
+  const rDates=recent.map(r=>fmtDate(r.dt));
+  const sArr=recent.map(r=>r.gmv);
+  const casMap={};cas.forEach(r=>casMap[r.dt]=r.gmv);
+  const cArr=recent.map(r=>(casMap[r.dt]||0)/30);
+  new Chart(document.getElementById('ov-daily-soft'),{type:'line',data:{labels:rDates,datasets:[
+    {label:'🔴 소프트워싱',data:sArr,borderColor:COLORS.soft,backgroundColor:COLORS.soft+'22',tension:.3,fill:true},
+    {label:'⚔️ 카스테라 (÷30)',data:cArr,borderColor:COLORS.comp1,borderDash:[5,5],tension:.3,pointRadius:0},
+  ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{ticks:{callback:v=>fmtKRW(v)}}}}});
+
+  // Daily recent 28 - allergy vs 돈워리
+  const arecent=allergy.slice(-28);
+  const aDates=arecent.map(r=>fmtDate(r.dt));
+  const aArr=arecent.map(r=>r.gmv);
+  const donMap={};don.forEach(r=>donMap[r.dt]=r.gmv);
+  const dArr=arecent.map(r=>donMap[r.dt]||0);
+  new Chart(document.getElementById('ov-daily-allergy'),{type:'line',data:{labels:aDates,datasets:[
+    {label:'🟢 알러지케어',data:aArr,borderColor:COLORS.allergy,backgroundColor:COLORS.allergy+'22',tension:.3,fill:true},
+    {label:'⚔️ 돈워리 M2',data:dArr,borderColor:COLORS.comp2,borderDash:[5,5],tension:.3,pointRadius:0},
+  ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{ticks:{callback:v=>fmtKRW(v)}}}}});
+
+  // Timeline (all)
+  renderTimeline('timeline-all',DATA.actions);
+  renderTimeline('timeline-soft',DATA.actions.filter(a=>a.product===3918642||a.product==='all'));
+
+  // ============ SOFT TAB ============
+  const softCum=soft.reduce((a,r)=>a+r.gmv,0);
+  document.getElementById('soft-cum-gmv').textContent=fmtKRW(softCum);
+  document.getElementById('soft-cum-days').textContent=soft.length+'일 (출시: 2/10)';
+  document.getElementById('soft-mtd-gmv').textContent=fmtKRW(softMtd);
+  const softPrev=soft.filter(r=>r.dt>='2026-03-01'&&r.dt<'2026-04-01').reduce((a,r)=>a+r.gmv,0);
+  document.getElementById('soft-mtd-vs-prev').textContent='3월 '+fmtKRW(softPrev);
+  document.getElementById('soft-wk-gmv').textContent=fmtKRW(s7.gmv);
+  document.getElementById('soft-wk-wow').textContent=((s7.gmv/sp7.gmv-1)*100).toFixed(1)+'% WoW';
+  document.getElementById('soft-ctr-7d').textContent=((s7.pdp/s7.imp)*100).toFixed(2);
+  document.getElementById('soft-cvr-7d').textContent=((s7.purchase/s7.pdp)*100).toFixed(2);
+
+  const sLabels=soft.map(r=>fmtDate(r.dt));
+  new Chart(document.getElementById('soft-gmv-trend'),{type:'bar',data:{labels:sLabels,datasets:[{label:'GMV',data:soft.map(r=>r.gmv),backgroundColor:COLORS.soft}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>fmtKRW(v)}}}}});
+  new Chart(document.getElementById('soft-funnel'),{type:'line',data:{labels:sLabels,datasets:[
+    {label:'CTR%',data:soft.map(r=>r.imp>0?r.pdp/r.imp*100:0),borderColor:COLORS.comp2,yAxisID:'y',tension:.3,pointRadius:0},
+    {label:'CVR(PV)%',data:soft.map(r=>r.pdp>0?r.purchase/r.pdp*100:0),borderColor:COLORS.soft,yAxisID:'y',tension:.3,pointRadius:0},
+  ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{title:{display:true,text:'%'}}}}});
+
+  // VS table soft (recent 30 days)
+  const sR=sumRecent(soft,30),cR=sumRecent(cas,30);
+  const sOpts=16,cOpts=173; // from Notion
+  renderVsTable('soft-vs-table','soft',[
+    ['월 GMV(최근 30일)',fmtKRW(sR.gmv),fmtKRW(cR.gmv),gapText(sR.gmv,cR.gmv,false)],
+    ['노출',sR.imp.toLocaleString(),cR.imp.toLocaleString(),gapText(sR.imp,cR.imp,false)],
+    ['PDP뷰',sR.pdp.toLocaleString(),cR.pdp.toLocaleString(),gapText(sR.pdp,cR.pdp,false)],
+    ['주문수(count)',sR.purchase.toLocaleString(),cR.purchase.toLocaleString(),gapText(sR.purchase,cR.purchase,false)],
+    ['CTR',(sR.pdp/sR.imp*100).toFixed(2)+'%',(cR.pdp/cR.imp*100).toFixed(2)+'%',pctGap(sR.pdp/sR.imp,cR.pdp/cR.imp)],
+    ['CVR(PV)',(sR.purchase/sR.pdp*100).toFixed(2)+'%',(cR.purchase/cR.pdp*100).toFixed(2)+'%',pctGap(sR.purchase/sR.pdp,cR.purchase/cR.pdp)],
+    ['판매수량(qty)',sR.qty.toLocaleString(),cR.qty.toLocaleString(),gapText(sR.qty,cR.qty,false)],
+    ['옵션 수(Notion 기준)',sOpts,cOpts,gapText(sOpts,cOpts,false)+' (×'+(cOpts/sOpts).toFixed(1)+')'],
+    ['가격','34,900원','34,900원','동일'],
+  ]);
+
+  // Weekly soft vs 카스테라
+  new Chart(document.getElementById('soft-vs-weekly'),{type:'bar',data:{labels:allWeeks.map(w=>'W'+getWeekNum(w)),datasets:[
+    {label:'🔴 소프트워싱',data:allWeeks.map(w=>softWk[w]?.gmv||0),backgroundColor:COLORS.soft},
+    {label:'⚔️ 카스테라',data:allWeeks.map(w=>(casWk[w]?.gmv||0)/10),backgroundColor:COLORS.comp1,stack:'s2'},
+  ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{ticks:{callback:v=>fmtKRW(v)},title:{display:true,text:'GMV (카스테라 ÷10)'}}}}});
+
+  // ============ ALLERGY TAB ============
+  const allergyCum=allergy.reduce((a,r)=>a+r.gmv,0);
+  document.getElementById('allergy-cum-gmv').textContent=fmtKRW(allergyCum);
+  document.getElementById('allergy-cum-days').textContent=allergy.length+'일 (2/1 이후)';
+  document.getElementById('allergy-mtd-gmv').textContent=fmtKRW(allergyMtd);
+  const allergyPrev=allergy.filter(r=>r.dt>='2026-03-01'&&r.dt<'2026-04-01').reduce((a,r)=>a+r.gmv,0);
+  document.getElementById('allergy-mtd-vs-prev').textContent='3월 '+fmtKRW(allergyPrev);
+  document.getElementById('allergy-wk-gmv').textContent=fmtKRW(a7.gmv);
+  document.getElementById('allergy-wk-wow').textContent=((a7.gmv/ap7.gmv-1)*100).toFixed(1)+'% WoW';
+  document.getElementById('allergy-ctr-7d').textContent=((a7.pdp/a7.imp)*100).toFixed(2);
+  document.getElementById('allergy-cvr-7d').textContent=((a7.purchase/a7.pdp)*100).toFixed(2);
+
+  const aLabels=allergy.map(r=>fmtDate(r.dt));
+  new Chart(document.getElementById('allergy-gmv-trend'),{type:'bar',data:{labels:aLabels,datasets:[{label:'GMV',data:allergy.map(r=>r.gmv),backgroundColor:COLORS.allergy}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>fmtKRW(v)}}}}});
+  new Chart(document.getElementById('allergy-funnel'),{type:'line',data:{labels:aLabels,datasets:[
+    {label:'CTR%',data:allergy.map(r=>r.imp>0?r.pdp/r.imp*100:0),borderColor:COLORS.comp2,tension:.3,pointRadius:0},
+    {label:'CVR(PV)%',data:allergy.map(r=>r.pdp>0?r.purchase/r.pdp*100:0),borderColor:COLORS.allergy,tension:.3,pointRadius:0},
+  ]},options:{responsive:true,maintainAspectRatio:false}});
+
+  // VS table allergy
+  const aR=sumRecent(allergy,30),dR=sumRecent(don,30);
+  renderVsTable('allergy-vs-table','allergy',[
+    ['월 GMV(최근 30일)',fmtKRW(aR.gmv),fmtKRW(dR.gmv),gapText(aR.gmv,dR.gmv,false)],
+    ['노출',aR.imp.toLocaleString(),dR.imp.toLocaleString(),gapText(aR.imp,dR.imp,true)],
+    ['PDP뷰',aR.pdp.toLocaleString(),dR.pdp.toLocaleString(),gapText(aR.pdp,dR.pdp,true)],
+    ['주문수(count)',aR.purchase.toLocaleString(),dR.purchase.toLocaleString(),gapText(aR.purchase,dR.purchase,true)],
+    ['CTR',(aR.pdp/aR.imp*100).toFixed(2)+'%',(dR.pdp/dR.imp*100).toFixed(2)+'%',pctGap(aR.pdp/aR.imp,dR.pdp/dR.imp)],
+    ['CVR(PV)',(aR.purchase/aR.pdp*100).toFixed(2)+'%',(dR.purchase/dR.pdp*100).toFixed(2)+'%',pctGap(aR.purchase/aR.pdp,dR.purchase/dR.pdp)],
+    ['판매수량(qty)',aR.qty.toLocaleString(),dR.qty.toLocaleString(),gapText(aR.qty,dR.qty,true)],
+    ['가격','49,900원','49,900원','동일'],
+  ]);
+
+  new Chart(document.getElementById('allergy-vs-weekly'),{type:'bar',data:{labels:allWeeks.map(w=>'W'+getWeekNum(w)),datasets:[
+    {label:'🟢 알러지케어',data:allWeeks.map(w=>allergyWk[w]?.gmv||0),backgroundColor:COLORS.allergy},
+    {label:'⚔️ 돈워리 M2',data:allWeeks.map(w=>donWk[w]?.gmv||0),backgroundColor:COLORS.comp2},
+  ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{ticks:{callback:v=>fmtKRW(v)}}}}});
+
+  // ============ TRACKING TAB ============
+  renderWeeklyTable('soft-weekly-table',softWk,allWeeks,3918642);
+  renderWeeklyTable('allergy-weekly-table',allergyWk,allWeeks,3640244);
+
+  // Monthly table
+  const months=['2026-02','2026-03','2026-04'];
+  const mt=document.getElementById('monthly-table');
+  months.forEach(m=>{
+    const sum=pid=>DATA.daily[pid].filter(r=>r.dt.startsWith(m)).reduce((a,r)=>({gmv:a.gmv+r.gmv,qty:a.qty+r.qty}),{gmv:0,qty:0});
+    const sS=sum('3918642'),sA=sum('3640244'),sC=sum('767440'),sD=sum('1930788');
+    mt.innerHTML+=`<tr><td><strong>${m}</strong></td><td class="r">${fmtKRW(sS.gmv)}</td><td class="r">${sS.qty}</td><td class="r">${fmtKRW(sA.gmv)}</td><td class="r">${sA.qty}</td><td class="r">${fmtKRW(sC.gmv)}</td><td class="r">${fmtKRW(sD.gmv)}</td></tr>`;
+  });
+}
+
+function gapText(a,b,good){
+  const pct=((a-b)/b*100);
+  const cls=(good?pct>0:pct>0)?'good':'bad';
+  const ratio=b!==0?(a/b).toFixed(2)+'x':'—';
+  return `<span class="gap ${pct>=0?'good':'bad'}">${ratio} (${pct>=0?'+':''}${pct.toFixed(0)}%)</span>`;
+}
+function pctGap(a,b){
+  const diff=(a-b)*100;
+  return `<span class="gap ${diff>=0?'good':'bad'}">${diff>=0?'+':''}${diff.toFixed(2)}%p</span>`;
+}
+
+function renderVsTable(id,self,rows){
+  const tb=document.getElementById(id);
+  tb.innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td class="r ${self==='soft'?'self':'allergy-self'}">${r[1]}</td><td class="r comp">${r[2]}</td><td class="r">${r[3]}</td></tr>`).join('');
+}
+
+function getWeekNum(isoDate){
+  const d=new Date(isoDate+'T00:00:00');
+  const start=new Date(d.getFullYear(),0,1);
+  return Math.ceil(((d-start)/86400000+start.getDay()+1)/7);
+}
+
+function renderTimeline(id,items){
+  const el=document.getElementById(id);
+  const sorted=[...items].sort((a,b)=>b.date.localeCompare(a.date));
+  el.innerHTML=sorted.map(a=>`
+    <div class="timeline-item ${a.type}">
+      <div class="dt">${a.date} <span class="pill ${a.type==='tf'?'tf':a.type==='promo'?'promo':a.type==='price'?'competitor':'up'}">${a.type}</span></div>
+      <div class="act">${a.action}</div>
+    </div>`).join('');
+}
+
+function renderWeeklyTable(id,weeklyMap,allWeeks,pid){
+  const actions=DATA.actions.filter(a=>a.product===pid||a.product==='all');
+  const tb=document.getElementById(id);
+  tb.innerHTML=allWeeks.map(w=>{
+    const d=weeklyMap[w]||{gmv:0,imp:0,pdp:0,purchase:0,qty:0};
+    const wkActions=actions.filter(a=>a.date>=w&&a.date<addDays(w,7)).map(a=>a.action).join(', ');
+    return `<tr><td><strong>W${getWeekNum(w)}</strong><br><span style="color:var(--text3);font-size:10px">${w}</span></td>
+      <td class="r">${fmtKRW(d.gmv)}</td>
+      <td class="r">${d.imp?d.imp.toLocaleString():'—'}</td>
+      <td class="r">${d.pdp?d.pdp.toLocaleString():'—'}</td>
+      <td class="r">${d.imp>0?(d.pdp/d.imp*100).toFixed(2)+'%':'—'}</td>
+      <td class="r">${d.pdp>0?(d.purchase/d.pdp*100).toFixed(2)+'%':'—'}</td>
+      <td class="r">${d.qty||'—'}</td>
+      <td style="font-size:10px;color:var(--text2)">${wkActions||'—'}</td></tr>`;
+  }).join('');
+}
+
+function addDays(dateStr,n){
+  const d=new Date(dateStr+'T00:00:00');d.setDate(d.getDate()+n);
+  return d.toISOString().substring(0,10);
+}
+
+load();
+</script>
+</body>
+</html>
