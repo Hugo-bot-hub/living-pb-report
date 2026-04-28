@@ -235,10 +235,10 @@ const CHARTS={};
 
 function fmtKRW(n){if(n==null||isNaN(n))return '—';if(Math.abs(n)>=100000000)return (n/100000000).toFixed(1)+'억';if(Math.abs(n)>=10000000)return Math.round(n/1000000)+'백만';if(Math.abs(n)>=10000)return Math.round(n/10000)+'만';return n.toLocaleString()}
 function fmtDate(s){return s.substring(5)}
-function fmtWeek(iso){return parseInt(iso.substring(5,7))+'/'+parseInt(iso.substring(8,10))+'주'}
+function fmtWeek(iso){return parseInt(iso.substring(5,7))+'/'+parseInt(iso.substring(8,10))+'주차'}
 function copyShareUrl(){navigator.clipboard.writeText(location.href.split('?')[0]).then(()=>alert('복사됨'))}
 function switchTab(e,id){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));e.target.classList.add('active');document.getElementById('tab-'+id).classList.add('active');window.dispatchEvent(new Event('resize'))}
-function isoWeek(s){const d=new Date(s+'T00:00:00');const day=(d.getDay()+6)%7;const m=new Date(d);m.setDate(d.getDate()-day);return m.toISOString().substring(0,10)}
+function isoWeek(s){const d=new Date(s+'T00:00:00');const day=(d.getDay()+6)%7;d.setDate(d.getDate()-day);const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0');return y+'-'+m+'-'+dd}
 function monthKey(s){return s.substring(0,7)}
 function aggregate(daily,k){const r={};daily.forEach(x=>{const key=k(x.dt);if(!r[key])r[key]={gmv:0,qty:0,imp:0,pdp:0,purchase:0,pdp_uv:0,buy_uv:0,imp_uv:0};r[key].gmv+=x.gmv;r[key].qty+=x.qty;r[key].imp+=x.imp;r[key].pdp+=x.pdp;r[key].purchase+=x.purchase;r[key].pdp_uv+=(x.pdp_uv||0);r[key].buy_uv+=(x.buy_uv||0);r[key].imp_uv+=(x.imp_uv||0)});return r}
 function sumRecent(d,n){return d.slice(-n).reduce((a,r)=>({gmv:a.gmv+r.gmv,imp:a.imp+r.imp,pdp:a.pdp+r.pdp,purchase:a.purchase+r.purchase,qty:a.qty+r.qty,pdp_uv:a.pdp_uv+(r.pdp_uv||0),buy_uv:a.buy_uv+(r.buy_uv||0),imp_uv:a.imp_uv+(r.imp_uv||0)}),{gmv:0,imp:0,pdp:0,purchase:0,qty:0,pdp_uv:0,buy_uv:0,imp_uv:0})}
