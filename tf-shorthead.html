@@ -571,7 +571,7 @@ function renderInflow(){
     sigBox.innerHTML=`<table style="width:100%"><thead><tr><th>심각도</th><th>상품</th><th>채널</th><th class="r">자사 CTR</th><th class="r">카테 평균</th><th class="r">갭</th><th class="r">노출</th><th class="r">손실 추정 클릭</th></tr></thead><tbody>${signals.map(s=>{
       const sevColor=s.severity==='critical'?'#c0392b':'#d68910';
       const sevLabel=s.severity==='critical'?'🔴 치명':'🟡 주의';
-      return `<tr><td><span style="color:${sevColor};font-weight:700">${sevLabel}</span></td><td>${s.emoji} ${s.name}</td><td><strong>${s.ch}</strong></td><td class="r">${s.ctr.toFixed(2)}%</td><td class="r">${s.compsAvg.toFixed(2)}%</td><td class="r" style="color:${sevColor}"><strong>1/${(1/s.ratio).toFixed(1)}</strong></td><td class="r">${s.imp.toLocaleString()}</td><td class="r" style="color:${sevColor}"><strong>+${s.losingClicks.toLocaleString()}</strong></td></tr>`;
+      return `<tr><td><span style="color:${sevColor};font-weight:700">${sevLabel}</span></td><td>${s.emoji} ${s.name}</td><td><strong>${s.ch}</strong></td><td class="r">${s.ctr.toFixed(2)}%</td><td class="r">${s.compsAvg.toFixed(2)}%</td><td class="r" style="color:${sevColor}"><strong>카테의 ${(s.ratio*100).toFixed(0)}%</strong><br><small>(${((s.ratio-1)*100).toFixed(0)}%, ${(1/s.ratio).toFixed(1)}배 부족)</small></td><td class="r">${s.imp.toLocaleString()}</td><td class="r" style="color:${sevColor}"><strong>+${s.losingClicks.toLocaleString()}</strong></td></tr>`;
     }).join('')}</tbody></table><div class="note">손실 추정 클릭 = 동일 노출에 카테 평균 CTR 적용 시 추가로 받을 수 있는 클릭 수. 매칭 정밀도/시각 어필력 개선 우선순위.</div>`;
   }
 }
