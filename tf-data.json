@@ -154,6 +154,18 @@
       "product": 3918642,
       "action": "변경 썸네일 & 이벤트 배너 (객단가 up) 적용 완료",
       "type": "promo"
+    },
+    {
+      "date": "2026-05-06",
+      "product": 3918642,
+      "action": "PDP 1차 개편 (CVR 강화)",
+      "type": "pdp"
+    },
+    {
+      "date": "2026-05-11",
+      "product": 3918642,
+      "action": "PDP 2차 개편 (CVR 강화)",
+      "type": "pdp"
     }
   ],
   "daily": {
