@@ -165,7 +165,10 @@
         "qty": 0,
         "imp": 37,
         "pdp": 2,
-        "purchase": 0
+        "purchase": 0,
+        "imp_uv": 9,
+        "pdp_uv": 2,
+        "buy_uv": 0
       },
       {
         "dt": "2026-02-02",
@@ -174,7 +177,10 @@
         "qty": 0,
         "imp": 112,
         "pdp": 33,
-        "purchase": 0
+        "purchase": 0,
+        "imp_uv": 33,
+        "pdp_uv": 27,
+        "buy_uv": 0
       },
       {
         "dt": "2026-02-03",
@@ -183,7 +189,10 @@
         "qty": 0,
         "imp": 103,
         "pdp": 30,
-        "purchase": 0
+        "purchase": 0,
+        "imp_uv": 25,
+        "pdp_uv": 17,
+        "buy_uv": 0
       },
       {
         "dt": "2026-02-04",
@@ -192,7 +201,10 @@
         "qty": 0,
         "imp": 10,
         "pdp": 2,
-        "purchase": 0
+        "purchase": 0,
+        "imp_uv": 5,
+        "pdp_uv": 2,
+        "buy_uv": 0
       },
       {
         "dt": "2026-02-05",
@@ -201,7 +213,10 @@
         "qty": 0,
         "imp": 8,
         "pdp": 2,
-        "purchase": 0
+        "purchase": 0,
+        "imp_uv": 3,
+        "pdp_uv": 1,
+        "buy_uv": 0
       },
       {
         "dt": "2026-02-06",
@@ -210,7 +225,10 @@
         "qty": 0,
         "imp": 10,
         "pdp": 2,
-        "purchase": 0
+        "purchase": 0,
+        "imp_uv": 3,
+        "pdp_uv": 1,
+        "buy_uv": 0
       },
       {
         "dt": "2026-02-07",
@@ -219,7 +237,10 @@
         "qty": 0,
         "imp": 4,
         "pdp": 1,
-        "purchase": 0
+        "purchase": 0,
+        "imp_uv": 1,
+        "pdp_uv": 1,
+        "buy_uv": 0
       },
       {
         "dt": "2026-02-08",
@@ -228,7 +249,10 @@
         "qty": 0,
         "imp": 5,
         "pdp": 1,
-        "purchase": 0
+        "purchase": 0,
+        "imp_uv": 2,
+        "pdp_uv": 1,
+        "buy_uv": 0
       },
       {
         "dt": "2026-02-09",
@@ -237,7 +261,10 @@
         "qty": 0,
         "imp": 1307,
         "pdp": 358,
-        "purchase": 0
+        "purchase": 0,
+        "imp_uv": 32,
+        "pdp_uv": 47,
+        "buy_uv": 0
       },
       {
         "dt": "2026-02-10",
@@ -246,7 +273,10 @@
         "qty": 0,
         "imp": 698,
         "pdp": 152,
-        "purchase": 0
+        "purchase": 0,
+        "imp_uv": 20,
+        "pdp_uv": 30,
+        "buy_uv": 0
       },
       {
         "dt": "2026-02-11",
@@ -255,7 +285,10 @@
         "qty": 95,
         "imp": 6524,
         "pdp": 855,
-        "purchase": 92
+        "purchase": 92,
+        "imp_uv": 620,
+        "pdp_uv": 115,
+        "buy_uv": 92
       },
       {
         "dt": "2026-02-12",
@@ -264,7 +297,10 @@
         "qty": 14,
         "imp": 4697,
         "pdp": 300,
-        "purchase": 15
+        "purchase": 15,
+        "imp_uv": 1482,
+        "pdp_uv": 80,
+        "buy_uv": 15
       },
       {
         "dt": "2026-02-13",
@@ -273,7 +309,10 @@
         "qty": 0,
         "imp": 3762,
         "pdp": 189,
-        "purchase": 0
+        "purchase": 0,
+        "imp_uv": 1420,
+        "pdp_uv": 68,
+        "buy_uv": 0
       },
       {
         "dt": "2026-02-14",
@@ -282,7 +321,10 @@
         "qty": 1,
         "imp": 7218,
         "pdp": 202,
-        "purchase": 1
+        "purchase": 1,
+        "imp_uv": 3821,
+        "pdp_uv": 94,
+        "buy_uv": 1
       },
       {
         "dt": "2026-02-15",
@@ -291,7 +333,10 @@
         "qty": 1,
         "imp": 10226,
         "pdp": 208,
-        "purchase": 1
+        "purchase": 1,
+        "imp_uv": 5326,
+        "pdp_uv": 91,
+        "buy_uv": 1
       },
       {
         "dt": "2026-02-16",
@@ -300,7 +345,10 @@
         "qty": 0,
         "imp": 4475,
         "pdp": 96,
-        "purchase": 0
+        "purchase": 0,
+        "imp_uv": 1787,
+        "pdp_uv": 53,
+        "buy_uv": 0
       },
       {
         "dt": "2026-02-17",
@@ -309,7 +357,10 @@
         "qty": 6,
         "imp": 186084,
         "pdp": 1506,
-        "purchase": 4
+        "purchase": 4,
+        "imp_uv": 95522,
+        "pdp_uv": 898,
+        "buy_uv": 4
       },
       {
         "dt": "2026-02-18",
@@ -318,7 +369,10 @@
         "qty": 0,
         "imp": 39057,
         "pdp": 827,
-        "purchase": 1
+        "purchase": 1,
+        "imp_uv": 12867,
+        "pdp_uv": 421,
+        "buy_uv": 1
       },
       {
         "dt": "2026-02-19",
@@ -327,7 +381,10 @@
         "qty": 3,
         "imp": 37929,
         "pdp": 1092,
-        "purchase": 1
+        "purchase": 1,
+        "imp_uv": 11114,
+        "pdp_uv": 540,
+        "buy_uv": 1
       },
       {
         "dt": "2026-02-20",
@@ -336,7 +393,10 @@
         "qty": 2,
         "imp": 26334,
         "pdp": 620,
-        "purchase": 1
+        "purchase": 1,
+        "imp_uv": 6334,
+        "pdp_uv": 331,
+        "buy_uv": 1
       },
       {
         "dt": "2026-02-21",
@@ -345,7 +405,10 @@
         "qty": 0,
         "imp": 19869,
         "pdp": 502,
-        "purchase": 0
+        "purchase": 0,
+        "imp_uv": 5328,
+        "pdp_uv": 244,
+        "buy_uv": 0
       },
       {
         "dt": "2026-02-22",
@@ -354,7 +417,10 @@
         "qty": 5,
         "imp": 22779,
         "pdp": 403,
-        "purchase": 2
+        "purchase": 2,
+        "imp_uv": 6655,
+        "pdp_uv": 241,
+        "buy_uv": 2
       },
       {
         "dt": "2026-02-23",
@@ -363,7 +429,10 @@
         "qty": 29,
         "imp": 190696,
         "pdp": 4036,
-        "purchase": 21
+        "purchase": 21,
+        "imp_uv": 81095,
+        "pdp_uv": 2315,
+        "buy_uv": 21
       },
       {
         "dt": "2026-02-24",
@@ -372,7 +441,10 @@
         "qty": 17,
         "imp": 69927,
         "pdp": 1364,
-        "purchase": 6
+        "purchase": 6,
+        "imp_uv": 23436,
+        "pdp_uv": 718,
+        "buy_uv": 6
       },
       {
         "dt": "2026-02-25",
@@ -381,7 +453,10 @@
         "qty": 6,
         "imp": 54468,
         "pdp": 672,
-        "purchase": 4
+        "purchase": 4,
+        "imp_uv": 19313,
+        "pdp_uv": 359,
+        "buy_uv": 4
       },
       {
         "dt": "2026-02-26",
@@ -390,7 +465,10 @@
         "qty": 6,
         "imp": 47758,
         "pdp": 715,
-        "purchase": 4
+        "purchase": 4,
+        "imp_uv": 14489,
+        "pdp_uv": 392,
+        "buy_uv": 4
       },
       {
         "dt": "2026-02-27",
@@ -399,7 +477,10 @@
         "qty": 1,
         "imp": 39670,
         "pdp": 520,
-        "purchase": 1
+        "purchase": 1,
+        "imp_uv": 12675,
+        "pdp_uv": 302,
+        "buy_uv": 1
       },
       {
         "dt": "2026-02-28",
@@ -408,7 +489,10 @@
         "qty": 5,
         "imp": 44259,
         "pdp": 830,
-        "purchase": 4
+        "purchase": 4,
+        "imp_uv": 13594,
+        "pdp_uv": 476,
+        "buy_uv": 4
       },
       {
         "dt": "2026-03-01",
@@ -417,7 +501,10 @@
         "qty": 14,
         "imp": 45111,
         "pdp": 812,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 13566,
+        "pdp_uv": 396,
+        "buy_uv": 9
       },
       {
         "dt": "2026-03-02",
@@ -426,7 +513,10 @@
         "qty": 64,
         "imp": 150367,
         "pdp": 3452,
-        "purchase": 36
+        "purchase": 36,
+        "imp_uv": 55020,
+        "pdp_uv": 1938,
+        "buy_uv": 36
       },
       {
         "dt": "2026-03-03",
@@ -435,7 +525,10 @@
         "qty": 11,
         "imp": 49941,
         "pdp": 1066,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 14934,
+        "pdp_uv": 504,
+        "buy_uv": 8
       },
       {
         "dt": "2026-03-04",
@@ -444,7 +537,10 @@
         "qty": 8,
         "imp": 37485,
         "pdp": 673,
-        "purchase": 4
+        "purchase": 4,
+        "imp_uv": 12628,
+        "pdp_uv": 340,
+        "buy_uv": 4
       },
       {
         "dt": "2026-03-05",
@@ -453,7 +549,10 @@
         "qty": 8,
         "imp": 31363,
         "pdp": 506,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 11483,
+        "pdp_uv": 253,
+        "buy_uv": 5
       },
       {
         "dt": "2026-03-06",
@@ -462,7 +561,10 @@
         "qty": 4,
         "imp": 23541,
         "pdp": 436,
-        "purchase": 3
+        "purchase": 3,
+        "imp_uv": 8548,
+        "pdp_uv": 222,
+        "buy_uv": 3
       },
       {
         "dt": "2026-03-07",
@@ -471,7 +573,10 @@
         "qty": 8,
         "imp": 32697,
         "pdp": 850,
-        "purchase": 6
+        "purchase": 6,
+        "imp_uv": 10176,
+        "pdp_uv": 446,
+        "buy_uv": 6
       },
       {
         "dt": "2026-03-08",
@@ -480,7 +585,10 @@
         "qty": 19,
         "imp": 48536,
         "pdp": 1119,
-        "purchase": 16
+        "purchase": 16,
+        "imp_uv": 15203,
+        "pdp_uv": 569,
+        "buy_uv": 16
       },
       {
         "dt": "2026-03-09",
@@ -489,7 +597,10 @@
         "qty": 0,
         "imp": 26458,
         "pdp": 573,
-        "purchase": 0
+        "purchase": 0,
+        "imp_uv": 8810,
+        "pdp_uv": 345,
+        "buy_uv": 0
       },
       {
         "dt": "2026-03-10",
@@ -498,7 +609,10 @@
         "qty": 15,
         "imp": 80932,
         "pdp": 1023,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 45496,
+        "pdp_uv": 586,
+        "buy_uv": 7
       },
       {
         "dt": "2026-03-11",
@@ -507,7 +621,10 @@
         "qty": 5,
         "imp": 25074,
         "pdp": 583,
-        "purchase": 2
+        "purchase": 2,
+        "imp_uv": 8267,
+        "pdp_uv": 339,
+        "buy_uv": 2
       },
       {
         "dt": "2026-03-12",
@@ -516,7 +633,10 @@
         "qty": 0,
         "imp": 24983,
         "pdp": 592,
-        "purchase": 0
+        "purchase": 0,
+        "imp_uv": 8458,
+        "pdp_uv": 356,
+        "buy_uv": 0
       },
       {
         "dt": "2026-03-13",
@@ -525,7 +645,10 @@
         "qty": 12,
         "imp": 29637,
         "pdp": 621,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 9736,
+        "pdp_uv": 373,
+        "buy_uv": 7
       },
       {
         "dt": "2026-03-14",
@@ -534,7 +657,10 @@
         "qty": 2,
         "imp": 33883,
         "pdp": 755,
-        "purchase": 2
+        "purchase": 2,
+        "imp_uv": 9343,
+        "pdp_uv": 447,
+        "buy_uv": 2
       },
       {
         "dt": "2026-03-15",
@@ -543,7 +669,10 @@
         "qty": 7,
         "imp": 34796,
         "pdp": 936,
-        "purchase": 6
+        "purchase": 6,
+        "imp_uv": 9684,
+        "pdp_uv": 527,
+        "buy_uv": 6
       },
       {
         "dt": "2026-03-16",
@@ -552,7 +681,10 @@
         "qty": 10,
         "imp": 89603,
         "pdp": 1319,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 50698,
+        "pdp_uv": 844,
+        "buy_uv": 8
       },
       {
         "dt": "2026-03-17",
@@ -561,7 +693,10 @@
         "qty": 7,
         "imp": 23768,
         "pdp": 666,
-        "purchase": 4
+        "purchase": 4,
+        "imp_uv": 7547,
+        "pdp_uv": 396,
+        "buy_uv": 4
       },
       {
         "dt": "2026-03-18",
@@ -570,7 +705,10 @@
         "qty": 9,
         "imp": 26652,
         "pdp": 657,
-        "purchase": 6
+        "purchase": 6,
+        "imp_uv": 8892,
+        "pdp_uv": 365,
+        "buy_uv": 6
       },
       {
         "dt": "2026-03-19",
@@ -579,7 +717,10 @@
         "qty": 12,
         "imp": 40286,
         "pdp": 937,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 15391,
+        "pdp_uv": 524,
+        "buy_uv": 5
       },
       {
         "dt": "2026-03-20",
@@ -588,7 +729,10 @@
         "qty": 11,
         "imp": 36743,
         "pdp": 733,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 15032,
+        "pdp_uv": 441,
+        "buy_uv": 7
       },
       {
         "dt": "2026-03-21",
@@ -597,7 +741,10 @@
         "qty": 6,
         "imp": 35870,
         "pdp": 796,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 15367,
+        "pdp_uv": 474,
+        "buy_uv": 5
       },
       {
         "dt": "2026-03-22",
@@ -606,7 +753,10 @@
         "qty": 7,
         "imp": 40102,
         "pdp": 822,
-        "purchase": 3
+        "purchase": 3,
+        "imp_uv": 16584,
+        "pdp_uv": 478,
+        "buy_uv": 3
       },
       {
         "dt": "2026-03-23",
@@ -615,7 +765,10 @@
         "qty": 36,
         "imp": 109393,
         "pdp": 1607,
-        "purchase": 21
+        "purchase": 21,
+        "imp_uv": 59690,
+        "pdp_uv": 884,
+        "buy_uv": 21
       },
       {
         "dt": "2026-03-24",
@@ -624,7 +777,10 @@
         "qty": 8,
         "imp": 14831,
         "pdp": 433,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 3909,
+        "pdp_uv": 247,
+        "buy_uv": 7
       },
       {
         "dt": "2026-03-25",
@@ -633,7 +789,10 @@
         "qty": 11,
         "imp": 15232,
         "pdp": 488,
-        "purchase": 6
+        "purchase": 6,
+        "imp_uv": 3687,
+        "pdp_uv": 268,
+        "buy_uv": 6
       },
       {
         "dt": "2026-03-26",
@@ -642,7 +801,10 @@
         "qty": 6,
         "imp": 19661,
         "pdp": 462,
-        "purchase": 3
+        "purchase": 3,
+        "imp_uv": 7687,
+        "pdp_uv": 255,
+        "buy_uv": 3
       },
       {
         "dt": "2026-03-27",
@@ -651,7 +813,10 @@
         "qty": 11,
         "imp": 19671,
         "pdp": 444,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 8313,
+        "pdp_uv": 262,
+        "buy_uv": 5
       },
       {
         "dt": "2026-03-28",
@@ -660,7 +825,10 @@
         "qty": 5,
         "imp": 18996,
         "pdp": 424,
-        "purchase": 3
+        "purchase": 3,
+        "imp_uv": 7789,
+        "pdp_uv": 276,
+        "buy_uv": 3
       },
       {
         "dt": "2026-03-29",
@@ -669,7 +837,10 @@
         "qty": 6,
         "imp": 21410,
         "pdp": 500,
-        "purchase": 3
+        "purchase": 3,
+        "imp_uv": 8100,
+        "pdp_uv": 311,
+        "buy_uv": 3
       },
       {
         "dt": "2026-03-30",
@@ -678,7 +849,10 @@
         "qty": 9,
         "imp": 51899,
         "pdp": 854,
-        "purchase": 4
+        "purchase": 4,
+        "imp_uv": 27402,
+        "pdp_uv": 501,
+        "buy_uv": 4
       },
       {
         "dt": "2026-03-31",
@@ -687,7 +861,10 @@
         "qty": -3,
         "imp": 15748,
         "pdp": 426,
-        "purchase": 0
+        "purchase": 0,
+        "imp_uv": 3762,
+        "pdp_uv": 259,
+        "buy_uv": 0
       },
       {
         "dt": "2026-04-01",
@@ -696,7 +873,10 @@
         "qty": 5,
         "imp": 20787,
         "pdp": 457,
-        "purchase": 3
+        "purchase": 3,
+        "imp_uv": 5879,
+        "pdp_uv": 299,
+        "buy_uv": 3
       },
       {
         "dt": "2026-04-02",
@@ -705,7 +885,10 @@
         "qty": 8,
         "imp": 28040,
         "pdp": 686,
-        "purchase": 4
+        "purchase": 4,
+        "imp_uv": 9979,
+        "pdp_uv": 369,
+        "buy_uv": 4
       },
       {
         "dt": "2026-04-03",
@@ -714,7 +897,10 @@
         "qty": 1,
         "imp": 26791,
         "pdp": 553,
-        "purchase": 1
+        "purchase": 1,
+        "imp_uv": 9783,
+        "pdp_uv": 334,
+        "buy_uv": 1
       },
       {
         "dt": "2026-04-04",
@@ -723,7 +909,10 @@
         "qty": 6,
         "imp": 28110,
         "pdp": 679,
-        "purchase": 3
+        "purchase": 3,
+        "imp_uv": 9844,
+        "pdp_uv": 377,
+        "buy_uv": 3
       },
       {
         "dt": "2026-04-05",
@@ -732,7 +921,10 @@
         "qty": 12,
         "imp": 35002,
         "pdp": 832,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 11753,
+        "pdp_uv": 436,
+        "buy_uv": 7
       },
       {
         "dt": "2026-04-06",
@@ -741,7 +933,10 @@
         "qty": 5,
         "imp": 60600,
         "pdp": 971,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 30995,
+        "pdp_uv": 581,
+        "buy_uv": 5
       },
       {
         "dt": "2026-04-07",
@@ -750,7 +945,10 @@
         "qty": 5,
         "imp": 25600,
         "pdp": 588,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 7060,
+        "pdp_uv": 351,
+        "buy_uv": 5
       },
       {
         "dt": "2026-04-08",
@@ -759,7 +957,10 @@
         "qty": 14,
         "imp": 43764,
         "pdp": 834,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 12483,
+        "pdp_uv": 534,
+        "buy_uv": 7
       },
       {
         "dt": "2026-04-09",
@@ -768,7 +969,10 @@
         "qty": 5,
         "imp": 57522,
         "pdp": 1204,
-        "purchase": 4
+        "purchase": 4,
+        "imp_uv": 17615,
+        "pdp_uv": 729,
+        "buy_uv": 4
       },
       {
         "dt": "2026-04-10",
@@ -777,7 +981,10 @@
         "qty": 3,
         "imp": 52917,
         "pdp": 1234,
-        "purchase": 1
+        "purchase": 1,
+        "imp_uv": 17187,
+        "pdp_uv": 778,
+        "buy_uv": 1
       },
       {
         "dt": "2026-04-11",
@@ -786,7 +993,10 @@
         "qty": 15,
         "imp": 54992,
         "pdp": 1122,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 17838,
+        "pdp_uv": 638,
+        "buy_uv": 5
       },
       {
         "dt": "2026-04-12",
@@ -795,7 +1005,10 @@
         "qty": 14,
         "imp": 70617,
         "pdp": 1275,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 22434,
+        "pdp_uv": 781,
+        "buy_uv": 9
       },
       {
         "dt": "2026-04-13",
@@ -804,7 +1017,10 @@
         "qty": 19,
         "imp": 340402,
         "pdp": 2028,
-        "purchase": 10
+        "purchase": 10,
+        "imp_uv": 67915,
+        "pdp_uv": 1172,
+        "buy_uv": 10
       },
       {
         "dt": "2026-04-14",
@@ -813,7 +1029,10 @@
         "qty": 6,
         "imp": 46120,
         "pdp": 888,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 14684,
+        "pdp_uv": 582,
+        "buy_uv": 5
       },
       {
         "dt": "2026-04-15",
@@ -822,7 +1041,10 @@
         "qty": 9,
         "imp": 48518,
         "pdp": 848,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 15763,
+        "pdp_uv": 490,
+        "buy_uv": 7
       },
       {
         "dt": "2026-04-16",
@@ -831,7 +1053,10 @@
         "qty": 9,
         "imp": 53486,
         "pdp": 1002,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 19004,
+        "pdp_uv": 636,
+        "buy_uv": 5
       },
       {
         "dt": "2026-04-17",
@@ -840,7 +1065,10 @@
         "qty": 2,
         "imp": 50160,
         "pdp": 996,
-        "purchase": 1
+        "purchase": 1,
+        "imp_uv": 18648,
+        "pdp_uv": 660,
+        "buy_uv": 1
       },
       {
         "dt": "2026-04-18",
@@ -849,7 +1077,10 @@
         "qty": 2,
         "imp": 46342,
         "pdp": 802,
-        "purchase": 2
+        "purchase": 2,
+        "imp_uv": 17403,
+        "pdp_uv": 465,
+        "buy_uv": 2
       },
       {
         "dt": "2026-04-19",
@@ -858,7 +1089,10 @@
         "qty": 11,
         "imp": 54080,
         "pdp": 871,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 20326,
+        "pdp_uv": 553,
+        "buy_uv": 5
       },
       {
         "dt": "2026-04-20",
@@ -867,7 +1101,10 @@
         "qty": 8,
         "imp": 82322,
         "pdp": 1185,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 42794,
+        "pdp_uv": 662,
+        "buy_uv": 7
       },
       {
         "dt": "2026-04-21",
@@ -876,7 +1113,10 @@
         "qty": 14,
         "imp": 37218,
         "pdp": 712,
-        "purchase": 4
+        "purchase": 4,
+        "imp_uv": 11075,
+        "pdp_uv": 378,
+        "buy_uv": 4
       },
       {
         "dt": "2026-04-22",
@@ -885,7 +1125,10 @@
         "qty": 9,
         "imp": 30104,
         "pdp": 546,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 9669,
+        "pdp_uv": 297,
+        "buy_uv": 7
       },
       {
         "dt": "2026-04-23",
@@ -894,7 +1137,10 @@
         "qty": 13,
         "imp": 31049,
         "pdp": 539,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 11937,
+        "pdp_uv": 332,
+        "buy_uv": 7
       },
       {
         "dt": "2026-04-24",
@@ -903,7 +1149,10 @@
         "qty": 6,
         "imp": 34023,
         "pdp": 530,
-        "purchase": 3
+        "purchase": 3,
+        "imp_uv": 13739,
+        "pdp_uv": 306,
+        "buy_uv": 3
       },
       {
         "dt": "2026-04-25",
@@ -912,7 +1161,10 @@
         "qty": 5,
         "imp": 29450,
         "pdp": 512,
-        "purchase": 4
+        "purchase": 4,
+        "imp_uv": 11968,
+        "pdp_uv": 322,
+        "buy_uv": 4
       },
       {
         "dt": "2026-04-26",
@@ -921,7 +1173,10 @@
         "qty": 12,
         "imp": 36449,
         "pdp": 692,
-        "purchase": 6
+        "purchase": 6,
+        "imp_uv": 13488,
+        "pdp_uv": 401,
+        "buy_uv": 6
       },
       {
         "dt": "2026-04-27",
@@ -930,7 +1185,10 @@
         "qty": 20,
         "imp": 84638,
         "pdp": 1404,
-        "purchase": 13
+        "purchase": 13,
+        "imp_uv": 36954,
+        "pdp_uv": 640,
+        "buy_uv": 13
       },
       {
         "dt": "2026-04-28",
@@ -953,7 +1211,10 @@
         "qty": 19,
         "imp": 52402,
         "pdp": 1249,
-        "purchase": 17
+        "purchase": 17,
+        "imp_uv": 17212,
+        "pdp_uv": 558,
+        "buy_uv": 17
       },
       {
         "dt": "2026-02-02",
@@ -962,7 +1223,10 @@
         "qty": 9,
         "imp": 26920,
         "pdp": 799,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 7245,
+        "pdp_uv": 378,
+        "buy_uv": 9
       },
       {
         "dt": "2026-02-03",
@@ -971,7 +1235,10 @@
         "qty": 18,
         "imp": 28910,
         "pdp": 829,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 6946,
+        "pdp_uv": 400,
+        "buy_uv": 8
       },
       {
         "dt": "2026-02-04",
@@ -980,7 +1247,10 @@
         "qty": 16,
         "imp": 27957,
         "pdp": 823,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 7204,
+        "pdp_uv": 361,
+        "buy_uv": 7
       },
       {
         "dt": "2026-02-05",
@@ -989,7 +1259,10 @@
         "qty": 14,
         "imp": 35734,
         "pdp": 839,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 11871,
+        "pdp_uv": 350,
+        "buy_uv": 7
       },
       {
         "dt": "2026-02-06",
@@ -998,7 +1271,10 @@
         "qty": 10,
         "imp": 37845,
         "pdp": 1088,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 12240,
+        "pdp_uv": 394,
+        "buy_uv": 8
       },
       {
         "dt": "2026-02-07",
@@ -1007,7 +1283,10 @@
         "qty": 10,
         "imp": 34127,
         "pdp": 839,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 12311,
+        "pdp_uv": 356,
+        "buy_uv": 5
       },
       {
         "dt": "2026-02-08",
@@ -1016,7 +1295,10 @@
         "qty": 16,
         "imp": 41849,
         "pdp": 1151,
-        "purchase": 10
+        "purchase": 10,
+        "imp_uv": 13258,
+        "pdp_uv": 516,
+        "buy_uv": 10
       },
       {
         "dt": "2026-02-09",
@@ -1025,7 +1307,10 @@
         "qty": 14,
         "imp": 54126,
         "pdp": 1450,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 12997,
+        "pdp_uv": 621,
+        "buy_uv": 8
       },
       {
         "dt": "2026-02-10",
@@ -1034,7 +1319,10 @@
         "qty": 4,
         "imp": 36480,
         "pdp": 1127,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 8615,
+        "pdp_uv": 500,
+        "buy_uv": 7
       },
       {
         "dt": "2026-02-11",
@@ -1043,7 +1331,10 @@
         "qty": 111,
         "imp": 57112,
         "pdp": 2052,
-        "purchase": 108
+        "purchase": 108,
+        "imp_uv": 12921,
+        "pdp_uv": 642,
+        "buy_uv": 107
       },
       {
         "dt": "2026-02-12",
@@ -1052,7 +1343,10 @@
         "qty": 1,
         "imp": 40352,
         "pdp": 919,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 14075,
+        "pdp_uv": 431,
+        "buy_uv": 5
       },
       {
         "dt": "2026-02-13",
@@ -1061,7 +1355,10 @@
         "qty": 2,
         "imp": 39621,
         "pdp": 893,
-        "purchase": 4
+        "purchase": 4,
+        "imp_uv": 15593,
+        "pdp_uv": 426,
+        "buy_uv": 4
       },
       {
         "dt": "2026-02-14",
@@ -1070,7 +1367,10 @@
         "qty": 5,
         "imp": 58229,
         "pdp": 1153,
-        "purchase": 2
+        "purchase": 2,
+        "imp_uv": 21477,
+        "pdp_uv": 549,
+        "buy_uv": 2
       },
       {
         "dt": "2026-02-15",
@@ -1079,7 +1379,10 @@
         "qty": 13,
         "imp": 73048,
         "pdp": 1564,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 24056,
+        "pdp_uv": 771,
+        "buy_uv": 7
       },
       {
         "dt": "2026-02-16",
@@ -1088,7 +1391,10 @@
         "qty": 10,
         "imp": 37149,
         "pdp": 961,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 13026,
+        "pdp_uv": 419,
+        "buy_uv": 5
       },
       {
         "dt": "2026-02-17",
@@ -1097,7 +1403,10 @@
         "qty": 13,
         "imp": 36694,
         "pdp": 890,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 13156,
+        "pdp_uv": 432,
+        "buy_uv": 7
       },
       {
         "dt": "2026-02-18",
@@ -1106,7 +1415,10 @@
         "qty": 22,
         "imp": 43704,
         "pdp": 1175,
-        "purchase": 12
+        "purchase": 12,
+        "imp_uv": 13881,
+        "pdp_uv": 498,
+        "buy_uv": 12
       },
       {
         "dt": "2026-02-19",
@@ -1115,7 +1427,10 @@
         "qty": 21,
         "imp": 73240,
         "pdp": 1175,
-        "purchase": 13
+        "purchase": 13,
+        "imp_uv": 25875,
+        "pdp_uv": 566,
+        "buy_uv": 13
       },
       {
         "dt": "2026-02-20",
@@ -1124,7 +1439,10 @@
         "qty": 10,
         "imp": 67920,
         "pdp": 1123,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 24972,
+        "pdp_uv": 533,
+        "buy_uv": 7
       },
       {
         "dt": "2026-02-21",
@@ -1133,7 +1451,10 @@
         "qty": 13,
         "imp": 74608,
         "pdp": 993,
-        "purchase": 6
+        "purchase": 6,
+        "imp_uv": 32388,
+        "pdp_uv": 536,
+        "buy_uv": 6
       },
       {
         "dt": "2026-02-22",
@@ -1142,7 +1463,10 @@
         "qty": 28,
         "imp": 93298,
         "pdp": 1473,
-        "purchase": 17
+        "purchase": 17,
+        "imp_uv": 36044,
+        "pdp_uv": 664,
+        "buy_uv": 17
       },
       {
         "dt": "2026-02-23",
@@ -1151,7 +1475,10 @@
         "qty": 26,
         "imp": 118335,
         "pdp": 1698,
-        "purchase": 16
+        "purchase": 16,
+        "imp_uv": 45426,
+        "pdp_uv": 711,
+        "buy_uv": 16
       },
       {
         "dt": "2026-02-24",
@@ -1160,7 +1487,10 @@
         "qty": 45,
         "imp": 108269,
         "pdp": 2440,
-        "purchase": 30
+        "purchase": 30,
+        "imp_uv": 34586,
+        "pdp_uv": 872,
+        "buy_uv": 30
       },
       {
         "dt": "2026-02-25",
@@ -1169,7 +1499,10 @@
         "qty": 22,
         "imp": 116089,
         "pdp": 3641,
-        "purchase": 15
+        "purchase": 15,
+        "imp_uv": 33826,
+        "pdp_uv": 1189,
+        "buy_uv": 15
       },
       {
         "dt": "2026-02-26",
@@ -1178,7 +1511,10 @@
         "qty": 17,
         "imp": 115532,
         "pdp": 3083,
-        "purchase": 13
+        "purchase": 13,
+        "imp_uv": 38990,
+        "pdp_uv": 1119,
+        "buy_uv": 13
       },
       {
         "dt": "2026-02-27",
@@ -1187,7 +1523,10 @@
         "qty": 18,
         "imp": 115518,
         "pdp": 2761,
-        "purchase": 12
+        "purchase": 12,
+        "imp_uv": 43260,
+        "pdp_uv": 1036,
+        "buy_uv": 12
       },
       {
         "dt": "2026-02-28",
@@ -1196,7 +1535,10 @@
         "qty": 9,
         "imp": 146001,
         "pdp": 4050,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 46373,
+        "pdp_uv": 1557,
+        "buy_uv": 7
       },
       {
         "dt": "2026-03-01",
@@ -1205,7 +1547,10 @@
         "qty": 28,
         "imp": 168786,
         "pdp": 4734,
-        "purchase": 19
+        "purchase": 19,
+        "imp_uv": 49588,
+        "pdp_uv": 1994,
+        "buy_uv": 19
       },
       {
         "dt": "2026-03-02",
@@ -1214,7 +1559,10 @@
         "qty": 28,
         "imp": 180454,
         "pdp": 4202,
-        "purchase": 15
+        "purchase": 15,
+        "imp_uv": 63101,
+        "pdp_uv": 1756,
+        "buy_uv": 15
       },
       {
         "dt": "2026-03-03",
@@ -1223,7 +1571,10 @@
         "qty": 145,
         "imp": 205072,
         "pdp": 5830,
-        "purchase": 91
+        "purchase": 91,
+        "imp_uv": 61345,
+        "pdp_uv": 2095,
+        "buy_uv": 91
       },
       {
         "dt": "2026-03-04",
@@ -1232,7 +1583,10 @@
         "qty": 26,
         "imp": 100042,
         "pdp": 2952,
-        "purchase": 13
+        "purchase": 13,
+        "imp_uv": 25876,
+        "pdp_uv": 1097,
+        "buy_uv": 13
       },
       {
         "dt": "2026-03-05",
@@ -1241,7 +1595,10 @@
         "qty": 13,
         "imp": 93872,
         "pdp": 2872,
-        "purchase": 10
+        "purchase": 10,
+        "imp_uv": 26805,
+        "pdp_uv": 1307,
+        "buy_uv": 10
       },
       {
         "dt": "2026-03-06",
@@ -1250,7 +1607,10 @@
         "qty": 13,
         "imp": 81166,
         "pdp": 1869,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 25820,
+        "pdp_uv": 782,
+        "buy_uv": 9
       },
       {
         "dt": "2026-03-07",
@@ -1259,7 +1619,10 @@
         "qty": 21,
         "imp": 107472,
         "pdp": 4055,
-        "purchase": 15
+        "purchase": 15,
+        "imp_uv": 25707,
+        "pdp_uv": 1372,
+        "buy_uv": 15
       },
       {
         "dt": "2026-03-08",
@@ -1268,7 +1631,10 @@
         "qty": 33,
         "imp": 139235,
         "pdp": 4099,
-        "purchase": 24
+        "purchase": 24,
+        "imp_uv": 35222,
+        "pdp_uv": 1484,
+        "buy_uv": 24
       },
       {
         "dt": "2026-03-09",
@@ -1277,7 +1643,10 @@
         "qty": 26,
         "imp": 90086,
         "pdp": 1657,
-        "purchase": 14
+        "purchase": 14,
+        "imp_uv": 34113,
+        "pdp_uv": 825,
+        "buy_uv": 14
       },
       {
         "dt": "2026-03-10",
@@ -1286,7 +1655,10 @@
         "qty": 24,
         "imp": 86487,
         "pdp": 1216,
-        "purchase": 13
+        "purchase": 13,
+        "imp_uv": 33294,
+        "pdp_uv": 661,
+        "buy_uv": 13
       },
       {
         "dt": "2026-03-11",
@@ -1295,7 +1667,10 @@
         "qty": 19,
         "imp": 76445,
         "pdp": 1229,
-        "purchase": 12
+        "purchase": 12,
+        "imp_uv": 26221,
+        "pdp_uv": 600,
+        "buy_uv": 12
       },
       {
         "dt": "2026-03-12",
@@ -1304,7 +1679,10 @@
         "qty": 4,
         "imp": 68724,
         "pdp": 1067,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 25598,
+        "pdp_uv": 518,
+        "buy_uv": 5
       },
       {
         "dt": "2026-03-13",
@@ -1313,7 +1691,10 @@
         "qty": 9,
         "imp": 74442,
         "pdp": 1079,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 27465,
+        "pdp_uv": 547,
+        "buy_uv": 9
       },
       {
         "dt": "2026-03-14",
@@ -1322,7 +1703,10 @@
         "qty": 11,
         "imp": 76578,
         "pdp": 1409,
-        "purchase": 6
+        "purchase": 6,
+        "imp_uv": 28111,
+        "pdp_uv": 736,
+        "buy_uv": 6
       },
       {
         "dt": "2026-03-15",
@@ -1331,7 +1715,10 @@
         "qty": 14,
         "imp": 89779,
         "pdp": 1390,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 33140,
+        "pdp_uv": 734,
+        "buy_uv": 7
       },
       {
         "dt": "2026-03-16",
@@ -1340,7 +1727,10 @@
         "qty": 18,
         "imp": 100334,
         "pdp": 1832,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 36472,
+        "pdp_uv": 889,
+        "buy_uv": 9
       },
       {
         "dt": "2026-03-17",
@@ -1349,7 +1739,10 @@
         "qty": 29,
         "imp": 127093,
         "pdp": 1939,
-        "purchase": 20
+        "purchase": 20,
+        "imp_uv": 58138,
+        "pdp_uv": 928,
+        "buy_uv": 20
       },
       {
         "dt": "2026-03-18",
@@ -1358,7 +1751,10 @@
         "qty": 25,
         "imp": 74688,
         "pdp": 1252,
-        "purchase": 12
+        "purchase": 12,
+        "imp_uv": 27282,
+        "pdp_uv": 618,
+        "buy_uv": 12
       },
       {
         "dt": "2026-03-19",
@@ -1367,7 +1763,10 @@
         "qty": 19,
         "imp": 78572,
         "pdp": 1561,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 25793,
+        "pdp_uv": 747,
+        "buy_uv": 7
       },
       {
         "dt": "2026-03-20",
@@ -1376,7 +1775,10 @@
         "qty": 12,
         "imp": 71811,
         "pdp": 1303,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 24994,
+        "pdp_uv": 668,
+        "buy_uv": 9
       },
       {
         "dt": "2026-03-21",
@@ -1385,7 +1787,10 @@
         "qty": 33,
         "imp": 71215,
         "pdp": 1513,
-        "purchase": 18
+        "purchase": 18,
+        "imp_uv": 22842,
+        "pdp_uv": 733,
+        "buy_uv": 17
       },
       {
         "dt": "2026-03-22",
@@ -1394,7 +1799,10 @@
         "qty": 18,
         "imp": 75070,
         "pdp": 1477,
-        "purchase": 11
+        "purchase": 11,
+        "imp_uv": 24995,
+        "pdp_uv": 677,
+        "buy_uv": 11
       },
       {
         "dt": "2026-03-23",
@@ -1403,7 +1811,10 @@
         "qty": 10,
         "imp": 61680,
         "pdp": 1098,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 23816,
+        "pdp_uv": 486,
+        "buy_uv": 8
       },
       {
         "dt": "2026-03-24",
@@ -1412,7 +1823,10 @@
         "qty": 17,
         "imp": 149179,
         "pdp": 2020,
-        "purchase": 10
+        "purchase": 10,
+        "imp_uv": 75073,
+        "pdp_uv": 979,
+        "buy_uv": 10
       },
       {
         "dt": "2026-03-25",
@@ -1421,7 +1835,10 @@
         "qty": 16,
         "imp": 54108,
         "pdp": 1058,
-        "purchase": 11
+        "purchase": 11,
+        "imp_uv": 19248,
+        "pdp_uv": 384,
+        "buy_uv": 10
       },
       {
         "dt": "2026-03-26",
@@ -1430,7 +1847,10 @@
         "qty": 20,
         "imp": 46790,
         "pdp": 790,
-        "purchase": 14
+        "purchase": 14,
+        "imp_uv": 17354,
+        "pdp_uv": 386,
+        "buy_uv": 14
       },
       {
         "dt": "2026-03-27",
@@ -1439,7 +1859,10 @@
         "qty": 6,
         "imp": 40920,
         "pdp": 749,
-        "purchase": 4
+        "purchase": 4,
+        "imp_uv": 15381,
+        "pdp_uv": 333,
+        "buy_uv": 4
       },
       {
         "dt": "2026-03-28",
@@ -1448,7 +1871,10 @@
         "qty": 12,
         "imp": 48892,
         "pdp": 821,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 17691,
+        "pdp_uv": 380,
+        "buy_uv": 8
       },
       {
         "dt": "2026-03-29",
@@ -1457,7 +1883,10 @@
         "qty": 28,
         "imp": 57598,
         "pdp": 1012,
-        "purchase": 14
+        "purchase": 14,
+        "imp_uv": 20746,
+        "pdp_uv": 469,
+        "buy_uv": 14
       },
       {
         "dt": "2026-03-30",
@@ -1466,7 +1895,10 @@
         "qty": 13,
         "imp": 65273,
         "pdp": 888,
-        "purchase": 10
+        "purchase": 10,
+        "imp_uv": 29668,
+        "pdp_uv": 425,
+        "buy_uv": 10
       },
       {
         "dt": "2026-03-31",
@@ -1475,7 +1907,10 @@
         "qty": 20,
         "imp": 102146,
         "pdp": 1324,
-        "purchase": 13
+        "purchase": 13,
+        "imp_uv": 52195,
+        "pdp_uv": 664,
+        "buy_uv": 13
       },
       {
         "dt": "2026-04-01",
@@ -1484,7 +1919,10 @@
         "qty": 28,
         "imp": 60691,
         "pdp": 936,
-        "purchase": 15
+        "purchase": 15,
+        "imp_uv": 22683,
+        "pdp_uv": 502,
+        "buy_uv": 15
       },
       {
         "dt": "2026-04-02",
@@ -1493,7 +1931,10 @@
         "qty": 23,
         "imp": 59971,
         "pdp": 927,
-        "purchase": 13
+        "purchase": 13,
+        "imp_uv": 21182,
+        "pdp_uv": 493,
+        "buy_uv": 13
       },
       {
         "dt": "2026-04-03",
@@ -1502,7 +1943,10 @@
         "qty": 1,
         "imp": 46809,
         "pdp": 688,
-        "purchase": 1
+        "purchase": 1,
+        "imp_uv": 17826,
+        "pdp_uv": 397,
+        "buy_uv": 1
       },
       {
         "dt": "2026-04-04",
@@ -1511,7 +1955,10 @@
         "qty": 11,
         "imp": 51413,
         "pdp": 774,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 19493,
+        "pdp_uv": 406,
+        "buy_uv": 7
       },
       {
         "dt": "2026-04-05",
@@ -1520,7 +1967,10 @@
         "qty": 5,
         "imp": 76386,
         "pdp": 1386,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 25653,
+        "pdp_uv": 739,
+        "buy_uv": 5
       },
       {
         "dt": "2026-04-06",
@@ -1529,7 +1979,10 @@
         "qty": 16,
         "imp": 82600,
         "pdp": 1421,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 33217,
+        "pdp_uv": 777,
+        "buy_uv": 8
       },
       {
         "dt": "2026-04-07",
@@ -1538,7 +1991,10 @@
         "qty": 29,
         "imp": 380608,
         "pdp": 2463,
-        "purchase": 22
+        "purchase": 22,
+        "imp_uv": 100352,
+        "pdp_uv": 1318,
+        "buy_uv": 21
       },
       {
         "dt": "2026-04-08",
@@ -1547,7 +2003,10 @@
         "qty": 28,
         "imp": 72958,
         "pdp": 916,
-        "purchase": 16
+        "purchase": 16,
+        "imp_uv": 25785,
+        "pdp_uv": 456,
+        "buy_uv": 16
       },
       {
         "dt": "2026-04-09",
@@ -1556,7 +2015,10 @@
         "qty": 21,
         "imp": 72918,
         "pdp": 1397,
-        "purchase": 15
+        "purchase": 15,
+        "imp_uv": 24591,
+        "pdp_uv": 709,
+        "buy_uv": 14
       },
       {
         "dt": "2026-04-10",
@@ -1565,7 +2027,10 @@
         "qty": 8,
         "imp": 58679,
         "pdp": 1193,
-        "purchase": 6
+        "purchase": 6,
+        "imp_uv": 20300,
+        "pdp_uv": 704,
+        "buy_uv": 6
       },
       {
         "dt": "2026-04-11",
@@ -1574,7 +2039,10 @@
         "qty": 3,
         "imp": 56642,
         "pdp": 1227,
-        "purchase": 3
+        "purchase": 3,
+        "imp_uv": 19598,
+        "pdp_uv": 717,
+        "buy_uv": 3
       },
       {
         "dt": "2026-04-12",
@@ -1583,7 +2051,10 @@
         "qty": 24,
         "imp": 89815,
         "pdp": 1549,
-        "purchase": 14
+        "purchase": 14,
+        "imp_uv": 30294,
+        "pdp_uv": 808,
+        "buy_uv": 14
       },
       {
         "dt": "2026-04-13",
@@ -1592,7 +2063,10 @@
         "qty": 15,
         "imp": 94812,
         "pdp": 1459,
-        "purchase": 10
+        "purchase": 10,
+        "imp_uv": 37910,
+        "pdp_uv": 808,
+        "buy_uv": 10
       },
       {
         "dt": "2026-04-14",
@@ -1601,7 +2075,10 @@
         "qty": 23,
         "imp": 115134,
         "pdp": 1509,
-        "purchase": 16
+        "purchase": 16,
+        "imp_uv": 49447,
+        "pdp_uv": 841,
+        "buy_uv": 16
       },
       {
         "dt": "2026-04-15",
@@ -1610,7 +2087,10 @@
         "qty": 10,
         "imp": 78740,
         "pdp": 1165,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 28330,
+        "pdp_uv": 635,
+        "buy_uv": 7
       },
       {
         "dt": "2026-04-16",
@@ -1619,7 +2099,10 @@
         "qty": 13,
         "imp": 70471,
         "pdp": 1019,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 26213,
+        "pdp_uv": 596,
+        "buy_uv": 7
       },
       {
         "dt": "2026-04-17",
@@ -1628,7 +2111,10 @@
         "qty": 13,
         "imp": 67513,
         "pdp": 1034,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 24016,
+        "pdp_uv": 603,
+        "buy_uv": 8
       },
       {
         "dt": "2026-04-18",
@@ -1637,7 +2123,10 @@
         "qty": 11,
         "imp": 68687,
         "pdp": 1109,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 25154,
+        "pdp_uv": 600,
+        "buy_uv": 8
       },
       {
         "dt": "2026-04-19",
@@ -1646,7 +2135,10 @@
         "qty": 27,
         "imp": 88237,
         "pdp": 1403,
-        "purchase": 12
+        "purchase": 12,
+        "imp_uv": 31320,
+        "pdp_uv": 690,
+        "buy_uv": 12
       },
       {
         "dt": "2026-04-20",
@@ -1655,7 +2147,10 @@
         "qty": 17,
         "imp": 72824,
         "pdp": 822,
-        "purchase": 10
+        "purchase": 10,
+        "imp_uv": 33028,
+        "pdp_uv": 427,
+        "buy_uv": 10
       },
       {
         "dt": "2026-04-21",
@@ -1664,7 +2159,10 @@
         "qty": 12,
         "imp": 106808,
         "pdp": 1701,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 47340,
+        "pdp_uv": 777,
+        "buy_uv": 8
       },
       {
         "dt": "2026-04-22",
@@ -1673,7 +2171,10 @@
         "qty": 9,
         "imp": 58967,
         "pdp": 791,
-        "purchase": 6
+        "purchase": 6,
+        "imp_uv": 22104,
+        "pdp_uv": 433,
+        "buy_uv": 5
       },
       {
         "dt": "2026-04-23",
@@ -1682,7 +2183,10 @@
         "qty": 19,
         "imp": 54952,
         "pdp": 756,
-        "purchase": 13
+        "purchase": 13,
+        "imp_uv": 21187,
+        "pdp_uv": 421,
+        "buy_uv": 13
       },
       {
         "dt": "2026-04-24",
@@ -1691,7 +2195,10 @@
         "qty": 7,
         "imp": 47959,
         "pdp": 614,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 18878,
+        "pdp_uv": 342,
+        "buy_uv": 8
       },
       {
         "dt": "2026-04-25",
@@ -1700,7 +2207,10 @@
         "qty": 13,
         "imp": 36764,
         "pdp": 646,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 13418,
+        "pdp_uv": 378,
+        "buy_uv": 7
       },
       {
         "dt": "2026-04-26",
@@ -1709,7 +2219,10 @@
         "qty": 18,
         "imp": 48637,
         "pdp": 957,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 15492,
+        "pdp_uv": 531,
+        "buy_uv": 9
       },
       {
         "dt": "2026-04-27",
@@ -1718,7 +2231,10 @@
         "qty": 10,
         "imp": 57082,
         "pdp": 1144,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 18290,
+        "pdp_uv": 497,
+        "buy_uv": 9
       },
       {
         "dt": "2026-04-28",
@@ -1741,7 +2257,10 @@
         "qty": 579,
         "imp": 653747,
         "pdp": 16361,
-        "purchase": 326
+        "purchase": 326,
+        "imp_uv": 115930,
+        "pdp_uv": 5796,
+        "buy_uv": 325
       },
       {
         "dt": "2026-02-02",
@@ -1750,7 +2269,10 @@
         "qty": 623,
         "imp": 571099,
         "pdp": 15780,
-        "purchase": 335
+        "purchase": 335,
+        "imp_uv": 101784,
+        "pdp_uv": 5227,
+        "buy_uv": 335
       },
       {
         "dt": "2026-02-03",
@@ -1759,7 +2281,10 @@
         "qty": 666,
         "imp": 522039,
         "pdp": 14916,
-        "purchase": 409
+        "purchase": 409,
+        "imp_uv": 84782,
+        "pdp_uv": 5031,
+        "buy_uv": 408
       },
       {
         "dt": "2026-02-04",
@@ -1768,7 +2293,10 @@
         "qty": 538,
         "imp": 520966,
         "pdp": 14473,
-        "purchase": 305
+        "purchase": 305,
+        "imp_uv": 91022,
+        "pdp_uv": 4922,
+        "buy_uv": 305
       },
       {
         "dt": "2026-02-05",
@@ -1777,7 +2305,10 @@
         "qty": 552,
         "imp": 535530,
         "pdp": 14031,
-        "purchase": 313
+        "purchase": 313,
+        "imp_uv": 95265,
+        "pdp_uv": 4791,
+        "buy_uv": 313
       },
       {
         "dt": "2026-02-06",
@@ -1786,7 +2317,10 @@
         "qty": 465,
         "imp": 415000,
         "pdp": 10879,
-        "purchase": 234
+        "purchase": 234,
+        "imp_uv": 76309,
+        "pdp_uv": 3916,
+        "buy_uv": 234
       },
       {
         "dt": "2026-02-07",
@@ -1795,7 +2329,10 @@
         "qty": 429,
         "imp": 493010,
         "pdp": 12397,
-        "purchase": 236
+        "purchase": 236,
+        "imp_uv": 90743,
+        "pdp_uv": 4421,
+        "buy_uv": 235
       },
       {
         "dt": "2026-02-08",
@@ -1804,7 +2341,10 @@
         "qty": 724,
         "imp": 699538,
         "pdp": 17363,
-        "purchase": 421
+        "purchase": 421,
+        "imp_uv": 122575,
+        "pdp_uv": 6167,
+        "buy_uv": 420
       },
       {
         "dt": "2026-02-09",
@@ -1813,7 +2353,10 @@
         "qty": 559,
         "imp": 571253,
         "pdp": 15093,
-        "purchase": 341
+        "purchase": 341,
+        "imp_uv": 94841,
+        "pdp_uv": 5358,
+        "buy_uv": 340
       },
       {
         "dt": "2026-02-10",
@@ -1822,7 +2365,10 @@
         "qty": 699,
         "imp": 561255,
         "pdp": 14958,
-        "purchase": 377
+        "purchase": 377,
+        "imp_uv": 93659,
+        "pdp_uv": 5378,
+        "buy_uv": 375
       },
       {
         "dt": "2026-02-11",
@@ -1831,7 +2377,10 @@
         "qty": 538,
         "imp": 521095,
         "pdp": 14389,
-        "purchase": 299
+        "purchase": 299,
+        "imp_uv": 85049,
+        "pdp_uv": 4834,
+        "buy_uv": 298
       },
       {
         "dt": "2026-02-12",
@@ -1840,7 +2389,10 @@
         "qty": 463,
         "imp": 450611,
         "pdp": 13565,
-        "purchase": 263
+        "purchase": 263,
+        "imp_uv": 76852,
+        "pdp_uv": 5276,
+        "buy_uv": 259
       },
       {
         "dt": "2026-02-13",
@@ -1849,7 +2401,10 @@
         "qty": 243,
         "imp": 391048,
         "pdp": 10906,
-        "purchase": 156
+        "purchase": 156,
+        "imp_uv": 73896,
+        "pdp_uv": 4498,
+        "buy_uv": 155
       },
       {
         "dt": "2026-02-14",
@@ -1858,7 +2413,10 @@
         "qty": 221,
         "imp": 397450,
         "pdp": 10315,
-        "purchase": 147
+        "purchase": 147,
+        "imp_uv": 76606,
+        "pdp_uv": 4047,
+        "buy_uv": 147
       },
       {
         "dt": "2026-02-15",
@@ -1867,7 +2425,10 @@
         "qty": 325,
         "imp": 464298,
         "pdp": 12084,
-        "purchase": 192
+        "purchase": 192,
+        "imp_uv": 86652,
+        "pdp_uv": 4652,
+        "buy_uv": 192
       },
       {
         "dt": "2026-02-16",
@@ -1876,7 +2437,10 @@
         "qty": 405,
         "imp": 489760,
         "pdp": 13703,
-        "purchase": 262
+        "purchase": 262,
+        "imp_uv": 87024,
+        "pdp_uv": 4900,
+        "buy_uv": 259
       },
       {
         "dt": "2026-02-17",
@@ -1885,7 +2449,10 @@
         "qty": 418,
         "imp": 545316,
         "pdp": 15158,
-        "purchase": 240
+        "purchase": 240,
+        "imp_uv": 92088,
+        "pdp_uv": 5238,
+        "buy_uv": 240
       },
       {
         "dt": "2026-02-18",
@@ -1894,7 +2461,10 @@
         "qty": 611,
         "imp": 650229,
         "pdp": 18987,
-        "purchase": 382
+        "purchase": 382,
+        "imp_uv": 105142,
+        "pdp_uv": 6333,
+        "buy_uv": 381
       },
       {
         "dt": "2026-02-19",
@@ -1903,7 +2473,10 @@
         "qty": 621,
         "imp": 592657,
         "pdp": 17013,
-        "purchase": 377
+        "purchase": 377,
+        "imp_uv": 97567,
+        "pdp_uv": 5905,
+        "buy_uv": 376
       },
       {
         "dt": "2026-02-20",
@@ -1912,7 +2485,10 @@
         "qty": 457,
         "imp": 487603,
         "pdp": 14503,
-        "purchase": 288
+        "purchase": 288,
+        "imp_uv": 85939,
+        "pdp_uv": 5195,
+        "buy_uv": 287
       },
       {
         "dt": "2026-02-21",
@@ -1921,7 +2497,10 @@
         "qty": 451,
         "imp": 531969,
         "pdp": 15305,
-        "purchase": 253
+        "purchase": 253,
+        "imp_uv": 93920,
+        "pdp_uv": 5628,
+        "buy_uv": 253
       },
       {
         "dt": "2026-02-22",
@@ -1930,7 +2509,10 @@
         "qty": 576,
         "imp": 636254,
         "pdp": 19155,
-        "purchase": 349
+        "purchase": 349,
+        "imp_uv": 92686,
+        "pdp_uv": 6441,
+        "buy_uv": 348
       },
       {
         "dt": "2026-02-23",
@@ -1939,7 +2521,10 @@
         "qty": 1004,
         "imp": 1144501,
         "pdp": 28081,
-        "purchase": 616
+        "purchase": 616,
+        "imp_uv": 236551,
+        "pdp_uv": 9702,
+        "buy_uv": 612
       },
       {
         "dt": "2026-02-24",
@@ -1948,7 +2533,10 @@
         "qty": 721,
         "imp": 1038246,
         "pdp": 22291,
-        "purchase": 437
+        "purchase": 437,
+        "imp_uv": 204472,
+        "pdp_uv": 7815,
+        "buy_uv": 436
       },
       {
         "dt": "2026-02-25",
@@ -1957,7 +2545,10 @@
         "qty": 1416,
         "imp": 938134,
         "pdp": 39061,
-        "purchase": 882
+        "purchase": 882,
+        "imp_uv": 138361,
+        "pdp_uv": 10418,
+        "buy_uv": 871
       },
       {
         "dt": "2026-02-26",
@@ -1966,7 +2557,10 @@
         "qty": 517,
         "imp": 706521,
         "pdp": 33785,
-        "purchase": 306
+        "purchase": 306,
+        "imp_uv": 120533,
+        "pdp_uv": 8543,
+        "buy_uv": 305
       },
       {
         "dt": "2026-02-27",
@@ -1975,7 +2569,10 @@
         "qty": 454,
         "imp": 606501,
         "pdp": 31093,
-        "purchase": 280
+        "purchase": 280,
+        "imp_uv": 100242,
+        "pdp_uv": 7519,
+        "buy_uv": 279
       },
       {
         "dt": "2026-02-28",
@@ -1984,7 +2581,10 @@
         "qty": 475,
         "imp": 597463,
         "pdp": 22795,
-        "purchase": 279
+        "purchase": 279,
+        "imp_uv": 109474,
+        "pdp_uv": 7187,
+        "buy_uv": 279
       },
       {
         "dt": "2026-03-01",
@@ -1993,7 +2593,10 @@
         "qty": 630,
         "imp": 727791,
         "pdp": 18581,
-        "purchase": 380
+        "purchase": 380,
+        "imp_uv": 145891,
+        "pdp_uv": 6946,
+        "buy_uv": 379
       },
       {
         "dt": "2026-03-02",
@@ -2002,7 +2605,10 @@
         "qty": 616,
         "imp": 762546,
         "pdp": 18893,
-        "purchase": 383
+        "purchase": 383,
+        "imp_uv": 146953,
+        "pdp_uv": 7025,
+        "buy_uv": 383
       },
       {
         "dt": "2026-03-03",
@@ -2011,7 +2617,10 @@
         "qty": 722,
         "imp": 805087,
         "pdp": 22717,
-        "purchase": 443
+        "purchase": 443,
+        "imp_uv": 171153,
+        "pdp_uv": 8441,
+        "buy_uv": 442
       },
       {
         "dt": "2026-03-04",
@@ -2020,7 +2629,10 @@
         "qty": 401,
         "imp": 456848,
         "pdp": 12805,
-        "purchase": 258
+        "purchase": 258,
+        "imp_uv": 89955,
+        "pdp_uv": 4800,
+        "buy_uv": 258
       },
       {
         "dt": "2026-03-05",
@@ -2029,7 +2641,10 @@
         "qty": 414,
         "imp": 643732,
         "pdp": 13830,
-        "purchase": 258
+        "purchase": 258,
+        "imp_uv": 152085,
+        "pdp_uv": 5654,
+        "buy_uv": 258
       },
       {
         "dt": "2026-03-06",
@@ -2038,7 +2653,10 @@
         "qty": 436,
         "imp": 671323,
         "pdp": 12451,
-        "purchase": 240
+        "purchase": 240,
+        "imp_uv": 164898,
+        "pdp_uv": 4815,
+        "buy_uv": 240
       },
       {
         "dt": "2026-03-07",
@@ -2047,7 +2665,10 @@
         "qty": 373,
         "imp": 621433,
         "pdp": 12221,
-        "purchase": 213
+        "purchase": 213,
+        "imp_uv": 154254,
+        "pdp_uv": 4805,
+        "buy_uv": 212
       },
       {
         "dt": "2026-03-08",
@@ -2056,7 +2677,10 @@
         "qty": 1081,
         "imp": 942499,
         "pdp": 22105,
-        "purchase": 643
+        "purchase": 643,
+        "imp_uv": 195752,
+        "pdp_uv": 7716,
+        "buy_uv": 640
       },
       {
         "dt": "2026-03-09",
@@ -2065,7 +2689,10 @@
         "qty": 410,
         "imp": 409463,
         "pdp": 12477,
-        "purchase": 252
+        "purchase": 252,
+        "imp_uv": 84990,
+        "pdp_uv": 4677,
+        "buy_uv": 249
       },
       {
         "dt": "2026-03-10",
@@ -2074,7 +2701,10 @@
         "qty": 355,
         "imp": 369552,
         "pdp": 11641,
-        "purchase": 210
+        "purchase": 210,
+        "imp_uv": 73289,
+        "pdp_uv": 4436,
+        "buy_uv": 210
       },
       {
         "dt": "2026-03-11",
@@ -2083,7 +2713,10 @@
         "qty": 313,
         "imp": 351243,
         "pdp": 11138,
-        "purchase": 212
+        "purchase": 212,
+        "imp_uv": 67963,
+        "pdp_uv": 4184,
+        "buy_uv": 212
       },
       {
         "dt": "2026-03-12",
@@ -2092,7 +2725,10 @@
         "qty": 336,
         "imp": 307189,
         "pdp": 10461,
-        "purchase": 210
+        "purchase": 210,
+        "imp_uv": 59278,
+        "pdp_uv": 4070,
+        "buy_uv": 210
       },
       {
         "dt": "2026-03-13",
@@ -2101,7 +2737,10 @@
         "qty": 303,
         "imp": 278267,
         "pdp": 9155,
-        "purchase": 186
+        "purchase": 186,
+        "imp_uv": 55814,
+        "pdp_uv": 3535,
+        "buy_uv": 186
       },
       {
         "dt": "2026-03-14",
@@ -2110,7 +2749,10 @@
         "qty": 254,
         "imp": 325056,
         "pdp": 9792,
-        "purchase": 158
+        "purchase": 158,
+        "imp_uv": 67522,
+        "pdp_uv": 3937,
+        "buy_uv": 158
       },
       {
         "dt": "2026-03-15",
@@ -2119,7 +2761,10 @@
         "qty": 575,
         "imp": 475470,
         "pdp": 14835,
-        "purchase": 359
+        "purchase": 359,
+        "imp_uv": 88528,
+        "pdp_uv": 5404,
+        "buy_uv": 357
       },
       {
         "dt": "2026-03-16",
@@ -2128,7 +2773,10 @@
         "qty": 430,
         "imp": 367655,
         "pdp": 12753,
-        "purchase": 246
+        "purchase": 246,
+        "imp_uv": 64032,
+        "pdp_uv": 4819,
+        "buy_uv": 245
       },
       {
         "dt": "2026-03-17",
@@ -2137,7 +2785,10 @@
         "qty": 402,
         "imp": 352386,
         "pdp": 12828,
-        "purchase": 242
+        "purchase": 242,
+        "imp_uv": 58241,
+        "pdp_uv": 4897,
+        "buy_uv": 240
       },
       {
         "dt": "2026-03-18",
@@ -2146,7 +2797,10 @@
         "qty": 481,
         "imp": 387607,
         "pdp": 12920,
-        "purchase": 273
+        "purchase": 273,
+        "imp_uv": 62176,
+        "pdp_uv": 4832,
+        "buy_uv": 271
       },
       {
         "dt": "2026-03-19",
@@ -2155,7 +2809,10 @@
         "qty": 292,
         "imp": 319017,
         "pdp": 9389,
-        "purchase": 177
+        "purchase": 177,
+        "imp_uv": 61228,
+        "pdp_uv": 3670,
+        "buy_uv": 175
       },
       {
         "dt": "2026-03-20",
@@ -2164,7 +2821,10 @@
         "qty": 235,
         "imp": 312955,
         "pdp": 8825,
-        "purchase": 138
+        "purchase": 138,
+        "imp_uv": 64593,
+        "pdp_uv": 3582,
+        "buy_uv": 137
       },
       {
         "dt": "2026-03-21",
@@ -2173,7 +2833,10 @@
         "qty": 275,
         "imp": 295452,
         "pdp": 8592,
-        "purchase": 156
+        "purchase": 156,
+        "imp_uv": 59103,
+        "pdp_uv": 3448,
+        "buy_uv": 156
       },
       {
         "dt": "2026-03-22",
@@ -2182,7 +2845,10 @@
         "qty": 523,
         "imp": 404363,
         "pdp": 12222,
-        "purchase": 324
+        "purchase": 324,
+        "imp_uv": 68330,
+        "pdp_uv": 4356,
+        "buy_uv": 321
       },
       {
         "dt": "2026-03-23",
@@ -2191,7 +2857,10 @@
         "qty": 442,
         "imp": 353883,
         "pdp": 10582,
-        "purchase": 231
+        "purchase": 231,
+        "imp_uv": 60420,
+        "pdp_uv": 3832,
+        "buy_uv": 231
       },
       {
         "dt": "2026-03-24",
@@ -2200,7 +2869,10 @@
         "qty": 341,
         "imp": 324742,
         "pdp": 9425,
-        "purchase": 201
+        "purchase": 201,
+        "imp_uv": 60435,
+        "pdp_uv": 3431,
+        "buy_uv": 201
       },
       {
         "dt": "2026-03-25",
@@ -2209,7 +2881,10 @@
         "qty": 326,
         "imp": 304690,
         "pdp": 9174,
-        "purchase": 182
+        "purchase": 182,
+        "imp_uv": 58327,
+        "pdp_uv": 3637,
+        "buy_uv": 181
       },
       {
         "dt": "2026-03-26",
@@ -2218,7 +2893,10 @@
         "qty": 244,
         "imp": 268522,
         "pdp": 8297,
-        "purchase": 145
+        "purchase": 145,
+        "imp_uv": 49502,
+        "pdp_uv": 3215,
+        "buy_uv": 145
       },
       {
         "dt": "2026-03-27",
@@ -2227,7 +2905,10 @@
         "qty": 207,
         "imp": 227028,
         "pdp": 7351,
-        "purchase": 119
+        "purchase": 119,
+        "imp_uv": 43780,
+        "pdp_uv": 3039,
+        "buy_uv": 119
       },
       {
         "dt": "2026-03-28",
@@ -2236,7 +2917,10 @@
         "qty": 208,
         "imp": 242032,
         "pdp": 7733,
-        "purchase": 126
+        "purchase": 126,
+        "imp_uv": 46315,
+        "pdp_uv": 3291,
+        "buy_uv": 124
       },
       {
         "dt": "2026-03-29",
@@ -2245,7 +2929,10 @@
         "qty": 244,
         "imp": 321263,
         "pdp": 9439,
-        "purchase": 150
+        "purchase": 150,
+        "imp_uv": 58700,
+        "pdp_uv": 3627,
+        "buy_uv": 150
       },
       {
         "dt": "2026-03-30",
@@ -2254,7 +2941,10 @@
         "qty": 520,
         "imp": 353735,
         "pdp": 11208,
-        "purchase": 303
+        "purchase": 303,
+        "imp_uv": 60917,
+        "pdp_uv": 4111,
+        "buy_uv": 302
       },
       {
         "dt": "2026-03-31",
@@ -2263,7 +2953,10 @@
         "qty": 328,
         "imp": 309866,
         "pdp": 9312,
-        "purchase": 191
+        "purchase": 191,
+        "imp_uv": 55801,
+        "pdp_uv": 3598,
+        "buy_uv": 191
       },
       {
         "dt": "2026-04-01",
@@ -2272,7 +2965,10 @@
         "qty": 432,
         "imp": 304345,
         "pdp": 8544,
-        "purchase": 238
+        "purchase": 238,
+        "imp_uv": 55848,
+        "pdp_uv": 3187,
+        "buy_uv": 236
       },
       {
         "dt": "2026-04-02",
@@ -2281,7 +2977,10 @@
         "qty": 350,
         "imp": 287889,
         "pdp": 7929,
-        "purchase": 188
+        "purchase": 188,
+        "imp_uv": 54184,
+        "pdp_uv": 3054,
+        "buy_uv": 188
       },
       {
         "dt": "2026-04-03",
@@ -2290,7 +2989,10 @@
         "qty": 244,
         "imp": 263348,
         "pdp": 7024,
-        "purchase": 150
+        "purchase": 150,
+        "imp_uv": 49357,
+        "pdp_uv": 2622,
+        "buy_uv": 150
       },
       {
         "dt": "2026-04-04",
@@ -2299,7 +3001,10 @@
         "qty": 269,
         "imp": 272917,
         "pdp": 8561,
-        "purchase": 152
+        "purchase": 152,
+        "imp_uv": 48161,
+        "pdp_uv": 3444,
+        "buy_uv": 152
       },
       {
         "dt": "2026-04-05",
@@ -2308,7 +3013,10 @@
         "qty": 347,
         "imp": 337200,
         "pdp": 10483,
-        "purchase": 187
+        "purchase": 187,
+        "imp_uv": 54551,
+        "pdp_uv": 4177,
+        "buy_uv": 187
       },
       {
         "dt": "2026-04-06",
@@ -2317,7 +3025,10 @@
         "qty": 422,
         "imp": 328570,
         "pdp": 10212,
-        "purchase": 239
+        "purchase": 239,
+        "imp_uv": 52645,
+        "pdp_uv": 3952,
+        "buy_uv": 239
       },
       {
         "dt": "2026-04-07",
@@ -2326,7 +3037,10 @@
         "qty": 375,
         "imp": 289487,
         "pdp": 8932,
-        "purchase": 212
+        "purchase": 212,
+        "imp_uv": 45840,
+        "pdp_uv": 3468,
+        "buy_uv": 212
       },
       {
         "dt": "2026-04-08",
@@ -2335,7 +3049,10 @@
         "qty": 323,
         "imp": 276895,
         "pdp": 8479,
-        "purchase": 186
+        "purchase": 186,
+        "imp_uv": 46775,
+        "pdp_uv": 3159,
+        "buy_uv": 186
       },
       {
         "dt": "2026-04-09",
@@ -2344,7 +3061,10 @@
         "qty": 314,
         "imp": 269265,
         "pdp": 7838,
-        "purchase": 171
+        "purchase": 171,
+        "imp_uv": 47593,
+        "pdp_uv": 3001,
+        "buy_uv": 171
       },
       {
         "dt": "2026-04-10",
@@ -2353,7 +3073,10 @@
         "qty": 307,
         "imp": 238076,
         "pdp": 6883,
-        "purchase": 161
+        "purchase": 161,
+        "imp_uv": 43610,
+        "pdp_uv": 2698,
+        "buy_uv": 161
       },
       {
         "dt": "2026-04-11",
@@ -2362,7 +3085,10 @@
         "qty": 242,
         "imp": 272524,
         "pdp": 7762,
-        "purchase": 143
+        "purchase": 143,
+        "imp_uv": 48150,
+        "pdp_uv": 2880,
+        "buy_uv": 142
       },
       {
         "dt": "2026-04-12",
@@ -2371,7 +3097,10 @@
         "qty": 555,
         "imp": 394240,
         "pdp": 11773,
-        "purchase": 322
+        "purchase": 322,
+        "imp_uv": 64707,
+        "pdp_uv": 4245,
+        "buy_uv": 321
       },
       {
         "dt": "2026-04-13",
@@ -2380,7 +3109,10 @@
         "qty": 397,
         "imp": 353854,
         "pdp": 10175,
-        "purchase": 223
+        "purchase": 223,
+        "imp_uv": 60821,
+        "pdp_uv": 3881,
+        "buy_uv": 223
       },
       {
         "dt": "2026-04-14",
@@ -2389,7 +3121,10 @@
         "qty": 445,
         "imp": 318373,
         "pdp": 9373,
-        "purchase": 238
+        "purchase": 238,
+        "imp_uv": 48962,
+        "pdp_uv": 3274,
+        "buy_uv": 237
       },
       {
         "dt": "2026-04-15",
@@ -2398,7 +3133,10 @@
         "qty": 397,
         "imp": 298017,
         "pdp": 9449,
-        "purchase": 227
+        "purchase": 227,
+        "imp_uv": 44290,
+        "pdp_uv": 3270,
+        "buy_uv": 227
       },
       {
         "dt": "2026-04-16",
@@ -2407,7 +3145,10 @@
         "qty": 408,
         "imp": 285415,
         "pdp": 8887,
-        "purchase": 237
+        "purchase": 237,
+        "imp_uv": 44090,
+        "pdp_uv": 3470,
+        "buy_uv": 237
       },
       {
         "dt": "2026-04-17",
@@ -2416,7 +3157,10 @@
         "qty": 265,
         "imp": 252453,
         "pdp": 7771,
-        "purchase": 151
+        "purchase": 151,
+        "imp_uv": 43231,
+        "pdp_uv": 3022,
+        "buy_uv": 151
       },
       {
         "dt": "2026-04-18",
@@ -2425,7 +3169,10 @@
         "qty": 225,
         "imp": 267810,
         "pdp": 8057,
-        "purchase": 135
+        "purchase": 135,
+        "imp_uv": 45681,
+        "pdp_uv": 3172,
+        "buy_uv": 135
       },
       {
         "dt": "2026-04-19",
@@ -2434,7 +3181,10 @@
         "qty": 613,
         "imp": 398070,
         "pdp": 12403,
-        "purchase": 364
+        "purchase": 364,
+        "imp_uv": 59056,
+        "pdp_uv": 4432,
+        "buy_uv": 362
       },
       {
         "dt": "2026-04-20",
@@ -2443,7 +3193,10 @@
         "qty": 365,
         "imp": 340746,
         "pdp": 10504,
-        "purchase": 220
+        "purchase": 220,
+        "imp_uv": 55229,
+        "pdp_uv": 3914,
+        "buy_uv": 219
       },
       {
         "dt": "2026-04-21",
@@ -2452,7 +3205,10 @@
         "qty": 335,
         "imp": 351635,
         "pdp": 10490,
-        "purchase": 211
+        "purchase": 211,
+        "imp_uv": 66496,
+        "pdp_uv": 4204,
+        "buy_uv": 210
       },
       {
         "dt": "2026-04-22",
@@ -2461,7 +3217,10 @@
         "qty": 297,
         "imp": 283180,
         "pdp": 7751,
-        "purchase": 161
+        "purchase": 161,
+        "imp_uv": 53365,
+        "pdp_uv": 2894,
+        "buy_uv": 159
       },
       {
         "dt": "2026-04-23",
@@ -2470,7 +3229,10 @@
         "qty": 271,
         "imp": 258159,
         "pdp": 7443,
-        "purchase": 155
+        "purchase": 155,
+        "imp_uv": 45890,
+        "pdp_uv": 2844,
+        "buy_uv": 155
       },
       {
         "dt": "2026-04-24",
@@ -2479,7 +3241,10 @@
         "qty": 227,
         "imp": 234097,
         "pdp": 6430,
-        "purchase": 141
+        "purchase": 141,
+        "imp_uv": 42484,
+        "pdp_uv": 2424,
+        "buy_uv": 141
       },
       {
         "dt": "2026-04-25",
@@ -2488,7 +3253,10 @@
         "qty": 202,
         "imp": 250318,
         "pdp": 7095,
-        "purchase": 125
+        "purchase": 125,
+        "imp_uv": 44768,
+        "pdp_uv": 2747,
+        "buy_uv": 125
       },
       {
         "dt": "2026-04-26",
@@ -2497,7 +3265,10 @@
         "qty": 422,
         "imp": 360631,
         "pdp": 10437,
-        "purchase": 242
+        "purchase": 242,
+        "imp_uv": 58260,
+        "pdp_uv": 3779,
+        "buy_uv": 242
       },
       {
         "dt": "2026-04-27",
@@ -2506,7 +3277,10 @@
         "qty": 581,
         "imp": 347737,
         "pdp": 10820,
-        "purchase": 342
+        "purchase": 342,
+        "imp_uv": 51650,
+        "pdp_uv": 3494,
+        "buy_uv": 338
       },
       {
         "dt": "2026-04-28",
@@ -2529,7 +3303,10 @@
         "qty": 106,
         "imp": 150551,
         "pdp": 4607,
-        "purchase": 77
+        "purchase": 77,
+        "imp_uv": 27636,
+        "pdp_uv": 1911,
+        "buy_uv": 77
       },
       {
         "dt": "2026-02-02",
@@ -2538,7 +3315,10 @@
         "qty": 153,
         "imp": 231411,
         "pdp": 5349,
-        "purchase": 115
+        "purchase": 115,
+        "imp_uv": 56947,
+        "pdp_uv": 2328,
+        "buy_uv": 114
       },
       {
         "dt": "2026-02-03",
@@ -2547,7 +3327,10 @@
         "qty": 276,
         "imp": 250842,
         "pdp": 6483,
-        "purchase": 190
+        "purchase": 190,
+        "imp_uv": 53956,
+        "pdp_uv": 2509,
+        "buy_uv": 189
       },
       {
         "dt": "2026-02-04",
@@ -2556,7 +3339,10 @@
         "qty": 157,
         "imp": 241457,
         "pdp": 5738,
-        "purchase": 110
+        "purchase": 110,
+        "imp_uv": 57943,
+        "pdp_uv": 2531,
+        "buy_uv": 110
       },
       {
         "dt": "2026-02-05",
@@ -2565,7 +3351,10 @@
         "qty": 146,
         "imp": 241107,
         "pdp": 5555,
-        "purchase": 95
+        "purchase": 95,
+        "imp_uv": 55855,
+        "pdp_uv": 2400,
+        "buy_uv": 94
       },
       {
         "dt": "2026-02-06",
@@ -2574,7 +3363,10 @@
         "qty": 140,
         "imp": 248046,
         "pdp": 5229,
-        "purchase": 90
+        "purchase": 90,
+        "imp_uv": 56475,
+        "pdp_uv": 2277,
+        "buy_uv": 90
       },
       {
         "dt": "2026-02-07",
@@ -2583,7 +3375,10 @@
         "qty": 145,
         "imp": 220418,
         "pdp": 5138,
-        "purchase": 102
+        "purchase": 102,
+        "imp_uv": 51539,
+        "pdp_uv": 2274,
+        "buy_uv": 100
       },
       {
         "dt": "2026-02-08",
@@ -2592,7 +3387,10 @@
         "qty": 163,
         "imp": 253786,
         "pdp": 6240,
-        "purchase": 116
+        "purchase": 116,
+        "imp_uv": 57132,
+        "pdp_uv": 2753,
+        "buy_uv": 115
       },
       {
         "dt": "2026-02-09",
@@ -2601,7 +3399,10 @@
         "qty": 191,
         "imp": 233636,
         "pdp": 6152,
-        "purchase": 141
+        "purchase": 141,
+        "imp_uv": 42401,
+        "pdp_uv": 2405,
+        "buy_uv": 141
       },
       {
         "dt": "2026-02-10",
@@ -2610,7 +3411,10 @@
         "qty": 212,
         "imp": 223986,
         "pdp": 5942,
-        "purchase": 140
+        "purchase": 140,
+        "imp_uv": 42449,
+        "pdp_uv": 2369,
+        "buy_uv": 139
       },
       {
         "dt": "2026-02-11",
@@ -2619,7 +3423,10 @@
         "qty": 210,
         "imp": 216277,
         "pdp": 5499,
-        "purchase": 150
+        "purchase": 150,
+        "imp_uv": 42444,
+        "pdp_uv": 2277,
+        "buy_uv": 150
       },
       {
         "dt": "2026-02-12",
@@ -2628,7 +3435,10 @@
         "qty": 232,
         "imp": 211203,
         "pdp": 5634,
-        "purchase": 169
+        "purchase": 169,
+        "imp_uv": 38149,
+        "pdp_uv": 2355,
+        "buy_uv": 166
       },
       {
         "dt": "2026-02-13",
@@ -2637,7 +3447,10 @@
         "qty": 113,
         "imp": 188840,
         "pdp": 4832,
-        "purchase": 80
+        "purchase": 80,
+        "imp_uv": 37295,
+        "pdp_uv": 2092,
+        "buy_uv": 80
       },
       {
         "dt": "2026-02-14",
@@ -2646,7 +3459,10 @@
         "qty": 91,
         "imp": 177323,
         "pdp": 4537,
-        "purchase": 64
+        "purchase": 64,
+        "imp_uv": 37139,
+        "pdp_uv": 2018,
+        "buy_uv": 64
       },
       {
         "dt": "2026-02-15",
@@ -2655,7 +3471,10 @@
         "qty": 118,
         "imp": 211524,
         "pdp": 5479,
-        "purchase": 77
+        "purchase": 77,
+        "imp_uv": 41589,
+        "pdp_uv": 2357,
+        "buy_uv": 77
       },
       {
         "dt": "2026-02-16",
@@ -2664,7 +3483,10 @@
         "qty": 101,
         "imp": 209473,
         "pdp": 5249,
-        "purchase": 74
+        "purchase": 74,
+        "imp_uv": 42308,
+        "pdp_uv": 2312,
+        "buy_uv": 74
       },
       {
         "dt": "2026-02-17",
@@ -2673,7 +3495,10 @@
         "qty": 166,
         "imp": 225912,
         "pdp": 5925,
-        "purchase": 114
+        "purchase": 114,
+        "imp_uv": 44821,
+        "pdp_uv": 2510,
+        "buy_uv": 111
       },
       {
         "dt": "2026-02-18",
@@ -2682,7 +3507,10 @@
         "qty": 262,
         "imp": 284446,
         "pdp": 8128,
-        "purchase": 186
+        "purchase": 186,
+        "imp_uv": 51680,
+        "pdp_uv": 3069,
+        "buy_uv": 186
       },
       {
         "dt": "2026-02-19",
@@ -2691,7 +3519,10 @@
         "qty": 295,
         "imp": 297951,
         "pdp": 8391,
-        "purchase": 210
+        "purchase": 210,
+        "imp_uv": 56656,
+        "pdp_uv": 3064,
+        "buy_uv": 206
       },
       {
         "dt": "2026-02-20",
@@ -2700,7 +3531,10 @@
         "qty": 274,
         "imp": 267739,
         "pdp": 7424,
-        "purchase": 189
+        "purchase": 189,
+        "imp_uv": 52859,
+        "pdp_uv": 2947,
+        "buy_uv": 188
       },
       {
         "dt": "2026-02-21",
@@ -2709,7 +3543,10 @@
         "qty": 193,
         "imp": 274980,
         "pdp": 7411,
-        "purchase": 137
+        "purchase": 137,
+        "imp_uv": 57501,
+        "pdp_uv": 3052,
+        "buy_uv": 137
       },
       {
         "dt": "2026-02-22",
@@ -2718,7 +3555,10 @@
         "qty": 376,
         "imp": 343907,
         "pdp": 10409,
-        "purchase": 248
+        "purchase": 248,
+        "imp_uv": 60427,
+        "pdp_uv": 3783,
+        "buy_uv": 246
       },
       {
         "dt": "2026-02-23",
@@ -2727,7 +3567,10 @@
         "qty": 689,
         "imp": 457496,
         "pdp": 13544,
-        "purchase": 507
+        "purchase": 507,
+        "imp_uv": 83621,
+        "pdp_uv": 4789,
+        "buy_uv": 499
       },
       {
         "dt": "2026-02-24",
@@ -2736,7 +3579,10 @@
         "qty": 381,
         "imp": 385452,
         "pdp": 11107,
-        "purchase": 267
+        "purchase": 267,
+        "imp_uv": 77497,
+        "pdp_uv": 4255,
+        "buy_uv": 266
       },
       {
         "dt": "2026-02-25",
@@ -2745,7 +3591,10 @@
         "qty": 431,
         "imp": 352147,
         "pdp": 10144,
-        "purchase": 291
+        "purchase": 291,
+        "imp_uv": 66904,
+        "pdp_uv": 3880,
+        "buy_uv": 288
       },
       {
         "dt": "2026-02-26",
@@ -2754,7 +3603,10 @@
         "qty": 276,
         "imp": 331291,
         "pdp": 8675,
-        "purchase": 210
+        "purchase": 210,
+        "imp_uv": 69527,
+        "pdp_uv": 3430,
+        "buy_uv": 210
       },
       {
         "dt": "2026-02-27",
@@ -2763,7 +3615,10 @@
         "qty": 205,
         "imp": 269748,
         "pdp": 7500,
-        "purchase": 149
+        "purchase": 149,
+        "imp_uv": 55682,
+        "pdp_uv": 3132,
+        "buy_uv": 148
       },
       {
         "dt": "2026-02-28",
@@ -2772,7 +3627,10 @@
         "qty": 173,
         "imp": 277615,
         "pdp": 7328,
-        "purchase": 125
+        "purchase": 125,
+        "imp_uv": 59969,
+        "pdp_uv": 3095,
+        "buy_uv": 124
       },
       {
         "dt": "2026-03-01",
@@ -2781,7 +3639,10 @@
         "qty": 323,
         "imp": 501033,
         "pdp": 12813,
-        "purchase": 238
+        "purchase": 238,
+        "imp_uv": 131286,
+        "pdp_uv": 5735,
+        "buy_uv": 232
       },
       {
         "dt": "2026-03-02",
@@ -2790,7 +3651,10 @@
         "qty": 267,
         "imp": 379321,
         "pdp": 10149,
-        "purchase": 190
+        "purchase": 190,
+        "imp_uv": 80130,
+        "pdp_uv": 4093,
+        "buy_uv": 189
       },
       {
         "dt": "2026-03-03",
@@ -2799,7 +3663,10 @@
         "qty": 251,
         "imp": 307386,
         "pdp": 8202,
-        "purchase": 196
+        "purchase": 196,
+        "imp_uv": 64913,
+        "pdp_uv": 3304,
+        "buy_uv": 195
       },
       {
         "dt": "2026-03-04",
@@ -2808,7 +3675,10 @@
         "qty": 223,
         "imp": 268366,
         "pdp": 7626,
-        "purchase": 162
+        "purchase": 162,
+        "imp_uv": 58460,
+        "pdp_uv": 3257,
+        "buy_uv": 160
       },
       {
         "dt": "2026-03-05",
@@ -2817,7 +3687,10 @@
         "qty": 250,
         "imp": 340837,
         "pdp": 9916,
-        "purchase": 164
+        "purchase": 164,
+        "imp_uv": 82306,
+        "pdp_uv": 4665,
+        "buy_uv": 163
       },
       {
         "dt": "2026-03-06",
@@ -2826,7 +3699,10 @@
         "qty": 153,
         "imp": 220331,
         "pdp": 6237,
-        "purchase": 115
+        "purchase": 115,
+        "imp_uv": 53483,
+        "pdp_uv": 2889,
+        "buy_uv": 115
       },
       {
         "dt": "2026-03-07",
@@ -2835,7 +3711,10 @@
         "qty": 158,
         "imp": 272293,
         "pdp": 7823,
-        "purchase": 110
+        "purchase": 110,
+        "imp_uv": 66889,
+        "pdp_uv": 3565,
+        "buy_uv": 110
       },
       {
         "dt": "2026-03-08",
@@ -2844,7 +3723,10 @@
         "qty": 389,
         "imp": 629808,
         "pdp": 16576,
-        "purchase": 265
+        "purchase": 265,
+        "imp_uv": 174534,
+        "pdp_uv": 7263,
+        "buy_uv": 263
       },
       {
         "dt": "2026-03-09",
@@ -2853,7 +3735,10 @@
         "qty": 129,
         "imp": 244004,
         "pdp": 7187,
-        "purchase": 99
+        "purchase": 99,
+        "imp_uv": 54912,
+        "pdp_uv": 3197,
+        "buy_uv": 97
       },
       {
         "dt": "2026-03-10",
@@ -2862,7 +3747,10 @@
         "qty": 243,
         "imp": 235214,
         "pdp": 7359,
-        "purchase": 187
+        "purchase": 187,
+        "imp_uv": 50328,
+        "pdp_uv": 3081,
+        "buy_uv": 186
       },
       {
         "dt": "2026-03-11",
@@ -2871,7 +3759,10 @@
         "qty": 147,
         "imp": 216947,
         "pdp": 5935,
-        "purchase": 111
+        "purchase": 111,
+        "imp_uv": 49633,
+        "pdp_uv": 2712,
+        "buy_uv": 111
       },
       {
         "dt": "2026-03-12",
@@ -2880,7 +3771,10 @@
         "qty": 121,
         "imp": 213230,
         "pdp": 5810,
-        "purchase": 94
+        "purchase": 94,
+        "imp_uv": 47928,
+        "pdp_uv": 2663,
+        "buy_uv": 94
       },
       {
         "dt": "2026-03-13",
@@ -2889,7 +3783,10 @@
         "qty": 119,
         "imp": 190350,
         "pdp": 4931,
-        "purchase": 84
+        "purchase": 84,
+        "imp_uv": 45991,
+        "pdp_uv": 2325,
+        "buy_uv": 84
       },
       {
         "dt": "2026-03-14",
@@ -2898,7 +3795,10 @@
         "qty": 115,
         "imp": 200665,
         "pdp": 5772,
-        "purchase": 82
+        "purchase": 82,
+        "imp_uv": 46910,
+        "pdp_uv": 2596,
+        "buy_uv": 81
       },
       {
         "dt": "2026-03-15",
@@ -2907,7 +3807,10 @@
         "qty": 148,
         "imp": 256989,
         "pdp": 6804,
-        "purchase": 109
+        "purchase": 109,
+        "imp_uv": 59441,
+        "pdp_uv": 2945,
+        "buy_uv": 109
       },
       {
         "dt": "2026-03-16",
@@ -2916,7 +3819,10 @@
         "qty": 309,
         "imp": 239905,
         "pdp": 7080,
-        "purchase": 213
+        "purchase": 213,
+        "imp_uv": 49562,
+        "pdp_uv": 3055,
+        "buy_uv": 209
       },
       {
         "dt": "2026-03-17",
@@ -2925,7 +3831,10 @@
         "qty": 141,
         "imp": 166768,
         "pdp": 6183,
-        "purchase": 88
+        "purchase": 88,
+        "imp_uv": 33630,
+        "pdp_uv": 2854,
+        "buy_uv": 86
       },
       {
         "dt": "2026-03-18",
@@ -2934,7 +3843,10 @@
         "qty": 206,
         "imp": 200256,
         "pdp": 5820,
-        "purchase": 120
+        "purchase": 120,
+        "imp_uv": 44175,
+        "pdp_uv": 2696,
+        "buy_uv": 120
       },
       {
         "dt": "2026-03-19",
@@ -2943,7 +3855,10 @@
         "qty": 141,
         "imp": 188087,
         "pdp": 5353,
-        "purchase": 105
+        "purchase": 105,
+        "imp_uv": 41016,
+        "pdp_uv": 2411,
+        "buy_uv": 105
       },
       {
         "dt": "2026-03-20",
@@ -2952,7 +3867,10 @@
         "qty": 112,
         "imp": 165092,
         "pdp": 4450,
-        "purchase": 79
+        "purchase": 79,
+        "imp_uv": 39577,
+        "pdp_uv": 2086,
+        "buy_uv": 79
       },
       {
         "dt": "2026-03-21",
@@ -2961,7 +3879,10 @@
         "qty": 131,
         "imp": 190392,
         "pdp": 5378,
-        "purchase": 87
+        "purchase": 87,
+        "imp_uv": 43479,
+        "pdp_uv": 2649,
+        "buy_uv": 87
       },
       {
         "dt": "2026-03-22",
@@ -2970,7 +3891,10 @@
         "qty": 157,
         "imp": 237812,
         "pdp": 6670,
-        "purchase": 119
+        "purchase": 119,
+        "imp_uv": 49727,
+        "pdp_uv": 3018,
+        "buy_uv": 119
       },
       {
         "dt": "2026-03-23",
@@ -2979,7 +3903,10 @@
         "qty": 191,
         "imp": 235821,
         "pdp": 7025,
-        "purchase": 142
+        "purchase": 142,
+        "imp_uv": 43989,
+        "pdp_uv": 2877,
+        "buy_uv": 140
       },
       {
         "dt": "2026-03-24",
@@ -2988,7 +3915,10 @@
         "qty": 171,
         "imp": 208651,
         "pdp": 5771,
-        "purchase": 118
+        "purchase": 118,
+        "imp_uv": 44561,
+        "pdp_uv": 2451,
+        "buy_uv": 116
       },
       {
         "dt": "2026-03-25",
@@ -2997,7 +3927,10 @@
         "qty": 168,
         "imp": 205355,
         "pdp": 5961,
-        "purchase": 125
+        "purchase": 125,
+        "imp_uv": 44961,
+        "pdp_uv": 2649,
+        "buy_uv": 125
       },
       {
         "dt": "2026-03-26",
@@ -3006,7 +3939,10 @@
         "qty": 155,
         "imp": 209134,
         "pdp": 5795,
-        "purchase": 108
+        "purchase": 108,
+        "imp_uv": 44839,
+        "pdp_uv": 2579,
+        "buy_uv": 108
       },
       {
         "dt": "2026-03-27",
@@ -3015,7 +3951,10 @@
         "qty": 108,
         "imp": 201857,
         "pdp": 5347,
-        "purchase": 70
+        "purchase": 70,
+        "imp_uv": 45392,
+        "pdp_uv": 2598,
+        "buy_uv": 70
       },
       {
         "dt": "2026-03-28",
@@ -3024,7 +3963,10 @@
         "qty": 95,
         "imp": 195083,
         "pdp": 5250,
-        "purchase": 68
+        "purchase": 68,
+        "imp_uv": 44704,
+        "pdp_uv": 2644,
+        "buy_uv": 68
       },
       {
         "dt": "2026-03-29",
@@ -3033,7 +3975,10 @@
         "qty": 158,
         "imp": 227808,
         "pdp": 6457,
-        "purchase": 111
+        "purchase": 111,
+        "imp_uv": 47183,
+        "pdp_uv": 2974,
+        "buy_uv": 110
       },
       {
         "dt": "2026-03-30",
@@ -3042,7 +3987,10 @@
         "qty": 258,
         "imp": 243613,
         "pdp": 7329,
-        "purchase": 183
+        "purchase": 183,
+        "imp_uv": 46505,
+        "pdp_uv": 2979,
+        "buy_uv": 179
       },
       {
         "dt": "2026-03-31",
@@ -3051,7 +3999,10 @@
         "qty": 100,
         "imp": 205128,
         "pdp": 5794,
-        "purchase": 72
+        "purchase": 72,
+        "imp_uv": 43608,
+        "pdp_uv": 2522,
+        "buy_uv": 71
       },
       {
         "dt": "2026-04-01",
@@ -3060,7 +4011,10 @@
         "qty": 128,
         "imp": 219769,
         "pdp": 5883,
-        "purchase": 95
+        "purchase": 95,
+        "imp_uv": 49386,
+        "pdp_uv": 2716,
+        "buy_uv": 93
       },
       {
         "dt": "2026-04-02",
@@ -3069,7 +4023,10 @@
         "qty": 101,
         "imp": 198425,
         "pdp": 5230,
-        "purchase": 67
+        "purchase": 67,
+        "imp_uv": 42592,
+        "pdp_uv": 2518,
+        "buy_uv": 67
       },
       {
         "dt": "2026-04-03",
@@ -3078,7 +4035,10 @@
         "qty": 64,
         "imp": 143198,
         "pdp": 3867,
-        "purchase": 48
+        "purchase": 48,
+        "imp_uv": 35933,
+        "pdp_uv": 2048,
+        "buy_uv": 47
       },
       {
         "dt": "2026-04-04",
@@ -3087,7 +4047,10 @@
         "qty": 46,
         "imp": 126689,
         "pdp": 3718,
-        "purchase": 32
+        "purchase": 32,
+        "imp_uv": 31752,
+        "pdp_uv": 2009,
+        "buy_uv": 32
       },
       {
         "dt": "2026-04-05",
@@ -3096,7 +4059,10 @@
         "qty": 60,
         "imp": 183461,
         "pdp": 4785,
-        "purchase": 51
+        "purchase": 51,
+        "imp_uv": 41440,
+        "pdp_uv": 2360,
+        "buy_uv": 51
       },
       {
         "dt": "2026-04-06",
@@ -3105,7 +4071,10 @@
         "qty": 129,
         "imp": 213392,
         "pdp": 5775,
-        "purchase": 109
+        "purchase": 109,
+        "imp_uv": 41480,
+        "pdp_uv": 2383,
+        "buy_uv": 107
       },
       {
         "dt": "2026-04-07",
@@ -3114,7 +4083,10 @@
         "qty": 105,
         "imp": 202058,
         "pdp": 5069,
-        "purchase": 78
+        "purchase": 78,
+        "imp_uv": 43957,
+        "pdp_uv": 2207,
+        "buy_uv": 78
       },
       {
         "dt": "2026-04-08",
@@ -3123,7 +4095,10 @@
         "qty": 102,
         "imp": 182006,
         "pdp": 4919,
-        "purchase": 71
+        "purchase": 71,
+        "imp_uv": 39344,
+        "pdp_uv": 2304,
+        "buy_uv": 71
       },
       {
         "dt": "2026-04-09",
@@ -3132,7 +4107,10 @@
         "qty": 76,
         "imp": 181296,
         "pdp": 4533,
-        "purchase": 58
+        "purchase": 58,
+        "imp_uv": 41391,
+        "pdp_uv": 2106,
+        "buy_uv": 58
       },
       {
         "dt": "2026-04-10",
@@ -3141,7 +4119,10 @@
         "qty": 92,
         "imp": 179475,
         "pdp": 4113,
-        "purchase": 63
+        "purchase": 63,
+        "imp_uv": 42855,
+        "pdp_uv": 1852,
+        "buy_uv": 63
       },
       {
         "dt": "2026-04-11",
@@ -3150,7 +4131,10 @@
         "qty": 70,
         "imp": 177827,
         "pdp": 4436,
-        "purchase": 47
+        "purchase": 47,
+        "imp_uv": 42295,
+        "pdp_uv": 2163,
+        "buy_uv": 47
       },
       {
         "dt": "2026-04-12",
@@ -3159,7 +4143,10 @@
         "qty": 262,
         "imp": 233898,
         "pdp": 7114,
-        "purchase": 175
+        "purchase": 175,
+        "imp_uv": 44547,
+        "pdp_uv": 3027,
+        "buy_uv": 175
       },
       {
         "dt": "2026-04-13",
@@ -3168,7 +4155,10 @@
         "qty": 85,
         "imp": 208537,
         "pdp": 5326,
-        "purchase": 61
+        "purchase": 61,
+        "imp_uv": 45127,
+        "pdp_uv": 2543,
+        "buy_uv": 60
       },
       {
         "dt": "2026-04-14",
@@ -3177,7 +4167,10 @@
         "qty": 97,
         "imp": 192396,
         "pdp": 4661,
-        "purchase": 61
+        "purchase": 61,
+        "imp_uv": 42706,
+        "pdp_uv": 2268,
+        "buy_uv": 61
       },
       {
         "dt": "2026-04-15",
@@ -3186,7 +4179,10 @@
         "qty": 74,
         "imp": 172788,
         "pdp": 4775,
-        "purchase": 52
+        "purchase": 52,
+        "imp_uv": 37707,
+        "pdp_uv": 2322,
+        "buy_uv": 52
       },
       {
         "dt": "2026-04-16",
@@ -3195,7 +4191,10 @@
         "qty": 75,
         "imp": 150001,
         "pdp": 4478,
-        "purchase": 46
+        "purchase": 46,
+        "imp_uv": 32810,
+        "pdp_uv": 2329,
+        "buy_uv": 45
       },
       {
         "dt": "2026-04-17",
@@ -3204,7 +4203,10 @@
         "qty": 63,
         "imp": 144288,
         "pdp": 3898,
-        "purchase": 46
+        "purchase": 46,
+        "imp_uv": 34156,
+        "pdp_uv": 2002,
+        "buy_uv": 46
       },
       {
         "dt": "2026-04-18",
@@ -3213,7 +4215,10 @@
         "qty": 77,
         "imp": 149844,
         "pdp": 4196,
-        "purchase": 54
+        "purchase": 54,
+        "imp_uv": 33996,
+        "pdp_uv": 2045,
+        "buy_uv": 54
       },
       {
         "dt": "2026-04-19",
@@ -3222,7 +4227,10 @@
         "qty": 192,
         "imp": 213921,
         "pdp": 8163,
-        "purchase": 148
+        "purchase": 148,
+        "imp_uv": 29920,
+        "pdp_uv": 3088,
+        "buy_uv": 146
       },
       {
         "dt": "2026-04-20",
@@ -3231,7 +4239,10 @@
         "qty": 56,
         "imp": 177903,
         "pdp": 5808,
-        "purchase": 48
+        "purchase": 48,
+        "imp_uv": 32364,
+        "pdp_uv": 2506,
+        "buy_uv": 48
       },
       {
         "dt": "2026-04-21",
@@ -3240,7 +4251,10 @@
         "qty": 102,
         "imp": 190522,
         "pdp": 5928,
-        "purchase": 71
+        "purchase": 71,
+        "imp_uv": 37261,
+        "pdp_uv": 2568,
+        "buy_uv": 71
       },
       {
         "dt": "2026-04-22",
@@ -3249,7 +4263,10 @@
         "qty": 62,
         "imp": 168146,
         "pdp": 4601,
-        "purchase": 45
+        "purchase": 45,
+        "imp_uv": 35437,
+        "pdp_uv": 1833,
+        "buy_uv": 45
       },
       {
         "dt": "2026-04-23",
@@ -3258,7 +4275,10 @@
         "qty": 104,
         "imp": 168611,
         "pdp": 4905,
-        "purchase": 88
+        "purchase": 88,
+        "imp_uv": 34236,
+        "pdp_uv": 2036,
+        "buy_uv": 87
       },
       {
         "dt": "2026-04-24",
@@ -3267,7 +4287,10 @@
         "qty": 46,
         "imp": 141893,
         "pdp": 3095,
-        "purchase": 36
+        "purchase": 36,
+        "imp_uv": 34266,
+        "pdp_uv": 1538,
+        "buy_uv": 36
       },
       {
         "dt": "2026-04-25",
@@ -3276,7 +4299,10 @@
         "qty": 37,
         "imp": 144910,
         "pdp": 3599,
-        "purchase": 27
+        "purchase": 27,
+        "imp_uv": 33757,
+        "pdp_uv": 1657,
+        "buy_uv": 27
       },
       {
         "dt": "2026-04-26",
@@ -3285,7 +4311,10 @@
         "qty": 75,
         "imp": 166965,
         "pdp": 4718,
-        "purchase": 58
+        "purchase": 58,
+        "imp_uv": 34015,
+        "pdp_uv": 2069,
+        "buy_uv": 58
       },
       {
         "dt": "2026-04-27",
@@ -3294,7 +4323,10 @@
         "qty": 72,
         "imp": 140505,
         "pdp": 4022,
-        "purchase": 53
+        "purchase": 53,
+        "imp_uv": 28613,
+        "pdp_uv": 1785,
+        "buy_uv": 53
       },
       {
         "dt": "2026-04-28",
@@ -3317,7 +4349,10 @@
         "qty": 40,
         "imp": 201287,
         "pdp": 3079,
-        "purchase": 28
+        "purchase": 28,
+        "imp_uv": 51719,
+        "pdp_uv": 1601,
+        "buy_uv": 28
       },
       {
         "dt": "2026-02-02",
@@ -3326,7 +4361,10 @@
         "qty": 38,
         "imp": 164193,
         "pdp": 2452,
-        "purchase": 26
+        "purchase": 26,
+        "imp_uv": 46944,
+        "pdp_uv": 1269,
+        "buy_uv": 26
       },
       {
         "dt": "2026-02-03",
@@ -3335,7 +4373,10 @@
         "qty": 38,
         "imp": 130733,
         "pdp": 2286,
-        "purchase": 34
+        "purchase": 34,
+        "imp_uv": 39303,
+        "pdp_uv": 1097,
+        "buy_uv": 34
       },
       {
         "dt": "2026-02-04",
@@ -3344,7 +4385,10 @@
         "qty": 61,
         "imp": 138647,
         "pdp": 2315,
-        "purchase": 36
+        "purchase": 36,
+        "imp_uv": 41960,
+        "pdp_uv": 1147,
+        "buy_uv": 35
       },
       {
         "dt": "2026-02-05",
@@ -3353,7 +4397,10 @@
         "qty": 50,
         "imp": 128863,
         "pdp": 1944,
-        "purchase": 29
+        "purchase": 29,
+        "imp_uv": 29258,
+        "pdp_uv": 976,
+        "buy_uv": 29
       },
       {
         "dt": "2026-02-06",
@@ -3362,7 +4409,10 @@
         "qty": 23,
         "imp": 103356,
         "pdp": 1690,
-        "purchase": 15
+        "purchase": 15,
+        "imp_uv": 25345,
+        "pdp_uv": 898,
+        "buy_uv": 15
       },
       {
         "dt": "2026-02-07",
@@ -3371,7 +4421,10 @@
         "qty": 31,
         "imp": 99164,
         "pdp": 1873,
-        "purchase": 18
+        "purchase": 18,
+        "imp_uv": 23449,
+        "pdp_uv": 950,
+        "buy_uv": 18
       },
       {
         "dt": "2026-02-08",
@@ -3380,7 +4433,10 @@
         "qty": 66,
         "imp": 139162,
         "pdp": 2759,
-        "purchase": 47
+        "purchase": 47,
+        "imp_uv": 27782,
+        "pdp_uv": 1349,
+        "buy_uv": 47
       },
       {
         "dt": "2026-02-09",
@@ -3389,7 +4445,10 @@
         "qty": 43,
         "imp": 105327,
         "pdp": 2103,
-        "purchase": 33
+        "purchase": 33,
+        "imp_uv": 22187,
+        "pdp_uv": 1017,
+        "buy_uv": 33
       },
       {
         "dt": "2026-02-10",
@@ -3398,7 +4457,10 @@
         "qty": 51,
         "imp": 115484,
         "pdp": 2275,
-        "purchase": 32
+        "purchase": 32,
+        "imp_uv": 23419,
+        "pdp_uv": 1110,
+        "buy_uv": 32
       },
       {
         "dt": "2026-02-11",
@@ -3407,7 +4469,10 @@
         "qty": 40,
         "imp": 126754,
         "pdp": 2119,
-        "purchase": 23
+        "purchase": 23,
+        "imp_uv": 25488,
+        "pdp_uv": 1079,
+        "buy_uv": 23
       },
       {
         "dt": "2026-02-12",
@@ -3416,7 +4481,10 @@
         "qty": 34,
         "imp": 107536,
         "pdp": 2059,
-        "purchase": 19
+        "purchase": 19,
+        "imp_uv": 23151,
+        "pdp_uv": 1133,
+        "buy_uv": 19
       },
       {
         "dt": "2026-02-13",
@@ -3425,7 +4493,10 @@
         "qty": 19,
         "imp": 92265,
         "pdp": 1621,
-        "purchase": 13
+        "purchase": 13,
+        "imp_uv": 25594,
+        "pdp_uv": 866,
+        "buy_uv": 13
       },
       {
         "dt": "2026-02-14",
@@ -3434,7 +4505,10 @@
         "qty": 29,
         "imp": 101226,
         "pdp": 1875,
-        "purchase": 16
+        "purchase": 16,
+        "imp_uv": 32209,
+        "pdp_uv": 988,
+        "buy_uv": 16
       },
       {
         "dt": "2026-02-15",
@@ -3443,7 +4517,10 @@
         "qty": 21,
         "imp": 116389,
         "pdp": 2192,
-        "purchase": 14
+        "purchase": 14,
+        "imp_uv": 34754,
+        "pdp_uv": 1181,
+        "buy_uv": 14
       },
       {
         "dt": "2026-02-16",
@@ -3452,7 +4529,10 @@
         "qty": 58,
         "imp": 153109,
         "pdp": 2885,
-        "purchase": 40
+        "purchase": 40,
+        "imp_uv": 47794,
+        "pdp_uv": 1387,
+        "buy_uv": 40
       },
       {
         "dt": "2026-02-17",
@@ -3461,7 +4541,10 @@
         "qty": 46,
         "imp": 156464,
         "pdp": 2693,
-        "purchase": 28
+        "purchase": 28,
+        "imp_uv": 49320,
+        "pdp_uv": 1390,
+        "buy_uv": 28
       },
       {
         "dt": "2026-02-18",
@@ -3470,7 +4553,10 @@
         "qty": 50,
         "imp": 197311,
         "pdp": 3877,
-        "purchase": 28
+        "purchase": 28,
+        "imp_uv": 56718,
+        "pdp_uv": 2026,
+        "buy_uv": 27
       },
       {
         "dt": "2026-02-19",
@@ -3479,7 +4565,10 @@
         "qty": 55,
         "imp": 157244,
         "pdp": 3527,
-        "purchase": 26
+        "purchase": 26,
+        "imp_uv": 41398,
+        "pdp_uv": 1890,
+        "buy_uv": 26
       },
       {
         "dt": "2026-02-20",
@@ -3488,7 +4577,10 @@
         "qty": 22,
         "imp": 135408,
         "pdp": 2622,
-        "purchase": 24
+        "purchase": 24,
+        "imp_uv": 40211,
+        "pdp_uv": 1416,
+        "buy_uv": 24
       },
       {
         "dt": "2026-02-21",
@@ -3497,7 +4589,10 @@
         "qty": 32,
         "imp": 147803,
         "pdp": 2831,
-        "purchase": 22
+        "purchase": 22,
+        "imp_uv": 45198,
+        "pdp_uv": 1508,
+        "buy_uv": 22
       },
       {
         "dt": "2026-02-22",
@@ -3506,7 +4601,10 @@
         "qty": 44,
         "imp": 166365,
         "pdp": 3542,
-        "purchase": 25
+        "purchase": 25,
+        "imp_uv": 44826,
+        "pdp_uv": 1812,
+        "buy_uv": 25
       },
       {
         "dt": "2026-02-23",
@@ -3515,7 +4613,10 @@
         "qty": 75,
         "imp": 180378,
         "pdp": 4127,
-        "purchase": 41
+        "purchase": 41,
+        "imp_uv": 48722,
+        "pdp_uv": 2022,
+        "buy_uv": 41
       },
       {
         "dt": "2026-02-24",
@@ -3524,7 +4625,10 @@
         "qty": 65,
         "imp": 181532,
         "pdp": 3967,
-        "purchase": 45
+        "purchase": 45,
+        "imp_uv": 52933,
+        "pdp_uv": 1936,
+        "buy_uv": 45
       },
       {
         "dt": "2026-02-25",
@@ -3533,7 +4637,10 @@
         "qty": 285,
         "imp": 291553,
         "pdp": 8894,
-        "purchase": 169
+        "purchase": 169,
+        "imp_uv": 68657,
+        "pdp_uv": 3402,
+        "buy_uv": 169
       },
       {
         "dt": "2026-02-26",
@@ -3542,7 +4649,10 @@
         "qty": 55,
         "imp": 136828,
         "pdp": 3297,
-        "purchase": 35
+        "purchase": 35,
+        "imp_uv": 32259,
+        "pdp_uv": 1597,
+        "buy_uv": 35
       },
       {
         "dt": "2026-02-27",
@@ -3551,7 +4661,10 @@
         "qty": 25,
         "imp": 113998,
         "pdp": 2557,
-        "purchase": 20
+        "purchase": 20,
+        "imp_uv": 29460,
+        "pdp_uv": 1438,
+        "buy_uv": 20
       },
       {
         "dt": "2026-02-28",
@@ -3560,7 +4673,10 @@
         "qty": 41,
         "imp": 118706,
         "pdp": 2762,
-        "purchase": 26
+        "purchase": 26,
+        "imp_uv": 29466,
+        "pdp_uv": 1358,
+        "buy_uv": 26
       },
       {
         "dt": "2026-03-01",
@@ -3569,7 +4685,10 @@
         "qty": 65,
         "imp": 141525,
         "pdp": 3196,
-        "purchase": 40
+        "purchase": 40,
+        "imp_uv": 34302,
+        "pdp_uv": 1551,
+        "buy_uv": 40
       },
       {
         "dt": "2026-03-02",
@@ -3578,7 +4697,10 @@
         "qty": 63,
         "imp": 191680,
         "pdp": 3880,
-        "purchase": 42
+        "purchase": 42,
+        "imp_uv": 60113,
+        "pdp_uv": 1840,
+        "buy_uv": 42
       },
       {
         "dt": "2026-03-03",
@@ -3587,7 +4709,10 @@
         "qty": 45,
         "imp": 140118,
         "pdp": 2886,
-        "purchase": 32
+        "purchase": 32,
+        "imp_uv": 46889,
+        "pdp_uv": 1400,
+        "buy_uv": 32
       },
       {
         "dt": "2026-03-04",
@@ -3596,7 +4721,10 @@
         "qty": 59,
         "imp": 123662,
         "pdp": 2494,
-        "purchase": 39
+        "purchase": 39,
+        "imp_uv": 40804,
+        "pdp_uv": 1255,
+        "buy_uv": 39
       },
       {
         "dt": "2026-03-05",
@@ -3605,7 +4733,10 @@
         "qty": 38,
         "imp": 89896,
         "pdp": 2063,
-        "purchase": 25
+        "purchase": 25,
+        "imp_uv": 25442,
+        "pdp_uv": 1094,
+        "buy_uv": 25
       },
       {
         "dt": "2026-03-06",
@@ -3614,7 +4745,10 @@
         "qty": 28,
         "imp": 69483,
         "pdp": 1665,
-        "purchase": 23
+        "purchase": 23,
+        "imp_uv": 19339,
+        "pdp_uv": 832,
+        "buy_uv": 23
       },
       {
         "dt": "2026-03-07",
@@ -3623,7 +4757,10 @@
         "qty": 29,
         "imp": 78067,
         "pdp": 2034,
-        "purchase": 23
+        "purchase": 23,
+        "imp_uv": 21051,
+        "pdp_uv": 1015,
+        "buy_uv": 23
       },
       {
         "dt": "2026-03-08",
@@ -3632,7 +4769,10 @@
         "qty": 134,
         "imp": 142478,
         "pdp": 3908,
-        "purchase": 89
+        "purchase": 89,
+        "imp_uv": 31668,
+        "pdp_uv": 1674,
+        "buy_uv": 89
       },
       {
         "dt": "2026-03-09",
@@ -3641,7 +4781,10 @@
         "qty": 42,
         "imp": 83994,
         "pdp": 1999,
-        "purchase": 27
+        "purchase": 27,
+        "imp_uv": 24148,
+        "pdp_uv": 950,
+        "buy_uv": 27
       },
       {
         "dt": "2026-03-10",
@@ -3650,7 +4793,10 @@
         "qty": 58,
         "imp": 82973,
         "pdp": 2005,
-        "purchase": 30
+        "purchase": 30,
+        "imp_uv": 22490,
+        "pdp_uv": 1019,
+        "buy_uv": 30
       },
       {
         "dt": "2026-03-11",
@@ -3659,7 +4805,10 @@
         "qty": 32,
         "imp": 77304,
         "pdp": 1940,
-        "purchase": 24
+        "purchase": 24,
+        "imp_uv": 20759,
+        "pdp_uv": 971,
+        "buy_uv": 24
       },
       {
         "dt": "2026-03-12",
@@ -3668,7 +4817,10 @@
         "qty": 31,
         "imp": 65945,
         "pdp": 1717,
-        "purchase": 20
+        "purchase": 20,
+        "imp_uv": 17813,
+        "pdp_uv": 842,
+        "buy_uv": 20
       },
       {
         "dt": "2026-03-13",
@@ -3677,7 +4829,10 @@
         "qty": 22,
         "imp": 63693,
         "pdp": 1571,
-        "purchase": 14
+        "purchase": 14,
+        "imp_uv": 17866,
+        "pdp_uv": 820,
+        "buy_uv": 14
       },
       {
         "dt": "2026-03-14",
@@ -3686,7 +4841,10 @@
         "qty": 27,
         "imp": 66730,
         "pdp": 1677,
-        "purchase": 15
+        "purchase": 15,
+        "imp_uv": 19059,
+        "pdp_uv": 916,
+        "buy_uv": 15
       },
       {
         "dt": "2026-03-15",
@@ -3695,7 +4853,10 @@
         "qty": 61,
         "imp": 113113,
         "pdp": 3201,
-        "purchase": 46
+        "purchase": 46,
+        "imp_uv": 27256,
+        "pdp_uv": 1640,
+        "buy_uv": 46
       },
       {
         "dt": "2026-03-16",
@@ -3704,7 +4865,10 @@
         "qty": 38,
         "imp": 81013,
         "pdp": 2183,
-        "purchase": 15
+        "purchase": 15,
+        "imp_uv": 20058,
+        "pdp_uv": 1176,
+        "buy_uv": 15
       },
       {
         "dt": "2026-03-17",
@@ -3713,7 +4877,10 @@
         "qty": 30,
         "imp": 75038,
         "pdp": 2252,
-        "purchase": 18
+        "purchase": 18,
+        "imp_uv": 16806,
+        "pdp_uv": 1139,
+        "buy_uv": 18
       },
       {
         "dt": "2026-03-18",
@@ -3722,7 +4889,10 @@
         "qty": 41,
         "imp": 89558,
         "pdp": 2537,
-        "purchase": 26
+        "purchase": 26,
+        "imp_uv": 18974,
+        "pdp_uv": 1362,
+        "buy_uv": 26
       },
       {
         "dt": "2026-03-19",
@@ -3731,7 +4901,10 @@
         "qty": 35,
         "imp": 67217,
         "pdp": 1787,
-        "purchase": 20
+        "purchase": 20,
+        "imp_uv": 16357,
+        "pdp_uv": 914,
+        "buy_uv": 20
       },
       {
         "dt": "2026-03-20",
@@ -3740,7 +4913,10 @@
         "qty": 40,
         "imp": 71003,
         "pdp": 1938,
-        "purchase": 25
+        "purchase": 25,
+        "imp_uv": 16950,
+        "pdp_uv": 999,
+        "buy_uv": 25
       },
       {
         "dt": "2026-03-21",
@@ -3749,7 +4925,10 @@
         "qty": 22,
         "imp": 75834,
         "pdp": 2054,
-        "purchase": 19
+        "purchase": 19,
+        "imp_uv": 17627,
+        "pdp_uv": 1054,
+        "buy_uv": 19
       },
       {
         "dt": "2026-03-22",
@@ -3758,7 +4937,10 @@
         "qty": 39,
         "imp": 100191,
         "pdp": 2722,
-        "purchase": 30
+        "purchase": 30,
+        "imp_uv": 21396,
+        "pdp_uv": 1365,
+        "buy_uv": 30
       },
       {
         "dt": "2026-03-23",
@@ -3767,7 +4949,10 @@
         "qty": 30,
         "imp": 89457,
         "pdp": 2206,
-        "purchase": 19
+        "purchase": 19,
+        "imp_uv": 24399,
+        "pdp_uv": 1023,
+        "buy_uv": 19
       },
       {
         "dt": "2026-03-24",
@@ -3776,7 +4961,10 @@
         "qty": 46,
         "imp": 84402,
         "pdp": 2126,
-        "purchase": 28
+        "purchase": 28,
+        "imp_uv": 23105,
+        "pdp_uv": 920,
+        "buy_uv": 28
       },
       {
         "dt": "2026-03-25",
@@ -3785,7 +4973,10 @@
         "qty": 35,
         "imp": 82524,
         "pdp": 2037,
-        "purchase": 19
+        "purchase": 19,
+        "imp_uv": 22217,
+        "pdp_uv": 989,
+        "buy_uv": 19
       },
       {
         "dt": "2026-03-26",
@@ -3794,7 +4985,10 @@
         "qty": 33,
         "imp": 56044,
         "pdp": 1697,
-        "purchase": 15
+        "purchase": 15,
+        "imp_uv": 13633,
+        "pdp_uv": 904,
+        "buy_uv": 15
       },
       {
         "dt": "2026-03-27",
@@ -3803,7 +4997,10 @@
         "qty": 13,
         "imp": 58036,
         "pdp": 1938,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 13714,
+        "pdp_uv": 1004,
+        "buy_uv": 9
       },
       {
         "dt": "2026-03-28",
@@ -3812,7 +5009,10 @@
         "qty": 13,
         "imp": 60187,
         "pdp": 1704,
-        "purchase": 12
+        "purchase": 12,
+        "imp_uv": 14788,
+        "pdp_uv": 928,
+        "buy_uv": 12
       },
       {
         "dt": "2026-03-29",
@@ -3821,7 +5021,10 @@
         "qty": 25,
         "imp": 84876,
         "pdp": 2589,
-        "purchase": 17
+        "purchase": 17,
+        "imp_uv": 18788,
+        "pdp_uv": 1353,
+        "buy_uv": 17
       },
       {
         "dt": "2026-03-30",
@@ -3830,7 +5033,10 @@
         "qty": 50,
         "imp": 88231,
         "pdp": 2738,
-        "purchase": 33
+        "purchase": 33,
+        "imp_uv": 18283,
+        "pdp_uv": 1457,
+        "buy_uv": 33
       },
       {
         "dt": "2026-03-31",
@@ -3839,7 +5045,10 @@
         "qty": 23,
         "imp": 68183,
         "pdp": 1948,
-        "purchase": 20
+        "purchase": 20,
+        "imp_uv": 15396,
+        "pdp_uv": 1001,
+        "buy_uv": 20
       },
       {
         "dt": "2026-04-01",
@@ -3848,7 +5057,10 @@
         "qty": 38,
         "imp": 81037,
         "pdp": 2754,
-        "purchase": 27
+        "purchase": 27,
+        "imp_uv": 17393,
+        "pdp_uv": 1496,
+        "buy_uv": 27
       },
       {
         "dt": "2026-04-02",
@@ -3857,7 +5069,10 @@
         "qty": 36,
         "imp": 108321,
         "pdp": 3592,
-        "purchase": 26
+        "purchase": 26,
+        "imp_uv": 24263,
+        "pdp_uv": 1816,
+        "buy_uv": 26
       },
       {
         "dt": "2026-04-03",
@@ -3866,7 +5081,10 @@
         "qty": 26,
         "imp": 73415,
         "pdp": 1874,
-        "purchase": 23
+        "purchase": 23,
+        "imp_uv": 20138,
+        "pdp_uv": 944,
+        "buy_uv": 23
       },
       {
         "dt": "2026-04-04",
@@ -3875,7 +5093,10 @@
         "qty": 31,
         "imp": 95142,
         "pdp": 3217,
-        "purchase": 22
+        "purchase": 22,
+        "imp_uv": 23061,
+        "pdp_uv": 1784,
+        "buy_uv": 22
       },
       {
         "dt": "2026-04-05",
@@ -3884,7 +5105,10 @@
         "qty": 50,
         "imp": 120080,
         "pdp": 4212,
-        "purchase": 25
+        "purchase": 25,
+        "imp_uv": 26958,
+        "pdp_uv": 2328,
+        "buy_uv": 25
       },
       {
         "dt": "2026-04-06",
@@ -3893,7 +5117,10 @@
         "qty": 30,
         "imp": 111065,
         "pdp": 3890,
-        "purchase": 23
+        "purchase": 23,
+        "imp_uv": 22114,
+        "pdp_uv": 2140,
+        "buy_uv": 23
       },
       {
         "dt": "2026-04-07",
@@ -3902,7 +5129,10 @@
         "qty": 23,
         "imp": 100224,
         "pdp": 3520,
-        "purchase": 17
+        "purchase": 17,
+        "imp_uv": 21550,
+        "pdp_uv": 1978,
+        "buy_uv": 17
       },
       {
         "dt": "2026-04-08",
@@ -3911,7 +5141,10 @@
         "qty": 49,
         "imp": 103881,
         "pdp": 3155,
-        "purchase": 23
+        "purchase": 23,
+        "imp_uv": 22940,
+        "pdp_uv": 1767,
+        "buy_uv": 23
       },
       {
         "dt": "2026-04-09",
@@ -3920,7 +5153,10 @@
         "qty": 30,
         "imp": 85047,
         "pdp": 2219,
-        "purchase": 16
+        "purchase": 16,
+        "imp_uv": 20041,
+        "pdp_uv": 1237,
+        "buy_uv": 16
       },
       {
         "dt": "2026-04-10",
@@ -3929,7 +5165,10 @@
         "qty": 26,
         "imp": 68676,
         "pdp": 1893,
-        "purchase": 18
+        "purchase": 18,
+        "imp_uv": 17065,
+        "pdp_uv": 1032,
+        "buy_uv": 18
       },
       {
         "dt": "2026-04-11",
@@ -3938,7 +5177,10 @@
         "qty": 39,
         "imp": 76656,
         "pdp": 2204,
-        "purchase": 22
+        "purchase": 22,
+        "imp_uv": 17850,
+        "pdp_uv": 1216,
+        "buy_uv": 22
       },
       {
         "dt": "2026-04-12",
@@ -3947,7 +5189,10 @@
         "qty": 41,
         "imp": 109514,
         "pdp": 3089,
-        "purchase": 32
+        "purchase": 32,
+        "imp_uv": 23298,
+        "pdp_uv": 1642,
+        "buy_uv": 32
       },
       {
         "dt": "2026-04-13",
@@ -3956,7 +5201,10 @@
         "qty": 38,
         "imp": 104648,
         "pdp": 3040,
-        "purchase": 24
+        "purchase": 24,
+        "imp_uv": 23404,
+        "pdp_uv": 1715,
+        "buy_uv": 24
       },
       {
         "dt": "2026-04-14",
@@ -3965,7 +5213,10 @@
         "qty": 16,
         "imp": 84415,
         "pdp": 2172,
-        "purchase": 10
+        "purchase": 10,
+        "imp_uv": 21554,
+        "pdp_uv": 1223,
+        "buy_uv": 10
       },
       {
         "dt": "2026-04-15",
@@ -3974,7 +5225,10 @@
         "qty": 24,
         "imp": 77588,
         "pdp": 2039,
-        "purchase": 18
+        "purchase": 18,
+        "imp_uv": 19020,
+        "pdp_uv": 1063,
+        "buy_uv": 18
       },
       {
         "dt": "2026-04-16",
@@ -3983,7 +5237,10 @@
         "qty": 30,
         "imp": 85045,
         "pdp": 2381,
-        "purchase": 18
+        "purchase": 18,
+        "imp_uv": 20219,
+        "pdp_uv": 1343,
+        "buy_uv": 18
       },
       {
         "dt": "2026-04-17",
@@ -3992,7 +5249,10 @@
         "qty": 17,
         "imp": 80609,
         "pdp": 2073,
-        "purchase": 13
+        "purchase": 13,
+        "imp_uv": 20051,
+        "pdp_uv": 1213,
+        "buy_uv": 13
       },
       {
         "dt": "2026-04-18",
@@ -4001,7 +5261,10 @@
         "qty": 23,
         "imp": 86737,
         "pdp": 2027,
-        "purchase": 18
+        "purchase": 18,
+        "imp_uv": 22822,
+        "pdp_uv": 1142,
+        "buy_uv": 17
       },
       {
         "dt": "2026-04-19",
@@ -4010,7 +5273,10 @@
         "qty": 56,
         "imp": 125337,
         "pdp": 2847,
-        "purchase": 37
+        "purchase": 37,
+        "imp_uv": 29112,
+        "pdp_uv": 1478,
+        "buy_uv": 37
       },
       {
         "dt": "2026-04-20",
@@ -4019,7 +5285,10 @@
         "qty": 45,
         "imp": 94299,
         "pdp": 2106,
-        "purchase": 26
+        "purchase": 26,
+        "imp_uv": 22685,
+        "pdp_uv": 1039,
+        "buy_uv": 26
       },
       {
         "dt": "2026-04-21",
@@ -4028,7 +5297,10 @@
         "qty": 28,
         "imp": 74165,
         "pdp": 1684,
-        "purchase": 17
+        "purchase": 17,
+        "imp_uv": 18595,
+        "pdp_uv": 892,
+        "buy_uv": 17
       },
       {
         "dt": "2026-04-22",
@@ -4037,7 +5309,10 @@
         "qty": 19,
         "imp": 69113,
         "pdp": 1630,
-        "purchase": 14
+        "purchase": 14,
+        "imp_uv": 17471,
+        "pdp_uv": 829,
+        "buy_uv": 14
       },
       {
         "dt": "2026-04-23",
@@ -4046,7 +5321,10 @@
         "qty": 18,
         "imp": 67609,
         "pdp": 1518,
-        "purchase": 13
+        "purchase": 13,
+        "imp_uv": 17893,
+        "pdp_uv": 831,
+        "buy_uv": 13
       },
       {
         "dt": "2026-04-24",
@@ -4055,7 +5333,10 @@
         "qty": 25,
         "imp": 74758,
         "pdp": 1737,
-        "purchase": 19
+        "purchase": 19,
+        "imp_uv": 18022,
+        "pdp_uv": 894,
+        "buy_uv": 19
       },
       {
         "dt": "2026-04-25",
@@ -4064,7 +5345,10 @@
         "qty": 35,
         "imp": 70198,
         "pdp": 1547,
-        "purchase": 17
+        "purchase": 17,
+        "imp_uv": 18835,
+        "pdp_uv": 858,
+        "buy_uv": 17
       },
       {
         "dt": "2026-04-26",
@@ -4073,7 +5357,10 @@
         "qty": 20,
         "imp": 94501,
         "pdp": 2122,
-        "purchase": 16
+        "purchase": 16,
+        "imp_uv": 23669,
+        "pdp_uv": 1082,
+        "buy_uv": 16
       },
       {
         "dt": "2026-04-27",
@@ -4082,7 +5369,10 @@
         "qty": 45,
         "imp": 78041,
         "pdp": 1888,
-        "purchase": 28
+        "purchase": 28,
+        "imp_uv": 19511,
+        "pdp_uv": 939,
+        "buy_uv": 28
       },
       {
         "dt": "2026-04-28",
@@ -4105,7 +5395,10 @@
         "qty": 25,
         "imp": 114452,
         "pdp": 1931,
-        "purchase": 15
+        "purchase": 15,
+        "imp_uv": 27496,
+        "pdp_uv": 999,
+        "buy_uv": 15
       },
       {
         "dt": "2026-02-02",
@@ -4114,7 +5407,10 @@
         "qty": 31,
         "imp": 117175,
         "pdp": 2110,
-        "purchase": 22
+        "purchase": 22,
+        "imp_uv": 25864,
+        "pdp_uv": 1030,
+        "buy_uv": 22
       },
       {
         "dt": "2026-02-03",
@@ -4123,7 +5419,10 @@
         "qty": 24,
         "imp": 94189,
         "pdp": 1869,
-        "purchase": 18
+        "purchase": 18,
+        "imp_uv": 21367,
+        "pdp_uv": 911,
+        "buy_uv": 18
       },
       {
         "dt": "2026-02-04",
@@ -4132,7 +5431,10 @@
         "qty": 15,
         "imp": 88488,
         "pdp": 1660,
-        "purchase": 15
+        "purchase": 15,
+        "imp_uv": 20605,
+        "pdp_uv": 892,
+        "buy_uv": 15
       },
       {
         "dt": "2026-02-05",
@@ -4141,7 +5443,10 @@
         "qty": 20,
         "imp": 102955,
         "pdp": 1640,
-        "purchase": 14
+        "purchase": 14,
+        "imp_uv": 23431,
+        "pdp_uv": 845,
+        "buy_uv": 14
       },
       {
         "dt": "2026-02-06",
@@ -4150,7 +5455,10 @@
         "qty": 17,
         "imp": 100578,
         "pdp": 1519,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 22270,
+        "pdp_uv": 804,
+        "buy_uv": 8
       },
       {
         "dt": "2026-02-07",
@@ -4159,7 +5467,10 @@
         "qty": 14,
         "imp": 81304,
         "pdp": 1504,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 20890,
+        "pdp_uv": 838,
+        "buy_uv": 9
       },
       {
         "dt": "2026-02-08",
@@ -4168,7 +5479,10 @@
         "qty": 25,
         "imp": 107254,
         "pdp": 1931,
-        "purchase": 13
+        "purchase": 13,
+        "imp_uv": 25147,
+        "pdp_uv": 1000,
+        "buy_uv": 13
       },
       {
         "dt": "2026-02-09",
@@ -4177,7 +5491,10 @@
         "qty": 26,
         "imp": 114358,
         "pdp": 2045,
-        "purchase": 20
+        "purchase": 20,
+        "imp_uv": 25081,
+        "pdp_uv": 1005,
+        "buy_uv": 20
       },
       {
         "dt": "2026-02-10",
@@ -4186,7 +5503,10 @@
         "qty": 24,
         "imp": 109838,
         "pdp": 1828,
-        "purchase": 15
+        "purchase": 15,
+        "imp_uv": 24590,
+        "pdp_uv": 953,
+        "buy_uv": 15
       },
       {
         "dt": "2026-02-11",
@@ -4195,7 +5515,10 @@
         "qty": 32,
         "imp": 118825,
         "pdp": 1961,
-        "purchase": 18
+        "purchase": 18,
+        "imp_uv": 26140,
+        "pdp_uv": 1030,
+        "buy_uv": 18
       },
       {
         "dt": "2026-02-12",
@@ -4204,7 +5527,10 @@
         "qty": 8,
         "imp": 86652,
         "pdp": 1561,
-        "purchase": 6
+        "purchase": 6,
+        "imp_uv": 20491,
+        "pdp_uv": 894,
+        "buy_uv": 6
       },
       {
         "dt": "2026-02-13",
@@ -4213,7 +5539,10 @@
         "qty": 7,
         "imp": 62774,
         "pdp": 1270,
-        "purchase": 7
+        "purchase": 7,
+        "imp_uv": 17954,
+        "pdp_uv": 691,
+        "buy_uv": 7
       },
       {
         "dt": "2026-02-14",
@@ -4222,7 +5551,10 @@
         "qty": 16,
         "imp": 71905,
         "pdp": 1650,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 17555,
+        "pdp_uv": 910,
+        "buy_uv": 8
       },
       {
         "dt": "2026-02-15",
@@ -4231,7 +5563,10 @@
         "qty": 17,
         "imp": 65676,
         "pdp": 1599,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 15665,
+        "pdp_uv": 858,
+        "buy_uv": 9
       },
       {
         "dt": "2026-02-16",
@@ -4240,7 +5575,10 @@
         "qty": 15,
         "imp": 73277,
         "pdp": 1804,
-        "purchase": 10
+        "purchase": 10,
+        "imp_uv": 17272,
+        "pdp_uv": 980,
+        "buy_uv": 10
       },
       {
         "dt": "2026-02-17",
@@ -4249,7 +5587,10 @@
         "qty": 26,
         "imp": 82975,
         "pdp": 2124,
-        "purchase": 19
+        "purchase": 19,
+        "imp_uv": 17752,
+        "pdp_uv": 1022,
+        "buy_uv": 19
       },
       {
         "dt": "2026-02-18",
@@ -4258,7 +5599,10 @@
         "qty": 37,
         "imp": 96287,
         "pdp": 2573,
-        "purchase": 24
+        "purchase": 24,
+        "imp_uv": 20426,
+        "pdp_uv": 1251,
+        "buy_uv": 24
       },
       {
         "dt": "2026-02-19",
@@ -4267,7 +5611,10 @@
         "qty": 50,
         "imp": 97632,
         "pdp": 2535,
-        "purchase": 33
+        "purchase": 33,
+        "imp_uv": 21355,
+        "pdp_uv": 1315,
+        "buy_uv": 33
       },
       {
         "dt": "2026-02-20",
@@ -4276,7 +5623,10 @@
         "qty": 26,
         "imp": 91008,
         "pdp": 2313,
-        "purchase": 22
+        "purchase": 22,
+        "imp_uv": 18843,
+        "pdp_uv": 1131,
+        "buy_uv": 22
       },
       {
         "dt": "2026-02-21",
@@ -4285,7 +5635,10 @@
         "qty": 44,
         "imp": 90905,
         "pdp": 2399,
-        "purchase": 26
+        "purchase": 26,
+        "imp_uv": 20305,
+        "pdp_uv": 1221,
+        "buy_uv": 26
       },
       {
         "dt": "2026-02-22",
@@ -4294,7 +5647,10 @@
         "qty": 43,
         "imp": 107253,
         "pdp": 3061,
-        "purchase": 26
+        "purchase": 26,
+        "imp_uv": 21422,
+        "pdp_uv": 1598,
+        "buy_uv": 26
       },
       {
         "dt": "2026-02-23",
@@ -4303,7 +5659,10 @@
         "qty": 51,
         "imp": 104447,
         "pdp": 3024,
-        "purchase": 44
+        "purchase": 44,
+        "imp_uv": 20023,
+        "pdp_uv": 1385,
+        "buy_uv": 44
       },
       {
         "dt": "2026-02-24",
@@ -4312,7 +5671,10 @@
         "qty": 55,
         "imp": 113969,
         "pdp": 3119,
-        "purchase": 42
+        "purchase": 42,
+        "imp_uv": 19904,
+        "pdp_uv": 1356,
+        "buy_uv": 40
       },
       {
         "dt": "2026-02-25",
@@ -4321,7 +5683,10 @@
         "qty": 33,
         "imp": 105023,
         "pdp": 2849,
-        "purchase": 24
+        "purchase": 24,
+        "imp_uv": 20704,
+        "pdp_uv": 1326,
+        "buy_uv": 24
       },
       {
         "dt": "2026-02-26",
@@ -4330,7 +5695,10 @@
         "qty": 37,
         "imp": 108148,
         "pdp": 2749,
-        "purchase": 23
+        "purchase": 23,
+        "imp_uv": 22961,
+        "pdp_uv": 1381,
+        "buy_uv": 23
       },
       {
         "dt": "2026-02-27",
@@ -4339,7 +5707,10 @@
         "qty": 26,
         "imp": 99049,
         "pdp": 2059,
-        "purchase": 19
+        "purchase": 19,
+        "imp_uv": 23814,
+        "pdp_uv": 1108,
+        "buy_uv": 19
       },
       {
         "dt": "2026-02-28",
@@ -4348,7 +5719,10 @@
         "qty": 20,
         "imp": 94896,
         "pdp": 2269,
-        "purchase": 14
+        "purchase": 14,
+        "imp_uv": 22801,
+        "pdp_uv": 1231,
+        "buy_uv": 14
       },
       {
         "dt": "2026-03-01",
@@ -4357,7 +5731,10 @@
         "qty": 31,
         "imp": 99770,
         "pdp": 2453,
-        "purchase": 20
+        "purchase": 20,
+        "imp_uv": 22763,
+        "pdp_uv": 1241,
+        "buy_uv": 20
       },
       {
         "dt": "2026-03-02",
@@ -4366,7 +5743,10 @@
         "qty": 45,
         "imp": 115217,
         "pdp": 3099,
-        "purchase": 33
+        "purchase": 33,
+        "imp_uv": 23882,
+        "pdp_uv": 1351,
+        "buy_uv": 33
       },
       {
         "dt": "2026-03-03",
@@ -4375,7 +5755,10 @@
         "qty": 41,
         "imp": 104114,
         "pdp": 2507,
-        "purchase": 26
+        "purchase": 26,
+        "imp_uv": 23541,
+        "pdp_uv": 1257,
+        "buy_uv": 26
       },
       {
         "dt": "2026-03-04",
@@ -4384,7 +5767,10 @@
         "qty": 32,
         "imp": 116962,
         "pdp": 2760,
-        "purchase": 22
+        "purchase": 22,
+        "imp_uv": 23455,
+        "pdp_uv": 1305,
+        "buy_uv": 22
       },
       {
         "dt": "2026-03-05",
@@ -4393,7 +5779,10 @@
         "qty": 29,
         "imp": 125109,
         "pdp": 2639,
-        "purchase": 22
+        "purchase": 22,
+        "imp_uv": 40148,
+        "pdp_uv": 1327,
+        "buy_uv": 22
       },
       {
         "dt": "2026-03-06",
@@ -4402,7 +5791,10 @@
         "qty": 23,
         "imp": 104519,
         "pdp": 2114,
-        "purchase": 19
+        "purchase": 19,
+        "imp_uv": 35439,
+        "pdp_uv": 1109,
+        "buy_uv": 18
       },
       {
         "dt": "2026-03-07",
@@ -4411,7 +5803,10 @@
         "qty": 29,
         "imp": 112390,
         "pdp": 2570,
-        "purchase": 22
+        "purchase": 22,
+        "imp_uv": 37369,
+        "pdp_uv": 1298,
+        "buy_uv": 22
       },
       {
         "dt": "2026-03-08",
@@ -4420,7 +5815,10 @@
         "qty": 66,
         "imp": 133200,
         "pdp": 3594,
-        "purchase": 56
+        "purchase": 56,
+        "imp_uv": 41058,
+        "pdp_uv": 1662,
+        "buy_uv": 56
       },
       {
         "dt": "2026-03-09",
@@ -4429,7 +5827,10 @@
         "qty": 22,
         "imp": 93544,
         "pdp": 2311,
-        "purchase": 16
+        "purchase": 16,
+        "imp_uv": 21388,
+        "pdp_uv": 1162,
+        "buy_uv": 16
       },
       {
         "dt": "2026-03-10",
@@ -4438,7 +5839,10 @@
         "qty": 41,
         "imp": 85981,
         "pdp": 2125,
-        "purchase": 22
+        "purchase": 22,
+        "imp_uv": 20980,
+        "pdp_uv": 1083,
+        "buy_uv": 22
       },
       {
         "dt": "2026-03-11",
@@ -4447,7 +5851,10 @@
         "qty": 22,
         "imp": 91320,
         "pdp": 2263,
-        "purchase": 19
+        "purchase": 19,
+        "imp_uv": 21487,
+        "pdp_uv": 1144,
+        "buy_uv": 19
       },
       {
         "dt": "2026-03-12",
@@ -4456,7 +5863,10 @@
         "qty": 55,
         "imp": 82100,
         "pdp": 2357,
-        "purchase": 27
+        "purchase": 27,
+        "imp_uv": 17914,
+        "pdp_uv": 1180,
+        "buy_uv": 27
       },
       {
         "dt": "2026-03-13",
@@ -4465,7 +5875,10 @@
         "qty": 14,
         "imp": 61667,
         "pdp": 1658,
-        "purchase": 14
+        "purchase": 14,
+        "imp_uv": 14637,
+        "pdp_uv": 773,
+        "buy_uv": 14
       },
       {
         "dt": "2026-03-14",
@@ -4474,7 +5887,10 @@
         "qty": 31,
         "imp": 76462,
         "pdp": 2022,
-        "purchase": 19
+        "purchase": 19,
+        "imp_uv": 17037,
+        "pdp_uv": 967,
+        "buy_uv": 19
       },
       {
         "dt": "2026-03-15",
@@ -4483,7 +5899,10 @@
         "qty": 31,
         "imp": 83960,
         "pdp": 2484,
-        "purchase": 23
+        "purchase": 23,
+        "imp_uv": 18748,
+        "pdp_uv": 1204,
+        "buy_uv": 23
       },
       {
         "dt": "2026-03-16",
@@ -4492,7 +5911,10 @@
         "qty": 25,
         "imp": 79507,
         "pdp": 2326,
-        "purchase": 20
+        "purchase": 20,
+        "imp_uv": 17600,
+        "pdp_uv": 1154,
+        "buy_uv": 20
       },
       {
         "dt": "2026-03-17",
@@ -4501,7 +5923,10 @@
         "qty": 57,
         "imp": 82344,
         "pdp": 2469,
-        "purchase": 35
+        "purchase": 35,
+        "imp_uv": 17002,
+        "pdp_uv": 1155,
+        "buy_uv": 35
       },
       {
         "dt": "2026-03-18",
@@ -4510,7 +5935,10 @@
         "qty": 20,
         "imp": 87423,
         "pdp": 2215,
-        "purchase": 13
+        "purchase": 13,
+        "imp_uv": 20058,
+        "pdp_uv": 1107,
+        "buy_uv": 13
       },
       {
         "dt": "2026-03-19",
@@ -4519,7 +5947,10 @@
         "qty": 22,
         "imp": 79987,
         "pdp": 2069,
-        "purchase": 15
+        "purchase": 15,
+        "imp_uv": 17892,
+        "pdp_uv": 1044,
+        "buy_uv": 15
       },
       {
         "dt": "2026-03-20",
@@ -4528,7 +5959,10 @@
         "qty": 15,
         "imp": 70786,
         "pdp": 1811,
-        "purchase": 14
+        "purchase": 14,
+        "imp_uv": 16806,
+        "pdp_uv": 988,
+        "buy_uv": 14
       },
       {
         "dt": "2026-03-21",
@@ -4537,7 +5971,10 @@
         "qty": 23,
         "imp": 67544,
         "pdp": 1818,
-        "purchase": 16
+        "purchase": 16,
+        "imp_uv": 16297,
+        "pdp_uv": 956,
+        "buy_uv": 16
       },
       {
         "dt": "2026-03-22",
@@ -4546,7 +5983,10 @@
         "qty": 24,
         "imp": 74033,
         "pdp": 2193,
-        "purchase": 20
+        "purchase": 20,
+        "imp_uv": 16396,
+        "pdp_uv": 1205,
+        "buy_uv": 20
       },
       {
         "dt": "2026-03-23",
@@ -4555,7 +5995,10 @@
         "qty": 21,
         "imp": 73593,
         "pdp": 2133,
-        "purchase": 16
+        "purchase": 16,
+        "imp_uv": 16217,
+        "pdp_uv": 1127,
+        "buy_uv": 16
       },
       {
         "dt": "2026-03-24",
@@ -4564,7 +6007,10 @@
         "qty": 12,
         "imp": 70566,
         "pdp": 1741,
-        "purchase": 10
+        "purchase": 10,
+        "imp_uv": 16222,
+        "pdp_uv": 895,
+        "buy_uv": 10
       },
       {
         "dt": "2026-03-25",
@@ -4573,7 +6019,10 @@
         "qty": 27,
         "imp": 67526,
         "pdp": 1759,
-        "purchase": 21
+        "purchase": 21,
+        "imp_uv": 16590,
+        "pdp_uv": 918,
+        "buy_uv": 21
       },
       {
         "dt": "2026-03-26",
@@ -4582,7 +6031,10 @@
         "qty": 28,
         "imp": 75170,
         "pdp": 1997,
-        "purchase": 17
+        "purchase": 17,
+        "imp_uv": 17824,
+        "pdp_uv": 1025,
+        "buy_uv": 17
       },
       {
         "dt": "2026-03-27",
@@ -4591,7 +6043,10 @@
         "qty": 23,
         "imp": 52571,
         "pdp": 1228,
-        "purchase": 14
+        "purchase": 14,
+        "imp_uv": 14122,
+        "pdp_uv": 705,
+        "buy_uv": 14
       },
       {
         "dt": "2026-03-28",
@@ -4600,7 +6055,10 @@
         "qty": 6,
         "imp": 56849,
         "pdp": 1394,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 14168,
+        "pdp_uv": 763,
+        "buy_uv": 5
       },
       {
         "dt": "2026-03-29",
@@ -4609,7 +6067,10 @@
         "qty": 40,
         "imp": 68531,
         "pdp": 1920,
-        "purchase": 25
+        "purchase": 25,
+        "imp_uv": 15045,
+        "pdp_uv": 1009,
+        "buy_uv": 25
       },
       {
         "dt": "2026-03-30",
@@ -4618,7 +6079,10 @@
         "qty": 13,
         "imp": 71594,
         "pdp": 1860,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 15295,
+        "pdp_uv": 893,
+        "buy_uv": 9
       },
       {
         "dt": "2026-03-31",
@@ -4627,7 +6091,10 @@
         "qty": 20,
         "imp": 55675,
         "pdp": 1575,
-        "purchase": 10
+        "purchase": 10,
+        "imp_uv": 12737,
+        "pdp_uv": 784,
+        "buy_uv": 10
       },
       {
         "dt": "2026-04-01",
@@ -4636,7 +6103,10 @@
         "qty": 31,
         "imp": 53746,
         "pdp": 1409,
-        "purchase": 17
+        "purchase": 17,
+        "imp_uv": 12730,
+        "pdp_uv": 736,
+        "buy_uv": 17
       },
       {
         "dt": "2026-04-02",
@@ -4645,7 +6115,10 @@
         "qty": 11,
         "imp": 51025,
         "pdp": 1328,
-        "purchase": 12
+        "purchase": 12,
+        "imp_uv": 11682,
+        "pdp_uv": 667,
+        "buy_uv": 12
       },
       {
         "dt": "2026-04-03",
@@ -4654,7 +6127,10 @@
         "qty": 17,
         "imp": 45896,
         "pdp": 1186,
-        "purchase": 12
+        "purchase": 12,
+        "imp_uv": 11735,
+        "pdp_uv": 592,
+        "buy_uv": 12
       },
       {
         "dt": "2026-04-04",
@@ -4663,7 +6139,10 @@
         "qty": 23,
         "imp": 58217,
         "pdp": 1494,
-        "purchase": 11
+        "purchase": 11,
+        "imp_uv": 13513,
+        "pdp_uv": 816,
+        "buy_uv": 11
       },
       {
         "dt": "2026-04-05",
@@ -4672,7 +6151,10 @@
         "qty": 27,
         "imp": 66184,
         "pdp": 1774,
-        "purchase": 19
+        "purchase": 19,
+        "imp_uv": 14677,
+        "pdp_uv": 937,
+        "buy_uv": 19
       },
       {
         "dt": "2026-04-06",
@@ -4681,7 +6163,10 @@
         "qty": 30,
         "imp": 60905,
         "pdp": 1709,
-        "purchase": 18
+        "purchase": 18,
+        "imp_uv": 14328,
+        "pdp_uv": 895,
+        "buy_uv": 18
       },
       {
         "dt": "2026-04-07",
@@ -4690,7 +6175,10 @@
         "qty": 17,
         "imp": 59400,
         "pdp": 1518,
-        "purchase": 11
+        "purchase": 11,
+        "imp_uv": 15051,
+        "pdp_uv": 821,
+        "buy_uv": 11
       },
       {
         "dt": "2026-04-08",
@@ -4699,7 +6187,10 @@
         "qty": 12,
         "imp": 53610,
         "pdp": 1368,
-        "purchase": 6
+        "purchase": 6,
+        "imp_uv": 13822,
+        "pdp_uv": 805,
+        "buy_uv": 6
       },
       {
         "dt": "2026-04-09",
@@ -4708,7 +6199,10 @@
         "qty": 7,
         "imp": 53366,
         "pdp": 1342,
-        "purchase": 6
+        "purchase": 6,
+        "imp_uv": 13008,
+        "pdp_uv": 737,
+        "buy_uv": 6
       },
       {
         "dt": "2026-04-10",
@@ -4717,7 +6211,10 @@
         "qty": 18,
         "imp": 58133,
         "pdp": 1503,
-        "purchase": 12
+        "purchase": 12,
+        "imp_uv": 14072,
+        "pdp_uv": 778,
+        "buy_uv": 12
       },
       {
         "dt": "2026-04-11",
@@ -4726,7 +6223,10 @@
         "qty": 11,
         "imp": 56148,
         "pdp": 1358,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 13561,
+        "pdp_uv": 746,
+        "buy_uv": 8
       },
       {
         "dt": "2026-04-12",
@@ -4735,7 +6235,10 @@
         "qty": 21,
         "imp": 60974,
         "pdp": 1675,
-        "purchase": 13
+        "purchase": 13,
+        "imp_uv": 13519,
+        "pdp_uv": 848,
+        "buy_uv": 13
       },
       {
         "dt": "2026-04-13",
@@ -4744,7 +6247,10 @@
         "qty": 10,
         "imp": 61824,
         "pdp": 1760,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 14109,
+        "pdp_uv": 882,
+        "buy_uv": 9
       },
       {
         "dt": "2026-04-14",
@@ -4753,7 +6259,10 @@
         "qty": 35,
         "imp": 54412,
         "pdp": 1465,
-        "purchase": 20
+        "purchase": 20,
+        "imp_uv": 13843,
+        "pdp_uv": 753,
+        "buy_uv": 20
       },
       {
         "dt": "2026-04-15",
@@ -4762,7 +6271,10 @@
         "qty": 14,
         "imp": 53561,
         "pdp": 1403,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 12997,
+        "pdp_uv": 729,
+        "buy_uv": 8
       },
       {
         "dt": "2026-04-16",
@@ -4771,7 +6283,10 @@
         "qty": 13,
         "imp": 44450,
         "pdp": 1212,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 11485,
+        "pdp_uv": 654,
+        "buy_uv": 9
       },
       {
         "dt": "2026-04-17",
@@ -4780,7 +6295,10 @@
         "qty": 14,
         "imp": 39110,
         "pdp": 1019,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 10698,
+        "pdp_uv": 576,
+        "buy_uv": 9
       },
       {
         "dt": "2026-04-18",
@@ -4789,7 +6307,10 @@
         "qty": 6,
         "imp": 43252,
         "pdp": 1108,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 11397,
+        "pdp_uv": 626,
+        "buy_uv": 5
       },
       {
         "dt": "2026-04-19",
@@ -4798,7 +6319,10 @@
         "qty": 17,
         "imp": 44650,
         "pdp": 1225,
-        "purchase": 11
+        "purchase": 11,
+        "imp_uv": 10811,
+        "pdp_uv": 686,
+        "buy_uv": 11
       },
       {
         "dt": "2026-04-20",
@@ -4807,7 +6331,10 @@
         "qty": 25,
         "imp": 46010,
         "pdp": 1294,
-        "purchase": 14
+        "purchase": 14,
+        "imp_uv": 10429,
+        "pdp_uv": 693,
+        "buy_uv": 14
       },
       {
         "dt": "2026-04-21",
@@ -4816,7 +6343,10 @@
         "qty": 5,
         "imp": 54098,
         "pdp": 1260,
-        "purchase": 4
+        "purchase": 4,
+        "imp_uv": 13967,
+        "pdp_uv": 638,
+        "buy_uv": 4
       },
       {
         "dt": "2026-04-22",
@@ -4825,7 +6355,10 @@
         "qty": 34,
         "imp": 45506,
         "pdp": 1150,
-        "purchase": 17
+        "purchase": 17,
+        "imp_uv": 11640,
+        "pdp_uv": 608,
+        "buy_uv": 17
       },
       {
         "dt": "2026-04-23",
@@ -4834,7 +6367,10 @@
         "qty": 12,
         "imp": 45632,
         "pdp": 1114,
-        "purchase": 6
+        "purchase": 6,
+        "imp_uv": 11543,
+        "pdp_uv": 602,
+        "buy_uv": 6
       },
       {
         "dt": "2026-04-24",
@@ -4843,7 +6379,10 @@
         "qty": 18,
         "imp": 45601,
         "pdp": 1100,
-        "purchase": 11
+        "purchase": 11,
+        "imp_uv": 11839,
+        "pdp_uv": 592,
+        "buy_uv": 11
       },
       {
         "dt": "2026-04-25",
@@ -4852,7 +6391,10 @@
         "qty": 21,
         "imp": 43476,
         "pdp": 1146,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 11042,
+        "pdp_uv": 590,
+        "buy_uv": 9
       },
       {
         "dt": "2026-04-26",
@@ -4861,7 +6403,10 @@
         "qty": 10,
         "imp": 45591,
         "pdp": 1287,
-        "purchase": 9
+        "purchase": 9,
+        "imp_uv": 11657,
+        "pdp_uv": 656,
+        "buy_uv": 9
       },
       {
         "dt": "2026-04-27",
@@ -4870,7 +6415,10 @@
         "qty": 16,
         "imp": 48386,
         "pdp": 1222,
-        "purchase": 11
+        "purchase": 11,
+        "imp_uv": 12409,
+        "pdp_uv": 721,
+        "buy_uv": 11
       },
       {
         "dt": "2026-04-28",
