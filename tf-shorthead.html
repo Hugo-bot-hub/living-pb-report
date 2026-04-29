@@ -9,14 +9,14 @@
 <style>
 :root{--bg:#f5f6f8;--card:#fff;--border:#e2e4ea;--text:#1a1d27;--text2:#6b6e7d;--text3:#9a9dad;--accent:#6c5ce7;--green:#00b894;--red:#ff6b6b;--orange:#e6a817;--blue:#3b82f6;--purple:#8b5cf6;--soft:#ff6b6b;--allergy:#00b894;--compA:#e6a817;--compB:#8b5cf6}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:'Pretendard',sans-serif;font-size:13px;line-height:1.5}
+body{background:var(--bg);color:var(--text);font-family:'Pretendard',sans-serif;font-size:15px;line-height:1.5}
 .top-bar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 28px;display:flex;align-items:center;justify-content:space-between;height:56px}
-.top-bar .logo{font-size:15px;font-weight:700}
-.top-bar .logo .mission{color:var(--text2);font-weight:500;font-size:11px;margin-left:8px}
-.top-bar .meta{font-size:11px;color:var(--text2)}
-.top-bar .v-badge{background:var(--accent);color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700}
+.top-bar .logo{font-size:17px;font-weight:700}
+.top-bar .logo .mission{color:var(--text2);font-weight:500;font-size:13px;margin-left:8px}
+.top-bar .meta{font-size:13px;color:var(--text2)}
+.top-bar .v-badge{background:var(--accent);color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700}
 .tab-nav{display:flex;background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;position:sticky;top:56px;z-index:99;overflow-x:auto}
-.tab-btn{padding:12px 18px;font-size:12px;font-weight:600;color:var(--text2);background:none;border:none;cursor:pointer;position:relative;white-space:nowrap;font-family:inherit}
+.tab-btn{padding:12px 18px;font-size:14px;font-weight:600;color:var(--text2);background:none;border:none;cursor:pointer;position:relative;white-space:nowrap;font-family:inherit}
 .tab-btn:hover{color:var(--text)}
 .tab-btn.active{color:var(--accent)}
 .tab-btn.active::after{content:'';position:absolute;bottom:0;left:10px;right:10px;height:2px;background:var(--accent);border-radius:1px}
@@ -29,58 +29,58 @@ body{background:var(--bg);color:var(--text);font-family:'Pretendard',sans-serif;
 .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
 .card.soft{border-top:3px solid var(--soft)}
 .card.allergy{border-top:3px solid var(--allergy)}
-.card h3{font-size:13px;font-weight:600;margin-bottom:12px}
-.card .note{font-size:10px;color:var(--text3);margin-top:8px;font-style:italic}
-.sec{font-size:14px;font-weight:700;margin:22px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.card h3{font-size:15px;font-weight:600;margin-bottom:12px}
+.card .note{font-size:12px;color:var(--text3);margin-top:8px;font-style:italic}
+.sec{font-size:16px;font-weight:700;margin:22px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
 .sec:first-child{margin-top:0}
 .kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
-.kpi .lbl{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;font-weight:600}
-.kpi .val{font-size:22px;font-weight:700;line-height:1.2}
-.kpi .val small{font-size:11px;color:var(--text2)}
-.kpi .sub{font-size:10px;color:var(--text3);margin-top:3px}
+.kpi .lbl{font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;font-weight:600}
+.kpi .val{font-size:26px;font-weight:700;line-height:1.2}
+.kpi .val small{font-size:13px;color:var(--text2)}
+.kpi .sub{font-size:12px;color:var(--text3);margin-top:3px}
 .kpi.soft{border-left:3px solid var(--soft)}
 .kpi.allergy{border-left:3px solid var(--allergy)}
 .kpi .chg.up{color:var(--green);font-weight:700}
 .kpi .chg.dn{color:var(--red);font-weight:700}
 .ch{position:relative;width:100%;height:280px}
 .ch.sm{height:220px}.ch.lg{height:360px}.ch.xl{height:440px}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th{text-align:left;padding:9px 6px;border-bottom:1px solid var(--border);color:var(--text2);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.3px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;padding:9px 6px;border-bottom:1px solid var(--border);color:var(--text2);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.3px}
 td{padding:8px 6px;border-bottom:1px solid rgba(0,0,0,.04)}
 tr:hover td{background:rgba(108,92,231,.04)}
 .r{text-align:right}
-.pill{display:inline-block;padding:2px 7px;border-radius:99px;font-size:10px;font-weight:600}
+.pill{display:inline-block;padding:2px 7px;border-radius:99px;font-size:12px;font-weight:600}
 .pill.soft{background:rgba(255,107,107,.12);color:var(--soft)}
 .pill.allergy{background:rgba(0,184,148,.12);color:var(--allergy)}
 .vs-table th:first-child{width:160px}
 .vs-table .self{background:rgba(255,107,107,.05);font-weight:700}
 .vs-table .allergy-self{background:rgba(0,184,148,.05);font-weight:700}
 .vs-table .comp{color:var(--text2)}
-.product-header{display:flex;align-items:center;gap:8px;margin:18px 0 10px;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:700}
+.product-header{display:flex;align-items:center;gap:8px;margin:18px 0 10px;padding:10px 14px;border-radius:8px;font-size:15px;font-weight:700}
 .product-header.soft{background:rgba(255,107,107,.08);border-left:3px solid var(--soft)}
 .product-header.allergy{background:rgba(0,184,148,.08);border-left:3px solid var(--allergy)}
-.product-header .pid{font-size:10px;color:var(--text3);font-weight:500;margin-left:auto}
-.share-banner{background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;padding:12px 18px;border-radius:10px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px}
-.share-banner .copy-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit}
-.insight-box{background:linear-gradient(135deg,rgba(108,92,231,.06),rgba(162,155,254,.04));border-left:3px solid var(--accent);padding:12px 14px;border-radius:6px;margin:12px 0;font-size:12px;line-height:1.6}
+.product-header .pid{font-size:12px;color:var(--text3);font-weight:500;margin-left:auto}
+.share-banner{background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;padding:12px 18px;border-radius:10px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:14px}
+.share-banner .copy-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;padding:4px 10px;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit}
+.insight-box{background:linear-gradient(135deg,rgba(108,92,231,.06),rgba(162,155,254,.04));border-left:3px solid var(--accent);padding:12px 14px;border-radius:6px;margin:12px 0;font-size:14px;line-height:1.6}
 .insight-box strong{color:var(--accent)}
 .period-toggle{display:inline-flex;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2px;margin-left:8px}
-.period-toggle button{background:none;border:none;padding:5px 12px;font-size:11px;cursor:pointer;border-radius:4px;color:var(--text2);font-family:inherit;font-weight:600}
+.period-toggle button{background:none;border:none;padding:5px 12px;font-size:13px;cursor:pointer;border-radius:4px;color:var(--text2);font-family:inherit;font-weight:600}
 .period-toggle button.active{background:var(--accent);color:#fff}
-.scale-toggle{display:inline-flex;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2px;margin-left:8px;font-size:11px}
-.scale-toggle button{background:none;border:none;padding:4px 10px;font-size:10px;cursor:pointer;border-radius:4px;color:var(--text2);font-family:inherit;font-weight:600}
+.scale-toggle{display:inline-flex;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2px;margin-left:8px;font-size:13px}
+.scale-toggle button{background:none;border:none;padding:4px 10px;font-size:12px;cursor:pointer;border-radius:4px;color:var(--text2);font-family:inherit;font-weight:600}
 .scale-toggle button.active{background:var(--accent);color:#fff}
 .timeline{position:relative;padding-left:20px;border-left:2px solid var(--border)}
-.timeline-item{position:relative;padding:8px 0 8px 16px;font-size:12px}
+.timeline-item{position:relative;padding:8px 0 8px 16px;font-size:14px}
 .timeline-item::before{content:'';position:absolute;left:-25px;top:14px;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--card)}
 .timeline-item.launch::before{background:var(--green)}
 .timeline-item.price::before{background:var(--orange)}
 .timeline-item.promo::before{background:var(--blue)}
 .timeline-item.tf::before{background:var(--accent)}
-.timeline-item .dt{font-size:10px;color:var(--text3);font-weight:600}
+.timeline-item .dt{font-size:12px;color:var(--text3);font-weight:600}
 .timeline-item .act{font-weight:500;margin-top:2px}
-.warn-chip{background:rgba(255,107,107,.12);color:var(--soft);font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}
-.cvr-note{background:rgba(230,168,23,.08);border-left:3px solid var(--orange);padding:10px 12px;border-radius:6px;font-size:11px;color:var(--text2);margin:10px 0;line-height:1.5}
+.warn-chip{background:rgba(255,107,107,.12);color:var(--soft);font-size:12px;padding:2px 6px;border-radius:4px;font-weight:600}
+.cvr-note{background:rgba(230,168,23,.08);border-left:3px solid var(--orange);padding:10px 12px;border-radius:6px;font-size:13px;color:var(--text2);margin:10px 0;line-height:1.5}
 .err{background:#fee;border:1px solid #fcc;color:#a00;padding:12px;border-radius:8px}
 </style>
 </head>
@@ -99,7 +99,7 @@ tr:hover td{background:rgba(108,92,231,.04)}
 </div>
 
 <div id="tab-overview" class="tab-content active">
-  <div class="share-banner"><div>📊 <strong>TF 멤버 공유</strong> — 매일 9시 자동 업데이트</div><div><span id="share-url" style="font-family:monospace;font-size:11px">—</span> <button class="copy-btn" onclick="copyShareUrl()">복사</button></div></div>
+  <div class="share-banner"><div>📊 <strong>TF 멤버 공유</strong> — 매일 9시 자동 업데이트</div><div><span id="share-url" style="font-family:monospace;font-size:13px">—</span> <button class="copy-btn" onclick="copyShareUrl()">복사</button></div></div>
 
   <div class="cvr-note">✅ <strong>CVR(UV) = `purchase_user_join / pdpview_user_join`</strong> — 프리즘 `prism_mkt_kpi_stats` schema_doc 공식 산식 <code>purchaser / pdpviewer</code>의 상품 단위. 원천: <code>ba_preserved.commerce_daily_user_count_v3</code> (base='product', paid_type='total', 회원 `_join`, 당일취소 제외).</div>
 
@@ -112,8 +112,8 @@ tr:hover td{background:rgba(108,92,231,.04)}
   </div>
   <div class="g3">
     <div class="card soft"><h3>📊 일간 GMV <span class="scale-toggle"><button id="o-s-lin" class="active" onclick="setScale('os','linear')">선형</button><button id="o-s-log" onclick="setScale('os','log')">로그</button></span></h3><div class="ch"><canvas id="o-s-gmv-ch"></canvas></div><div class="note">로그 스케일: 규모 차이 큰 경쟁사와 같은 축 비교 가능</div></div>
-    <div class="card soft"><h3>📈 일간 CTR <span style="font-size:10px;color:var(--text3);font-weight:500">(Y축 0~8%)</span></h3><div class="ch"><canvas id="o-s-ctr-ch"></canvas></div></div>
-    <div class="card soft"><h3>📈 일간 CVR(UV) <span style="font-size:10px;color:var(--text3);font-weight:500">(Y축 0~12%)</span></h3><div class="ch"><canvas id="o-s-cvr-ch"></canvas></div></div>
+    <div class="card soft"><h3>📈 일간 CTR <span style="font-size:12px;color:var(--text3);font-weight:500">(Y축 0~8%)</span></h3><div class="ch"><canvas id="o-s-ctr-ch"></canvas></div></div>
+    <div class="card soft"><h3>📈 일간 CVR(UV) <span style="font-size:12px;color:var(--text3);font-weight:500">(Y축 0~12%)</span></h3><div class="ch"><canvas id="o-s-cvr-ch"></canvas></div></div>
   </div>
 
   <div class="product-header allergy">🟢 알러지케어 침구, 오늘의집 layer, 3640244 <span class="pill allergy">외부 확장</span><span class="pid">49,900원</span></div>
@@ -125,8 +125,8 @@ tr:hover td{background:rgba(108,92,231,.04)}
   </div>
   <div class="g3">
     <div class="card allergy"><h3>📊 일간 GMV <span class="scale-toggle"><button id="o-a-lin" class="active" onclick="setScale('oa','linear')">선형</button><button id="o-a-log" onclick="setScale('oa','log')">로그</button></span></h3><div class="ch"><canvas id="o-a-gmv-ch"></canvas></div></div>
-    <div class="card allergy"><h3>📈 일간 CTR <span style="font-size:10px;color:var(--text3);font-weight:500">(Y축 0~8%)</span></h3><div class="ch"><canvas id="o-a-ctr-ch"></canvas></div></div>
-    <div class="card allergy"><h3>📈 일간 CVR(UV) <span style="font-size:10px;color:var(--text3);font-weight:500">(Y축 0~12%)</span></h3><div class="ch"><canvas id="o-a-cvr-ch"></canvas></div></div>
+    <div class="card allergy"><h3>📈 일간 CTR <span style="font-size:12px;color:var(--text3);font-weight:500">(Y축 0~8%)</span></h3><div class="ch"><canvas id="o-a-ctr-ch"></canvas></div></div>
+    <div class="card allergy"><h3>📈 일간 CVR(UV) <span style="font-size:12px;color:var(--text3);font-weight:500">(Y축 0~12%)</span></h3><div class="ch"><canvas id="o-a-cvr-ch"></canvas></div></div>
   </div>
 
   <div class="sec">🧭 TF 액션 타임라인</div>
@@ -284,7 +284,7 @@ function renderOverviewGMV(){
     mkCh(id,{type:'line',data:{labels:selfData.map(r=>fmtDate(r.dt)),datasets:[
       {label:selfLabel,data:selfData.map(r=>safeVal(r.gmv)),borderColor:selfColor,backgroundColor:selfColor+'22',fill:scaleMode==='linear',tension:.3,borderWidth:3,spanGaps:true},
       ...compData.map((m,i)=>({label:compLabels[i],data:selfData.map(r=>safeVal((m[r.dt]||{}).gmv||0)),borderColor:compColors[i],backgroundColor:'transparent',borderDash:[5,5],tension:.3,pointRadius:0,borderWidth:2,spanGaps:true}))
-    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{type:scaleMode,min:scaleMode==='log'?1000:undefined,ticks:{callback:v=>fmtKRW(v)},title:{display:true,text:'GMV'+(scaleMode==='log'?' (로그)':'')}}}}});
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:12}}}},scales:{y:{type:scaleMode,min:scaleMode==='log'?1000:undefined,ticks:{callback:v=>fmtKRW(v)},title:{display:true,text:'GMV'+(scaleMode==='log'?' (로그)':'')}}}}});
   };
 
   mkGMV('o-s-gmv-ch',r28s,[casMap,puriMap],
@@ -335,19 +335,19 @@ function render(){
   mkCh('o-s-ctr-ch',{type:'line',data:{labels:r28s.map(r=>fmtDate(r.dt)),datasets:[
     {label:'🔴 소프트워싱 이불, 오늘의집 layer, 3918642',data:r28s.map(clipCTR),borderColor:COLORS.soft,tension:.3,pointRadius:0,borderWidth:3,spanGaps:true},
     ...softComps.map(([m,lbl,col])=>({label:lbl,data:r28s.map(r=>clipCTR(m[r.dt])),borderColor:col,tension:.3,pointRadius:0,borderWidth:2,spanGaps:true}))
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{min:0,max:8,title:{display:true,text:'CTR %'}}}}});
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:12}}}},scales:{y:{min:0,max:8,title:{display:true,text:'CTR %'}}}}});
   mkCh('o-s-cvr-ch',{type:'line',data:{labels:r28s.map(r=>fmtDate(r.dt)),datasets:[
     {label:'🔴 소프트워싱 이불, 오늘의집 layer, 3918642',data:r28s.map(clipCVR),borderColor:COLORS.soft,tension:.3,pointRadius:0,borderWidth:3,spanGaps:true},
     ...softComps.map(([m,lbl,col])=>({label:lbl,data:r28s.map(r=>clipCVR(m[r.dt])),borderColor:col,tension:.3,pointRadius:0,borderWidth:2,spanGaps:true}))
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{min:0,max:12,title:{display:true,text:'CVR(UV) %'}}}}});
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:12}}}},scales:{y:{min:0,max:12,title:{display:true,text:'CVR(UV) %'}}}}});
   mkCh('o-a-ctr-ch',{type:'line',data:{labels:r28a.map(r=>fmtDate(r.dt)),datasets:[
     {label:'🟢 알러지케어 침구, 오늘의집 layer, 3640244',data:r28a.map(clipCTR),borderColor:COLORS.allergy,tension:.3,pointRadius:0,borderWidth:3,spanGaps:true},
     ...allergyComps.map(([m,lbl,col])=>({label:lbl,data:r28a.map(r=>clipCTR(m[r.dt])),borderColor:col,tension:.3,pointRadius:0,borderWidth:2,spanGaps:true}))
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{min:0,max:8,title:{display:true,text:'CTR %'}}}}});
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:12}}}},scales:{y:{min:0,max:8,title:{display:true,text:'CTR %'}}}}});
   mkCh('o-a-cvr-ch',{type:'line',data:{labels:r28a.map(r=>fmtDate(r.dt)),datasets:[
     {label:'🟢 알러지케어 침구, 오늘의집 layer, 3640244',data:r28a.map(clipCVR),borderColor:COLORS.allergy,tension:.3,pointRadius:0,borderWidth:3,spanGaps:true},
     ...allergyComps.map(([m,lbl,col])=>({label:lbl,data:r28a.map(r=>clipCVR(m[r.dt])),borderColor:col,tension:.3,pointRadius:0,borderWidth:2,spanGaps:true}))
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{min:0,max:12,title:{display:true,text:'CVR(UV) %'}}}}});
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:12}}}},scales:{y:{min:0,max:12,title:{display:true,text:'CVR(UV) %'}}}}});
 
   renderTimeline('timeline-all',DATA.actions);
   renderTimeline('timeline-soft',DATA.actions.filter(a=>a.product===3918642||a.product==='all'));
@@ -389,7 +389,7 @@ function renderProductTab(p){
     borderWidth:i===0?3:2,
     spanGaps:true
   }));
-  mkCh(prefix+'-gmv-ch',{type:chType,data:{labels,datasets:gmvSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{type:scale,min:scale==='log'?1000:undefined,ticks:{callback:v=>fmtKRW(v)},title:{display:true,text:'GMV'+(scale==='log'?' (로그)':'')}}}}});
+  mkCh(prefix+'-gmv-ch',{type:chType,data:{labels,datasets:gmvSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:12}}}},scales:{y:{type:scale,min:scale==='log'?1000:undefined,ticks:{callback:v=>fmtKRW(v)},title:{display:true,text:'GMV'+(scale==='log'?' (로그)':'')}}}}});
 
   // qty
   const qtySets=aggs.map((a,i)=>({
@@ -403,15 +403,15 @@ function renderProductTab(p){
     fill:chType==='line'&&i===0,
     spanGaps:true
   }));
-  mkCh(prefix+'-qty-ch',{type:chType,data:{labels,datasets:qtySets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{type:scale,min:scale==='log'?1:undefined,title:{display:true,text:'판매수량'+(scale==='log'?' (로그)':'')}}}}});
+  mkCh(prefix+'-qty-ch',{type:chType,data:{labels,datasets:qtySets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:12}}}},scales:{y:{type:scale,min:scale==='log'?1:undefined,title:{display:true,text:'판매수량'+(scale==='log'?' (로그)':'')}}}}});
 
   // CTR (Y 0~8 고정)
   const ctrSets=aggs.map((a,i)=>({label:names[i],data:allKeys.map(k=>{const x=a[k];if(!x||x.imp<=0)return null;const v=x.pdp/x.imp*100;return v>10?null:v}),borderColor:cols[i],tension:.3,pointRadius:mode==='day'?0:3,spanGaps:true,borderWidth:i===0?3:2}));
-  mkCh(prefix+'-ctr-ch',{type:'line',data:{labels,datasets:ctrSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{min:0,max:8,title:{display:true,text:'CTR %'}}}}});
+  mkCh(prefix+'-ctr-ch',{type:'line',data:{labels,datasets:ctrSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:12}}}},scales:{y:{min:0,max:8,title:{display:true,text:'CTR %'}}}}});
 
   // CVR(UV) Y 0~12 고정 - 프리즘 공식 buy_uv/pdp_uv
   const cvrSets=aggs.map((a,i)=>({label:names[i],data:allKeys.map(k=>{const x=a[k];if(!x||!x.pdp_uv||x.pdp_uv<=0)return null;const v=(x.buy_uv||0)/x.pdp_uv*100;return v>15?null:v}),borderColor:cols[i],tension:.3,pointRadius:mode==='day'?0:3,spanGaps:true,borderWidth:i===0?3:2}));
-  mkCh(prefix+'-cvr-ch',{type:'line',data:{labels,datasets:cvrSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{min:0,max:12,title:{display:true,text:'CVR(UV) %'}}}}});
+  mkCh(prefix+'-cvr-ch',{type:'line',data:{labels,datasets:cvrSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:12}}}},scales:{y:{min:0,max:12,title:{display:true,text:'CVR(UV) %'}}}}});
 
   // VS table
   const r30=data.map(d=>sumRecent(d,30));
@@ -453,7 +453,7 @@ function renderInflow(){
     data:pids.map(pid=>{const total=Object.values(stackData[pid]).reduce((a,b)=>a+b,0);return total>0?stackData[pid][k]/total*100:0}),
     backgroundColor:INF_COLORS[k]||'#888'
   }));
-  mkCh('in-6p-stack',{type:'bar',data:{labels,datasets},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:10}}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.parsed.x.toFixed(1)+'%'}}},scales:{x:{stacked:true,max:100,ticks:{callback:v=>v+'%'}},y:{stacked:true}}}});
+  mkCh('in-6p-stack',{type:'bar',data:{labels,datasets},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:12}}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.parsed.x.toFixed(1)+'%'}}},scales:{x:{stacked:true,max:100,ticks:{callback:v=>v+'%'}},y:{stacked:true}}}});
 
   // CTR grouped by path (top 5 paths × 6 products)
   const mainPaths=['검색','PDP추천','카테고리','홈','브랜드관'];
@@ -468,7 +468,7 @@ function renderInflow(){
   mkCh('in-ctr-grp',{type:'bar',data:{labels:mainPaths,datasets:pids.map(pid=>{
     const p=DATA.products[pid];
     return {label:`${p.emoji} ${p.shortName}(${pid})`,data:mainPaths.map(k=>{const v=ctrData[pid][k];return v.imp>0?v.click/v.imp*100:0}),backgroundColor:PID_COLOR[pid]};
-  })},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{title:{display:true,text:'CTR %'}}}}});
+  })},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:12}}}},scales:{y:{title:{display:true,text:'CTR %'}}}}});
 
   // 자사 상세표
   ['3918642','3640244'].forEach(pid=>{
@@ -586,7 +586,7 @@ function renderSRP(){
     const p=DATA.products[pid];
     return {label:`${p.emoji} ${p.shortName}, ${p.brand}, ${pid}`,data:dates.map(d=>m[d]||null),borderColor:PID_COLOR[pid],backgroundColor:PID_COLOR[pid]+'11',tension:.3,borderDash:isSelf?[]:[5,5],borderWidth:isSelf?3:2,pointRadius:0,spanGaps:true};
   });
-  mkCh('srp-score-ts',{type:'line',data:{labels:dates.map(fmtDate),datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:10}}}},scales:{y:{min:0.6,max:1.0,title:{display:true,text:'selling_score'}}}}});
+  mkCh('srp-score-ts',{type:'line',data:{labels:dates.map(fmtDate),datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:12}}}},scales:{y:{min:0.6,max:1.0,title:{display:true,text:'selling_score'}}}}});
 
   const soft=DATA.srpKeywords['3918642'];
   const allergy=DATA.srpKeywords['3640244'];
@@ -598,7 +598,7 @@ function renderSRP(){
   });
   const am={};allergy.filter(r=>r.kw==='알러지케어').forEach(r=>am[r.dt]=r.rank);
   rankSets.push({label:`🟢 알러지케어 "알러지케어" (3640244)`,data:allDates.map(d=>am[d]||null),borderColor:KW_COLORS['알러지케어'],tension:.3,spanGaps:true,pointRadius:3,borderWidth:3});
-  mkCh('srp-rank-ts',{type:'line',data:{labels:allDates.map(fmtDate),datasets:rankSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:10}}}},scales:{y:{reverse:true,suggestedMin:1,suggestedMax:150,title:{display:true,text:'순위 (위가 좋음)'}}}}});
+  mkCh('srp-rank-ts',{type:'line',data:{labels:allDates.map(fmtDate),datasets:rankSets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:12}}}},scales:{y:{reverse:true,suggestedMin:1,suggestedMax:150,title:{display:true,text:'순위 (위가 좋음)'}}}}});
 
   const pids=['767440','2636441','442026','1930788','3640244','3918642'];
   const kwOrder=['이불','차렵이불','이불세트','사계절이불','알러지케어'];
@@ -630,7 +630,7 @@ function renderSRP(){
       const p=DATA.products[pid];
       const isSelf=pid==='3918642'||pid==='3640244';
       return {label:`${p.emoji} ${p.shortName}, ${p.brand}, ${pid}`,data:featDates.map(d=>m[d]||null),borderColor:PID_COLOR[pid],tension:.3,borderDash:isSelf?[]:[5,5],borderWidth:isSelf?3:2,pointRadius:2,spanGaps:true};
-    })},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:reverse?{reverse:true,title:{display:true,text:'rank (낮을수록 좋음)'}}:{title:{display:true,text:'score'}}}}});
+    })},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:12}}}},scales:{y:reverse?{reverse:true,title:{display:true,text:'rank (낮을수록 좋음)'}}:{title:{display:true,text:'score'}}}}});
   };
   mkFeatCh('srp-feat-review','review');
   mkFeatCh('srp-feat-sell','sell28');
