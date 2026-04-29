@@ -939,7 +939,10 @@
         "qty": 10,
         "imp": 43385,
         "pdp": 700,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 14293,
+        "pdp_uv": 412,
+        "buy_uv": 5
       }
     ],
     "3640244": [
@@ -1724,7 +1727,10 @@
         "qty": 7,
         "imp": 99442,
         "pdp": 1411,
-        "purchase": 8
+        "purchase": 8,
+        "imp_uv": 42874,
+        "pdp_uv": 710,
+        "buy_uv": 8
       }
     ],
     "767440": [
@@ -2509,7 +2515,10 @@
         "qty": 323,
         "imp": 316524,
         "pdp": 8422,
-        "purchase": 192
+        "purchase": 192,
+        "imp_uv": 58065,
+        "pdp_uv": 3030,
+        "buy_uv": 191
       }
     ],
     "2636441": [
@@ -3294,7 +3303,10 @@
         "qty": 81,
         "imp": 151638,
         "pdp": 3700,
-        "purchase": 57
+        "purchase": 57,
+        "imp_uv": 34171,
+        "pdp_uv": 1664,
+        "buy_uv": 55
       }
     ],
     "1930788": [
@@ -4079,7 +4091,10 @@
         "qty": 38,
         "imp": 77061,
         "pdp": 1789,
-        "purchase": 19
+        "purchase": 19,
+        "imp_uv": 19282,
+        "pdp_uv": 961,
+        "buy_uv": 19
       }
     ],
     "442026": [
@@ -4864,7 +4879,10 @@
         "qty": 6,
         "imp": 37788,
         "pdp": 895,
-        "purchase": 5
+        "purchase": 5,
+        "imp_uv": 11195,
+        "pdp_uv": 499,
+        "buy_uv": 5
       }
     ]
   },
