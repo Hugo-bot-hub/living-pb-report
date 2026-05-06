@@ -190,6 +190,10 @@ tr:hover td{background:rgba(108,92,231,.04)}
   <div class="insight-box"><strong>읽는 법:</strong> 같은 채널 가로 비교 — 자사가 동급 카테 경쟁사 평균보다 1/3 이하면 🔴 약점, 1/2 이하면 🟡 주의. 검색/PDP추천 정상인데 마이패키지·카테고리·브랜드관에서 약점이면 PB 시각 어필력(썸네일·메인비주얼) 개선 시그널.</div>
   <div class="card"><table id="ctr-heat"><thead><tr><th>상품</th><th class="r">검색</th><th class="r">PDP추천</th><th class="r">카테고리</th><th class="r">홈</th><th class="r">브랜드관</th><th class="r">기획전</th><th class="r">마이패키지</th><th class="r">광고리스트</th></tr></thead><tbody id="ctr-heat-tbl"></tbody></table><div class="note">색상: 🟢 카테 평균 이상 / 🟡 50~100% / 🔴 50% 미만. n &lt; 100 노출은 회색 처리.</div></div>
 
+  <div class="sec">💰 채널×상품 CVR(UV) 히트맵 (최근 7일)</div>
+  <div class="insight-box"><strong>CVR(UV) 정의:</strong> click한 unique 사용자 중 같은 날 PURCHASE 발생한 비율 (last-click attribution, 모든 상품 대상). 광고리스트는 CPC 광고 영역(OGARDEN_MISSION)이라 CVR 낮은 게 정상. 검색/PDP추천이 통상 가장 높음.</div>
+  <div class="card"><table id="cvr-heat"><thead><tr><th>상품</th><th class="r">검색</th><th class="r">PDP추천</th><th class="r">카테고리</th><th class="r">홈</th><th class="r">브랜드관</th><th class="r">기획전</th><th class="r">마이패키지</th><th class="r">광고리스트</th></tr></thead><tbody id="cvr-heat-tbl"></tbody></table><div class="note">색상: 🟢 카테 평균 이상 / 🟡 50~100% / 🔴 50% 미만. n &lt; 30 click_uv는 회색 처리. PURCHASE는 ORDER_RESULT 페이지 발생이라 inflow 직접 매핑 불가 → click한 uuid → 동일 일자 PURCHASE uuid 매칭으로 attribution.</div></div>
+
   <div class="sec">⚠️ 약점 채널 시그널 — 카테 동급 대비 자동 탐지</div>
   <div class="card" id="weak-signals"></div>
 </div>
@@ -540,6 +544,42 @@ function renderInflow(){
     const isSelf=pid==='3918642'||pid==='3640244';
     return `<tr${isSelf?' style="background:rgba(0,0,0,.03)"':''}><td><strong>${p.emoji} ${p.shortName} (${pid})</strong></td>${cells}</tr>`;
   }).join('');
+
+  // 채널×상품 CVR 히트맵 (inflowCvr 사용 — 7일 attribution)
+  const cvrAgg = DATA.inflowCvr ? DATA.inflowCvr.data : null;
+  if (cvrAgg) {
+    function compAvgCvr(comps, ch) {
+      let cu = 0, bu = 0;
+      comps.forEach(c => {
+        const v = cvrAgg[c] && cvrAgg[c][ch];
+        if (v) { cu += v.click_uv; bu += v.buy_uv; }
+      });
+      return cu >= 30 ? (bu / cu * 100) : null;
+    }
+    const cvrHeatTbl = document.getElementById('cvr-heat-tbl');
+    cvrHeatTbl.innerHTML = pids.map(pid => {
+      const p = DATA.products[pid];
+      const cohort = Object.values(COHORTS).find(c => c.self === pid || c.comps.includes(pid));
+      const cells = cmpKeys.map(k => {
+        const v = cvrAgg[pid] && cvrAgg[pid][k];
+        if (!v || v.click_uv < 30) return `<td class="r" style="color:#999;background:#f5f5f5">—</td>`;
+        const cvr = v.cvr;
+        if (pid === '3918642' || pid === '3640244') {
+          const compsAvg = compAvgCvr(cohort.comps, k);
+          if (compsAvg == null) return `<td class="r"><strong>${cvr.toFixed(2)}%</strong></td>`;
+          const ratio = cvr / compsAvg;
+          let bg = '#fff', color = '#333';
+          if (ratio >= 1) { bg = '#d4f4dd'; color = '#1a5d2a'; }
+          else if (ratio >= 0.5) { bg = '#fff4cc'; color = '#7a5b00'; }
+          else { bg = '#fcd5cf'; color = '#8a1a08'; }
+          return `<td class="r" style="background:${bg};color:${color}"><strong>${cvr.toFixed(2)}%</strong><br><small>(카테 ${ratio>=1?'+':''}${((ratio-1)*100).toFixed(0)}%)</small></td>`;
+        }
+        return `<td class="r">${cvr.toFixed(2)}%</td>`;
+      }).join('');
+      const isSelf = pid === '3918642' || pid === '3640244';
+      return `<tr${isSelf?' style="background:rgba(0,0,0,.03)"':''}><td><strong>${p.emoji} ${p.shortName} (${pid})</strong></td>${cells}</tr>`;
+    }).join('');
+  }
 
   // 시그널 자동 탐지
   const signals=[];
