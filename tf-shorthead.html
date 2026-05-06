@@ -200,19 +200,19 @@ tr:hover td{background:rgba(108,92,231,.04)}
 </div>
 
 <div id="tab-benchmark" class="tab-content">
-  <div class="cvr-note"><strong>스코프:</strong> 자사 2상품(🔴 소프트워싱 / 🟢 알러지케어) 드릴다운. <strong>cate_d3 = 이불/이불커버</strong> 한정. 기간: <span id="bm-period">—</span>. 색상 🟢 ratio≥1 / 🟡 50~100% / 🔴 50% 미만. n &lt; 100 imp는 회색 처리.</div>
+  <div class="cvr-note"><strong>스코프:</strong> 자사 2상품(🔴 소프트워싱 / 🟢 알러지케어) 드릴다운. <strong>cate_d3 = 이불/이불커버</strong> 한정. 기간: <span id="bm-period">—</span>. <strong>지표 정의 통일:</strong> CTR(UV) = pdp_uv / imp_uv, CVR(UV) = buy_uv / pdp_uv (Overview 탭과 동일, `commerce_daily_user_count_v3` 프리즘 공식). 색상 🟢 ratio≥1 / 🟡 50~100% / 🔴 50% 미만.</div>
 
-  <div class="sec">📊 자사 2상품 vs 카테 동급 / 가격대 동급 평균</div>
-  <div class="insight-box">자사 상품의 CTR/CVR 절대 수치를 <strong>cate_d3 (이불/이불커버) 3P 전체 평균</strong>과 <strong>같은 가격대 3P 평균</strong> 두 가지 벤치마크에 동시에 비교. 가격 경쟁력 진단 포함.</div>
-  <div class="card"><table id="bm-self-tbl"><thead><tr><th rowspan="2">상품</th><th class="r" rowspan="2">가격</th><th class="r" colspan="3">CTR</th><th class="r" colspan="3">CVR</th></tr><tr><th class="r">자사</th><th class="r">vs 카테</th><th class="r">vs 가격대</th><th class="r">자사</th><th class="r">vs 카테</th><th class="r">vs 가격대</th></tr></thead><tbody id="bm-self-body"></tbody></table></div>
+  <div class="sec">📊 자사 2상품 vs 카테 동급 / 가격대 동급 평균 (CTR/CVR — UV 기준)</div>
+  <div class="insight-box">자사 상품의 CTR(UV)/CVR(UV)을 <strong>cate_d3 (이불/이불커버) 3P 전체 평균</strong>과 <strong>같은 가격대 3P 평균</strong>에 동시에 비교. Overview 탭과 동일한 프리즘 정의.</div>
+  <div class="card"><table id="bm-self-tbl"><thead><tr><th rowspan="2">상품</th><th class="r" rowspan="2">가격</th><th class="r" colspan="3">CTR(UV)</th><th class="r" colspan="3">CVR(UV)</th></tr><tr><th class="r">자사</th><th class="r">vs 카테</th><th class="r">vs 가격대</th><th class="r">자사</th><th class="r">vs 카테</th><th class="r">vs 가격대</th></tr></thead><tbody id="bm-self-body"></tbody></table></div>
 
-  <div class="sec">💰 가격대별 PB vs 3P (이불/이불커버)</div>
+  <div class="sec">💰 가격대별 PB vs 3P (이불/이불커버, UV 기준)</div>
   <div class="insight-box">가격대 안에서 PB가 동급 3P 대비 어디쯤인지. 자사 2상품의 가격대 위치 (소프트워싱 &lt;30k / 알러지케어 30~50k)에 주목.</div>
-  <div class="card"><table id="bm-band-tbl"><thead><tr><th rowspan="2">가격대</th><th class="r" rowspan="2">PB 수</th><th class="r" rowspan="2">3P 수</th><th class="r" colspan="3">CTR</th><th class="r" colspan="3">CVR</th></tr><tr><th class="r">PB</th><th class="r">3P</th><th class="r">ratio</th><th class="r">PB</th><th class="r">3P</th><th class="r">ratio</th></tr></thead><tbody id="bm-band-body"></tbody></table></div>
+  <div class="card"><table id="bm-band-tbl"><thead><tr><th rowspan="2">가격대</th><th class="r" rowspan="2">PB 수</th><th class="r" rowspan="2">3P 수</th><th class="r" colspan="3">CTR(UV)</th><th class="r" colspan="3">CVR(UV)</th></tr><tr><th class="r">PB</th><th class="r">3P</th><th class="r">ratio</th><th class="r">PB</th><th class="r">3P</th><th class="r">ratio</th></tr></thead><tbody id="bm-band-body"></tbody></table></div>
 
-  <div class="sec">🏷️ PB 이불/이불커버 라인업 7개 비교</div>
+  <div class="sec">🏷️ PB 이불/이불커버 라인업 7개 비교 (UV 기준)</div>
   <div class="insight-box">자사 2상품과 같은 카테(이불/이불커버)에 위치한 다른 PB 5개와의 효율 비교. 자사가 같은 PB 라인업 안에서 어느 위치인지.</div>
-  <div class="card"><table id="bm-lineup-tbl"><thead><tr><th>구분</th><th>상품</th><th>라인</th><th class="r">가격</th><th class="r">imp</th><th class="r">CTR</th><th class="r">click_uv</th><th class="r">buy_uv</th><th class="r">CVR</th></tr></thead><tbody id="bm-lineup-body"></tbody></table></div>
+  <div class="card"><table id="bm-lineup-tbl"><thead><tr><th>구분</th><th>상품</th><th>라인</th><th class="r">가격</th><th class="r">imp_uv</th><th class="r">CTR(UV)</th><th class="r">pdp_uv</th><th class="r">buy_uv</th><th class="r">CVR(UV)</th></tr></thead><tbody id="bm-lineup-body"></tbody></table></div>
 
   <div class="sec">🔎 진단 시그널 — 자사 2상품 약점 자동 탐지</div>
   <div class="card" id="bm-signals"></div>
@@ -668,11 +668,11 @@ function renderBenchmark(){
       <td><strong>${b.label}</strong>${isSelfBand ? '<br><small>(자사 위치)</small>' : ''}</td>
       <td class="r">${b.pb_prod_cnt}</td>
       <td class="r">${b.p3_prod_cnt.toLocaleString()}</td>
-      <td class="r">${b.pb_imp > 0 ? b.pb_ctr.toFixed(2)+'%' : '—'}</td>
-      <td class="r">${b.p3_ctr.toFixed(2)}%</td>
+      <td class="r">${b.pb_ctr != null ? b.pb_ctr.toFixed(2)+'%' : '—'}</td>
+      <td class="r">${b.p3_ctr != null ? b.p3_ctr.toFixed(2)+'%' : '—'}</td>
       <td class="r" style="background:${c1.bg};color:${c1.color}"><strong>${fmtRatio(b.ctr_ratio)}</strong></td>
-      <td class="r">${b.pb_click_uv > 0 ? b.pb_cvr.toFixed(2)+'%' : '—'}</td>
-      <td class="r">${b.p3_cvr.toFixed(2)}%</td>
+      <td class="r">${b.pb_cvr != null ? b.pb_cvr.toFixed(2)+'%' : '—'}</td>
+      <td class="r">${b.p3_cvr != null ? b.p3_cvr.toFixed(2)+'%' : '—'}</td>
       <td class="r" style="background:${c2.bg};color:${c2.color}"><strong>${fmtRatio(b.cvr_ratio)}</strong></td>
     </tr>`;
   }).join('');
@@ -680,7 +680,7 @@ function renderBenchmark(){
   // 3. PB 라인업 7개
   const lineupBody = document.getElementById('bm-lineup-body');
   lineupBody.innerHTML = bm.pb_lineup.map(p => {
-    const greyOut = p.imp < 100;
+    const greyOut = (p.imp_uv || 0) < 100;
     const trStyle = greyOut ? ' style="color:#999"' : (p.is_self ? ' style="background:rgba(0,0,0,.05);font-weight:600"' : '');
     const selfMark = p.is_self ? (p.pid === '3918642' ? '🔴 자사' : '🟢 자사') : '';
     return `<tr${trStyle}>
@@ -688,11 +688,11 @@ function renderBenchmark(){
       <td><strong>${p.name}</strong> (${p.pid})</td>
       <td>${p.line}</td>
       <td class="r">${p.price.toLocaleString()}원</td>
-      <td class="r">${p.imp.toLocaleString()}</td>
-      <td class="r">${p.imp >= 100 ? p.ctr.toFixed(2)+'%' : '—'}</td>
-      <td class="r">${p.click_uv}</td>
-      <td class="r">${p.buy_uv}</td>
-      <td class="r">${p.click_uv >= 30 ? p.cvr.toFixed(2)+'%' : '—'}</td>
+      <td class="r">${(p.imp_uv || 0).toLocaleString()}</td>
+      <td class="r">${(p.imp_uv || 0) >= 100 && p.ctr != null ? p.ctr.toFixed(2)+'%' : '—'}</td>
+      <td class="r">${p.pdp_uv || 0}</td>
+      <td class="r">${p.buy_uv || 0}</td>
+      <td class="r">${(p.pdp_uv || 0) >= 30 && p.cvr != null ? p.cvr.toFixed(2)+'%' : '—'}</td>
     </tr>`;
   }).join('');
 
