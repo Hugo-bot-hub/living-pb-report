@@ -94,6 +94,7 @@ tr:hover td{background:rgba(108,92,231,.04)}
   <button class="tab-btn" onclick="switchTab(event,'soft')">🔴 소프트워싱</button>
   <button class="tab-btn" onclick="switchTab(event,'allergy')">🟢 알러지케어</button>
   <button class="tab-btn" onclick="switchTab(event,'inflow')">🚀 유입 퍼널</button>
+  <button class="tab-btn" onclick="switchTab(event,'benchmark')">📊 PB 카테 벤치마크</button>
   <button class="tab-btn" onclick="switchTab(event,'srp')">🔍 SRP 점수</button>
   <button class="tab-btn" onclick="switchTab(event,'ages')">👥 연령대</button>
 </div>
@@ -187,15 +188,28 @@ tr:hover td{background:rgba(108,92,231,.04)}
   <div class="card"><table><thead><tr><th>상품</th><th class="r">검색</th><th class="r">PDP추천</th><th class="r">카테고리</th><th class="r">홈</th><th class="r">브랜드관</th><th class="r">기획전</th><th class="r">마이패키지</th><th class="r">광고리스트</th><th class="r">총 노출</th></tr></thead><tbody id="in-cmp-tbl"></tbody></table></div>
 
   <div class="sec">🔥 채널×상품 CTR 히트맵 (최근 7일)</div>
-  <div class="insight-box"><strong>읽는 법:</strong> 같은 채널 가로 비교 — 자사가 동급 카테 경쟁사 평균보다 1/3 이하면 🔴 약점, 1/2 이하면 🟡 주의. 검색/PDP추천 정상인데 마이패키지·카테고리·브랜드관에서 약점이면 PB 시각 어필력(썸네일·메인비주얼) 개선 시그널.</div>
-  <div class="card"><table id="ctr-heat"><thead><tr><th>상품</th><th class="r">검색</th><th class="r">PDP추천</th><th class="r">카테고리</th><th class="r">홈</th><th class="r">브랜드관</th><th class="r">기획전</th><th class="r">마이패키지</th><th class="r">광고리스트</th></tr></thead><tbody id="ctr-heat-tbl"></tbody></table><div class="note">색상: 🟢 카테 평균 이상 / 🟡 50~100% / 🔴 50% 미만. n &lt; 100 노출은 회색 처리.</div></div>
+  <div class="insight-box"><strong>읽는 법:</strong> 6상품(자사 2 + 경쟁 4) 채널별 절대 CTR. 6상품 안에서 가로 비교만 — 카테 동급 대표성은 모집단 작아 약함. <strong>PB vs 3P 카테 평균 비교는 [📊 PB 카테 벤치마크] 탭 참조.</strong></div>
+  <div class="card"><table id="ctr-heat"><thead><tr><th>상품</th><th class="r">검색</th><th class="r">PDP추천</th><th class="r">카테고리</th><th class="r">홈</th><th class="r">브랜드관</th><th class="r">기획전</th><th class="r">마이패키지</th><th class="r">광고리스트</th></tr></thead><tbody id="ctr-heat-tbl"></tbody></table><div class="note">자사 PB는 굵은 표기. n &lt; 100 노출은 회색 처리.</div></div>
 
   <div class="sec">💰 채널×상품 CVR(UV) 히트맵 (최근 7일)</div>
-  <div class="insight-box"><strong>CVR(UV) 정의:</strong> click한 unique 사용자 중 같은 날 PURCHASE 발생한 비율 (last-click attribution, 모든 상품 대상). 광고리스트는 CPC 광고 영역(OGARDEN_MISSION)이라 CVR 낮은 게 정상. 검색/PDP추천이 통상 가장 높음.</div>
-  <div class="card"><table id="cvr-heat"><thead><tr><th>상품</th><th class="r">검색</th><th class="r">PDP추천</th><th class="r">카테고리</th><th class="r">홈</th><th class="r">브랜드관</th><th class="r">기획전</th><th class="r">마이패키지</th><th class="r">광고리스트</th></tr></thead><tbody id="cvr-heat-tbl"></tbody></table><div class="note">색상: 🟢 카테 평균 이상 / 🟡 50~100% / 🔴 50% 미만. n &lt; 30 click_uv는 회색 처리. PURCHASE는 ORDER_RESULT 페이지 발생이라 inflow 직접 매핑 불가 → click한 uuid → 동일 일자 PURCHASE uuid 매칭으로 attribution.</div></div>
+  <div class="insight-box"><strong>CVR(UV) 정의:</strong> click한 user_id가 같은 날 같은 product_id를 commerce_gross_profit_orders에서 산 비율. 6상품 한정 절대 수치. 광고리스트는 CPC 광고 영역(OGARDEN_MISSION)이라 CVR 낮은 게 정상. <strong>카테 평균 비교는 [📊 PB 카테 벤치마크] 탭.</strong></div>
+  <div class="card"><table id="cvr-heat"><thead><tr><th>상품</th><th class="r">검색</th><th class="r">PDP추천</th><th class="r">카테고리</th><th class="r">홈</th><th class="r">브랜드관</th><th class="r">기획전</th><th class="r">마이패키지</th><th class="r">광고리스트</th></tr></thead><tbody id="cvr-heat-tbl"></tbody></table><div class="note">자사 PB는 굵은 표기. n &lt; 30 click_uv는 회색 처리.</div></div>
 
   <div class="sec">⚠️ 약점 채널 시그널 — 카테 동급 대비 자동 탐지</div>
   <div class="card" id="weak-signals"></div>
+</div>
+
+<div id="tab-benchmark" class="tab-content">
+  <div class="sec">📊 PB 카테고리 벤치마크 — 가구 PB vs 3P 카테 평균</div>
+  <div class="insight-box"><strong>모집단:</strong> PB(오늘의집 layer) <span id="bm-fur-pb-cnt">—</span>개 vs 3P 가구 카테 전체 평균. <strong>CTR</strong>=click/imp. <strong>CVR</strong>=buy_uv/click_uv (uuid→user_id, 같은날 같은 product_id 매칭). <strong>색상:</strong> 🟢 카테 평균 이상(ratio≥1) / 🟡 50~100% / 🔴 50% 미만. 기간: <span id="bm-period">—</span></div>
+  <div class="card"><table id="bm-fur-tbl"><thead><tr><th rowspan="2">cate_d2</th><th class="r" rowspan="2">PB 수</th><th class="r" rowspan="2">3P 수</th><th class="r" colspan="3">CTR</th><th class="r" colspan="3">CVR</th></tr><tr><th class="r">PB</th><th class="r">3P</th><th class="r">ratio</th><th class="r">PB</th><th class="r">3P</th><th class="r">ratio</th></tr></thead><tbody id="bm-furniture-tbl"></tbody><tfoot id="bm-furniture-foot"></tfoot></table></div>
+
+  <div class="sec">📊 PB 카테고리 벤치마크 — 리빙 PB vs 3P 카테 평균</div>
+  <div class="insight-box"><strong>모집단:</strong> PB(오늘의집 layer 가구 외) <span id="bm-liv-pb-cnt">—</span>개 vs 3P 리빙 카테 전체 평균.</div>
+  <div class="card"><table id="bm-liv-tbl"><thead><tr><th rowspan="2">cate_d2</th><th class="r" rowspan="2">PB 수</th><th class="r" rowspan="2">3P 수</th><th class="r" colspan="3">CTR</th><th class="r" colspan="3">CVR</th></tr><tr><th class="r">PB</th><th class="r">3P</th><th class="r">ratio</th><th class="r">PB</th><th class="r">3P</th><th class="r">ratio</th></tr></thead><tbody id="bm-living-tbl"></tbody><tfoot id="bm-living-foot"></tfoot></table></div>
+
+  <div class="sec">🔎 진단 시그널</div>
+  <div class="card" id="bm-signals"></div>
 </div>
 
 <div id="tab-srp" class="tab-content">
@@ -358,6 +372,7 @@ function render(){
   renderProductTab('soft');
   renderProductTab('allergy');
   renderInflow();
+  renderBenchmark();
   renderSRP();
   renderAges();
 }
@@ -530,14 +545,7 @@ function renderInflow(){
       const ctr=v.click/v.imp*100;
       // 자사면 카테 평균 대비 색상, 경쟁사면 흰색
       if(pid==='3918642'||pid==='3640244'){
-        const compsAvg=compAvgCtr(cohort.comps,k);
-        if(compsAvg==null) return `<td class="r"><strong>${ctr.toFixed(2)}%</strong></td>`;
-        const ratio=ctr/compsAvg;
-        let bg='#fff',color='#333';
-        if(ratio>=1){bg='#d4f4dd';color='#1a5d2a'}
-        else if(ratio>=0.5){bg='#fff4cc';color='#7a5b00'}
-        else{bg='#fcd5cf';color='#8a1a08'}
-        return `<td class="r" style="background:${bg};color:${color}"><strong>${ctr.toFixed(2)}%</strong><br><small>(카테 ${ratio>=1?'+':''}${((ratio-1)*100).toFixed(0)}%)</small></td>`;
+        return `<td class="r"><strong>${ctr.toFixed(2)}%</strong></td>`;
       }
       return `<td class="r">${ctr.toFixed(2)}%</td>`;
     }).join('');
@@ -559,20 +567,12 @@ function renderInflow(){
     const cvrHeatTbl = document.getElementById('cvr-heat-tbl');
     cvrHeatTbl.innerHTML = pids.map(pid => {
       const p = DATA.products[pid];
-      const cohort = Object.values(COHORTS).find(c => c.self === pid || c.comps.includes(pid));
       const cells = cmpKeys.map(k => {
         const v = cvrAgg[pid] && cvrAgg[pid][k];
         if (!v || v.click_uv < 30) return `<td class="r" style="color:#999;background:#f5f5f5">—</td>`;
         const cvr = v.cvr;
         if (pid === '3918642' || pid === '3640244') {
-          const compsAvg = compAvgCvr(cohort.comps, k);
-          if (compsAvg == null) return `<td class="r"><strong>${cvr.toFixed(2)}%</strong></td>`;
-          const ratio = cvr / compsAvg;
-          let bg = '#fff', color = '#333';
-          if (ratio >= 1) { bg = '#d4f4dd'; color = '#1a5d2a'; }
-          else if (ratio >= 0.5) { bg = '#fff4cc'; color = '#7a5b00'; }
-          else { bg = '#fcd5cf'; color = '#8a1a08'; }
-          return `<td class="r" style="background:${bg};color:${color}"><strong>${cvr.toFixed(2)}%</strong><br><small>(카테 ${ratio>=1?'+':''}${((ratio-1)*100).toFixed(0)}%)</small></td>`;
+          return `<td class="r"><strong>${cvr.toFixed(2)}%</strong></td>`;
         }
         return `<td class="r">${cvr.toFixed(2)}%</td>`;
       }).join('');
@@ -613,6 +613,102 @@ function renderInflow(){
       const sevLabel=s.severity==='critical'?'🔴 치명':'🟡 주의';
       return `<tr><td><span style="color:${sevColor};font-weight:700">${sevLabel}</span></td><td>${s.emoji} ${s.name}</td><td><strong>${s.ch}</strong></td><td class="r">${s.ctr.toFixed(2)}%</td><td class="r">${s.compsAvg.toFixed(2)}%</td><td class="r" style="color:${sevColor}"><strong>카테의 ${(s.ratio*100).toFixed(0)}%</strong><br><small>(${((s.ratio-1)*100).toFixed(0)}%, ${(1/s.ratio).toFixed(1)}배 부족)</small></td><td class="r">${s.imp.toLocaleString()}</td><td class="r" style="color:${sevColor}"><strong>+${s.losingClicks.toLocaleString()}</strong></td></tr>`;
     }).join('')}</tbody></table><div class="note">손실 추정 클릭 = 동일 노출에 카테 평균 CTR 적용 시 추가로 받을 수 있는 클릭 수. 매칭 정밀도/시각 어필력 개선 우선순위.</div>`;
+  }
+}
+
+function renderBenchmark(){
+  const bm = DATA.categoryBenchmark;
+  if (!bm) return;
+  document.getElementById('bm-period').textContent = bm.period;
+
+  function colorOf(ratio){
+    if (ratio >= 1) return {bg:'#d4f4dd', color:'#1a5d2a'};
+    if (ratio >= 0.5) return {bg:'#fff4cc', color:'#7a5b00'};
+    return {bg:'#fcd5cf', color:'#8a1a08'};
+  }
+  function fmtRatio(ratio){
+    const pct = ((ratio - 1) * 100).toFixed(0);
+    return (ratio >= 1 ? '+' : '') + pct + '%';
+  }
+
+  function renderSeg(rows, segId){
+    const tbody = document.getElementById(`bm-${segId}-tbl`);
+    const tfoot = document.getElementById(`bm-${segId}-foot`);
+
+    let pbImp=0, pbClick=0, p3Imp=0, p3Click=0;
+    let pbCuv=0, pbBuv=0, p3Cuv=0, p3Buv=0;
+    let pbProd=0, p3Prod=0;
+    rows.forEach(r => {
+      pbImp+=r.pb_imp; pbClick+=r.pb_click; p3Imp+=r.p3_imp; p3Click+=r.p3_click;
+      pbCuv+=r.pb_click_uv; pbBuv+=r.pb_buy_uv; p3Cuv+=r.p3_click_uv; p3Buv+=r.p3_buy_uv;
+      pbProd+=r.pb_prod_cnt; p3Prod+=r.p3_prod_cnt;
+    });
+    const pbCtrAvg = pbClick*100/pbImp;
+    const p3CtrAvg = p3Click*100/p3Imp;
+    const ctrRatioAvg = pbCtrAvg / p3CtrAvg;
+    const pbCvrAvg = pbBuv*100/pbCuv;
+    const p3CvrAvg = p3Buv*100/p3Cuv;
+    const cvrRatioAvg = pbCvrAvg / p3CvrAvg;
+
+    tbody.innerHTML = rows.map(r => {
+      const ctrCol = colorOf(r.ctr_ratio);
+      const cvrCol = colorOf(r.cvr_ratio);
+      return `<tr>
+        <td><strong>${r.cate_d2}</strong></td>
+        <td class="r">${r.pb_prod_cnt}</td>
+        <td class="r">${r.p3_prod_cnt.toLocaleString()}</td>
+        <td class="r">${r.pb_ctr.toFixed(2)}%</td>
+        <td class="r">${r.p3_ctr.toFixed(2)}%</td>
+        <td class="r" style="background:${ctrCol.bg};color:${ctrCol.color}"><strong>${fmtRatio(r.ctr_ratio)}</strong><br><small>${r.ctr_ratio.toFixed(2)}x</small></td>
+        <td class="r">${r.pb_cvr.toFixed(2)}%</td>
+        <td class="r">${r.p3_cvr.toFixed(2)}%</td>
+        <td class="r" style="background:${cvrCol.bg};color:${cvrCol.color}"><strong>${fmtRatio(r.cvr_ratio)}</strong><br><small>${r.cvr_ratio.toFixed(2)}x</small></td>
+      </tr>`;
+    }).join('');
+
+    const ctrFootCol = colorOf(ctrRatioAvg);
+    const cvrFootCol = colorOf(cvrRatioAvg);
+    tfoot.innerHTML = `<tr style="background:#f5f5f5;font-weight:700">
+      <td><strong>가중평균</strong></td>
+      <td class="r">${pbProd}</td>
+      <td class="r">${p3Prod.toLocaleString()}</td>
+      <td class="r">${pbCtrAvg.toFixed(2)}%</td>
+      <td class="r">${p3CtrAvg.toFixed(2)}%</td>
+      <td class="r" style="background:${ctrFootCol.bg};color:${ctrFootCol.color}"><strong>${fmtRatio(ctrRatioAvg)}</strong></td>
+      <td class="r">${pbCvrAvg.toFixed(2)}%</td>
+      <td class="r">${p3CvrAvg.toFixed(2)}%</td>
+      <td class="r" style="background:${cvrFootCol.bg};color:${cvrFootCol.color}"><strong>${fmtRatio(cvrRatioAvg)}</strong></td>
+    </tr>`;
+
+    return {pbProd, p3Prod, pbCtrAvg, p3CtrAvg, ctrRatioAvg, pbCvrAvg, p3CvrAvg, cvrRatioAvg};
+  }
+
+  const furSummary = renderSeg(bm.furniture, 'furniture');
+  const livSummary = renderSeg(bm.living, 'living');
+  document.getElementById('bm-fur-pb-cnt').textContent = furSummary.pbProd;
+  document.getElementById('bm-liv-pb-cnt').textContent = livSummary.pbProd;
+
+  // 진단 시그널
+  const sig = [];
+  bm.furniture.forEach(r => {
+    if (r.cvr_ratio < 0.2) sig.push({seg:'가구', cate:r.cate_d2, type:'CVR', ratio:r.cvr_ratio, pb:r.pb_cvr, p3:r.p3_cvr, prod:r.pb_prod_cnt});
+    if (r.ctr_ratio < 0.7) sig.push({seg:'가구', cate:r.cate_d2, type:'CTR', ratio:r.ctr_ratio, pb:r.pb_ctr, p3:r.p3_ctr, prod:r.pb_prod_cnt});
+  });
+  bm.living.forEach(r => {
+    if (r.cvr_ratio < 0.3) sig.push({seg:'리빙', cate:r.cate_d2, type:'CVR', ratio:r.cvr_ratio, pb:r.pb_cvr, p3:r.p3_cvr, prod:r.pb_prod_cnt});
+    if (r.ctr_ratio < 0.7) sig.push({seg:'리빙', cate:r.cate_d2, type:'CTR', ratio:r.ctr_ratio, pb:r.pb_ctr, p3:r.p3_ctr, prod:r.pb_prod_cnt});
+  });
+  sig.sort((a,b)=>a.ratio-b.ratio);
+
+  const sigBox = document.getElementById('bm-signals');
+  if (sig.length === 0) {
+    sigBox.innerHTML = '<div class="note">중대한 약점 시그널 없음.</div>';
+  } else {
+    sigBox.innerHTML = `<table><thead><tr><th>심각도</th><th>세그먼트</th><th>cate_d2</th><th>지표</th><th class="r">PB</th><th class="r">3P 평균</th><th class="r">갭</th><th class="r">PB 상품 수</th></tr></thead><tbody>${sig.map(s=>{
+      const sev = s.ratio < 0.1 ? '🔴 치명' : s.ratio < 0.5 ? '🟠 큰약점' : '🟡 주의';
+      const col = s.ratio < 0.1 ? '#c0392b' : s.ratio < 0.5 ? '#d35400' : '#d68910';
+      return `<tr><td><span style="color:${col};font-weight:700">${sev}</span></td><td>${s.seg}</td><td><strong>${s.cate}</strong></td><td>${s.type}</td><td class="r">${s.pb.toFixed(2)}%</td><td class="r">${s.p3.toFixed(2)}%</td><td class="r" style="color:${col}"><strong>카테의 ${(s.ratio*100).toFixed(0)}% (${s.ratio.toFixed(2)}x)</strong></td><td class="r">${s.prod}</td></tr>`;
+    }).join('')}</tbody></table><div class="note">CVR ratio &lt; 0.2(가구) / &lt; 0.3(리빙) 또는 CTR ratio &lt; 0.7 시 표시. 카테 평균 대비 약점 정도 순.</div>`;
   }
 }
 
