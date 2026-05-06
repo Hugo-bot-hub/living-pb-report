@@ -200,15 +200,21 @@ tr:hover td{background:rgba(108,92,231,.04)}
 </div>
 
 <div id="tab-benchmark" class="tab-content">
-  <div class="sec">📊 PB 카테고리 벤치마크 — 가구 PB vs 3P 카테 평균</div>
-  <div class="insight-box"><strong>모집단:</strong> PB(오늘의집 layer) <span id="bm-fur-pb-cnt">—</span>개 vs 3P 가구 카테 전체 평균. <strong>CTR</strong>=click/imp. <strong>CVR</strong>=buy_uv/click_uv (uuid→user_id, 같은날 같은 product_id 매칭). <strong>색상:</strong> 🟢 카테 평균 이상(ratio≥1) / 🟡 50~100% / 🔴 50% 미만. 기간: <span id="bm-period">—</span></div>
-  <div class="card"><table id="bm-fur-tbl"><thead><tr><th rowspan="2">cate_d2</th><th class="r" rowspan="2">PB 수</th><th class="r" rowspan="2">3P 수</th><th class="r" colspan="3">CTR</th><th class="r" colspan="3">CVR</th></tr><tr><th class="r">PB</th><th class="r">3P</th><th class="r">ratio</th><th class="r">PB</th><th class="r">3P</th><th class="r">ratio</th></tr></thead><tbody id="bm-furniture-tbl"></tbody><tfoot id="bm-furniture-foot"></tfoot></table></div>
+  <div class="cvr-note"><strong>스코프:</strong> 자사 2상품(🔴 소프트워싱 / 🟢 알러지케어) 드릴다운. <strong>cate_d3 = 이불/이불커버</strong> 한정. 기간: <span id="bm-period">—</span>. 색상 🟢 ratio≥1 / 🟡 50~100% / 🔴 50% 미만. n &lt; 100 imp는 회색 처리.</div>
 
-  <div class="sec">📊 PB 카테고리 벤치마크 — 리빙 PB vs 3P 카테 평균</div>
-  <div class="insight-box"><strong>모집단:</strong> PB(오늘의집 layer 가구 외) <span id="bm-liv-pb-cnt">—</span>개 vs 3P 리빙 카테 전체 평균.</div>
-  <div class="card"><table id="bm-liv-tbl"><thead><tr><th rowspan="2">cate_d2</th><th class="r" rowspan="2">PB 수</th><th class="r" rowspan="2">3P 수</th><th class="r" colspan="3">CTR</th><th class="r" colspan="3">CVR</th></tr><tr><th class="r">PB</th><th class="r">3P</th><th class="r">ratio</th><th class="r">PB</th><th class="r">3P</th><th class="r">ratio</th></tr></thead><tbody id="bm-living-tbl"></tbody><tfoot id="bm-living-foot"></tfoot></table></div>
+  <div class="sec">📊 자사 2상품 vs 카테 동급 / 가격대 동급 평균</div>
+  <div class="insight-box">자사 상품의 CTR/CVR 절대 수치를 <strong>cate_d3 (이불/이불커버) 3P 전체 평균</strong>과 <strong>같은 가격대 3P 평균</strong> 두 가지 벤치마크에 동시에 비교. 가격 경쟁력 진단 포함.</div>
+  <div class="card"><table id="bm-self-tbl"><thead><tr><th rowspan="2">상품</th><th class="r" rowspan="2">가격</th><th class="r" colspan="3">CTR</th><th class="r" colspan="3">CVR</th></tr><tr><th class="r">자사</th><th class="r">vs 카테</th><th class="r">vs 가격대</th><th class="r">자사</th><th class="r">vs 카테</th><th class="r">vs 가격대</th></tr></thead><tbody id="bm-self-body"></tbody></table></div>
 
-  <div class="sec">🔎 진단 시그널</div>
+  <div class="sec">💰 가격대별 PB vs 3P (이불/이불커버)</div>
+  <div class="insight-box">가격대 안에서 PB가 동급 3P 대비 어디쯤인지. 자사 2상품의 가격대 위치 (소프트워싱 &lt;30k / 알러지케어 30~50k)에 주목.</div>
+  <div class="card"><table id="bm-band-tbl"><thead><tr><th rowspan="2">가격대</th><th class="r" rowspan="2">PB 수</th><th class="r" rowspan="2">3P 수</th><th class="r" colspan="3">CTR</th><th class="r" colspan="3">CVR</th></tr><tr><th class="r">PB</th><th class="r">3P</th><th class="r">ratio</th><th class="r">PB</th><th class="r">3P</th><th class="r">ratio</th></tr></thead><tbody id="bm-band-body"></tbody></table></div>
+
+  <div class="sec">🏷️ PB 이불/이불커버 라인업 7개 비교</div>
+  <div class="insight-box">자사 2상품과 같은 카테(이불/이불커버)에 위치한 다른 PB 5개와의 효율 비교. 자사가 같은 PB 라인업 안에서 어느 위치인지.</div>
+  <div class="card"><table id="bm-lineup-tbl"><thead><tr><th>구분</th><th>상품</th><th>라인</th><th class="r">가격</th><th class="r">imp</th><th class="r">CTR</th><th class="r">click_uv</th><th class="r">buy_uv</th><th class="r">CVR</th></tr></thead><tbody id="bm-lineup-body"></tbody></table></div>
+
+  <div class="sec">🔎 진단 시그널 — 자사 2상품 약점 자동 탐지</div>
   <div class="card" id="bm-signals"></div>
 </div>
 
@@ -622,93 +628,103 @@ function renderBenchmark(){
   document.getElementById('bm-period').textContent = bm.period;
 
   function colorOf(ratio){
+    if (ratio == null) return {bg:'#f5f5f5', color:'#999'};
     if (ratio >= 1) return {bg:'#d4f4dd', color:'#1a5d2a'};
     if (ratio >= 0.5) return {bg:'#fff4cc', color:'#7a5b00'};
     return {bg:'#fcd5cf', color:'#8a1a08'};
   }
   function fmtRatio(ratio){
-    const pct = ((ratio - 1) * 100).toFixed(0);
-    return (ratio >= 1 ? '+' : '') + pct + '%';
+    if (ratio == null) return '—';
+    return ratio.toFixed(2) + 'x';
   }
 
-  function renderSeg(rows, segId){
-    const tbody = document.getElementById(`bm-${segId}-tbl`);
-    const tfoot = document.getElementById(`bm-${segId}-foot`);
-
-    let pbImp=0, pbClick=0, p3Imp=0, p3Click=0;
-    let pbCuv=0, pbBuv=0, p3Cuv=0, p3Buv=0;
-    let pbProd=0, p3Prod=0;
-    rows.forEach(r => {
-      pbImp+=r.pb_imp; pbClick+=r.pb_click; p3Imp+=r.p3_imp; p3Click+=r.p3_click;
-      pbCuv+=r.pb_click_uv; pbBuv+=r.pb_buy_uv; p3Cuv+=r.p3_click_uv; p3Buv+=r.p3_buy_uv;
-      pbProd+=r.pb_prod_cnt; p3Prod+=r.p3_prod_cnt;
-    });
-    const pbCtrAvg = pbClick*100/pbImp;
-    const p3CtrAvg = p3Click*100/p3Imp;
-    const ctrRatioAvg = pbCtrAvg / p3CtrAvg;
-    const pbCvrAvg = pbBuv*100/pbCuv;
-    const p3CvrAvg = p3Buv*100/p3Cuv;
-    const cvrRatioAvg = pbCvrAvg / p3CvrAvg;
-
-    tbody.innerHTML = rows.map(r => {
-      const ctrCol = colorOf(r.ctr_ratio);
-      const cvrCol = colorOf(r.cvr_ratio);
-      return `<tr>
-        <td><strong>${r.cate_d2}</strong></td>
-        <td class="r">${r.pb_prod_cnt}</td>
-        <td class="r">${r.p3_prod_cnt.toLocaleString()}</td>
-        <td class="r">${r.pb_ctr.toFixed(2)}%</td>
-        <td class="r">${r.p3_ctr.toFixed(2)}%</td>
-        <td class="r" style="background:${ctrCol.bg};color:${ctrCol.color}"><strong>${fmtRatio(r.ctr_ratio)}</strong><br><small>${r.ctr_ratio.toFixed(2)}x</small></td>
-        <td class="r">${r.pb_cvr.toFixed(2)}%</td>
-        <td class="r">${r.p3_cvr.toFixed(2)}%</td>
-        <td class="r" style="background:${cvrCol.bg};color:${cvrCol.color}"><strong>${fmtRatio(r.cvr_ratio)}</strong><br><small>${r.cvr_ratio.toFixed(2)}x</small></td>
-      </tr>`;
-    }).join('');
-
-    const ctrFootCol = colorOf(ctrRatioAvg);
-    const cvrFootCol = colorOf(cvrRatioAvg);
-    tfoot.innerHTML = `<tr style="background:#f5f5f5;font-weight:700">
-      <td><strong>가중평균</strong></td>
-      <td class="r">${pbProd}</td>
-      <td class="r">${p3Prod.toLocaleString()}</td>
-      <td class="r">${pbCtrAvg.toFixed(2)}%</td>
-      <td class="r">${p3CtrAvg.toFixed(2)}%</td>
-      <td class="r" style="background:${ctrFootCol.bg};color:${ctrFootCol.color}"><strong>${fmtRatio(ctrRatioAvg)}</strong></td>
-      <td class="r">${pbCvrAvg.toFixed(2)}%</td>
-      <td class="r">${p3CvrAvg.toFixed(2)}%</td>
-      <td class="r" style="background:${cvrFootCol.bg};color:${cvrFootCol.color}"><strong>${fmtRatio(cvrRatioAvg)}</strong></td>
+  // 1. 자사 2상품 표
+  const selfBody = document.getElementById('bm-self-body');
+  selfBody.innerHTML = bm.self_products.map(s => {
+    const c1 = colorOf(s.cate_ctr_ratio);
+    const c2 = colorOf(s.band_ctr_ratio);
+    const c3 = colorOf(s.cate_cvr_ratio);
+    const c4 = colorOf(s.band_cvr_ratio);
+    const emoji = s.pid === '3918642' ? '🔴' : '🟢';
+    return `<tr style="background:rgba(0,0,0,.03)">
+      <td><strong>${emoji} ${s.name}</strong> (${s.pid})<br><small>${s.line} 라인</small></td>
+      <td class="r">${s.price.toLocaleString()}원<br><small>${s.price_band}</small></td>
+      <td class="r"><strong>${s.ctr.toFixed(2)}%</strong></td>
+      <td class="r" style="background:${c1.bg};color:${c1.color}"><strong>${fmtRatio(s.cate_ctr_ratio)}</strong><br><small>(카테 ${s.cate_p3_ctr.toFixed(2)}%)</small></td>
+      <td class="r" style="background:${c2.bg};color:${c2.color}"><strong>${fmtRatio(s.band_ctr_ratio)}</strong><br><small>(가격대 ${s.band_p3_ctr.toFixed(2)}%)</small></td>
+      <td class="r"><strong>${s.cvr.toFixed(2)}%</strong></td>
+      <td class="r" style="background:${c3.bg};color:${c3.color}"><strong>${fmtRatio(s.cate_cvr_ratio)}</strong><br><small>(카테 ${s.cate_p3_cvr.toFixed(2)}%)</small></td>
+      <td class="r" style="background:${c4.bg};color:${c4.color}"><strong>${fmtRatio(s.band_cvr_ratio)}</strong><br><small>(가격대 ${s.band_p3_cvr.toFixed(2)}%)</small></td>
     </tr>`;
+  }).join('');
 
-    return {pbProd, p3Prod, pbCtrAvg, p3CtrAvg, ctrRatioAvg, pbCvrAvg, p3CvrAvg, cvrRatioAvg};
-  }
+  // 2. 가격대별 표
+  const bandBody = document.getElementById('bm-band-body');
+  bandBody.innerHTML = bm.price_bands.map(b => {
+    const c1 = colorOf(b.ctr_ratio);
+    const c2 = colorOf(b.cvr_ratio);
+    const isSelfBand = (b.band === '01_<30k') || (b.band === '02_30-50k');
+    return `<tr${isSelfBand ? ' style="background:rgba(0,0,0,.03)"' : ''}>
+      <td><strong>${b.label}</strong>${isSelfBand ? '<br><small>(자사 위치)</small>' : ''}</td>
+      <td class="r">${b.pb_prod_cnt}</td>
+      <td class="r">${b.p3_prod_cnt.toLocaleString()}</td>
+      <td class="r">${b.pb_imp > 0 ? b.pb_ctr.toFixed(2)+'%' : '—'}</td>
+      <td class="r">${b.p3_ctr.toFixed(2)}%</td>
+      <td class="r" style="background:${c1.bg};color:${c1.color}"><strong>${fmtRatio(b.ctr_ratio)}</strong></td>
+      <td class="r">${b.pb_click_uv > 0 ? b.pb_cvr.toFixed(2)+'%' : '—'}</td>
+      <td class="r">${b.p3_cvr.toFixed(2)}%</td>
+      <td class="r" style="background:${c2.bg};color:${c2.color}"><strong>${fmtRatio(b.cvr_ratio)}</strong></td>
+    </tr>`;
+  }).join('');
 
-  const furSummary = renderSeg(bm.furniture, 'furniture');
-  const livSummary = renderSeg(bm.living, 'living');
-  document.getElementById('bm-fur-pb-cnt').textContent = furSummary.pbProd;
-  document.getElementById('bm-liv-pb-cnt').textContent = livSummary.pbProd;
+  // 3. PB 라인업 7개
+  const lineupBody = document.getElementById('bm-lineup-body');
+  lineupBody.innerHTML = bm.pb_lineup.map(p => {
+    const greyOut = p.imp < 100;
+    const trStyle = greyOut ? ' style="color:#999"' : (p.is_self ? ' style="background:rgba(0,0,0,.05);font-weight:600"' : '');
+    const selfMark = p.is_self ? (p.pid === '3918642' ? '🔴 자사' : '🟢 자사') : '';
+    return `<tr${trStyle}>
+      <td>${selfMark}</td>
+      <td><strong>${p.name}</strong> (${p.pid})</td>
+      <td>${p.line}</td>
+      <td class="r">${p.price.toLocaleString()}원</td>
+      <td class="r">${p.imp.toLocaleString()}</td>
+      <td class="r">${p.imp >= 100 ? p.ctr.toFixed(2)+'%' : '—'}</td>
+      <td class="r">${p.click_uv}</td>
+      <td class="r">${p.buy_uv}</td>
+      <td class="r">${p.click_uv >= 30 ? p.cvr.toFixed(2)+'%' : '—'}</td>
+    </tr>`;
+  }).join('');
 
-  // 진단 시그널
+  // 4. 진단 시그널
   const sig = [];
-  bm.furniture.forEach(r => {
-    if (r.cvr_ratio < 0.2) sig.push({seg:'가구', cate:r.cate_d2, type:'CVR', ratio:r.cvr_ratio, pb:r.pb_cvr, p3:r.p3_cvr, prod:r.pb_prod_cnt});
-    if (r.ctr_ratio < 0.7) sig.push({seg:'가구', cate:r.cate_d2, type:'CTR', ratio:r.ctr_ratio, pb:r.pb_ctr, p3:r.p3_ctr, prod:r.pb_prod_cnt});
+  bm.self_products.forEach(s => {
+    const emoji = s.pid === '3918642' ? '🔴' : '🟢';
+    const shortName = s.pid === '3918642' ? '소프트워싱' : '알러지케어';
+    if (s.cate_cvr_ratio != null && s.cate_cvr_ratio < 0.3) {
+      sig.push({pid:s.pid, name:`${emoji} ${shortName}`, type:'CVR (vs 카테 평균)', ratio:s.cate_cvr_ratio, val:`${s.cvr.toFixed(2)}% vs ${s.cate_p3_cvr.toFixed(2)}%`});
+    }
+    if (s.band_cvr_ratio != null && s.band_cvr_ratio < 0.3) {
+      sig.push({pid:s.pid, name:`${emoji} ${shortName}`, type:'CVR (vs 가격대 평균)', ratio:s.band_cvr_ratio, val:`${s.cvr.toFixed(2)}% vs ${s.band_p3_cvr.toFixed(2)}%`});
+    }
+    if (s.cate_ctr_ratio != null && s.cate_ctr_ratio < 0.7) {
+      sig.push({pid:s.pid, name:`${emoji} ${shortName}`, type:'CTR (vs 카테 평균)', ratio:s.cate_ctr_ratio, val:`${s.ctr.toFixed(2)}% vs ${s.cate_p3_ctr.toFixed(2)}%`});
+    }
+    if (s.band_ctr_ratio != null && s.band_ctr_ratio < 0.7) {
+      sig.push({pid:s.pid, name:`${emoji} ${shortName}`, type:'CTR (vs 가격대 평균)', ratio:s.band_ctr_ratio, val:`${s.ctr.toFixed(2)}% vs ${s.band_p3_ctr.toFixed(2)}%`});
+    }
   });
-  bm.living.forEach(r => {
-    if (r.cvr_ratio < 0.3) sig.push({seg:'리빙', cate:r.cate_d2, type:'CVR', ratio:r.cvr_ratio, pb:r.pb_cvr, p3:r.p3_cvr, prod:r.pb_prod_cnt});
-    if (r.ctr_ratio < 0.7) sig.push({seg:'리빙', cate:r.cate_d2, type:'CTR', ratio:r.ctr_ratio, pb:r.pb_ctr, p3:r.p3_ctr, prod:r.pb_prod_cnt});
-  });
-  sig.sort((a,b)=>a.ratio-b.ratio);
+  sig.sort((a, b) => a.ratio - b.ratio);
 
   const sigBox = document.getElementById('bm-signals');
   if (sig.length === 0) {
     sigBox.innerHTML = '<div class="note">중대한 약점 시그널 없음.</div>';
   } else {
-    sigBox.innerHTML = `<table><thead><tr><th>심각도</th><th>세그먼트</th><th>cate_d2</th><th>지표</th><th class="r">PB</th><th class="r">3P 평균</th><th class="r">갭</th><th class="r">PB 상품 수</th></tr></thead><tbody>${sig.map(s=>{
-      const sev = s.ratio < 0.1 ? '🔴 치명' : s.ratio < 0.5 ? '🟠 큰약점' : '🟡 주의';
-      const col = s.ratio < 0.1 ? '#c0392b' : s.ratio < 0.5 ? '#d35400' : '#d68910';
-      return `<tr><td><span style="color:${col};font-weight:700">${sev}</span></td><td>${s.seg}</td><td><strong>${s.cate}</strong></td><td>${s.type}</td><td class="r">${s.pb.toFixed(2)}%</td><td class="r">${s.p3.toFixed(2)}%</td><td class="r" style="color:${col}"><strong>카테의 ${(s.ratio*100).toFixed(0)}% (${s.ratio.toFixed(2)}x)</strong></td><td class="r">${s.prod}</td></tr>`;
-    }).join('')}</tbody></table><div class="note">CVR ratio &lt; 0.2(가구) / &lt; 0.3(리빙) 또는 CTR ratio &lt; 0.7 시 표시. 카테 평균 대비 약점 정도 순.</div>`;
+    sigBox.innerHTML = `<table><thead><tr><th>심각도</th><th>상품</th><th>지표</th><th class="r">자사 vs 비교 평균</th><th class="r">ratio</th></tr></thead><tbody>${sig.map(s => {
+      const sev = s.ratio < 0.2 ? '🔴 치명' : s.ratio < 0.5 ? '🟠 큰약점' : '🟡 주의';
+      const col = s.ratio < 0.2 ? '#c0392b' : s.ratio < 0.5 ? '#d35400' : '#d68910';
+      return `<tr><td><span style="color:${col};font-weight:700">${sev}</span></td><td><strong>${s.name}</strong></td><td>${s.type}</td><td class="r">${s.val}</td><td class="r" style="color:${col}"><strong>${s.ratio.toFixed(2)}x</strong></td></tr>`;
+    }).join('')}</tbody></table><div class="note">CVR ratio &lt; 0.3 또는 CTR ratio &lt; 0.7 자동 탐지. 약점 정도 순.</div>`;
   }
 }
 
