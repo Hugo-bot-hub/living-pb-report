@@ -173,8 +173,12 @@ tr:hover td{background:rgba(108,92,231,.04)}
   <div class="sec">🚀 직전 유입 퍼널 (PDP로 들어오기 직전 경로)</div>
   <div class="insight-box"><strong>핵심:</strong> 자사 2상품이 자생 경로(검색·카테고리)에서 오는지, 광고·기획전에 의존하는지 + 경쟁사 6개가 어떤 경로에서 유입되는지 비교.</div>
 
-  <div class="sec">🎯 Pull vs Push 노출 비중 (최근 7일)</div>
-  <div class="insight-box"><strong>Pull(파랑) = 사용자가 땡긴 노출</strong>: 검색(오가닉)·카테고리(오가닉)·브랜드관·베스트·재방문(장바구니/스크랩북/최근본/마이페/주문결과)·기타(PDP스타일링샷/카드태그/리뷰쓰기 등 컨텐츠 탐색). <strong>Push(주황) = 플랫폼이 부은 노출</strong>: 홈·기획전·오늘의딜·컨텐츠·마이패키지·광고리스트·<strong>검색광고</strong>·<strong>카테고리광고</strong>·푸시(BRAZE)·PDP추천. Pull 비중 높을수록 자생력 강함. ※ 검색·카테고리 page_id 안의 광고 슬롯(SEARCH_CAROUSEL_HOME·STORE_SRP_AD·STORE_CATEGORY_CAROUSEL·MD_PICK)은 광고 컬럼으로 분리.</div>
+  <div class="sec">🎯 자연 vs 광고·큐레이션 노출 비중 (최근 7일)</div>
+  <div class="insight-box">
+    <div style="margin-bottom:6px"><span style="display:inline-block;width:12px;height:12px;background:#3b82f6;vertical-align:middle;margin-right:6px"></span><strong>자연 노출 (Pull)</strong> — 사용자의 탐색 흐름에서 발생: 검색(오가닉)·카테고리(오가닉)·브랜드관·베스트·재방문(장바구니/스크랩북/마이페/주문결과)·기타(PDP스타일링샷·리뷰·태그 등)</div>
+    <div><span style="display:inline-block;width:12px;height:12px;background:#f97316;vertical-align:middle;margin-right:6px"></span><strong>광고·큐레이션 노출 (Push)</strong> — 플랫폼 광고 또는 알고리즘 큐레이션으로 부어주는 노출: 홈·기획전·오늘의딜·콘텐츠·마이패키지·PDP추천·검색광고·카테고리광고·광고리스트·푸시(BRAZE)</div>
+    <div style="margin-top:8px;font-size:11px;color:var(--text3)">※ <strong>검색광고</strong> = SRP 안의 광고 슬롯(SEARCH_CAROUSEL_HOME·STORE_SRP_AD)으로 검색 흐름 중에 끼어드는 광고. <strong>광고리스트</strong> = 검색과 무관한 별도 광고면(오늘의가든미션 OGARDEN_MISSION_LIST). 둘 다 CPC 과금이지만 노출 위치가 다름.</div>
+  </div>
   <div class="card"><div class="ch lg"><canvas id="in-pp-stack"></canvas></div><div class="note">2026.04 월간 이니셔티브 리뷰 대시보드의 Pull/Push 분류 기준 적용.</div></div>
 
   <div class="sec">📊 6상품 유입 경로 비중 비교 (100% Stacked, 최근 7일)</div>
@@ -491,7 +495,7 @@ function renderInflow(){
     });
   });
   const ppGroups=['pull','push'];
-  const ppLabels={pull:'Pull (검색·카테·브랜드·베스트·재방문·기타)',push:'Push (홈·기획전·딜·콘텐츠·마패·광고·검색광고·카테광고·PDP추천·BRAZE)'};
+  const ppLabels={pull:'자연 노출 (검색·카테·브랜드·베스트·재방문·기타)',push:'광고·큐레이션 노출 (홈·기획전·딜·콘텐츠·마패·검색광고·카테광고·광고리스트·PDP추천·BRAZE)'};
   const ppDatasets=ppGroups.map(g=>({
     label:ppLabels[g],
     data:pids.map(pid=>{const t=ppData[pid].pull+ppData[pid].push;return t>0?ppData[pid][g]/t*100:0}),
