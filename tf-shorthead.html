@@ -174,7 +174,7 @@ tr:hover td{background:rgba(108,92,231,.04)}
   <div class="insight-box"><strong>핵심:</strong> 자사 2상품이 자생 경로(검색·카테고리)에서 오는지, 광고·기획전에 의존하는지 + 경쟁사 6개가 어떤 경로에서 유입되는지 비교.</div>
 
   <div class="sec">🎯 Pull vs Push 노출 비중 (최근 7일)</div>
-  <div class="insight-box"><strong>Pull(파랑) = 사용자가 땡긴 노출</strong>: 검색·카테고리·브랜드관·베스트 + <strong>재방문</strong>(장바구니·스크랩북·최근본·마이페이지·주문결과). <strong>Push(주황) = 플랫폼이 부은 노출</strong>: 홈·기획전·오늘의딜·컨텐츠·마이패키지·광고리스트·푸시(BRAZE)·PDP추천. Pull 비중 높을수록 자생력 강함.</div>
+  <div class="insight-box"><strong>Pull(파랑) = 사용자가 땡긴 노출</strong>: 검색(오가닉)·카테고리(오가닉)·브랜드관·베스트 + <strong>재방문</strong>(장바구니·스크랩북·최근본·마이페이지·주문결과). <strong>Push(주황) = 플랫폼이 부은 노출</strong>: 홈·기획전·오늘의딜·컨텐츠·마이패키지·광고리스트·<strong>검색광고</strong>·<strong>카테고리광고</strong>·푸시(BRAZE)·PDP추천. Pull 비중 높을수록 자생력 강함. ※ 검색·카테고리는 SRP/CATEGORY page_id 안에서 광고 슬롯(SEARCH_CAROUSEL_HOME·STORE_SRP_AD·STORE_CATEGORY_CAROUSEL·MD_PICK)을 분리해 광고 컬럼으로 이관.</div>
   <div class="card"><div class="ch lg"><canvas id="in-pp-stack"></canvas></div><div class="note">2026.04 월간 이니셔티브 리뷰 대시보드의 Pull/Push 분류 기준 적용.</div></div>
 
   <div class="sec">📊 6상품 유입 경로 비중 비교 (100% Stacked, 최근 7일)</div>
@@ -261,9 +261,9 @@ tr:hover td{background:rgba(108,92,231,.04)}
 <script>
 const COLORS={soft:'#ff6b6b',allergy:'#00b894',compA:'#e6a817',compB:'#8b5cf6'};
 const PID_COLOR={'3918642':'#ff6b6b','3640244':'#00b894','767440':'#e6a817','2636441':'#8b5cf6','1930788':'#f97316','442026':'#3b82f6'};
-const INF_COLORS={'검색':'#3b82f6','PDP추천':'#10b981','카테고리':'#f59e0b','홈':'#ef4444','브랜드관':'#8b5cf6','기획전':'#06b6d4','마이패키지':'#ec4899','광고리스트':'#6b7280','오늘의딜':'#f97316','베스트':'#14b8a6','컨텐츠':'#84cc16','기타':'#9ca3af','푸시':'#a78bfa','재방문':'#0ea5e9'};
-// Pull(능동/땡긴 노출) vs Push(자동/부은 노출). 재방문(CART·마이페·스크랩북·최근본·주문결과 등)은 사용자가 한 번 땡긴 상품의 자동 재노출이라 pull. 광고리스트·PDP추천·푸시는 자발적 아니라 push.
-const CHANNEL_GROUP={'검색':'pull','카테고리':'pull','브랜드관':'pull','베스트':'pull','재방문':'pull','홈':'push','기획전':'push','오늘의딜':'push','컨텐츠':'push','마이패키지':'push','광고리스트':'push','PDP추천':'push','푸시':'push','기타':'기타'};
+const INF_COLORS={'검색':'#3b82f6','검색광고':'#1d4ed8','PDP추천':'#10b981','카테고리':'#f59e0b','카테고리광고':'#b45309','홈':'#ef4444','브랜드관':'#8b5cf6','기획전':'#06b6d4','마이패키지':'#ec4899','광고리스트':'#6b7280','오늘의딜':'#f97316','베스트':'#14b8a6','컨텐츠':'#84cc16','기타':'#9ca3af','푸시':'#a78bfa','재방문':'#0ea5e9'};
+// Pull(능동/땡긴 노출) vs Push(자동/부은 노출). 재방문은 한 번 땡긴 상품의 자동 재노출이라 pull. 검색광고/카테고리광고/광고리스트/PDP추천/푸시는 광고·큐레이션이라 push.
+const CHANNEL_GROUP={'검색':'pull','카테고리':'pull','브랜드관':'pull','베스트':'pull','재방문':'pull','홈':'push','기획전':'push','오늘의딜':'push','컨텐츠':'push','마이패키지':'push','광고리스트':'push','검색광고':'push','카테고리광고':'push','PDP추천':'push','푸시':'push','기타':'기타'};
 const PP_COLORS={pull:'#3b82f6',push:'#f97316','기타':'#9ca3af'};
 const KW_COLORS={'이불':'#dc2626','차렵이불':'#ef4444','이불세트':'#f59e0b','사계절이불':'#10b981','알러지케어':'#3b82f6'};
 let DATA=null;
@@ -466,7 +466,7 @@ function renderProductTab(p){
 function renderInflow(){
   const rows=DATA.inflow;
   const pids=['3918642','3640244','767440','2636441','1930788','442026'];
-  const keys=['검색','PDP추천','카테고리','홈','브랜드관','기획전','마이패키지','광고리스트','오늘의딜','베스트','재방문','컨텐츠','푸시','기타'];
+  const keys=['검색','검색광고','PDP추천','카테고리','카테고리광고','홈','브랜드관','기획전','마이패키지','광고리스트','오늘의딜','베스트','재방문','컨텐츠','푸시','기타'];
   const recent7=[...new Set(rows.map(r=>r.dt))].sort().slice(-7);
 
   // 6상품 100% stacked
