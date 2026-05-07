@@ -173,8 +173,12 @@ tr:hover td{background:rgba(108,92,231,.04)}
   <div class="sec">🚀 직전 유입 퍼널 (PDP로 들어오기 직전 경로)</div>
   <div class="insight-box"><strong>핵심:</strong> 자사 2상품이 자생 경로(검색·카테고리)에서 오는지, 광고·기획전에 의존하는지 + 경쟁사 6개가 어떤 경로에서 유입되는지 비교.</div>
 
+  <div class="sec">🎯 Pull vs Push 노출 비중 (최근 7일)</div>
+  <div class="insight-box"><strong>Pull(파랑)</strong> = 사용자 의도/탐색 진입 (검색·카테고리·브랜드관·베스트). <strong>Push(주황)</strong> = 플랫폼 큐레이션·알림 (홈·기획전·오늘의딜·컨텐츠·마이패키지·광고리스트·푸시·PDP추천). Pull 비중이 높을수록 자생력 강함.</div>
+  <div class="card"><div class="ch lg"><canvas id="in-pp-stack"></canvas></div><div class="note">2026.04 월간 이니셔티브 리뷰 대시보드의 Pull/Push 분류 기준 적용.</div></div>
+
   <div class="sec">📊 6상품 유입 경로 비중 비교 (100% Stacked, 최근 7일)</div>
-  <div class="card"><div class="ch xl"><canvas id="in-6p-stack"></canvas></div><div class="note">각 상품의 PDP 노출 중 경로별 비중. 검색·카테고리 비중이 높을수록 자생적. 마이패키지·광고리스트 높으면 내부 프로모션 의존.</div></div>
+  <div class="card"><div class="ch xl"><canvas id="in-6p-stack"></canvas></div><div class="note">각 상품의 PDP 노출 중 경로별 상세 비중. 위의 Pull/Push 묶음을 채널 단위로 풀어본 차트.</div></div>
 
   <div class="g2">
     <div class="card soft"><h3>🔴 소프트워싱 경로 상세 (최근 7일)</h3><table><thead><tr><th>경로</th><th class="r">노출</th><th class="r">클릭</th><th class="r">CTR</th><th class="r">비중</th></tr></thead><tbody id="in-s-tbl"></tbody></table></div>
@@ -258,6 +262,9 @@ tr:hover td{background:rgba(108,92,231,.04)}
 const COLORS={soft:'#ff6b6b',allergy:'#00b894',compA:'#e6a817',compB:'#8b5cf6'};
 const PID_COLOR={'3918642':'#ff6b6b','3640244':'#00b894','767440':'#e6a817','2636441':'#8b5cf6','1930788':'#f97316','442026':'#3b82f6'};
 const INF_COLORS={'검색':'#3b82f6','PDP추천':'#10b981','카테고리':'#f59e0b','홈':'#ef4444','브랜드관':'#8b5cf6','기획전':'#06b6d4','마이패키지':'#ec4899','광고리스트':'#6b7280','오늘의딜':'#f97316','베스트':'#14b8a6','컨텐츠':'#84cc16','기타':'#9ca3af','푸시':'#a78bfa'};
+// Pull(사용자 의도/탐색) vs Push(플랫폼 큐레이션·알림). PDP추천은 다른 PDP의 추천에서 진입이라 push로 분류.
+const CHANNEL_GROUP={'검색':'pull','카테고리':'pull','브랜드관':'pull','베스트':'pull','홈':'push','기획전':'push','오늘의딜':'push','컨텐츠':'push','마이패키지':'push','광고리스트':'push','PDP추천':'push','푸시':'push','기타':'기타'};
+const PP_COLORS={pull:'#3b82f6',push:'#f97316','기타':'#9ca3af'};
 const KW_COLORS={'이불':'#dc2626','차렵이불':'#ef4444','이불세트':'#f59e0b','사계절이불':'#10b981','알러지케어':'#3b82f6'};
 let DATA=null;
 const PERIOD={soft:'day',allergy:'day'};
@@ -472,6 +479,24 @@ function renderInflow(){
     });
   });
   const labels=pids.map(pid=>{const p=DATA.products[pid];return `${p.emoji} ${p.shortName}, ${p.brand}, ${pid}`});
+
+  // Pull/Push 100% stacked (그룹 묶음)
+  const ppData={};
+  pids.forEach(pid=>{
+    ppData[pid]={pull:0,push:0,'기타':0};
+    keys.forEach(k=>{
+      const g=CHANNEL_GROUP[k]||'기타';
+      ppData[pid][g]+=stackData[pid][k]||0;
+    });
+  });
+  const ppGroups=['pull','push','기타'];
+  const ppLabels={pull:'Pull (검색·카테·브랜드·베스트)',push:'Push (홈·기획전·딜·콘텐츠·마패·광고·PDP추천·BRAZE)','기타':'기타'};
+  const ppDatasets=ppGroups.map(g=>({
+    label:ppLabels[g],
+    data:pids.map(pid=>{const t=ppData[pid].pull+ppData[pid].push+ppData[pid]['기타'];return t>0?ppData[pid][g]/t*100:0}),
+    backgroundColor:PP_COLORS[g]
+  }));
+  mkCh('in-pp-stack',{type:'bar',data:{labels,datasets:ppDatasets},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:14,font:{size:12}}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.parsed.x.toFixed(1)+'%'}}},scales:{x:{stacked:true,max:100,ticks:{callback:v=>v+'%'}},y:{stacked:true}}}});
   // convert to 100%
   const datasets=keys.map(k=>({
     label:k,
