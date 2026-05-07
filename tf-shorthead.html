@@ -205,6 +205,13 @@ tr:hover td{background:rgba(108,92,231,.04)}
 
   <div class="sec">⚠️ 약점 채널 시그널 — 카테 동급 대비 자동 탐지</div>
   <div class="card" id="weak-signals"></div>
+
+  <div class="sec">🔄 채널 변화 감지 — WoW (최근 7일 vs 직전 7일)</div>
+  <div class="insight-box"><strong>읽는 법:</strong> 어제까지 7일(최근) vs 그 이전 7일 동일 채널 노출 비교. 변동률 ±15% 이상은 색상 강조 (🔻 빨강 / 🔺 파랑). 노출 1,000 미만 채널은 노이즈로 회색 처리. <strong>특정 채널 갑자기 떨어지거나 뜨는지 한눈에 감지.</strong></div>
+  <div class="card">
+    <div style="margin-bottom:8px;font-size:12px;color:var(--text3)">필터: <select id="wow-filter-pid" style="padding:4px 8px;font-size:12px"><option value="all">전체 6상품</option><option value="3918642">🔴 소프트워싱</option><option value="3640244">🟢 알러지케어</option><option value="767440">⚔️ 카스테라</option><option value="2636441">⚔️ 쁘리엘르</option><option value="1930788">⚔️ 돈워리 M2</option><option value="442026">⚔️ 가드 M2</option></select> · 정렬: <select id="wow-filter-sort" style="padding:4px 8px;font-size:12px"><option value="abs">변동률 절대값</option><option value="desc">증가순</option><option value="asc">감소순</option><option value="imp">노출 큰순</option></select></div>
+    <table id="wow-tbl"><thead><tr><th>상품</th><th>채널</th><th class="r">직전 7일</th><th class="r">최근 7일</th><th class="r">Δ</th><th class="r">WoW%</th><th class="r">신호</th></tr></thead><tbody id="wow-body"></tbody></table>
+  </div>
 </div>
 
 <div id="tab-benchmark" class="tab-content">
@@ -649,6 +656,53 @@ function renderInflow(){
       return `<tr><td><span style="color:${sevColor};font-weight:700">${sevLabel}</span></td><td>${s.emoji} ${s.name}</td><td><strong>${s.ch}</strong></td><td class="r">${s.ctr.toFixed(2)}%</td><td class="r">${s.compsAvg.toFixed(2)}%</td><td class="r" style="color:${sevColor}"><strong>카테의 ${(s.ratio*100).toFixed(0)}%</strong><br><small>(${((s.ratio-1)*100).toFixed(0)}%, ${(1/s.ratio).toFixed(1)}배 부족)</small></td><td class="r">${s.imp.toLocaleString()}</td><td class="r" style="color:${sevColor}"><strong>+${s.losingClicks.toLocaleString()}</strong></td></tr>`;
     }).join('')}</tbody></table><div class="note">손실 추정 클릭 = 동일 노출에 카테 평균 CTR 적용 시 추가로 받을 수 있는 클릭 수. 매칭 정밀도/시각 어필력 개선 우선순위.</div>`;
   }
+
+  // WoW 변화 감지 (최근 7일 vs 직전 7일)
+  const allDates=[...new Set(rows.map(r=>r.dt))].sort();
+  const recent=allDates.slice(-7);
+  const prev=allDates.slice(-14,-7);
+  function aggBy(dts){
+    const a={};
+    rows.filter(r=>dts.includes(r.dt)).forEach(r=>{
+      const k=r.pid+'|'+r.inflow;
+      a[k]=(a[k]||0)+r.imp;
+    });
+    return a;
+  }
+  const recentAgg=aggBy(recent);
+  const prevAgg=aggBy(prev);
+  const wowKeys=new Set([...Object.keys(recentAgg),...Object.keys(prevAgg)]);
+  const wowRows=[...wowKeys].map(k=>{
+    const [pid,ch]=k.split('|');
+    const recentImp=recentAgg[k]||0;
+    const prevImp=prevAgg[k]||0;
+    const delta=recentImp-prevImp;
+    const wow=prevImp>0?(delta/prevImp*100):(recentImp>0?999:0);
+    return {pid,ch,prevImp,recentImp,delta,wow,maxImp:Math.max(prevImp,recentImp)};
+  }).filter(r=>r.maxImp>=1000);
+  function renderWoW(){
+    const pidFilter=document.getElementById('wow-filter-pid').value;
+    const sortMode=document.getElementById('wow-filter-sort').value;
+    let filtered=pidFilter==='all'?wowRows:wowRows.filter(r=>r.pid===pidFilter);
+    if(sortMode==='abs') filtered.sort((a,b)=>Math.abs(b.wow)-Math.abs(a.wow));
+    else if(sortMode==='desc') filtered.sort((a,b)=>b.wow-a.wow);
+    else if(sortMode==='asc') filtered.sort((a,b)=>a.wow-b.wow);
+    else filtered.sort((a,b)=>b.recentImp-a.recentImp);
+    document.getElementById('wow-body').innerHTML=filtered.slice(0,40).map(r=>{
+      const p=DATA.products[r.pid];
+      const isSelf=r.pid==='3918642'||r.pid==='3640244';
+      const wowAbs=Math.abs(r.wow);
+      let signal='', sigColor='', wowColor='inherit';
+      if(r.wow>=15){signal='🔺 상승'; sigColor='#1d4ed8'; wowColor='#1d4ed8';}
+      else if(r.wow<=-15){signal='🔻 하락'; sigColor='#c0392b'; wowColor='#c0392b';}
+      else {signal='— 보합'; sigColor='#999';}
+      const wowDisp=r.wow>=999?'신규':(r.wow>=0?'+':'')+r.wow.toFixed(0)+'%';
+      return `<tr${isSelf?' style="background:rgba(0,0,0,.03)"':''}><td>${p.emoji} ${p.shortName}${isSelf?' <strong>(자사)</strong>':''}</td><td><span class="pill" style="background:${INF_COLORS[r.ch]||'#888'}22;color:${INF_COLORS[r.ch]||'#888'}">${r.ch}</span></td><td class="r">${r.prevImp.toLocaleString()}</td><td class="r">${r.recentImp.toLocaleString()}</td><td class="r" style="color:${wowColor}">${(r.delta>=0?'+':'')+r.delta.toLocaleString()}</td><td class="r" style="color:${wowColor};font-weight:${wowAbs>=15?700:400}">${wowDisp}</td><td class="r" style="color:${sigColor};font-weight:${wowAbs>=15?700:400}">${signal}</td></tr>`;
+    }).join('');
+  }
+  document.getElementById('wow-filter-pid').onchange=renderWoW;
+  document.getElementById('wow-filter-sort').onchange=renderWoW;
+  renderWoW();
 }
 
 function renderBenchmark(){
