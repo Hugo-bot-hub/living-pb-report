@@ -23968,159 +23968,234 @@
   },
   "categoryBenchmark": {
     "period": "최근 7일 (2026-05-04 ~ 2026-05-10)",
+    "scope": "cate_d3=이불/이불커버 PB vs 3P, UV 기준",
     "cate_d3": "이불/이불커버",
+    "cate_d2": "침구",
+    "metric_def": "CTR(UV)=pdpview_user_join/impression_user_join, CVR(UV)=purchase_user_join/pdpview_user_join",
     "cate_3p_avg": {
-      "imp_uv": 13598769,
-      "pdp_uv": 575534,
-      "buy_uv": 11945,
-      "ctr": 4.232250727988688,
-      "cvr": 2.0754638301125565,
+      "ctr": 4.232,
+      "cvr": 2.075,
       "prod_cnt": 27531
     },
-    "price_bands": {
-      "02_30-50k": {
-        "3P": {
-          "prod_cnt": 5274,
-          "imp_uv": 4564285,
-          "pdp_uv": 221172,
-          "buy_uv": 6070,
-          "ctr": 4.845709678514817,
-          "cvr": 2.7444703669542254
-        },
-        "PB": {
-          "prod_cnt": 2,
-          "imp_uv": 182321,
-          "pdp_uv": 4734,
-          "buy_uv": 209,
-          "ctr": 2.5965193258044876,
-          "cvr": 4.414871144909167
-        }
-      },
-      "04_70-100k": {
-        "3P": {
-          "prod_cnt": 5594,
-          "imp_uv": 2111176,
-          "pdp_uv": 77390,
-          "buy_uv": 833,
-          "ctr": 3.6657294323163963,
-          "cvr": 1.0763664556144203
-        }
-      },
-      "01_<30k": {
-        "PB": {
-          "prod_cnt": 1,
-          "imp_uv": 142623,
-          "pdp_uv": 4275,
-          "buy_uv": 120,
-          "ctr": 2.9974127595128417,
-          "cvr": 2.807017543859649
-        },
-        "3P": {
-          "prod_cnt": 3227,
-          "imp_uv": 1184981,
-          "pdp_uv": 56970,
-          "buy_uv": 1459,
-          "ctr": 4.807672021745496,
-          "cvr": 2.560997015973319
-        }
-      },
-      "03_50-70k": {
-        "3P": {
-          "prod_cnt": 4939,
-          "imp_uv": 3714817,
-          "pdp_uv": 158968,
-          "buy_uv": 3222,
-          "ctr": 4.279295588450252,
-          "cvr": 2.026823008404207
-        },
-        "PB": {
-          "prod_cnt": 3,
-          "imp_uv": 130705,
-          "pdp_uv": 3208,
-          "buy_uv": 86,
-          "ctr": 2.4543820052790633,
-          "cvr": 2.680798004987531
-        }
-      },
-      "05_100k+": {
-        "3P": {
-          "prod_cnt": 8497,
-          "imp_uv": 2023510,
-          "pdp_uv": 61034,
-          "buy_uv": 361,
-          "ctr": 3.016244051178398,
-          "cvr": 0.5914736048759708
-        }
-      }
-    },
-    "pb_lineup": {
-      "3508402": {
-        "imp_uv": 1539,
-        "pdp_uv": 39,
-        "buy_uv": 1,
-        "ctr": 2.53411306042885,
-        "cvr": 2.564102564102564
-      },
-      "3918642": {
+    "self_products": [
+      {
+        "pid": "3918642",
+        "name": "바른 복숭아촉감 소프트워싱 침구세트",
+        "line": "basic",
+        "price": 35900,
+        "price_band": "3-5만원",
+        "ctr": 2.997,
+        "cvr": 2.807,
         "imp_uv": 142623,
         "pdp_uv": 4275,
         "buy_uv": 120,
-        "ctr": 2.9974127595128417,
-        "cvr": 2.807017543859649
+        "cate_p3_ctr": 4.232,
+        "cate_p3_cvr": 2.075,
+        "cate_ctr_ratio": 0.708,
+        "cate_cvr_ratio": 1.353,
+        "band_p3_ctr": 4.846,
+        "band_p3_cvr": 2.744,
+        "band_ctr_ratio": 0.618,
+        "band_cvr_ratio": 1.023
       },
-      "3640244": {
+      {
+        "pid": "3640244",
+        "name": "바른 알러지케어 침구세트",
+        "line": "basic",
+        "price": 49900,
+        "price_band": "3-5만원",
+        "ctr": 2.584,
+        "cvr": 2.388,
         "imp_uv": 137738,
         "pdp_uv": 3559,
         "buy_uv": 85,
-        "ctr": 2.5838911556723634,
-        "cvr": 2.3883113234054507
+        "cate_p3_ctr": 4.232,
+        "cate_p3_cvr": 2.075,
+        "cate_ctr_ratio": 0.611,
+        "cate_cvr_ratio": 1.151,
+        "band_p3_ctr": 4.846,
+        "band_p3_cvr": 2.744,
+        "band_ctr_ratio": 0.533,
+        "band_cvr_ratio": 0.87
+      }
+    ],
+    "price_bands": [
+      {
+        "band": "01_<30k",
+        "label": "<30,000원",
+        "pb_prod_cnt": 1,
+        "p3_prod_cnt": 3227,
+        "pb_imp_uv": 142623,
+        "pb_pdp_uv": 4275,
+        "pb_buy_uv": 120,
+        "p3_imp_uv": 1184981,
+        "p3_pdp_uv": 56970,
+        "p3_buy_uv": 1459,
+        "pb_ctr": 2.997,
+        "p3_ctr": 4.808,
+        "ctr_ratio": 0.623,
+        "pb_cvr": 2.807,
+        "p3_cvr": 2.561,
+        "cvr_ratio": 1.096
       },
-      "3640123": {
-        "imp_uv": 129129,
-        "pdp_uv": 3161,
-        "buy_uv": 85,
-        "ctr": 2.447939657241983,
-        "cvr": 2.689022461246441
+      {
+        "band": "02_30-50k",
+        "label": "3-5만원",
+        "pb_prod_cnt": 2,
+        "p3_prod_cnt": 5274,
+        "pb_imp_uv": 182321,
+        "pb_pdp_uv": 4734,
+        "pb_buy_uv": 209,
+        "p3_imp_uv": 4564285,
+        "p3_pdp_uv": 221172,
+        "p3_buy_uv": 6070,
+        "pb_ctr": 2.597,
+        "p3_ctr": 4.846,
+        "ctr_ratio": 0.536,
+        "pb_cvr": 4.415,
+        "p3_cvr": 2.744,
+        "cvr_ratio": 1.609
       },
-      "3707436": {
-        "imp_uv": 37,
-        "pdp_uv": 8,
-        "buy_uv": 0,
-        "ctr": 21.62162162162162,
-        "cvr": 0.0
+      {
+        "band": "03_50-70k",
+        "label": "5-7만원",
+        "pb_prod_cnt": 3,
+        "p3_prod_cnt": 4939,
+        "pb_imp_uv": 130705,
+        "pb_pdp_uv": 3208,
+        "pb_buy_uv": 86,
+        "p3_imp_uv": 3714817,
+        "p3_pdp_uv": 158968,
+        "p3_buy_uv": 3222,
+        "pb_ctr": 2.454,
+        "p3_ctr": 4.279,
+        "ctr_ratio": 0.573,
+        "pb_cvr": 2.681,
+        "p3_cvr": 2.027,
+        "cvr_ratio": 1.323
       },
-      "4037745": {
+      {
+        "band": "04_70-100k",
+        "label": "7-10만원",
+        "pb_prod_cnt": 0,
+        "p3_prod_cnt": 5594,
+        "pb_imp_uv": 0,
+        "pb_pdp_uv": 0,
+        "pb_buy_uv": 0,
+        "p3_imp_uv": 2111176,
+        "p3_pdp_uv": 77390,
+        "p3_buy_uv": 833,
+        "pb_ctr": null,
+        "p3_ctr": 3.666,
+        "ctr_ratio": null,
+        "pb_cvr": null,
+        "p3_cvr": 1.076,
+        "cvr_ratio": null
+      },
+      {
+        "band": "05_100k+",
+        "label": "10만원+",
+        "pb_prod_cnt": 0,
+        "p3_prod_cnt": 8497,
+        "pb_imp_uv": 0,
+        "pb_pdp_uv": 0,
+        "pb_buy_uv": 0,
+        "p3_imp_uv": 2023510,
+        "p3_pdp_uv": 61034,
+        "p3_buy_uv": 361,
+        "pb_ctr": null,
+        "p3_ctr": 3.016,
+        "ctr_ratio": null,
+        "pb_cvr": null,
+        "p3_cvr": 0.591,
+        "cvr_ratio": null
+      }
+    ],
+    "pb_lineup": [
+      {
+        "pid": "3918642",
+        "name": "바른 복숭아촉감 소프트워싱 침구세트",
+        "line": "basic",
+        "price": 35900,
+        "is_self": true,
+        "imp_uv": 142623,
+        "pdp_uv": 4275,
+        "buy_uv": 120,
+        "ctr": 2.997,
+        "cvr": 2.807
+      },
+      {
+        "pid": "4037745",
+        "name": "시아눌 알러지케어 침구세트",
+        "line": "refine",
+        "price": 39900,
+        "is_self": false,
         "imp_uv": 44583,
         "pdp_uv": 1175,
         "buy_uv": 124,
-        "ctr": 2.6355337236166254,
-        "cvr": 10.553191489361701
+        "ctr": 2.636,
+        "cvr": 10.553
       },
-      "3707457": {
+      {
+        "pid": "3640244",
+        "name": "바른 알러지케어 침구세트",
+        "line": "basic",
+        "price": 49900,
+        "is_self": true,
+        "imp_uv": 137738,
+        "pdp_uv": 3559,
+        "buy_uv": 85,
+        "ctr": 2.584,
+        "cvr": 2.388
+      },
+      {
+        "pid": "3640123",
+        "name": "60수 호텔 호텔침구세트",
+        "line": "refine",
+        "price": 50900,
+        "is_self": false,
+        "imp_uv": 129129,
+        "pdp_uv": 3161,
+        "buy_uv": 85,
+        "ctr": 2.448,
+        "cvr": 2.689
+      },
+      {
+        "pid": "3707436",
+        "name": "알러지케어 단풍 차렵이불",
+        "line": "basic",
+        "price": 55800,
+        "is_self": false,
+        "imp_uv": 37,
+        "pdp_uv": 8,
+        "buy_uv": 0,
+        "ctr": 21.622,
+        "cvr": 0.0
+      },
+      {
+        "pid": "3508402",
+        "name": "큐넬 부드러운 차렵이불",
+        "line": "refine",
+        "price": 69000,
+        "is_self": false,
+        "imp_uv": 1539,
+        "pdp_uv": 39,
+        "buy_uv": 1,
+        "ctr": 2.534,
+        "cvr": 2.564
+      },
+      {
+        "pid": "3707457",
+        "name": "60수 면춘 호텔 차렵이불",
+        "line": "basic",
+        "price": 77800,
+        "is_self": false,
         "imp_uv": 0,
         "pdp_uv": 0,
         "buy_uv": 0,
         "ctr": 0,
-        "cvr": 0
+        "cvr": null
       }
-    },
-    "self_products": {
-      "3918642": {
-        "ctr": 2.9974127595128417,
-        "cvr": 2.807017543859649,
-        "ctr_vs_cate_3p": 0.7082313766739704,
-        "cvr_vs_cate_3p": 1.352477216481975,
-        "ctr_vs_band_3p": 0.6185704382585983,
-        "cvr_vs_band_3p": 1.0227902540535854
-      },
-      "3640244": {
-        "ctr": 2.5838911556723634,
-        "cvr": 2.3883113234054507,
-        "ctr_vs_cate_3p": 0.6105241210272809,
-        "cvr_vs_cate_3p": 1.1507361818374489,
-        "ctr_vs_band_3p": 0.5332327619892225,
-        "cvr_vs_band_3p": 0.8702266754863762
-      }
-    }
+    ]
   }
 }
