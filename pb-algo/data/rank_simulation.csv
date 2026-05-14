@@ -1,0 +1,8 @@
+scenario,weights,pb_total,pb_rank1,pb_top3,pb_top5,pb_top10,pb_rank1_pct,pb_top3_pct,pb_top5_pct,pb_median_pct_in_cate
+rebuy_only,{'rebuy_rate': 1.0},76,12,29,45,56,15.8,38.2,59.2,87.1
+delivery_only,{'delivery_ontime': 1.0},76,3,4,5,7,3.9,5.3,6.6,50.0
+rebuy_delivery_50_50,"{'rebuy_rate': 0.5, 'delivery_ontime': 0.5}",76,11,23,30,43,14.5,30.3,39.5,74.6
+rebuy_delivery_70_30,"{'rebuy_rate': 0.7, 'delivery_ontime': 0.3}",76,13,25,40,54,17.1,32.9,52.6,85.5
+rebuy_delivery_80_20,"{'rebuy_rate': 0.8, 'delivery_ontime': 0.2}",76,12,28,42,54,15.8,36.8,55.3,87.0
+rebuy_delivery_90_10,"{'rebuy_rate': 0.9, 'delivery_ontime': 0.1}",76,12,28,43,55,15.8,36.8,56.6,87.1
+rebuy_delivery_by_auc,"{'rebuy_rate': 0.524, 'delivery_ontime': 0.476}",76,12,23,34,44,15.8,30.3,44.7,76.8
