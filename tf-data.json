@@ -24219,173 +24219,240 @@
     }
   },
   "categoryBenchmark": {
-    "period": "최근 7일 (2026-05-06 ~ 2026-05-12)",
-    "scope": "cate_d3=이불/이불커버 PB vs 3P, UV 기준",
+    "period": "최근 7일 (2026-05-07 ~ 2026-05-13)",
+    "scope": "cate_d3=이불/이불커버, base=product, paid_type=total",
     "cate_d3": "이불/이불커버",
     "cate_d2": "침구",
-    "metric_def": "CTR(UV)=pdpview_user_join/impression_user_join, CVR(UV)=purchase_user_join/pdpview_user_join. 프리즘 commerce_daily_user_count_v3 (paid_type=total)",
+    "metric_def": {
+      "CTR(UV)": "pdpview_user_join / impression_user_join",
+      "CVR(UV)": "purchase_user_join / pdpview_user_join"
+    },
     "cate_3p_avg": {
-      "imp_uv": 12759419,
-      "pdp_uv": 549907,
-      "buy_uv": 11673,
-      "ctr": 4.309812225776111,
-      "cvr": 2.122722569452653
+      "imp_uv": 12282849,
+      "pdp_uv": 542591,
+      "buy_uv": 11510,
+      "ctr": 4.417,
+      "cvr": 2.121
     },
-    "self_products": {
-      "3918642": {
-        "imp_uv": 156219,
-        "pdp_uv": 4177,
-        "buy_uv": 133,
-        "ctr": 2.6738104840000254,
-        "cvr": 3.184103423509696,
-        "vs_cate_3p_avg": {
-          "ctr_ratio": 0.6204006912432306,
-          "cvr_ratio": 1.5000092189770808
-        },
-        "price_band": "02_30-50k",
-        "vs_price_band_3p": {
-          "ctr_ratio": 0.5439324447751058,
-          "cvr_ratio": 1.112550431962645
-        }
+    "self_products": [
+      {
+        "pid": "3918642",
+        "name": "소프트워싱",
+        "line": "basic",
+        "price": 29900,
+        "price_band": "<3만원",
+        "ctr": 2.583,
+        "cvr": 3.111,
+        "imp_uv": 158059,
+        "pdp_uv": 4082,
+        "buy_uv": 127,
+        "cate_p3_ctr": 4.417,
+        "cate_p3_cvr": 2.121,
+        "cate_ctr_ratio": 0.585,
+        "cate_cvr_ratio": 1.467,
+        "band_p3_ctr": 4.838,
+        "band_p3_cvr": 2.655,
+        "band_ctr_ratio": 0.534,
+        "band_cvr_ratio": 1.172
       },
-      "3640244": {
-        "imp_uv": 163838,
-        "pdp_uv": 3458,
-        "buy_uv": 80,
-        "ctr": 2.1106214675472112,
-        "cvr": 2.313475997686524,
-        "vs_cate_3p_avg": {
-          "ctr_ratio": 0.4897246926267491,
-          "cvr_ratio": 1.0898626278247265
-        },
-        "price_band": "02_30-50k",
-        "vs_price_band_3p": {
-          "ctr_ratio": 0.4293630762941408,
-          "cvr_ratio": 0.8083464568259227
-        }
+      {
+        "pid": "3640244",
+        "name": "알러지케어",
+        "line": "basic",
+        "price": 40900,
+        "price_band": "3-5만원",
+        "ctr": 2.025,
+        "cvr": 2.184,
+        "imp_uv": 169576,
+        "pdp_uv": 3434,
+        "buy_uv": 75,
+        "cate_p3_ctr": 4.417,
+        "cate_p3_cvr": 2.121,
+        "cate_ctr_ratio": 0.458,
+        "cate_cvr_ratio": 1.03,
+        "band_p3_ctr": 5.035,
+        "band_p3_cvr": 2.827,
+        "band_ctr_ratio": 0.402,
+        "band_cvr_ratio": 0.773
       }
-    },
-    "price_bands": {
-      "01_<30k": {
-        "PB": {
-          "prod_cnt": 1,
-          "imp_uv": 156219,
-          "pdp_uv": 4177,
-          "buy_uv": 133,
-          "ctr": 2.6738104840000254,
-          "cvr": 3.184103423509696
-        },
-        "3P": {
-          "prod_cnt": 3223,
-          "imp_uv": 1153230,
-          "pdp_uv": 54968,
-          "buy_uv": 1378,
-          "ctr": 4.766438611551902,
-          "cvr": 2.506913113083976
-        }
+    ],
+    "price_bands": [
+      {
+        "band": "01_<30k",
+        "label": "<30,000원",
+        "pb_prod_cnt": 1,
+        "p3_prod_cnt": 3218,
+        "pb_imp_uv": 158059,
+        "pb_pdp_uv": 4082,
+        "pb_buy_uv": 127,
+        "p3_imp_uv": 1120385,
+        "p3_pdp_uv": 54203,
+        "p3_buy_uv": 1439,
+        "pb_ctr": 2.583,
+        "p3_ctr": 4.838,
+        "ctr_ratio": 0.534,
+        "pb_cvr": 3.111,
+        "p3_cvr": 2.655,
+        "cvr_ratio": 1.172
       },
-      "02_30-50k": {
-        "PB": {
-          "prod_cnt": 2,
-          "imp_uv": 214296,
-          "pdp_uv": 5035,
-          "buy_uv": 203,
-          "ctr": 2.3495538880800386,
-          "cvr": 4.031777557100298
-        },
-        "3P": {
-          "prod_cnt": 5280,
-          "imp_uv": 4380655,
-          "pdp_uv": 215340,
-          "buy_uv": 6163,
-          "ctr": 4.915703245290945,
-          "cvr": 2.8619856970372433
-        }
+      {
+        "band": "02_30-50k",
+        "label": "30,000-50,000원",
+        "pb_prod_cnt": 2,
+        "p3_prod_cnt": 5263,
+        "pb_imp_uv": 224421,
+        "pb_pdp_uv": 5274,
+        "pb_buy_uv": 199,
+        "p3_imp_uv": 4259406,
+        "p3_pdp_uv": 214471,
+        "p3_buy_uv": 6063,
+        "pb_ctr": 2.35,
+        "p3_ctr": 5.035,
+        "ctr_ratio": 0.467,
+        "pb_cvr": 3.773,
+        "p3_cvr": 2.827,
+        "cvr_ratio": 1.335
       },
-      "03_50-70k": {
-        "PB": {
-          "prod_cnt": 3,
-          "imp_uv": 156678,
-          "pdp_uv": 3288,
-          "buy_uv": 94,
-          "ctr": 2.0985715926932946,
-          "cvr": 2.8588807785888077
-        },
-        "3P": {
-          "prod_cnt": 4956,
-          "imp_uv": 3666656,
-          "pdp_uv": 155994,
-          "buy_uv": 3137,
-          "ctr": 4.254394194601294,
-          "cvr": 2.0109747810813237
-        }
+      {
+        "band": "03_50-70k",
+        "label": "50,000-70,000원",
+        "pb_prod_cnt": 3,
+        "p3_prod_cnt": 4943,
+        "pb_imp_uv": 168064,
+        "pb_pdp_uv": 3370,
+        "pb_buy_uv": 100,
+        "p3_imp_uv": 3579846,
+        "p3_pdp_uv": 154648,
+        "p3_buy_uv": 3075,
+        "pb_ctr": 2.005,
+        "p3_ctr": 4.32,
+        "ctr_ratio": 0.464,
+        "pb_cvr": 2.967,
+        "p3_cvr": 1.988,
+        "cvr_ratio": 1.492
       },
-      "04_70-100k": {
-        "PB": null,
-        "3P": {
-          "prod_cnt": 5586,
-          "imp_uv": 1906396,
-          "pdp_uv": 69261,
-          "buy_uv": 701,
-          "ctr": 3.633085675798732,
-          "cvr": 1.0121135992838683
-        }
+      {
+        "band": "04_70-100k",
+        "label": "70,000-100,000원",
+        "pb_prod_cnt": 1,
+        "p3_prod_cnt": 5581,
+        "pb_imp_uv": 1,
+        "pb_pdp_uv": 0,
+        "pb_buy_uv": 0,
+        "p3_imp_uv": 1878439,
+        "p3_pdp_uv": 67665,
+        "p3_buy_uv": 679,
+        "pb_ctr": null,
+        "p3_ctr": 3.602,
+        "ctr_ratio": null,
+        "pb_cvr": null,
+        "p3_cvr": 1.003,
+        "cvr_ratio": null
       },
-      "05_100k+": {
-        "PB": null,
-        "3P": {
-          "prod_cnt": 8491,
-          "imp_uv": 1652482,
-          "pdp_uv": 54344,
-          "buy_uv": 294,
-          "ctr": 3.2886288625231623,
-          "cvr": 0.540998086265273
-        }
+      {
+        "band": "05_100k+",
+        "label": "100,000원+",
+        "pb_prod_cnt": 0,
+        "p3_prod_cnt": 8468,
+        "pb_imp_uv": 0,
+        "pb_pdp_uv": 0,
+        "pb_buy_uv": 0,
+        "p3_imp_uv": 1444773,
+        "p3_pdp_uv": 51604,
+        "p3_buy_uv": 254,
+        "pb_ctr": null,
+        "p3_ctr": 3.572,
+        "ctr_ratio": null,
+        "pb_cvr": null,
+        "p3_cvr": 0.492,
+        "cvr_ratio": null
       }
-    },
-    "pb_lineup": {
-      "3508402": {
-        "imp_uv": 1535,
-        "pdp_uv": 42,
-        "buy_uv": 1,
-        "ctr": 2.736156351791531,
-        "cvr": 2.380952380952381
+    ],
+    "pb_lineup": [
+      {
+        "pid": "3640244",
+        "name": "알러지케어",
+        "line": "basic",
+        "price": 40900,
+        "is_self": true,
+        "imp_uv": 169576,
+        "pdp_uv": 3434,
+        "buy_uv": 75,
+        "ctr": 2.025,
+        "cvr": 2.184
       },
-      "3640244": {
-        "imp_uv": 163838,
-        "pdp_uv": 3458,
-        "buy_uv": 80,
-        "ctr": 2.1106214675472112,
-        "cvr": 2.313475997686524
+      {
+        "pid": "3640123",
+        "name": "60수 호텔",
+        "line": "refine",
+        "price": 50900,
+        "is_self": false,
+        "imp_uv": 166490,
+        "pdp_uv": 3319,
+        "buy_uv": 98,
+        "ctr": 1.994,
+        "cvr": 2.953
       },
-      "3640123": {
-        "imp_uv": 155109,
-        "pdp_uv": 3238,
-        "buy_uv": 93,
-        "ctr": 2.08756422902604,
-        "cvr": 2.872143298332304
+      {
+        "pid": "3918642",
+        "name": "소프트워싱",
+        "line": "basic",
+        "price": 29900,
+        "is_self": true,
+        "imp_uv": 158059,
+        "pdp_uv": 4082,
+        "buy_uv": 127,
+        "ctr": 2.583,
+        "cvr": 3.111
       },
-      "3918642": {
-        "imp_uv": 156219,
-        "pdp_uv": 4177,
-        "buy_uv": 133,
-        "ctr": 2.6738104840000254,
-        "cvr": 3.184103423509696
+      {
+        "pid": "4037745",
+        "name": "시어서커",
+        "line": "refine",
+        "price": 39900,
+        "is_self": false,
+        "imp_uv": 54845,
+        "pdp_uv": 1840,
+        "buy_uv": 124,
+        "ctr": 3.355,
+        "cvr": 6.739
       },
-      "3707436": {
-        "imp_uv": 34,
-        "pdp_uv": 8,
+      {
+        "pid": "3508402",
+        "name": "쯔누가 냉감",
+        "line": "refine",
+        "price": 69000,
+        "is_self": false,
+        "imp_uv": 1541,
+        "pdp_uv": 46,
+        "buy_uv": 2,
+        "ctr": 2.985,
+        "cvr": 4.348
+      },
+      {
+        "pid": "3707436",
+        "name": "먼지없는 알러지케어",
+        "line": "basic",
+        "price": 55800,
+        "is_self": false,
+        "imp_uv": 33,
+        "pdp_uv": 5,
         "buy_uv": 0,
-        "ctr": 23.52941176470588,
-        "cvr": 0.0
+        "ctr": null,
+        "cvr": null
       },
-      "4037745": {
-        "imp_uv": 50458,
-        "pdp_uv": 1577,
-        "buy_uv": 123,
-        "ctr": 3.1253715961790003,
-        "cvr": 7.7996195307545975
+      {
+        "pid": "3707457",
+        "name": "60수 코튼",
+        "line": "basic",
+        "price": 77800,
+        "is_self": false,
+        "imp_uv": 1,
+        "pdp_uv": 0,
+        "buy_uv": 0,
+        "ctr": null,
+        "cvr": null
       }
-    }
+    ]
   }
 }
