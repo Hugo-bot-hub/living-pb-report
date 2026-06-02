@@ -25465,354 +25465,359 @@
     ]
   },
   "inflowCvr": {
-    "period": "2026-05-25 ~ 2026-05-31",
+    "period": "2026-05-26 ~ 2026-06-01",
     "note": "Same-day click → purchase attribution (UV 기준, 7일)",
     "data": {
-      "442026": {
-        "광고리스트": {
-          "click_uv": 201,
-          "buy_uv": 0,
-          "cvr": 0
-        },
-        "마이패키지": {
-          "click_uv": 15,
-          "buy_uv": 1,
-          "cvr": 6.67
-        },
-        "PDP추천": {
-          "click_uv": 273,
-          "buy_uv": 10,
-          "cvr": 3.66
-        },
-        "기타": {
-          "click_uv": 412,
-          "buy_uv": 17,
-          "cvr": 4.13
-        },
-        "베스트": {
-          "click_uv": 3,
-          "buy_uv": 0,
-          "cvr": 0
-        },
-        "브랜드관": {
-          "click_uv": 192,
-          "buy_uv": 4,
-          "cvr": 2.08
-        },
-        "컨텐츠": {
-          "click_uv": 59,
-          "buy_uv": 0,
-          "cvr": 0
-        },
+      "1930788": {
         "검색": {
-          "click_uv": 708,
-          "buy_uv": 11,
-          "cvr": 1.55
+          "click_uv": 2094,
+          "buy_uv": 45,
+          "cvr": 2.15
         },
         "카테고리": {
-          "click_uv": 284,
-          "buy_uv": 1,
-          "cvr": 0.35
+          "click_uv": 498,
+          "buy_uv": 6,
+          "cvr": 1.2
+        },
+        "PDP추천": {
+          "click_uv": 483,
+          "buy_uv": 36,
+          "cvr": 7.45
+        },
+        "기타": {
+          "click_uv": 467,
+          "buy_uv": 60,
+          "cvr": 12.85
+        },
+        "광고리스트": {
+          "click_uv": 437,
+          "buy_uv": 0,
+          "cvr": 0.0
+        },
+        "브랜드관": {
+          "click_uv": 407,
+          "buy_uv": 16,
+          "cvr": 3.93
         },
         "홈": {
-          "click_uv": 241,
-          "buy_uv": 2,
-          "cvr": 0.83
-        }
-      },
-      "767440": {
+          "click_uv": 331,
+          "buy_uv": 7,
+          "cvr": 2.11
+        },
+        "마이패키지": {
+          "click_uv": 23,
+          "buy_uv": 1,
+          "cvr": 4.35
+        },
         "컨텐츠": {
-          "click_uv": 208,
-          "buy_uv": 8,
-          "cvr": 3.85
+          "click_uv": 19,
+          "buy_uv": 0,
+          "cvr": 0.0
+        },
+        "베스트": {
+          "click_uv": 5,
+          "buy_uv": 0,
+          "cvr": 0.0
         },
         "기획전": {
+          "click_uv": 3,
+          "buy_uv": 0,
+          "cvr": 0.0
+        }
+      },
+      "2636441": {
+        "검색": {
+          "click_uv": 5842,
+          "buy_uv": 315,
+          "cvr": 5.39
+        },
+        "카테고리": {
+          "click_uv": 3299,
+          "buy_uv": 119,
+          "cvr": 3.61
+        },
+        "기타": {
+          "click_uv": 2002,
+          "buy_uv": 401,
+          "cvr": 20.03
+        },
+        "PDP추천": {
+          "click_uv": 1061,
+          "buy_uv": 241,
+          "cvr": 22.71
+        },
+        "홈": {
+          "click_uv": 882,
+          "buy_uv": 55,
+          "cvr": 6.24
+        },
+        "브랜드관": {
+          "click_uv": 428,
+          "buy_uv": 38,
+          "cvr": 8.88
+        },
+        "광고리스트": {
+          "click_uv": 314,
+          "buy_uv": 5,
+          "cvr": 1.59
+        },
+        "기획전": {
+          "click_uv": 210,
+          "buy_uv": 15,
+          "cvr": 7.14
+        },
+        "베스트": {
+          "click_uv": 183,
+          "buy_uv": 4,
+          "cvr": 2.19
+        },
+        "마이패키지": {
+          "click_uv": 175,
+          "buy_uv": 14,
+          "cvr": 8.0
+        },
+        "컨텐츠": {
+          "click_uv": 109,
+          "buy_uv": 5,
+          "cvr": 4.59
+        },
+        "오늘의딜": {
+          "click_uv": 48,
+          "buy_uv": 5,
+          "cvr": 10.42
+        }
+      },
+      "3640244": {
+        "검색": {
+          "click_uv": 1780,
+          "buy_uv": 28,
+          "cvr": 1.57
+        },
+        "기획전": {
+          "click_uv": 900,
+          "buy_uv": 14,
+          "cvr": 1.56
+        },
+        "광고리스트": {
+          "click_uv": 520,
+          "buy_uv": 0,
+          "cvr": 0.0
+        },
+        "기타": {
+          "click_uv": 460,
+          "buy_uv": 46,
+          "cvr": 10.0
+        },
+        "오늘의딜": {
+          "click_uv": 393,
+          "buy_uv": 3,
+          "cvr": 0.76
+        },
+        "브랜드관": {
+          "click_uv": 244,
+          "buy_uv": 13,
+          "cvr": 5.33
+        },
+        "홈": {
+          "click_uv": 191,
+          "buy_uv": 5,
+          "cvr": 2.62
+        },
+        "마이패키지": {
+          "click_uv": 177,
+          "buy_uv": 5,
+          "cvr": 2.82
+        },
+        "PDP추천": {
+          "click_uv": 134,
+          "buy_uv": 29,
+          "cvr": 21.64
+        },
+        "컨텐츠": {
+          "click_uv": 121,
+          "buy_uv": 2,
+          "cvr": 1.65
+        },
+        "카테고리": {
+          "click_uv": 91,
+          "buy_uv": 1,
+          "cvr": 1.1
+        },
+        "베스트": {
+          "click_uv": 15,
+          "buy_uv": 0,
+          "cvr": 0.0
+        }
+      },
+      "3918642": {
+        "검색": {
+          "click_uv": 1367,
+          "buy_uv": 39,
+          "cvr": 2.85
+        },
+        "기획전": {
+          "click_uv": 475,
+          "buy_uv": 11,
+          "cvr": 2.32
+        },
+        "홈": {
+          "click_uv": 262,
+          "buy_uv": 2,
+          "cvr": 0.76
+        },
+        "기타": {
+          "click_uv": 252,
+          "buy_uv": 40,
+          "cvr": 15.87
+        },
+        "오늘의딜": {
+          "click_uv": 229,
+          "buy_uv": 7,
+          "cvr": 3.06
+        },
+        "광고리스트": {
+          "click_uv": 226,
+          "buy_uv": 0,
+          "cvr": 0.0
+        },
+        "브랜드관": {
+          "click_uv": 165,
+          "buy_uv": 8,
+          "cvr": 4.85
+        },
+        "PDP추천": {
+          "click_uv": 125,
+          "buy_uv": 26,
+          "cvr": 20.8
+        },
+        "카테고리": {
+          "click_uv": 87,
+          "buy_uv": 3,
+          "cvr": 3.45
+        },
+        "컨텐츠": {
+          "click_uv": 26,
+          "buy_uv": 0,
+          "cvr": 0.0
+        },
+        "마이패키지": {
+          "click_uv": 18,
+          "buy_uv": 3,
+          "cvr": 16.67
+        }
+      },
+      "442026": {
+        "검색": {
+          "click_uv": 651,
+          "buy_uv": 11,
+          "cvr": 1.69
+        },
+        "기타": {
+          "click_uv": 364,
+          "buy_uv": 15,
+          "cvr": 4.12
+        },
+        "카테고리": {
+          "click_uv": 233,
+          "buy_uv": 1,
+          "cvr": 0.43
+        },
+        "홈": {
+          "click_uv": 230,
+          "buy_uv": 2,
+          "cvr": 0.87
+        },
+        "PDP추천": {
+          "click_uv": 228,
+          "buy_uv": 10,
+          "cvr": 4.39
+        },
+        "광고리스트": {
+          "click_uv": 194,
+          "buy_uv": 0,
+          "cvr": 0.0
+        },
+        "브랜드관": {
+          "click_uv": 180,
+          "buy_uv": 3,
+          "cvr": 1.67
+        },
+        "컨텐츠": {
+          "click_uv": 51,
+          "buy_uv": 0,
+          "cvr": 0.0
+        },
+        "마이패키지": {
           "click_uv": 14,
           "buy_uv": 1,
           "cvr": 7.14
         },
-        "카테고리": {
-          "click_uv": 5025,
-          "buy_uv": 210,
-          "cvr": 4.18
-        },
+        "베스트": {
+          "click_uv": 4,
+          "buy_uv": 0,
+          "cvr": 0.0
+        }
+      },
+      "767440": {
         "검색": {
-          "click_uv": 8059,
-          "buy_uv": 465,
-          "cvr": 5.77
+          "click_uv": 7448,
+          "buy_uv": 446,
+          "cvr": 5.99
+        },
+        "카테고리": {
+          "click_uv": 4561,
+          "buy_uv": 190,
+          "cvr": 4.17
+        },
+        "기타": {
+          "click_uv": 2929,
+          "buy_uv": 689,
+          "cvr": 23.52
+        },
+        "PDP추천": {
+          "click_uv": 1136,
+          "buy_uv": 341,
+          "cvr": 30.02
+        },
+        "베스트": {
+          "click_uv": 1019,
+          "buy_uv": 25,
+          "cvr": 2.45
+        },
+        "브랜드관": {
+          "click_uv": 712,
+          "buy_uv": 86,
+          "cvr": 12.08
+        },
+        "홈": {
+          "click_uv": 698,
+          "buy_uv": 36,
+          "cvr": 5.16
+        },
+        "광고리스트": {
+          "click_uv": 348,
+          "buy_uv": 1,
+          "cvr": 0.29
+        },
+        "마이패키지": {
+          "click_uv": 337,
+          "buy_uv": 41,
+          "cvr": 12.17
+        },
+        "컨텐츠": {
+          "click_uv": 211,
+          "buy_uv": 6,
+          "cvr": 2.84
+        },
+        "기획전": {
+          "click_uv": 13,
+          "buy_uv": 0,
+          "cvr": 0.0
         },
         "오늘의딜": {
           "click_uv": 2,
           "buy_uv": 0,
-          "cvr": 0
-        },
-        "홈": {
-          "click_uv": 723,
-          "buy_uv": 39,
-          "cvr": 5.39
-        },
-        "마이패키지": {
-          "click_uv": 374,
-          "buy_uv": 42,
-          "cvr": 11.23
-        },
-        "광고리스트": {
-          "click_uv": 339,
-          "buy_uv": 1,
-          "cvr": 0.29
-        },
-        "기타": {
-          "click_uv": 3564,
-          "buy_uv": 705,
-          "cvr": 19.78
-        },
-        "브랜드관": {
-          "click_uv": 780,
-          "buy_uv": 82,
-          "cvr": 10.51
-        },
-        "PDP추천": {
-          "click_uv": 1217,
-          "buy_uv": 371,
-          "cvr": 30.48
-        },
-        "베스트": {
-          "click_uv": 1131,
-          "buy_uv": 24,
-          "cvr": 2.12
-        }
-      },
-      "1930788": {
-        "베스트": {
-          "click_uv": 5,
-          "buy_uv": 0,
-          "cvr": 0
-        },
-        "PDP추천": {
-          "click_uv": 521,
-          "buy_uv": 35,
-          "cvr": 6.72
-        },
-        "컨텐츠": {
-          "click_uv": 22,
-          "buy_uv": 0,
-          "cvr": 0
-        },
-        "광고리스트": {
-          "click_uv": 457,
-          "buy_uv": 0,
-          "cvr": 0
-        },
-        "홈": {
-          "click_uv": 363,
-          "buy_uv": 9,
-          "cvr": 2.48
-        },
-        "기타": {
-          "click_uv": 544,
-          "buy_uv": 57,
-          "cvr": 10.48
-        },
-        "브랜드관": {
-          "click_uv": 450,
-          "buy_uv": 17,
-          "cvr": 3.78
-        },
-        "기획전": {
-          "click_uv": 1,
-          "buy_uv": 0,
-          "cvr": 0
-        },
-        "검색": {
-          "click_uv": 2263,
-          "buy_uv": 43,
-          "cvr": 1.9
-        },
-        "카테고리": {
-          "click_uv": 529,
-          "buy_uv": 7,
-          "cvr": 1.32
-        },
-        "마이패키지": {
-          "click_uv": 28,
-          "buy_uv": 1,
-          "cvr": 3.57
-        }
-      },
-      "2636441": {
-        "마이패키지": {
-          "click_uv": 186,
-          "buy_uv": 12,
-          "cvr": 6.45
-        },
-        "컨텐츠": {
-          "click_uv": 122,
-          "buy_uv": 5,
-          "cvr": 4.1
-        },
-        "베스트": {
-          "click_uv": 180,
-          "buy_uv": 2,
-          "cvr": 1.11
-        },
-        "PDP추천": {
-          "click_uv": 848,
-          "buy_uv": 189,
-          "cvr": 22.29
-        },
-        "기타": {
-          "click_uv": 2182,
-          "buy_uv": 312,
-          "cvr": 14.3
-        },
-        "홈": {
-          "click_uv": 854,
-          "buy_uv": 37,
-          "cvr": 4.33
-        },
-        "기획전": {
-          "click_uv": 14,
-          "buy_uv": 0,
-          "cvr": 0
-        },
-        "광고리스트": {
-          "click_uv": 268,
-          "buy_uv": 4,
-          "cvr": 1.49
-        },
-        "브랜드관": {
-          "click_uv": 427,
-          "buy_uv": 27,
-          "cvr": 6.32
-        },
-        "카테고리": {
-          "click_uv": 3683,
-          "buy_uv": 118,
-          "cvr": 3.2
-        },
-        "검색": {
-          "click_uv": 6191,
-          "buy_uv": 266,
-          "cvr": 4.3
-        }
-      },
-      "3640244": {
-        "컨텐츠": {
-          "click_uv": 132,
-          "buy_uv": 2,
-          "cvr": 1.52
-        },
-        "광고리스트": {
-          "click_uv": 602,
-          "buy_uv": 0,
-          "cvr": 0
-        },
-        "기획전": {
-          "click_uv": 905,
-          "buy_uv": 13,
-          "cvr": 1.44
-        },
-        "검색": {
-          "click_uv": 1916,
-          "buy_uv": 28,
-          "cvr": 1.46
-        },
-        "PDP추천": {
-          "click_uv": 135,
-          "buy_uv": 31,
-          "cvr": 22.96
-        },
-        "브랜드관": {
-          "click_uv": 260,
-          "buy_uv": 13,
-          "cvr": 5
-        },
-        "오늘의딜": {
-          "click_uv": 399,
-          "buy_uv": 3,
-          "cvr": 0.75
-        },
-        "기타": {
-          "click_uv": 517,
-          "buy_uv": 46,
-          "cvr": 8.9
-        },
-        "베스트": {
-          "click_uv": 15,
-          "buy_uv": 0,
-          "cvr": 0
-        },
-        "홈": {
-          "click_uv": 208,
-          "buy_uv": 5,
-          "cvr": 2.4
-        },
-        "마이패키지": {
-          "click_uv": 170,
-          "buy_uv": 5,
-          "cvr": 2.94
-        },
-        "카테고리": {
-          "click_uv": 98,
-          "buy_uv": 1,
-          "cvr": 1.02
-        }
-      },
-      "3918642": {
-        "기획전": {
-          "click_uv": 493,
-          "buy_uv": 11,
-          "cvr": 2.23
-        },
-        "기타": {
-          "click_uv": 298,
-          "buy_uv": 36,
-          "cvr": 12.08
-        },
-        "카테고리": {
-          "click_uv": 104,
-          "buy_uv": 5,
-          "cvr": 4.81
-        },
-        "마이패키지": {
-          "click_uv": 17,
-          "buy_uv": 2,
-          "cvr": 11.76
-        },
-        "광고리스트": {
-          "click_uv": 277,
-          "buy_uv": 0,
-          "cvr": 0
-        },
-        "브랜드관": {
-          "click_uv": 185,
-          "buy_uv": 8,
-          "cvr": 4.32
-        },
-        "검색": {
-          "click_uv": 1488,
-          "buy_uv": 39,
-          "cvr": 2.62
-        },
-        "홈": {
-          "click_uv": 314,
-          "buy_uv": 2,
-          "cvr": 0.64
-        },
-        "컨텐츠": {
-          "click_uv": 33,
-          "buy_uv": 0,
-          "cvr": 0
-        },
-        "오늘의딜": {
-          "click_uv": 275,
-          "buy_uv": 7,
-          "cvr": 2.55
-        },
-        "PDP추천": {
-          "click_uv": 146,
-          "buy_uv": 30,
-          "cvr": 20.55
+          "cvr": 0.0
         }
       }
     }
@@ -25820,11 +25825,11 @@
   "categoryBenchmark": {
     "period": "7일 (어제 기준)",
     "cate_3p_avg": {
-      "imp_uv": 14058602,
-      "pdp_uv": 679653,
-      "buy_uv": 15460,
-      "ctr": 4.83,
-      "cvr": 2.27
+      "imp_uv": 13992523,
+      "pdp_uv": 674063,
+      "buy_uv": 15932,
+      "ctr": 4.82,
+      "cvr": 2.36
     },
     "self_products": [
       {
@@ -25833,19 +25838,19 @@
         "line": "basic",
         "price": 35900,
         "price_band": "01_<30k",
-        "ctr": 2.6,
-        "cvr": 2.49,
-        "imp_uv": 146902,
-        "pdp_uv": 3815,
-        "buy_uv": 95,
-        "cate_p3_ctr": 4.83,
-        "cate_p3_cvr": 2.27,
-        "cate_ctr_ratio": 0.54,
-        "cate_cvr_ratio": 1.1,
-        "band_p3_ctr": 5.42,
-        "band_p3_cvr": 2.64,
-        "band_ctr_ratio": 0.48,
-        "band_cvr_ratio": 0.94
+        "ctr": 2.68,
+        "cvr": 2.81,
+        "imp_uv": 133137,
+        "pdp_uv": 3564,
+        "buy_uv": 100,
+        "cate_p3_ctr": 4.82,
+        "cate_p3_cvr": 2.36,
+        "cate_ctr_ratio": 0.56,
+        "cate_cvr_ratio": 1.19,
+        "band_p3_ctr": 5.37,
+        "band_p3_cvr": 2.93,
+        "band_ctr_ratio": 0.5,
+        "band_cvr_ratio": 0.96
       },
       {
         "pid": "3640244",
@@ -25853,19 +25858,19 @@
         "line": "basic",
         "price": 49900,
         "price_band": "02_30-50k",
-        "ctr": 2.39,
-        "cvr": 1.57,
-        "imp_uv": 239939,
-        "pdp_uv": 5727,
-        "buy_uv": 90,
-        "cate_p3_ctr": 4.83,
-        "cate_p3_cvr": 2.27,
-        "cate_ctr_ratio": 0.49,
-        "cate_cvr_ratio": 0.69,
-        "band_p3_ctr": 5.29,
-        "band_p3_cvr": 2.86,
-        "band_ctr_ratio": 0.45,
-        "band_cvr_ratio": 0.55
+        "ctr": 2.32,
+        "cvr": 1.65,
+        "imp_uv": 242959,
+        "pdp_uv": 5645,
+        "buy_uv": 93,
+        "cate_p3_ctr": 4.82,
+        "cate_p3_cvr": 2.36,
+        "cate_ctr_ratio": 0.48,
+        "cate_cvr_ratio": 0.7,
+        "band_p3_ctr": 5.28,
+        "band_p3_cvr": 2.93,
+        "band_ctr_ratio": 0.44,
+        "band_cvr_ratio": 0.56
       }
     ],
     "price_bands": [
@@ -25873,91 +25878,91 @@
         "band": "01_<30k",
         "label": "<30K",
         "pb_prod_cnt": 1,
-        "p3_prod_cnt": 3162,
-        "pb_imp_uv": 146902,
-        "pb_pdp_uv": 3815,
-        "pb_buy_uv": 95,
-        "p3_imp_uv": 1406118,
-        "p3_pdp_uv": 76155,
-        "p3_buy_uv": 2014,
-        "pb_ctr": 2.6,
-        "p3_ctr": 5.42,
-        "ctr_ratio": 0.48,
-        "pb_cvr": 2.49,
-        "p3_cvr": 2.64,
-        "cvr_ratio": 0.94
+        "p3_prod_cnt": 3160,
+        "pb_imp_uv": 133137,
+        "pb_pdp_uv": 3564,
+        "pb_buy_uv": 100,
+        "p3_imp_uv": 1430931,
+        "p3_pdp_uv": 76831,
+        "p3_buy_uv": 2250,
+        "pb_ctr": 2.68,
+        "p3_ctr": 5.37,
+        "ctr_ratio": 0.5,
+        "pb_cvr": 2.81,
+        "p3_cvr": 2.93,
+        "cvr_ratio": 0.96
       },
       {
         "band": "02_30-50k",
         "label": "30-50K",
         "pb_prod_cnt": 2,
-        "p3_prod_cnt": 5307,
-        "pb_imp_uv": 524056,
-        "pb_pdp_uv": 15821,
-        "pb_buy_uv": 196,
-        "p3_imp_uv": 5766896,
-        "p3_pdp_uv": 304967,
-        "p3_buy_uv": 8737,
-        "pb_ctr": 3.02,
-        "p3_ctr": 5.29,
-        "ctr_ratio": 0.57,
-        "pb_cvr": 1.24,
-        "p3_cvr": 2.86,
-        "cvr_ratio": 0.43
+        "p3_prod_cnt": 5328,
+        "pb_imp_uv": 535372,
+        "pb_pdp_uv": 15609,
+        "pb_buy_uv": 201,
+        "p3_imp_uv": 5790070,
+        "p3_pdp_uv": 305598,
+        "p3_buy_uv": 8939,
+        "pb_ctr": 2.92,
+        "p3_ctr": 5.28,
+        "ctr_ratio": 0.55,
+        "pb_cvr": 1.29,
+        "p3_cvr": 2.93,
+        "cvr_ratio": 0.44
       },
       {
         "band": "03_50-70k",
         "label": "50-70K",
         "pb_prod_cnt": 3,
-        "p3_prod_cnt": 5003,
-        "pb_imp_uv": 183725,
-        "pb_pdp_uv": 3742,
+        "p3_prod_cnt": 4999,
+        "pb_imp_uv": 177812,
+        "pb_pdp_uv": 3630,
         "pb_buy_uv": 24,
-        "p3_imp_uv": 4045668,
-        "p3_pdp_uv": 186622,
-        "p3_buy_uv": 3753,
+        "p3_imp_uv": 3969864,
+        "p3_pdp_uv": 184152,
+        "p3_buy_uv": 3798,
         "pb_ctr": 2.04,
-        "p3_ctr": 4.61,
+        "p3_ctr": 4.64,
         "ctr_ratio": 0.44,
-        "pb_cvr": 0.64,
-        "p3_cvr": 2.01,
+        "pb_cvr": 0.66,
+        "p3_cvr": 2.06,
         "cvr_ratio": 0.32
       },
       {
         "band": "04_70-100k",
         "label": "70-100K",
         "pb_prod_cnt": 1,
-        "p3_prod_cnt": 5611,
-        "pb_imp_uv": 4,
-        "pb_pdp_uv": 2,
+        "p3_prod_cnt": 5562,
+        "pb_imp_uv": 5,
+        "pb_pdp_uv": 1,
         "pb_buy_uv": 0,
-        "p3_imp_uv": 1561700,
-        "p3_pdp_uv": 65030,
-        "p3_buy_uv": 714,
-        "pb_ctr": 50,
-        "p3_ctr": 4.16,
-        "ctr_ratio": 12.02,
-        "pb_cvr": 0,
-        "p3_cvr": 1.1,
-        "cvr_ratio": 0
+        "p3_imp_uv": 1540854,
+        "p3_pdp_uv": 62821,
+        "p3_buy_uv": 710,
+        "pb_ctr": 20.0,
+        "p3_ctr": 4.08,
+        "ctr_ratio": 4.9,
+        "pb_cvr": 0.0,
+        "p3_cvr": 1.13,
+        "cvr_ratio": 0.0
       },
       {
         "band": "05_100k+",
         "label": "100K+",
         "pb_prod_cnt": 0,
-        "p3_prod_cnt": 8548,
+        "p3_prod_cnt": 8507,
         "pb_imp_uv": 0,
         "pb_pdp_uv": 0,
         "pb_buy_uv": 0,
-        "p3_imp_uv": 1278220,
-        "p3_pdp_uv": 46879,
-        "p3_buy_uv": 242,
-        "pb_ctr": 0,
-        "p3_ctr": 3.67,
-        "ctr_ratio": 0,
-        "pb_cvr": 0,
-        "p3_cvr": 0.52,
-        "cvr_ratio": 0
+        "p3_imp_uv": 1260804,
+        "p3_pdp_uv": 44661,
+        "p3_buy_uv": 235,
+        "pb_ctr": 0.0,
+        "p3_ctr": 3.54,
+        "ctr_ratio": 0.0,
+        "pb_cvr": 0.0,
+        "p3_cvr": 0.53,
+        "cvr_ratio": 0.0
       }
     ],
     "pb_lineup": [
@@ -25967,11 +25972,11 @@
         "line": "refine",
         "price": 59900,
         "is_self": false,
-        "imp_uv": 174084,
-        "pdp_uv": 3433,
-        "buy_uv": 23,
-        "ctr": 1.97,
-        "cvr": 0.67
+        "imp_uv": 166895,
+        "pdp_uv": 3318,
+        "buy_uv": 22,
+        "ctr": 1.99,
+        "cvr": 0.66
       },
       {
         "pid": "3640244",
@@ -25979,11 +25984,11 @@
         "line": "basic",
         "price": 49900,
         "is_self": true,
-        "imp_uv": 239939,
-        "pdp_uv": 5727,
-        "buy_uv": 90,
-        "ctr": 2.39,
-        "cvr": 1.57
+        "imp_uv": 242959,
+        "pdp_uv": 5645,
+        "buy_uv": 93,
+        "ctr": 2.32,
+        "cvr": 1.65
       },
       {
         "pid": "3508402",
@@ -25991,11 +25996,11 @@
         "line": "studio",
         "price": 79900,
         "is_self": false,
-        "imp_uv": 9601,
-        "pdp_uv": 306,
-        "buy_uv": 1,
-        "ctr": 3.19,
-        "cvr": 0.33
+        "imp_uv": 10878,
+        "pdp_uv": 310,
+        "buy_uv": 2,
+        "ctr": 2.85,
+        "cvr": 0.65
       },
       {
         "pid": "3707436",
@@ -26003,11 +26008,11 @@
         "line": "studio",
         "price": 99900,
         "is_self": false,
-        "imp_uv": 40,
-        "pdp_uv": 3,
+        "imp_uv": 39,
+        "pdp_uv": 2,
         "buy_uv": 0,
-        "ctr": 7.5,
-        "cvr": 0
+        "ctr": 5.13,
+        "cvr": 0.0
       },
       {
         "pid": "4037745",
@@ -26015,11 +26020,11 @@
         "line": "refine",
         "price": 65900,
         "is_self": false,
-        "imp_uv": 284117,
-        "pdp_uv": 10094,
-        "buy_uv": 106,
-        "ctr": 3.55,
-        "cvr": 1.05
+        "imp_uv": 292413,
+        "pdp_uv": 9964,
+        "buy_uv": 108,
+        "ctr": 3.41,
+        "cvr": 1.08
       },
       {
         "pid": "3707457",
@@ -26027,11 +26032,11 @@
         "line": "studio",
         "price": 89900,
         "is_self": false,
-        "imp_uv": 4,
-        "pdp_uv": 2,
+        "imp_uv": 5,
+        "pdp_uv": 1,
         "buy_uv": 0,
-        "ctr": 50,
-        "cvr": 0
+        "ctr": 20.0,
+        "cvr": 0.0
       },
       {
         "pid": "3918642",
@@ -26039,11 +26044,11 @@
         "line": "basic",
         "price": 35900,
         "is_self": true,
-        "imp_uv": 146902,
-        "pdp_uv": 3815,
-        "buy_uv": 95,
-        "ctr": 2.6,
-        "cvr": 2.49
+        "imp_uv": 133137,
+        "pdp_uv": 3564,
+        "buy_uv": 100,
+        "ctr": 2.68,
+        "cvr": 2.81
       }
     ]
   }
