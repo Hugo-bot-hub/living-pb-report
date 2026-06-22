@@ -1,0 +1,152 @@
+# -*- coding: utf-8 -*-
+"""2026-06-22 숏헤드TF 업데이트: 쿼리 manifest 생성 (mcp_athena 브리지용).
+스케줄러가 6/22 API 529로 5회 전부 실패 → 수동 복구. 월요일이라 ages(E) 포함."""
+import json, os
+
+OUT = r"tf-data\tmp_2026_06_22"
+os.makedirs(OUT, exist_ok=True)
+
+PIDS_SQL = "(3918642, 3640244, 767440, 2636441, 1930788, 442026)"
+PIDS_STR = "('3918642','3640244','767440','2636441','1930788','442026')"
+KW = "('차렵이불','워싱이불','알러지케어','차렵이불단품','이불세트','침구','사계절이불','먼지없는이불')"
+
+INFLOW_CASE = """CASE WHEN COALESCE(inferred_page_id,page_id) LIKE 'SRP%' AND object_section_id IN ('SEARCH_CAROUSEL_HOME','STORE_SRP_AD_PRODUCTION','STORE_SRP_AD_MID') THEN '검색광고'
+         WHEN COALESCE(inferred_page_id,page_id) LIKE 'SRP%' THEN '검색'
+         WHEN COALESCE(inferred_page_id,page_id)='CATEGORY' AND object_section_id IN ('STORE_CATEGORY_CAROUSEL','MD_PICK_ITEM') THEN '카테고리광고'
+         WHEN COALESCE(inferred_page_id,page_id)='CATEGORY' THEN '카테고리'
+         WHEN COALESCE(inferred_page_id,page_id)='PDP' THEN 'PDP추천'
+         WHEN COALESCE(inferred_page_id,page_id) IN ('HOME','SHOPPINGHOME') THEN '홈'
+         WHEN COALESCE(inferred_page_id,page_id)='BRAND_DETAIL' THEN '브랜드관'
+         WHEN COALESCE(inferred_page_id,page_id)='EXHIBITION_DETAIL' THEN '기획전'
+         WHEN COALESCE(inferred_page_id,page_id) LIKE 'MYPACKAGE%' THEN '마이패키지'
+         WHEN COALESCE(inferred_page_id,page_id)='TODAYSDEAL' THEN '오늘의딜'
+         WHEN COALESCE(inferred_page_id,page_id)='AD_PRODUCT_LIST' THEN '광고리스트'
+         WHEN COALESCE(inferred_page_id,page_id)='BEST' THEN '베스트'
+         WHEN COALESCE(inferred_page_id,page_id) LIKE 'CDP%' THEN '컨텐츠'
+         WHEN COALESCE(inferred_page_id,page_id) LIKE 'BRAZE%' THEN '푸시'
+         WHEN COALESCE(inferred_page_id,page_id)='CART'
+              OR COALESCE(inferred_page_id,page_id) LIKE 'MYPAGE%'
+              OR COALESCE(inferred_page_id,page_id) LIKE 'MYSHOPPING%'
+              OR COALESCE(inferred_page_id,page_id)='ORDER_RESULT'
+              OR COALESCE(inferred_page_id,page_id)='MYREVIEW_WRITABLE'
+              OR COALESCE(inferred_page_id,page_id)='DELIVERY_TRACKING'
+              OR COALESCE(inferred_page_id,page_id)='RECENT_VIEWED_GOODS'
+              OR COALESCE(inferred_page_id,page_id) LIKE 'INTERESTINFO%' THEN '재방문'
+         ELSE '기타' END"""
+
+CVR_CASE = """CASE WHEN COALESCE(inferred_page_id,page_id) LIKE 'SRP%' THEN '검색'
+         WHEN COALESCE(inferred_page_id,page_id)='CATEGORY' THEN '카테고리'
+         WHEN COALESCE(inferred_page_id,page_id)='PDP' THEN 'PDP추천'
+         WHEN COALESCE(inferred_page_id,page_id) IN ('HOME','SHOPPINGHOME') THEN '홈'
+         WHEN COALESCE(inferred_page_id,page_id)='BRAND_DETAIL' THEN '브랜드관'
+         WHEN COALESCE(inferred_page_id,page_id)='EXHIBITION_DETAIL' THEN '기획전'
+         WHEN COALESCE(inferred_page_id,page_id) LIKE 'MYPACKAGE%' THEN '마이패키지'
+         WHEN COALESCE(inferred_page_id,page_id)='AD_PRODUCT_LIST' THEN '광고리스트'
+         WHEN COALESCE(inferred_page_id,page_id)='TODAYSDEAL' THEN '오늘의딜'
+         WHEN COALESCE(inferred_page_id,page_id)='BEST' THEN '베스트'
+         WHEN COALESCE(inferred_page_id,page_id) LIKE 'CDP%' THEN '컨텐츠'
+         ELSE '기타' END"""
+
+def inflow_q(lo, hi):
+    return f"""WITH inflow_map AS (
+  SELECT date, object_id pid, {INFLOW_CASE} inflow, category, uuid
+  FROM log.analyst_log_table
+  WHERE date BETWEEN CAST(DATE_ADD('day',{lo},CURRENT_DATE) AS VARCHAR) AND CAST(DATE_ADD('day',{hi},CURRENT_DATE) AS VARCHAR)
+    AND object_id IN {PIDS_STR} AND category IN ('IMPRESSION','CLICK') AND object_type='PRODUCTION')
+SELECT date, pid, inflow,
+  SUM(CASE WHEN category='IMPRESSION' THEN 1 ELSE 0 END) imp,
+  SUM(CASE WHEN category='CLICK' THEN 1 ELSE 0 END) click,
+  COUNT(DISTINCT CASE WHEN category='CLICK' THEN uuid END) click_uv
+FROM inflow_map GROUP BY date, pid, inflow"""
+
+jobs = {}
+jobs["a"] = f"""SELECT CAST(base_dt AS VARCHAR) dt, CAST(product_id AS BIGINT) product_id, SUM(gmv) gmv, SUM(gross_profit) gp, SUM(option_quantity) qty
+FROM ba_preserved.commerce_gross_profit_orders
+WHERE CAST(product_id AS BIGINT) IN {PIDS_SQL} AND yyyymm = '202606' AND base_dt >= DATE '2026-06-20'
+GROUP BY base_dt, product_id ORDER BY base_dt, product_id"""
+
+jobs["b"] = f"""SELECT period dt, product_id, SUM(impression_count_all) imp, SUM(pdpview_count_all) pdp, SUM(purchase_count_all) purchase
+FROM ba_preserved.comm_product_perform
+WHERE product_id IN {PIDS_SQL} AND period_base='day' AND period >= '2026-06-20' AND yyyymm='202606'
+GROUP BY period, product_id ORDER BY period, product_id"""
+
+jobs["b_uv"] = f"""SELECT base_dt dt, id pid, SUM(impression_user_join) imp_uv, SUM(pdpview_user_join) pdp_uv, SUM(purchase_user_join) buy_uv
+FROM ba_preserved.commerce_daily_user_count_v3
+WHERE id IN {PIDS_STR} AND base='product' AND paid_type='total' AND base_dt >= '2026-06-20'
+GROUP BY base_dt, id ORDER BY base_dt, id"""
+
+jobs["c"] = f"""SELECT date, object_id, query_keyword, AVG(object_idx) avg_rank, MIN(object_idx) best_rank, AVG(monthly_sales_score) selling_score
+FROM search.commerce_srp_dataset_daily_v0_0_2
+WHERE object_id IN ('3918642','3640244') AND date >= CAST(DATE_ADD('day',-14,CURRENT_DATE) AS VARCHAR) AND query_keyword IN {KW}
+GROUP BY date, object_id, query_keyword ORDER BY date DESC"""
+
+jobs["f"] = f"""SELECT object_id, query_keyword, AVG(object_idx) avg_rank, MIN(object_idx) best_rank, AVG(monthly_sales_score) score, SUM(is_clicked)*1.0/COUNT(*) ctr, COUNT(*) imp
+FROM search.commerce_srp_dataset_daily_v0_0_2
+WHERE object_id IN {PIDS_STR} AND date >= CAST(DATE_ADD('day',-30,CURRENT_DATE) AS VARCHAR) AND query_keyword IN {KW} AND object_idx <= 100
+GROUP BY object_id, query_keyword HAVING COUNT(*) > 10"""
+
+jobs["d_a"] = inflow_q(-14, -8)
+jobs["d_b"] = inflow_q(-7, -1)
+
+jobs["g"] = f"""WITH inflow_click AS (
+  SELECT date dt, object_id pid, uuid, user_id, {CVR_CASE} inflow
+  FROM log.analyst_log_table
+  WHERE date >= CAST(DATE_ADD('day',-7,CURRENT_DATE) AS VARCHAR) AND object_id IN {PIDS_STR} AND category='CLICK' AND object_type='PRODUCTION'),
+product_purchase AS (
+  SELECT DISTINCT CAST(base_dt AS VARCHAR) dt, CAST(user_id AS VARCHAR) user_id, CAST(product_id AS BIGINT) pid
+  FROM ba_preserved.commerce_gross_profit_orders
+  WHERE yyyymm IN ('202606','202605') AND base_dt >= DATE_ADD('day',-7,CURRENT_DATE) AND option_quantity > 0 AND user_id IS NOT NULL)
+SELECT i.dt, i.pid, i.inflow, COUNT(DISTINCT i.uuid) click_uv, COUNT(DISTINCT CASE WHEN p.user_id IS NOT NULL THEN i.uuid END) buy_uv
+FROM inflow_click i LEFT JOIN product_purchase p ON i.dt=p.dt AND CAST(i.user_id AS VARCHAR)=p.user_id AND CAST(i.pid AS BIGINT)=p.pid
+GROUP BY i.dt, i.pid, i.inflow"""
+
+jobs["h"] = """SELECT CASE WHEN p.brand_name='오늘의집 layer' THEN 'PB' ELSE '3P' END pb_flag,
+  CASE WHEN p.selling_cost < 30000 THEN '01_<30k' WHEN p.selling_cost < 50000 THEN '02_30-50k'
+       WHEN p.selling_cost < 70000 THEN '03_50-70k' WHEN p.selling_cost < 100000 THEN '04_70-100k' ELSE '05_100k+' END price_band,
+  COUNT(DISTINCT p.product_id) prod_cnt, SUM(uc.impression_user_join) imp_uv, SUM(uc.pdpview_user_join) pdp_uv, SUM(uc.purchase_user_join) buy_uv
+FROM ba_preserved.commerce_daily_user_count_v3 uc
+JOIN ba_preserved.comm_product_info_latest p ON TRY_CAST(uc.id AS BIGINT) = p.product_id
+WHERE uc.base_dt BETWEEN CAST(DATE_ADD('day',-7,CURRENT_DATE) AS VARCHAR) AND CAST(DATE_ADD('day',-1,CURRENT_DATE) AS VARCHAR)
+  AND uc.base='product' AND uc.paid_type='total' AND p.cate_d3 = '이불/이불커버'
+GROUP BY 1, 2"""
+
+jobs["i"] = """SELECT id pid, SUM(impression_user_join) imp_uv, SUM(pdpview_user_join) pdp_uv, SUM(purchase_user_join) buy_uv
+FROM ba_preserved.commerce_daily_user_count_v3
+WHERE base_dt BETWEEN CAST(DATE_ADD('day',-7,CURRENT_DATE) AS VARCHAR) AND CAST(DATE_ADD('day',-1,CURRENT_DATE) AS VARCHAR)
+  AND base='product' AND paid_type='total' AND id IN ('3918642','4037745','3640244','3640123','3707436','3508402','3707457')
+GROUP BY 1"""
+
+jobs["score"] = f"""SELECT date dt, object_id pid, AVG(monthly_sales_score) score
+FROM search.commerce_srp_dataset_daily_v0_0_2
+WHERE object_id IN {PIDS_STR} AND date >= CAST(DATE_ADD('day',-60,CURRENT_DATE) AS VARCHAR)
+GROUP BY date, object_id ORDER BY date, object_id"""
+
+jobs["feat"] = f"""SELECT date dt, object_id pid, AVG(review_count_score) review, AVG(sell_cnt_28_day_score) sell28,
+  AVG(view_cnt_28_day_score) view28, AVG(sell_per_view_28_day_score) spv28, AVG(wish_count_180_day_score) wish,
+  AVG(card_count_180_day_score) card, CAST(AVG(qc_rank_4w) AS DOUBLE) qc_rank
+FROM search.commerce_srp_dataset_daily_v0_0_2
+WHERE object_id IN {PIDS_STR} AND date >= CAST(DATE_ADD('day',-60,CURRENT_DATE) AS VARCHAR)
+GROUP BY date, object_id ORDER BY date, object_id"""
+
+jobs["e"] = f"""WITH buyers AS (
+  SELECT DISTINCT CAST(o.product_id AS BIGINT) pid, CAST(o.user_id AS BIGINT) user_id
+  FROM ba_preserved.commerce_gross_profit_orders o
+  WHERE o.yyyymm BETWEEN '202501' AND '202606' AND CAST(o.product_id AS BIGINT) IN (3918642,3640244,767440,2636441,1930788,442026)
+    AND o.option_quantity > 0 AND o.user_id IS NOT NULL)
+SELECT b.pid,
+  CASE WHEN 2026-CAST(SUBSTR(u.birthday,1,4) AS INT) < 25 THEN '20-24'
+       WHEN 2026-CAST(SUBSTR(u.birthday,1,4) AS INT) < 30 THEN '25-29'
+       WHEN 2026-CAST(SUBSTR(u.birthday,1,4) AS INT) < 35 THEN '30-34'
+       WHEN 2026-CAST(SUBSTR(u.birthday,1,4) AS INT) < 40 THEN '35-39'
+       WHEN 2026-CAST(SUBSTR(u.birthday,1,4) AS INT) < 45 THEN '40-44'
+       WHEN 2026-CAST(SUBSTR(u.birthday,1,4) AS INT) < 50 THEN '45-49'
+       WHEN 2026-CAST(SUBSTR(u.birthday,1,4) AS INT) < 55 THEN '50-54'
+       WHEN 2026-CAST(SUBSTR(u.birthday,1,4) AS INT) < 60 THEN '55-59' ELSE '60+' END age_group,
+  COUNT(DISTINCT b.user_id) cnt
+FROM buyers b JOIN dump_member.verified_users u ON u.user_id = b.user_id
+WHERE u.birthday IS NOT NULL AND LENGTH(u.birthday) >= 4 AND CAST(SUBSTR(u.birthday,1,4) AS INT) BETWEEN 1930 AND 2010
+GROUP BY 1, 2 ORDER BY 1, 2"""
+
+with open(os.path.join(OUT, "manifest.json"), "w", encoding="utf-8") as f:
+    json.dump(jobs, f, ensure_ascii=False)
+print(f"manifest written: {len(jobs)} jobs -> {OUT}\\manifest.json")
