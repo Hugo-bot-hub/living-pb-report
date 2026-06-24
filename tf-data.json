@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-06-22",
+    "lastUpdate": "2026-06-23",
     "kickoff": "2026-04-13",
     "dataSourceGMV": "ba_preserved.commerce_gross_profit_orders (gmv, gross_profit, option_quantity, base_dt 파티션 yyyymm)",
     "dataSourceFunnel": "ba_preserved.comm_product_perform (period_base='day')",
@@ -1888,6 +1888,18 @@
         "imp_uv": 2140,
         "pdp_uv": 165,
         "buy_uv": 5
+      },
+      {
+        "dt": "2026-06-23",
+        "gmv": 286700,
+        "gp": 31491.69,
+        "qty": 3,
+        "imp": 8145,
+        "pdp": 244,
+        "purchase": 2,
+        "imp_uv": 1962,
+        "pdp_uv": 147,
+        "buy_uv": 2
       }
     ],
     "767440": [
@@ -3594,6 +3606,18 @@
         "imp_uv": 56196,
         "pdp_uv": 4375,
         "buy_uv": 164
+      },
+      {
+        "dt": "2026-06-23",
+        "gmv": 14019000,
+        "gp": 1639566.86,
+        "qty": 246,
+        "imp": 330450,
+        "pdp": 8622,
+        "purchase": 153,
+        "imp_uv": 59322,
+        "pdp_uv": 3680,
+        "buy_uv": 153
       }
     ],
     "1930788": [
@@ -5300,6 +5324,18 @@
         "imp_uv": 20864,
         "pdp_uv": 951,
         "buy_uv": 17
+      },
+      {
+        "dt": "2026-06-23",
+        "gmv": 1919200,
+        "gp": 214853.16,
+        "qty": 23,
+        "imp": 139486,
+        "pdp": 3061,
+        "purchase": 20,
+        "imp_uv": 39310,
+        "pdp_uv": 1678,
+        "buy_uv": 20
       }
     ],
     "2636441": [
@@ -7006,6 +7042,18 @@
         "imp_uv": 36916,
         "pdp_uv": 3112,
         "buy_uv": 136
+      },
+      {
+        "dt": "2026-06-23",
+        "gmv": 6483300,
+        "gp": 707749.62,
+        "qty": 127,
+        "imp": 214967,
+        "pdp": 5963,
+        "purchase": 92,
+        "imp_uv": 41321,
+        "pdp_uv": 2847,
+        "buy_uv": 92
       }
     ],
     "3640244": [
@@ -8712,6 +8760,18 @@
         "imp_uv": 12593,
         "pdp_uv": 406,
         "buy_uv": 8
+      },
+      {
+        "dt": "2026-06-23",
+        "gmv": 392200,
+        "gp": -59067.77,
+        "qty": 9,
+        "imp": 39583,
+        "pdp": 692,
+        "purchase": 4,
+        "imp_uv": 13454,
+        "pdp_uv": 399,
+        "buy_uv": 4
       }
     ],
     "3918642": [
@@ -10250,6 +10310,18 @@
         "imp_uv": 5247,
         "pdp_uv": 267,
         "buy_uv": 4
+      },
+      {
+        "dt": "2026-06-23",
+        "gmv": 374900,
+        "gp": -49055.08,
+        "qty": 11,
+        "imp": 17723,
+        "pdp": 468,
+        "purchase": 8,
+        "imp_uv": 4423,
+        "pdp_uv": 239,
+        "buy_uv": 8
       }
     ]
   },
