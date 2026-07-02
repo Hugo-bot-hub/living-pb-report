@@ -744,5 +744,185 @@
         }
       ]
     }
+  },
+  "mat_to_frame_by_tier": {
+    "basic": {
+      "mat_users": 1164,
+      "bought_frame": 447,
+      "our": 99,
+      "comp_only": 348,
+      "rate_pct": 38.4,
+      "leak_pct": 77.9,
+      "dest": [
+        {
+          "pid": "1243313",
+          "name": "basic 바른수납 프레임(우리)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 69,
+          "gmv": 23033400
+        },
+        {
+          "pid": "324336",
+          "name": "크라운퍼니쳐 에디트",
+          "brand": "크라운퍼니쳐",
+          "is_self": false,
+          "users": 28,
+          "gmv": 4565000
+        },
+        {
+          "pid": "1786951",
+          "name": "크라운퍼니쳐 노아06",
+          "brand": "크라운퍼니쳐",
+          "is_self": false,
+          "users": 26,
+          "gmv": 4731000
+        },
+        {
+          "pid": "3858646",
+          "name": "refine 빅수납 프레임(우리)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 19,
+          "gmv": 9639410
+        },
+        {
+          "pid": "2352818",
+          "name": "데일리리빙 드레스덴",
+          "brand": "데일리리빙",
+          "is_self": false,
+          "users": 18,
+          "gmv": 5903000
+        },
+        {
+          "pid": "2689542",
+          "name": "지누스 스마트베이스",
+          "brand": "지누스",
+          "is_self": false,
+          "users": 12,
+          "gmv": 1743600
+        }
+      ]
+    },
+    "refine": {
+      "mat_users": 293,
+      "bought_frame": 152,
+      "our": 48,
+      "comp_only": 104,
+      "rate_pct": 51.9,
+      "leak_pct": 68.4,
+      "dest": [
+        {
+          "pid": "3858646",
+          "name": "refine 빅수납 프레임(우리)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 17,
+          "gmv": 8367000
+        },
+        {
+          "pid": "1243313",
+          "name": "basic 바른수납 프레임(우리)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 14,
+          "gmv": 4249000
+        },
+        {
+          "pid": "3652507",
+          "name": "refine 수납 프레임(우리)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 11,
+          "gmv": 5176600
+        },
+        {
+          "pid": "2510855",
+          "name": "알파침대 이브",
+          "brand": "알파침대",
+          "is_self": false,
+          "users": 6,
+          "gmv": 1762600
+        },
+        {
+          "pid": "3325301",
+          "name": "mu' 벙커수납",
+          "brand": "mu'",
+          "is_self": false,
+          "users": 5,
+          "gmv": 1205000
+        },
+        {
+          "pid": "3603649",
+          "name": "크라운퍼니쳐 노엘",
+          "brand": "크라운퍼니쳐",
+          "is_self": false,
+          "users": 4,
+          "gmv": 1286000
+        }
+      ]
+    },
+    "studio": {
+      "mat_users": 143,
+      "bought_frame": 69,
+      "our": 10,
+      "comp_only": 59,
+      "rate_pct": 48.3,
+      "leak_pct": 85.5,
+      "dest": [
+        {
+          "pid": "2352818",
+          "name": "데일리리빙 드레스덴",
+          "brand": "데일리리빙",
+          "is_self": false,
+          "users": 8,
+          "gmv": 3076000
+        },
+        {
+          "pid": "2720354",
+          "name": "데일리리빙 플로어",
+          "brand": "데일리리빙",
+          "is_self": false,
+          "users": 4,
+          "gmv": 2096000
+        },
+        {
+          "pid": "3649353",
+          "name": "눕 밀러패브릭",
+          "brand": "눕",
+          "is_self": false,
+          "users": 2,
+          "gmv": 494900
+        },
+        {
+          "pid": "1122797",
+          "name": "잉글랜더 앙티브",
+          "brand": "잉글랜더",
+          "is_self": false,
+          "users": 2,
+          "gmv": 978000
+        },
+        {
+          "pid": "2456084",
+          "name": "베디스 비앙코",
+          "brand": "베디스",
+          "is_self": false,
+          "users": 2,
+          "gmv": 946900
+        },
+        {
+          "pid": "3652507",
+          "name": "refine 수납 프레임(우리)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 2,
+          "gmv": 830900
+        }
+      ]
+    }
+  },
+  "mat_to_frame_summary": {
+    "method": "우리 매트리스(basic/refine/studio) 구매자 → 프레임 구매(유저단위, 매트리스 2026-04~06 / 프레임 2026-02~07)",
+    "note": "매트리스→프레임 구매율(38~52%)이 프레임→매트리스(18~31%)보다 높음. basic만 우리 basic프레임으로 시너지, studio 매트리스 구매자는 경쟁 패브릭 프레임으로 대거 유출(86%)."
   }
 }
