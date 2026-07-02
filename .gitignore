@@ -2,3 +2,6 @@ build_data.py
 verify_data.py
 *.bak
 monthly_raw.json
+daily_pipeline/tmp/
+daily_pipeline/_queries.json
+daily_pipeline/tmp_test*/
