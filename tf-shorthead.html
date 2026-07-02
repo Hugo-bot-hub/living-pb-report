@@ -177,7 +177,7 @@ function viewOverview(){
   '<div class="card"><h3>'+(S.div==='living'?'🛋️ 리빙':'🛏️ 가구')+' 자사 상품 관제탑 <span style="font-weight:400;color:var(--text3);font-size:12px">· 최근 7일</span></h3>'+
   '<table><thead><tr><th>상품</th><th class="num">어제 GMV</th><th class="num">7일 GMV</th><th class="num">WoW</th><th class="num">CTR</th><th class="num">CVR(UV)</th><th class="num">SRP 평균순위</th><th class="num">실객단가</th></tr></thead>'+
   '<tbody>'+rows+'</tbody></table>'+
-  '<div class="note">CTR=PDP/노출, CVR(UV)=구매UV/PDP UV. WoW=최근7일 vs 이전7일 GMV. <b>SRP 평균순위=검색 노출키워드 노출가중 평균순위</b>(대표값, 최근30일). 괄호 "최고"는 단발 best순위라 얇을 수 있어 참고용. 실객단가=매트리스만(커버제외 가중), 그외 표시가.</div></div>'+trend;
+  '<div class="note">CTR=PDP/노출, CVR(UV)=구매UV/PDP UV. WoW=최근7일 vs 이전7일 GMV. <b>SRP 평균순위=검색 노출키워드 노출가중 평균순위</b>(대표값, 최근14일). 괄호 "최고"=상위5%(P5) 노출순위(단발 1위 요행 제외). 실객단가=매트리스만(커버제외 가중), 그외 표시가.</div></div>'+trend;
 }
 
 function viewDetail(){
@@ -253,11 +253,11 @@ function subSrp(pid){
   }
   if(krank.length){
     const rows=krank.map(function(k){var avg=Math.round(k.rank)+1;var hi=avg>30;return '<tr><td>'+k.kw+'</td><td class="num">'+(k.qc||0).toLocaleString()+'</td><td class="num"'+(hi?' style="color:#E67E22;font-weight:700"':'')+'>'+avg+'위</td><td class="num">'+((k.best||0)+1)+'위</td><td class="num">'+(k.imp||0).toLocaleString()+'</td><td class="num">'+pct(k.ctr)+'</td></tr>';}).join('');
-    h+='<div class="card"><h3>🔍 검색 키워드 순위 <span style="font-weight:400;color:var(--text3);font-size:12px">· 검색량(QC) 큰 순</span><span class="wbadge">최근 28일</span></h3><table><thead><tr><th>키워드</th><th class="num">검색량</th><th class="num">우리 평균순위</th><th class="num">최고</th><th class="num">노출</th><th class="num">CTR</th></tr></thead><tbody>'+rows+'</tbody></table><div class="note">검색량 큰 키워드부터. <span style="color:#E67E22;font-weight:700">주황</span>=평균 30위 밖(큰 키워드인데 우리가 묻힘 → 공략 대상).</div></div>';
+    h+='<div class="card"><h3>🔍 검색 키워드 순위 <span style="font-weight:400;color:var(--text3);font-size:12px">· 검색량(QC) 큰 순</span><span class="wbadge">최근 14일</span></h3><table><thead><tr><th>키워드</th><th class="num" title="이 키워드의 4주 검색량(QC)">검색량</th><th class="num" title="우리 상품이 이 키워드로 노출된 위치의 노출가중 평균순위">우리 평균순위</th><th class="num" title="상위 5%(P5) 노출 위치 — 단발 1위 요행 배제한 로버스트 최고순위">최고(상위5%)</th><th class="num">노출</th><th class="num" title="이 키워드로 우리 상품이 노출된 것 중 클릭된 비율 = 우리클릭÷우리노출 (키워드 전체 CTR 아님)">우리 CTR</th></tr></thead><tbody>'+rows+'</tbody></table><div class="note">검색량 큰 키워드부터 · <b>최고(상위5%)</b>=상위 5% 노출 위치(단발 1위 요행 제외) · <b>우리 CTR</b>=우리 상품 노출 중 클릭률(키워드 전체 아님). <span style="color:#E67E22;font-weight:700">주황</span>=평균 30위 밖(큰 키워드인데 묻힘 → 공략 대상).</div></div>';
   }
   if(mtx.length){
     const rows=mtx.slice().sort(function(a,b){return a.rank-b.rank;}).map(function(r){return '<tr><td>'+r.kw+'</td><td class="num">'+dispRank(r.rank)+'</td><td class="num">'+dispBest(r.best)+'</td><td class="num">'+r.score+'</td><td class="num">'+pct(r.ctr)+'</td><td class="num">'+(r.imp||0).toLocaleString()+'</td></tr>';}).join('');
-    h+='<div class="card"><h3>📋 SRP 매트릭스 <span style="font-weight:400;color:var(--text3);font-size:12px">· 최근 30일</span></h3><table><thead><tr><th>키워드</th><th class="num">순위</th><th class="num">최고</th><th class="num">스코어</th><th class="num">CTR</th><th class="num">노출</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+    h+='<div class="card"><h3>📋 SRP 매트릭스 <span style="font-weight:400;color:var(--text3);font-size:12px">· 최근 14일</span></h3><table><thead><tr><th>키워드</th><th class="num" title="노출가중 평균순위">순위</th><th class="num" title="상위 5%(P5) 노출 위치">최고(상위5%)</th><th class="num">스코어</th><th class="num" title="우리 상품 노출 중 클릭률">우리 CTR</th><th class="num">노출</th></tr></thead><tbody>'+rows+'</tbody></table><div class="note">순위·최고는 검색키워드순위 표와 동일 최근 14일 기준. 최고=상위5%(P5), CTR=우리 상품 CTR.</div></div>';
   }
   return h;
 }
@@ -341,23 +341,35 @@ function viewMprice(){
   return h;
 }
 
+function tierCards(byTier, isFtoM){
+  const TN={basic:'🟦 basic',refine:'🟨 refine',studio:'🟥 studio'};
+  return ['basic','refine','studio'].map(function(t){ const x=byTier[t]; if(!x) return '';
+    const from = isFtoM ? x.frame_users : x.mat_users;
+    const got  = isFtoM ? x.bought_mat  : x.bought_frame;
+    const dest=(x.dest||[]).slice(0,5).map(function(d){return '<tr class="'+(d.is_self?'self-row':'')+'"><td>'+(d.is_self?'⭐':'⚔️')+' '+(d.name||'').slice(0,18)+'</td><td class="num">'+(d.users||0)+'명</td><td class="num">'+won(d.gmv)+'</td></tr>';}).join('');
+    return '<div class="card"><h3>'+TN[t]+' '+(isFtoM?'프레임':'매트리스')+' 구매자</h3>'+
+      '<div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:8px">'+
+      '<div><div class="mm-lbl">'+(isFtoM?'프레임구매자':'매트리스구매자')+'</div><div style="font-size:17px;font-weight:700">'+(from||0).toLocaleString()+'명</div></div>'+
+      '<div><div class="mm-lbl">'+(isFtoM?'→매트리스':'→프레임')+' 구매</div><div style="font-size:17px;font-weight:700">'+(got||0).toLocaleString()+' <span style="font-size:12px;color:var(--text3)">('+(x.rate_pct||0)+'%)</span></div></div>'+
+      '<div><div class="mm-lbl">경쟁 유출</div><div style="font-size:20px;font-weight:800;color:#E74C3C">'+(x.leak_pct||0)+'%</div></div>'+
+      '</div><table><thead><tr><th>'+(isFtoM?'매트리스 행선지':'프레임 행선지')+'</th><th class="num">구매자</th><th class="num">GMV</th></tr></thead><tbody>'+dest+'</tbody></table></div>';
+  }).join('');
+}
 function viewAttach(){
   if(!M) return '<div class="ph">데이터 없음</div>';
-  const afo=M.attach_frame_option||[]; const cos=M.cosell||[]; const cs=M.cosell_summary||null;
-  let h='<div class="insight">🔗 <b>프레임 합구매</b> — 우리 침대프레임을 산 고객이 같은 주문에 함께 담은 매트리스. <b>우리 프레임이 만든 매트리스 수요가 대거 경쟁사로 유출</b>(수면밀도 1위).</div>';
-  if(cs){ h+='<div class="card" style="border-left:4px solid #E74C3C"><h3>🚨 합구매 유출 요약 <span class="wbadge">'+(cs.window||'')+'</span></h3><div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-end">'+
-    '<div><div class="mm-lbl">프레임 주문</div><div style="font-size:22px;font-weight:700">'+(cs.frame_orders||0).toLocaleString()+'건</div></div>'+
-    '<div><div class="mm-lbl">매트리스 합구매</div><div style="font-size:22px;font-weight:700">'+(cs.with_mattress||0).toLocaleString()+'건 <span style="font-size:13px;color:var(--text3)">('+(cs.attach_rate_pct||0)+'%)</span></div></div>'+
-    '<div><div class="mm-lbl">우리 vs 경쟁</div><div style="font-size:22px;font-weight:700"><span style="color:#6C5CE7">'+(cs.with_our_mattress||0)+'</span> vs <span style="color:#E67E22">'+(cs.with_competitor_mattress||0)+'</span></div></div>'+
-    '<div><div class="mm-lbl">경쟁 유출률</div><div style="font-size:30px;font-weight:800;color:#E74C3C">'+(cs.competitor_share_pct||0)+'%</div></div>'+
-    '</div><div class="note">'+(cs.frame_scope||'')+'. '+(cs.note||'')+'</div></div>'; }
-  h+='<div class="grid2">'+
-    '<div class="card"><h3>① 프레임 옵션 매트리스 (월별) <span class="wbadge">2026-02~07</span></h3><div class="chart-box sm"><canvas id="at-afo"></canvas></div><div class="note">프레임 상품번호 옵션의 "페이브 매트리스"(매트리스 PID엔 안 잡힘). 월 1~7대 소량.</div></div>'+
-    '<div class="card"><h3>② 카트 교차구매 매트리스 <span class="wbadge">최근 3개월·전 프레임</span></h3>'+
-    (cos.length?'<table><thead><tr><th>매트리스</th><th>브랜드</th><th class="num">주문</th><th class="num">수량</th><th class="num">GMV</th></tr></thead><tbody>'+
-      cos.slice(0,20).map(function(c){return '<tr class="'+(c.is_self?'self-row':'')+'"><td>'+(c.is_self?'⭐':'')+' '+(c.name||'').slice(0,22)+'</td><td>'+(c.brand||'')+'</td><td class="num">'+(c.orders||0)+'</td><td class="num">'+(c.qty||0)+'</td><td class="num">'+won(c.gmv)+'</td></tr>';}).join('')+
-      '</tbody></table>':'<div class="ph">데이터 없음</div>')+
-    '</div></div>';
+  const afo=M.attach_frame_option||[]; const cs=M.cosell_summary||{}; const cbt=M.cosell_by_tier||{}; const mft=M.mat_to_frame_by_tier||{}; const mfs=M.mat_to_frame_summary||{};
+  const g3='display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr))';
+  const sech='font-size:15px;font-weight:800;margin:20px 2px 8px';
+  let h='<div class="insight">🔗 <b>프레임 ↔ 매트리스 합구매 흐름</b> — 침대프레임/매트리스 구매자가 <b>상대 카테고리를 어디서(우리 vs 경쟁) 샀는지</b> 유저단위 추적. tier(basic/refine/studio)별 유출 행선지.</div>';
+  h+='<div class="card" style="border-left:4px solid #E74C3C"><h3>🚨 합구매 유출 요약 <span class="wbadge">'+(cs.window||'유저단위')+'</span></h3><div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-end">'+
+    '<div><div class="mm-lbl">프레임 구매자</div><div style="font-size:22px;font-weight:700">'+(cs.frame_users||0).toLocaleString()+'명</div></div>'+
+    '<div><div class="mm-lbl">매트리스 구매</div><div style="font-size:22px;font-weight:700">'+(cs.bought_mat||0).toLocaleString()+'명 <span style="font-size:13px;color:var(--text3)">('+(cs.rate_pct||0)+'%)</span></div></div>'+
+    '<div><div class="mm-lbl">우리 vs 경쟁</div><div style="font-size:22px;font-weight:700"><span style="color:#6C5CE7">'+(cs.our||0)+'</span> vs <span style="color:#E67E22">'+(cs.comp_only||0)+'</span></div></div>'+
+    '<div><div class="mm-lbl">경쟁 유출률</div><div style="font-size:30px;font-weight:800;color:#E74C3C">'+(cs.leak_pct||0)+'%</div></div>'+
+    '</div><div class="note">'+(cs.method||'')+' '+(cs.note||'')+'</div></div>';
+  h+='<div style="'+sech+'">① 프레임 구매자 → 매트리스 행선지</div><div style="'+g3+'">'+tierCards(cbt,true)+'</div>';
+  h+='<div style="'+sech+'">② 매트리스 구매자 → 프레임 행선지</div>'+(mfs.note?'<div class="note" style="margin:0 2px 8px">'+mfs.note+'</div>':'')+'<div style="'+g3+'">'+tierCards(mft,false)+'</div>';
+  h+='<div class="card" style="margin-top:18px"><h3>③ 프레임 옵션 매트리스 (월별) <span class="wbadge">2026-02~07</span></h3><div class="chart-box sm"><canvas id="at-afo"></canvas></div><div class="note">프레임 상품번호 옵션의 "페이브 매트리스"(매트리스 PID엔 안 잡힘). 월 1~7대 소량 — 대부분은 위 카트 교차구매(별도 주문)로 발생.</div></div>';
   return h;
 }
 
