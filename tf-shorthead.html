@@ -52,6 +52,8 @@ body{background:var(--bg);color:var(--text);font-family:'Pretendard',sans-serif;
 .card .note{font-size:12px;color:var(--text3);margin-top:8px;font-style:italic}
 .chart-box{position:relative;height:300px}
 .chart-box.sm{height:240px}
+.chart-box.xs{height:132px}
+.mm-lbl{font-size:11px;color:var(--text2);font-weight:600;margin-bottom:3px;text-align:center}
 table{width:100%;border-collapse:collapse;font-size:13.5px}
 th{text-align:left;padding:9px 6px;border-bottom:1px solid var(--border);color:var(--text2);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.3px}
 td{padding:9px 6px;border-bottom:1px solid #f0f1f5}
@@ -102,6 +104,9 @@ function daily(pid){ return (D.daily&&D.daily[pid])||[]; }
 function sumF(arr,f,n,skip){ skip=skip||0; const s=arr.slice(Math.max(0,arr.length-n-skip), arr.length-skip); return s.reduce((a,r)=>a+(r[f]||0),0); }
 function unitPrice(pid){ if(M&&M.decomp&&M.decomp[pid]){ const dc=M.decomp[pid]; const g=dc.reduce((a,r)=>a+(r.gmv||0),0), q=dc.reduce((a,r)=>a+(r.qty||0),0); return q?Math.round(g/q):null; } return null; }
 function srpBest(pid){ const rows=(D.srpMatrix||[]).filter(r=>String(r.pid)===String(pid)); if(!rows.length) return null; return Math.min.apply(null, rows.map(r=>r.best)); }
+// SRP object_idx는 0-based(0=1위) → 사람이 읽는 순위는 +1 (표시단계에서만 보정, 데이터는 raw)
+function dispRank(v){ return (v==null||isNaN(v))?'-':(v+1).toFixed(1); }
+function dispBest(v){ return (v==null||isNaN(v))?'-':(v+1); }
 
 function renderNav(){
   document.getElementById('v-badge').textContent = D.meta.version||'v19';
@@ -142,16 +147,21 @@ function viewOverview(){
       '<td class="num '+(wow==null?'':wow>=0?'chg up':'chg dn')+'">'+(wow==null?'-':(wow>=0?'+':'')+wow.toFixed(0)+'%')+'</td>'+
       '<td class="num">'+pct(ctr)+'</td>'+
       '<td class="num">'+pct(cvr)+'</td>'+
-      '<td class="num">'+(best==null?'-':best+'위')+'</td>'+
+      '<td class="num">'+(best==null?'-':(best+1)+'위')+'</td>'+
       '<td class="num">'+(up?won(up):(m.price?won(m.price)+' <span style="color:var(--text3);font-size:11px">(표시가)</span>':'-'))+'</td>'+
     '</tr>';
   }).join('');
   const insight = S.div==='living'
     ? '리빙 자사 침구 3종. 60수·소프트워싱 = 인앱 SRP 전략, 알러지케어 = 외부 확장. 최근 7일 기준 관제.'
     : '가구 자사 6종. 매트리스3 = 인앱 SRP, 침대프레임3 = 외부 전략. <b>실객단가는 표시가와 크게 다름</b>(사이즈·경도). 상세·객단가·합구매 탭 참조.';
-  const trend='<div class="card"><h3>📈 상품별 GMV 추세 <span style="font-weight:400;color:var(--text3);font-size:12px">· 일별 시계열</span></h3><div class="grid2">'+
-    sp.map(function(pid){return '<div><div style="font-size:13px;font-weight:600;margin-bottom:4px">'+(meta(pid).emoji||'')+' '+sn(pid)+'</div><div class="chart-box sm"><canvas id="ov-'+pid+'"></canvas></div></div>';}).join('')+
-    '</div><div class="note">겹침 방지 위해 상품별 개별 추세(소형 멀티플). 상호 비교는 위 관제탑 표 참조.</div></div>';
+  const trend='<div class="card"><h3>📈 상품별 지표 추세 <span style="font-weight:400;color:var(--text3);font-size:12px">· GMV·CTR·CVR·SRP 일별 시계열</span></h3>'+
+    sp.map(function(pid){return '<div style="margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #f0f1f5"><div style="font-size:13.5px;font-weight:700;margin-bottom:6px">'+(meta(pid).emoji||'')+' '+sn(pid)+'</div><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">'+
+      '<div><div class="mm-lbl">GMV</div><div class="chart-box xs"><canvas id="ov-gmv-'+pid+'"></canvas></div></div>'+
+      '<div><div class="mm-lbl">CTR</div><div class="chart-box xs"><canvas id="ov-ctr-'+pid+'"></canvas></div></div>'+
+      '<div><div class="mm-lbl">CVR(UV)</div><div class="chart-box xs"><canvas id="ov-cvr-'+pid+'"></canvas></div></div>'+
+      '<div><div class="mm-lbl">SRP 스코어</div><div class="chart-box xs"><canvas id="ov-srp-'+pid+'"></canvas></div></div>'+
+    '</div></div>';}).join('')+
+    '<div class="note">겹침 방지 위해 상품별 개별 4지표 추세. 상호 비교는 위 관제탑 표. CTR=PDP/노출, CVR=구매UV/PDP UV, SRP스코어=셀링스코어(0~1).</div></div>';
   return '<div class="insight">'+insight+'</div>'+
   '<div class="card"><h3>'+(S.div==='living'?'🛋️ 리빙':'🛏️ 가구')+' 자사 상품 관제탑 <span style="font-weight:400;color:var(--text3);font-size:12px">· 최근 7일</span></h3>'+
   '<table><thead><tr><th>상품</th><th class="num">어제 GMV</th><th class="num">7일 GMV</th><th class="num">WoW</th><th class="num">CTR</th><th class="num">CVR(UV)</th><th class="num">SRP최고</th><th class="num">실객단가</th></tr></thead>'+
@@ -219,17 +229,23 @@ function subSrp(pid){
   const kws=(D.srpKeywords&&D.srpKeywords[pid])||[];
   const mtx=(D.srpMatrix||[]).filter(function(r){return String(r.pid)===String(pid);});
   if(!hasScore&&!hasFeat&&!kws.length&&!mtx.length) return '<div class="ph">SRP 데이터 없음 (경쟁상품은 키워드 미수집)</div>';
-  let h='<div class="grid2">';
-  h+='<div class="card"><h3>🎯 셀링스코어 추이 '+(seriesPids(pid).length>1?(meta(pid).role==='competitor'?'· vs 자사':'· vs 경쟁'):'')+'</h3>'+(hasScore?'<div class="chart-box sm"><canvas id="ch-score"></canvas></div>':'<div class="ph">score 없음</div>')+'</div>';
-  h+='<div class="card"><h3>🧩 SRP 피처 추이</h3>'+(hasFeat?'<div class="chart-box sm"><canvas id="ch-feat"></canvas></div><div class="note">0~1 점수: 리뷰/판매28/뷰28/뷰당판매/찜/장바구니</div>':'<div class="ph">feat 없음</div>')+'</div>';
-  h+='</div>';
+  const sp=seriesPids(pid); const hasCmp=sp.length>1; const isC=meta(pid).role==='competitor';
+  const cmpLbl=hasCmp?(isC?'· vs 자사':'· vs 경쟁'):'';
+  const cmpNote=hasCmp?('비교 대상: '+sp.slice(1).map(function(p){return sn(p);}).join(', ')):'경쟁 미지정(외부 전략) — 단독 추세';
+  let h='<div class="card"><h3>🎯 셀링스코어 추이 '+cmpLbl+'</h3>'+(hasScore?'<div class="chart-box sm"><canvas id="ch-score"></canvas></div><div class="note">'+cmpNote+'</div>':'<div class="ph">score 없음</div>')+'</div>';
+  if(hasFeat){
+    const feats=[['review','리뷰'],['sell28','판매28일'],['view28','뷰28일'],['spv28','뷰당판매'],['wish','찜180일'],['card','장바구니'],['qc_rank','QC랭크 ↓좋음']];
+    h+='<div class="card"><h3>🧩 SRP 피처 항목별 '+cmpLbl+' <span style="font-weight:400;color:var(--text3);font-size:12px">· 우리 vs 경쟁 격차·수렴 추적</span></h3><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(210px,1fr))">'+
+      feats.map(function(f){return '<div><div class="mm-lbl">'+f[1]+'</div><div class="chart-box xs"><canvas id="ch-feat-'+f[0]+'"></canvas></div></div>';}).join('')+
+      '</div><div class="note">항목별 시계열(우리=보라). 리뷰~장바구니=0~1 점수(높을수록 우위), QC랭크=순위(낮을수록 우위). '+cmpNote+'</div></div>';
+  }
   if(kws.length){
     const byKw={}; kws.forEach(function(k){ if(!byKw[k.kw]||k.dt>byKw[k.kw].dt) byKw[k.kw]=k; });
-    const rows=Object.keys(byKw).map(function(k){return byKw[k];}).sort(function(a,b){return a.rank-b.rank;}).map(function(k){return '<tr><td>'+k.kw+'</td><td class="num">'+k.rank+'</td><td class="num">'+k.best+'</td><td class="num">'+k.score+'</td></tr>';}).join('');
+    const rows=Object.keys(byKw).map(function(k){return byKw[k];}).sort(function(a,b){return a.rank-b.rank;}).map(function(k){return '<tr><td>'+k.kw+'</td><td class="num">'+dispRank(k.rank)+'</td><td class="num">'+dispBest(k.best)+'</td><td class="num">'+k.score+'</td></tr>';}).join('');
     h+='<div class="card"><h3>🔍 검색 키워드 순위 <span style="font-weight:400;color:var(--text3);font-size:12px">· 최근 14일 평균</span></h3><table><thead><tr><th>키워드</th><th class="num">평균순위</th><th class="num">최고</th><th class="num">셀링스코어</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
   }
   if(mtx.length){
-    const rows=mtx.slice().sort(function(a,b){return a.rank-b.rank;}).map(function(r){return '<tr><td>'+r.kw+'</td><td class="num">'+r.rank+'</td><td class="num">'+r.best+'</td><td class="num">'+r.score+'</td><td class="num">'+pct(r.ctr)+'</td><td class="num">'+(r.imp||0).toLocaleString()+'</td></tr>';}).join('');
+    const rows=mtx.slice().sort(function(a,b){return a.rank-b.rank;}).map(function(r){return '<tr><td>'+r.kw+'</td><td class="num">'+dispRank(r.rank)+'</td><td class="num">'+dispBest(r.best)+'</td><td class="num">'+r.score+'</td><td class="num">'+pct(r.ctr)+'</td><td class="num">'+(r.imp||0).toLocaleString()+'</td></tr>';}).join('');
     h+='<div class="card"><h3>📋 SRP 매트릭스 <span style="font-weight:400;color:var(--text3);font-size:12px">· 최근 30일</span></h3><table><thead><tr><th>키워드</th><th class="num">순위</th><th class="num">최고</th><th class="num">스코어</th><th class="num">CTR</th><th class="num">노출</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
   }
   return h;
@@ -341,10 +357,17 @@ function buildDetailCharts(){
   else if(S.sub==='age') buildAgeChart();
   else if(S.sub==='bench') buildBenchCharts();
 }
+function miniChart(id,labels,data,color,pctY){ const el=document.getElementById(id); if(!el||!labels.length) return;
+  charts[id]=new Chart(el,{type:'line',data:{labels:labels,datasets:[{data:data,borderColor:color,backgroundColor:color+'22',borderWidth:1.8,pointRadius:0,fill:true,tension:.25,spanGaps:true}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:5,font:{size:8}}},y:{beginAtZero:true,ticks:{maxTicksLimit:4,font:{size:8},callback:function(v){return pctY?v+'%':(Math.abs(v)>=1e8?(v/1e8).toFixed(1)+'억':Math.abs(v)>=1e4?Math.round(v/1e4)+'만':v);}}}}}});
+}
 function buildOverviewCharts(){
-  selfPids(S.div).forEach(function(pid){ const dd=daily(pid); const el=document.getElementById('ov-'+pid); if(!el||!dd.length) return;
-    charts['ov-'+pid]=new Chart(el,{type:'line',data:{labels:dd.map(function(r){return r.dt;}),datasets:[{label:'GMV',data:dd.map(function(r){return r.gmv;}),borderColor:COL.self,backgroundColor:COL.self+'22',borderWidth:2,pointRadius:0,fill:true,tension:.25,spanGaps:true}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:6,font:{size:9}}},y:{beginAtZero:true,ticks:{font:{size:9},callback:function(v){return Math.abs(v)>=1e8?(v/1e8).toFixed(1)+'억':Math.round(v/1e4)+'만';}}}}}});
+  selfPids(S.div).forEach(function(pid){ const dd=daily(pid); if(!dd.length) return;
+    const lb=dd.map(function(r){return r.dt;});
+    miniChart('ov-gmv-'+pid,lb,dd.map(function(r){return r.gmv;}),COL.self);
+    miniChart('ov-ctr-'+pid,lb,dd.map(function(r){return r.imp?+(r.pdp/r.imp*100).toFixed(2):null;}),COL.blue,true);
+    miniChart('ov-cvr-'+pid,lb,dd.map(function(r){return r.pdp_uv?+(r.buy_uv/r.pdp_uv*100).toFixed(2):null;}),COL.green,true);
+    const sd=(D.scoreTs&&D.scoreTs[pid])||[]; miniChart('ov-srp-'+pid,sd.map(function(r){return r.dt;}),sd.map(function(r){return r.score;}),COL.orange);
   });
 }
 function mkBar(id,labels,data,colors,pctY){ const el=document.getElementById(id); if(!el) return;
@@ -383,9 +406,12 @@ function buildSrpCharts(){
   }
   const fd=(D.srpFeatureTs&&D.srpFeatureTs[S.pid])||[];
   if(fd.length){ const lb=fd.map(function(r){return r.dt;});
-    const feats=[['review','리뷰','#6c5ce7'],['sell28','판매28','#00b894'],['view28','뷰28','#e6a817'],['spv28','뷰당판매','#3b82f6'],['wish','찜','#ff6b6b'],['card','장바구니','#8b5cf6']];
-    const ds=feats.map(function(f){return {label:f[1],data:fd.map(function(r){return r[f[0]]!=null?r[f[0]]:null;}),borderColor:f[2],backgroundColor:'transparent',borderWidth:1.6,pointRadius:0,tension:.25,spanGaps:true};});
-    const el=document.getElementById('ch-feat'); if(el) charts['ch-feat']=new Chart(el,{type:'line',data:{labels:lb,datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{ticks:{maxTicksLimit:8,font:{size:10}}},y:{min:0,max:1,ticks:{font:{size:10}}}}}});
+    const feats=[['review',false],['sell28',false],['view28',false],['spv28',false],['wish',false],['card',false],['qc_rank',true]];
+    feats.forEach(function(f){ const key=f[0], isRank=f[1];
+      const el=document.getElementById('ch-feat-'+key); if(!el) return;
+      const ds=pids.map(function(p,i){ const arr=(D.srpFeatureTs&&D.srpFeatureTs[p])||[]; const m={}; arr.forEach(function(r){m[r.dt]=r[key];}); return {label:sn(p),data:lb.map(function(d){return m[d]!=null?m[d]:null;}),borderColor:cols[i]||COL.gray,backgroundColor:'transparent',borderWidth:1.8,pointRadius:0,tension:.25,spanGaps:true};});
+      charts['ch-feat-'+key]=new Chart(el,{type:'line',data:{labels:lb,datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:pids.length>1,labels:{boxWidth:8,font:{size:8}}}},scales:{x:{ticks:{maxTicksLimit:4,font:{size:8}}},y:(isRank?{ticks:{maxTicksLimit:4,font:{size:8}}}:{min:0,max:1,ticks:{maxTicksLimit:3,font:{size:8}}})}}});
+    });
   }
 }
 function channelMix(pid){ const m={}; (D.inflow||[]).forEach(function(r){ if(String(r.pid)===String(pid)) m[r.inflow]=(m[r.inflow]||0)+(r.imp||0); }); return m; }
