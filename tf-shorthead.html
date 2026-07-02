@@ -30,6 +30,8 @@ body{background:var(--bg);color:var(--text);font-family:'Pretendard',sans-serif;
 .sel-group .glabel .strat{padding:1px 7px;border-radius:4px;font-size:11px;margin-left:4px}
 .strat.internal{background:rgba(59,130,246,.12);color:var(--blue)}
 .strat.external{background:rgba(230,168,23,.14);color:var(--orange)}
+.strat.competitor{background:rgba(154,157,173,.18);color:var(--text2)}
+.pill-btn.comp.active{background:var(--text2);border-color:var(--text2)}
 .pills{display:flex;flex-wrap:wrap;gap:8px}
 .pill-btn{padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text2);cursor:pointer;font-family:inherit;font-size:14px;font-weight:600}
 .pill-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -95,7 +97,7 @@ function sn(pid){ return meta(pid).shortName||pid; }
 function selfPids(div){ return ((D.meta.divisions&&D.meta.divisions[div])||[]).filter(p=>meta(p).role==='self'); }
 function compsOf(pid){ return Object.keys(D.products).filter(k=>String(meta(k).vs)===String(pid)); }
 function divOf(pid){ const m=meta(pid); if(m.div) return m.div; if(m.vs) return meta(m.vs).div||'living'; return 'living'; }
-function benchKey(pid){ if(divOf(pid)==='living') return 'bedding'; return meta(pid).group==='매트리스'?'mattress':'bed'; }
+function benchKey(pid){ if(divOf(pid)==='living') return 'bedding'; const g=meta(pid).group||(meta(pid).vs&&meta(meta(pid).vs).group)||''; return g==='매트리스'?'mattress':'bed'; }
 function daily(pid){ return (D.daily&&D.daily[pid])||[]; }
 function sumF(arr,f,n,skip){ skip=skip||0; const s=arr.slice(Math.max(0,arr.length-n-skip), arr.length-skip); return s.reduce((a,r)=>a+(r[f]||0),0); }
 function unitPrice(pid){ if(M&&M.decomp&&M.decomp[pid]){ const dc=M.decomp[pid]; const g=dc.reduce((a,r)=>a+(r.gmv||0),0), q=dc.reduce((a,r)=>a+(r.qty||0),0); return q?Math.round(g/q):null; } return null; }
@@ -118,7 +120,7 @@ function render(){
   destroyCharts(); renderNav();
   const c=document.getElementById('content');
   try{
-    if(S.view==='overview') c.innerHTML=viewOverview();
+    if(S.view==='overview'){ c.innerHTML=viewOverview(); buildOverviewCharts(); }
     else if(S.view==='detail'){ c.innerHTML=viewDetail(); buildDetailCharts(); }
     else if(S.view==='mprice'){ c.innerHTML=viewMprice(); buildMpriceCharts(); }
     else if(S.view==='attach'){ c.innerHTML=viewAttach(); buildAttachCharts(); }
@@ -147,21 +149,25 @@ function viewOverview(){
   const insight = S.div==='living'
     ? '리빙 자사 침구 3종. 60수·소프트워싱 = 인앱 SRP 전략, 알러지케어 = 외부 확장. 최근 7일 기준 관제.'
     : '가구 자사 6종. 매트리스3 = 인앱 SRP, 침대프레임3 = 외부 전략. <b>실객단가는 표시가와 크게 다름</b>(사이즈·경도). 상세·객단가·합구매 탭 참조.';
+  const trend='<div class="card"><h3>📈 상품별 GMV 추세 <span style="font-weight:400;color:var(--text3);font-size:12px">· 일별 시계열</span></h3><div class="grid2">'+
+    sp.map(function(pid){return '<div><div style="font-size:13px;font-weight:600;margin-bottom:4px">'+(meta(pid).emoji||'')+' '+sn(pid)+'</div><div class="chart-box sm"><canvas id="ov-'+pid+'"></canvas></div></div>';}).join('')+
+    '</div><div class="note">겹침 방지 위해 상품별 개별 추세(소형 멀티플). 상호 비교는 위 관제탑 표 참조.</div></div>';
   return '<div class="insight">'+insight+'</div>'+
   '<div class="card"><h3>'+(S.div==='living'?'🛋️ 리빙':'🛏️ 가구')+' 자사 상품 관제탑 <span style="font-weight:400;color:var(--text3);font-size:12px">· 최근 7일</span></h3>'+
   '<table><thead><tr><th>상품</th><th class="num">어제 GMV</th><th class="num">7일 GMV</th><th class="num">WoW</th><th class="num">CTR</th><th class="num">CVR(UV)</th><th class="num">SRP최고</th><th class="num">실객단가</th></tr></thead>'+
   '<tbody>'+rows+'</tbody></table>'+
-  '<div class="note">CTR=PDP/노출, CVR(UV)=구매UV/PDP UV. WoW=최근7일 vs 이전7일 GMV. SRP최고=검색 노출키워드 최고순위. 실객단가=매트리스만(커버제외 가중), 그외 표시가.</div></div>';
+  '<div class="note">CTR=PDP/노출, CVR(UV)=구매UV/PDP UV. WoW=최근7일 vs 이전7일 GMV. SRP최고=검색 노출키워드 최고순위. 실객단가=매트리스만(커버제외 가중), 그외 표시가.</div></div>'+trend;
 }
 
 function viewDetail(){
   const sp=selfPids(S.div); if(!S.pid) S.pid=sp[0];
-  const groups={}; sp.forEach(function(pid){ const g=meta(pid).strategy||'etc'; (groups[g]=groups[g]||[]).push(pid); });
-  const order=['internal','external','etc']; const gl={internal:'인앱 SRP 전략', external:'외부 전략', etc:'기타'};
+  const dp=detailPids(S.div);
+  const groups={}; dp.forEach(function(pid){ const m=meta(pid); const g=m.role==='competitor'?'competitor':(m.strategy||'etc'); (groups[g]=groups[g]||[]).push(pid); });
+  const order=['internal','external','competitor','etc']; const gl={internal:'인앱 SRP 전략', external:'외부 전략', competitor:'경쟁사 · 트래킹', etc:'기타'};
   let selector='<div class="selector">';
   order.forEach(function(g){ if(!groups[g]) return;
-    selector+='<div class="sel-group"><div class="glabel">'+gl[g]+'<span class="strat '+g+'">'+(g==='internal'?'내부':g==='external'?'외부':'')+'</span></div><div class="pills">'+
-      groups[g].map(function(pid){return '<button class="pill-btn '+(S.pid===pid?'active':'')+'" onclick="setPid(\''+pid+'\')">'+(meta(pid).emoji||'')+' '+sn(pid)+'</button>';}).join('')+'</div></div>';
+    selector+='<div class="sel-group"><div class="glabel">'+gl[g]+'<span class="strat '+g+'">'+(g==='internal'?'내부':g==='external'?'외부':g==='competitor'?'경쟁':'')+'</span></div><div class="pills">'+
+      groups[g].map(function(pid){return '<button class="pill-btn '+(g==='competitor'?'comp ':'')+(S.pid===pid?'active':'')+'" onclick="setPid(\''+pid+'\')">'+(meta(pid).emoji||'')+' '+sn(pid)+'</button>';}).join('')+'</div></div>';
   });
   selector+='</div>';
   const subs=[['metrics','지표 종합'],['srp','SRP'],['inflow','유입'],['age','연령대'],['bench','벤치마크']];
@@ -182,7 +188,8 @@ function subMetrics(pid){
   const last=dd[dd.length-1]||{};
   const r7g=sumF(dd,'gmv',7), p7g=sumF(dd,'gmv',7,7), wow=p7g?(r7g-p7g)/p7g*100:null;
   const imp=sumF(dd,'imp',7),pdp=sumF(dd,'pdp',7),pu=sumF(dd,'pdp_uv',7),bu=sumF(dd,'buy_uv',7);
-  const comps=compsOf(pid);
+  const cmp=seriesPids(pid).slice(1); const isComp=meta(pid).role==='competitor';
+  const vsLbl=cmp.length?(isComp?'· vs 자사':'· vs 경쟁'):'';
   const kpis='<div class="kpi-row">'+
     '<div class="kpi"><div class="lbl">어제 GMV</div><div class="val">'+won(last.gmv)+'</div><div class="sub">'+(last.dt||'')+'</div></div>'+
     '<div class="kpi"><div class="lbl">7일 GMV</div><div class="val">'+won(r7g)+'</div><div class="sub '+(wow==null?'':wow>=0?'chg up':'chg dn')+'">'+(wow==null?'':'WoW '+(wow>=0?'+':'')+wow.toFixed(0)+'%')+'</div></div>'+
@@ -190,12 +197,12 @@ function subMetrics(pid){
     '<div class="kpi"><div class="lbl">CVR-UV (7일)</div><div class="val">'+pct(pu?bu/pu*100:null)+'</div><div class="sub">구매UV/PDP UV</div></div>'+
     (unitPrice(pid)?'<div class="kpi"><div class="lbl">실객단가</div><div class="val">'+won(unitPrice(pid))+'</div><div class="sub">커버제외 가중</div></div>':'')+
   '</div>';
-  const vsNote = comps.length? '<div class="note">vs 경쟁: '+comps.map(function(c){return sn(c);}).join(', ')+'</div>':'<div class="note">외부 전략 상품 — 인앱 경쟁 미지정</div>';
+  const vsNote = cmp.length? '<div class="note">'+(isComp?'vs 자사: ':'vs 경쟁: ')+cmp.map(function(c){return sn(c);}).join(', ')+'</div>':'<div class="note">외부 전략 상품 — 인앱 경쟁 미지정</div>';
   return kpis+'<div class="grid2">'+
-    '<div class="card"><h3>📊 일별 GMV '+(comps.length?'· vs 경쟁':'')+'</h3><div class="chart-box"><canvas id="ch-gmv"></canvas></div>'+vsNote+'</div>'+
+    '<div class="card"><h3>📊 일별 GMV '+vsLbl+'</h3><div class="chart-box"><canvas id="ch-gmv"></canvas></div>'+vsNote+'</div>'+
     '<div class="card"><h3>📦 일별 판매수량</h3><div class="chart-box"><canvas id="ch-qty"></canvas></div></div>'+
-    '<div class="card"><h3>📈 일별 CTR '+(comps.length?'· vs 경쟁':'')+'</h3><div class="chart-box sm"><canvas id="ch-ctr"></canvas></div></div>'+
-    '<div class="card"><h3>📈 일별 CVR(UV) '+(comps.length?'· vs 경쟁':'')+'</h3><div class="chart-box sm"><canvas id="ch-cvr"></canvas></div></div>'+
+    '<div class="card"><h3>📈 일별 CTR '+vsLbl+'</h3><div class="chart-box sm"><canvas id="ch-ctr"></canvas></div></div>'+
+    '<div class="card"><h3>📈 일별 CVR(UV) '+vsLbl+'</h3><div class="chart-box sm"><canvas id="ch-cvr"></canvas></div></div>'+
   '</div>'+
   '<div class="card"><h3>🧭 액션 타임라인</h3>'+actionTable(pid)+'</div>';
 }
@@ -213,7 +220,7 @@ function subSrp(pid){
   const mtx=(D.srpMatrix||[]).filter(function(r){return String(r.pid)===String(pid);});
   if(!hasScore&&!hasFeat&&!kws.length&&!mtx.length) return '<div class="ph">SRP 데이터 없음 (경쟁상품은 키워드 미수집)</div>';
   let h='<div class="grid2">';
-  h+='<div class="card"><h3>🎯 셀링스코어 추이 '+(compsOf(pid).length?'· vs 경쟁':'')+'</h3>'+(hasScore?'<div class="chart-box sm"><canvas id="ch-score"></canvas></div>':'<div class="ph">score 없음</div>')+'</div>';
+  h+='<div class="card"><h3>🎯 셀링스코어 추이 '+(seriesPids(pid).length>1?(meta(pid).role==='competitor'?'· vs 자사':'· vs 경쟁'):'')+'</h3>'+(hasScore?'<div class="chart-box sm"><canvas id="ch-score"></canvas></div>':'<div class="ph">score 없음</div>')+'</div>';
   h+='<div class="card"><h3>🧩 SRP 피처 추이</h3>'+(hasFeat?'<div class="chart-box sm"><canvas id="ch-feat"></canvas></div><div class="note">0~1 점수: 리뷰/판매28/뷰28/뷰당판매/찜/장바구니</div>':'<div class="ph">feat 없음</div>')+'</div>';
   h+='</div>';
   if(kws.length){
@@ -234,6 +241,8 @@ function subInflow(pid){
   if(!rows.length&&!cvr) return '<div class="ph">유입 데이터 없음</div>';
   let h='';
   if(rows.length) h+='<div class="card"><h3>🚀 유입 채널별 노출 <span style="font-weight:400;color:var(--text3);font-size:12px">· 최근 14일</span></h3><div class="chart-box"><canvas id="ch-inflow"></canvas></div><div class="note">일별 채널 노출(imp) 스택.</div></div>';
+  const ents=seriesPids(pid);
+  if(ents.length>1){ h+='<div class="card"><h3>🆚 채널 믹스 비교 '+(meta(pid).role==='competitor'?'· 우리 vs 이 경쟁사':'· 우리 vs 경쟁')+' <span style="font-weight:400;color:var(--text3);font-size:12px">· 최근 14일 노출 점유%</span></h3><div class="chart-box"><canvas id="ch-inflow-cmp"></canvas></div><div class="note">각 상품의 채널별 노출 비중(100% 기준). 우리와 경쟁사의 유입 구조 차이를 비교 — 인앱 액션 방향 참고.</div></div>'; }
   if(rows.length){
     const dates=Array.from(new Set(rows.map(function(r){return r.dt;}))).sort();
     const recent=dates.slice(-7), prev=dates.slice(-14,-7);
@@ -263,11 +272,17 @@ function subBench(pid){
   const bands=b.price_bands||[]; const ca=b.cate_3p_avg||{};
   let h='<div class="insight">카테고리 <b>'+(key==='bedding'?'이불/이불커버':key==='mattress'?'매트리스':'침대')+'</b> · 자사 PB vs 3P 벤치마크 (최근 7일 UV)</div>';
   if(self){
+    var rc=function(r){return r?'<span class="'+(r>=1?'chg up':'chg dn')+'">'+r.toFixed(2)+'x</span>':'';};
     h+='<div class="kpi-row">'+
-      '<div class="kpi"><div class="lbl">우리 CTR</div><div class="val">'+pct(self.ctr)+'</div><div class="sub">카테3P '+pct(ca.ctr)+(self.cate_ctr_ratio?' · '+self.cate_ctr_ratio.toFixed(2)+'x':'')+'</div></div>'+
-      '<div class="kpi"><div class="lbl">우리 CVR</div><div class="val">'+pct(self.cvr)+'</div><div class="sub">카테3P '+pct(ca.cvr)+(self.cate_cvr_ratio?' · '+self.cate_cvr_ratio.toFixed(2)+'x':'')+'</div></div>'+
+      '<div class="kpi"><div class="lbl">우리 CTR</div><div class="val">'+pct(self.ctr)+'</div><div class="sub">카테3P '+pct(ca.ctr)+(self.cate_ctr_ratio?' · '+rc(self.cate_ctr_ratio):'')+'</div></div>'+
+      '<div class="kpi"><div class="lbl">우리 CVR</div><div class="val">'+pct(self.cvr)+'</div><div class="sub">카테3P '+pct(ca.cvr)+(self.cate_cvr_ratio?' · '+rc(self.cate_cvr_ratio):'')+'</div></div>'+
+    '</div>'+
+    '<div class="grid2">'+
+      '<div class="card"><h3>📊 CTR · 우리 vs 3P</h3><div class="chart-box sm"><canvas id="ch-bench-ctr"></canvas></div></div>'+
+      '<div class="card"><h3>📊 CVR · 우리 vs 3P</h3><div class="chart-box sm"><canvas id="ch-bench-cvr"></canvas></div></div>'+
     '</div>';
   }
+  if((b.price_bands||[]).length) h+='<div class="card"><h3>💰 가격대별 CTR·CVR (PB vs 3P)</h3><div class="chart-box"><canvas id="ch-bench-band"></canvas></div><div class="note">막대: 가격밴드별 PB(진한색) vs 3P(회색). 우리 상품 밴드는 표에서 강조.</div></div>';
   const brows=bands.map(function(bd){return '<tr class="'+(self&&self.price_band===bd.band?'self-row':'')+'"><td>'+bd.label+'</td><td class="num">'+pct(bd.pb_ctr)+'</td><td class="num">'+pct(bd.p3_ctr)+'</td><td class="num">'+(bd.ctr_ratio?bd.ctr_ratio.toFixed(2)+'x':'-')+'</td><td class="num">'+pct(bd.pb_cvr)+'</td><td class="num">'+pct(bd.p3_cvr)+'</td><td class="num">'+(bd.cvr_ratio?bd.cvr_ratio.toFixed(2)+'x':'-')+'</td><td class="num">'+bd.pb_prod_cnt+'/'+bd.p3_prod_cnt+'</td></tr>';}).join('');
   h+='<div class="card"><h3>💰 가격대별 PB vs 3P</h3><table><thead><tr><th>가격대</th><th class="num">PB CTR</th><th class="num">3P CTR</th><th class="num">CTR비</th><th class="num">PB CVR</th><th class="num">3P CVR</th><th class="num">CVR비</th><th class="num">PB/3P수</th></tr></thead><tbody>'+brows+'</tbody></table></div>';
   const lineup=(b.pb_lineup||[]);
@@ -317,12 +332,39 @@ function dsFor(pid,field,color,calc){
   const dd=daily(pid); const map={}; dd.forEach(function(r){ map[r.dt]= calc?calc(r):r[field]; });
   return {label:sn(pid),data:LB.map(function(dt){return map[dt]!=null?map[dt]:null;}),borderColor:color,backgroundColor:color+'22',borderWidth:2,pointRadius:0,tension:.25,spanGaps:true};
 }
-function seriesPids(pid){ return [pid].concat(compsOf(pid)); }
+function seriesPids(pid){ const c=compsOf(pid); if(c.length) return [pid].concat(c); if(meta(pid).vs && D.products[String(meta(pid).vs)]) return [pid,String(meta(pid).vs)]; return [pid]; }
+function detailPids(div){ const self=selfPids(div); const comps=Object.keys(D.products).filter(function(k){ return meta(k).role==='competitor' && divOf(k)===div; }); return self.concat(comps); }
 function buildDetailCharts(){
   if(S.sub==='metrics') buildMetricCharts();
   else if(S.sub==='srp') buildSrpCharts();
   else if(S.sub==='inflow') buildInflowChart();
   else if(S.sub==='age') buildAgeChart();
+  else if(S.sub==='bench') buildBenchCharts();
+}
+function buildOverviewCharts(){
+  selfPids(S.div).forEach(function(pid){ const dd=daily(pid); const el=document.getElementById('ov-'+pid); if(!el||!dd.length) return;
+    charts['ov-'+pid]=new Chart(el,{type:'line',data:{labels:dd.map(function(r){return r.dt;}),datasets:[{label:'GMV',data:dd.map(function(r){return r.gmv;}),borderColor:COL.self,backgroundColor:COL.self+'22',borderWidth:2,pointRadius:0,fill:true,tension:.25,spanGaps:true}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:6,font:{size:9}}},y:{beginAtZero:true,ticks:{font:{size:9},callback:function(v){return Math.abs(v)>=1e8?(v/1e8).toFixed(1)+'억':Math.round(v/1e4)+'만';}}}}}});
+  });
+}
+function mkBar(id,labels,data,colors,pctY){ const el=document.getElementById(id); if(!el) return;
+  charts[id]=new Chart(el,{type:'bar',data:{labels:labels,datasets:[{data:data,backgroundColor:colors}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{font:{size:10},callback:function(v){return pctY?v+'%':v;}}},x:{ticks:{font:{size:11}}}}}});
+}
+function buildBenchCharts(){
+  const key=benchKey(S.pid); const b=(D.benchmarks&&D.benchmarks[key])||null; if(!b) return;
+  const self=(b.self_products||[]).find(function(x){return String(x.pid)===String(S.pid);}); const ca=b.cate_3p_avg||{};
+  if(self){ const band=(b.price_bands||[]).find(function(x){return x.band===self.price_band;})||{};
+    mkBar('ch-bench-ctr',['우리 PB','동일밴드 3P','카테 3P'],[self.ctr,band.p3_ctr,ca.ctr],[COL.self,COL.gray,COL.blue],true);
+    mkBar('ch-bench-cvr',['우리 PB','동일밴드 3P','카테 3P'],[self.cvr,band.p3_cvr,ca.cvr],[COL.green,COL.gray,COL.blue],true);
+  }
+  const bands=b.price_bands||[]; const el=document.getElementById('ch-bench-band');
+  if(bands.length&&el){ charts['ch-bench-band']=new Chart(el,{type:'bar',data:{labels:bands.map(function(x){return x.label;}),datasets:[
+    {label:'PB CTR',data:bands.map(function(x){return x.pb_ctr;}),backgroundColor:COL.self},
+    {label:'3P CTR',data:bands.map(function(x){return x.p3_ctr;}),backgroundColor:'#c7cad6'},
+    {label:'PB CVR',data:bands.map(function(x){return x.pb_cvr;}),backgroundColor:COL.green},
+    {label:'3P CVR',data:bands.map(function(x){return x.p3_cvr;}),backgroundColor:'#9aa0b0'}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{ticks:{font:{size:9}}},y:{beginAtZero:true,ticks:{font:{size:9},callback:function(v){return v+'%';}}}}}});
+  }
 }
 function buildMetricCharts(){
   const dd=daily(S.pid); LB=dd.map(function(r){return r.dt;});
@@ -346,13 +388,25 @@ function buildSrpCharts(){
     const el=document.getElementById('ch-feat'); if(el) charts['ch-feat']=new Chart(el,{type:'line',data:{labels:lb,datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{ticks:{maxTicksLimit:8,font:{size:10}}},y:{min:0,max:1,ticks:{font:{size:10}}}}}});
   }
 }
+function channelMix(pid){ const m={}; (D.inflow||[]).forEach(function(r){ if(String(r.pid)===String(pid)) m[r.inflow]=(m[r.inflow]||0)+(r.imp||0); }); return m; }
 function buildInflowChart(){
-  const rows=(D.inflow||[]).filter(function(r){return String(r.pid)===String(S.pid);}); if(!rows.length) return;
-  const dates=Array.from(new Set(rows.map(function(r){return r.dt;}))).sort();
-  const chans=Array.from(new Set(rows.map(function(r){return r.inflow;})));
-  const ds=chans.map(function(ch,i){ const m={}; rows.filter(function(r){return r.inflow===ch;}).forEach(function(r){m[r.dt]=r.imp||0;}); return {label:ch,data:dates.map(function(d){return m[d]||0;}),backgroundColor:CHANNEL_COLORS[i%CHANNEL_COLORS.length]};});
-  const el=document.getElementById('ch-inflow'); if(!el) return;
-  charts['ch-inflow']=new Chart(el,{type:'bar',data:{labels:dates,datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{stacked:true,ticks:{maxTicksLimit:14,font:{size:9}}},y:{stacked:true,ticks:{font:{size:10}}}}}});
+  const rows=(D.inflow||[]).filter(function(r){return String(r.pid)===String(S.pid);});
+  if(rows.length){
+    const dates=Array.from(new Set(rows.map(function(r){return r.dt;}))).sort();
+    const chans=Array.from(new Set(rows.map(function(r){return r.inflow;})));
+    const ds=chans.map(function(ch,i){ const m={}; rows.filter(function(r){return r.inflow===ch;}).forEach(function(r){m[r.dt]=r.imp||0;}); return {label:ch,data:dates.map(function(d){return m[d]||0;}),backgroundColor:CHANNEL_COLORS[i%CHANNEL_COLORS.length]};});
+    const el=document.getElementById('ch-inflow'); if(el) charts['ch-inflow']=new Chart(el,{type:'bar',data:{labels:dates,datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{stacked:true,ticks:{maxTicksLimit:14,font:{size:9}}},y:{stacked:true,ticks:{font:{size:10}}}}}});
+  }
+  const ents=seriesPids(S.pid); const el2=document.getElementById('ch-inflow-cmp');
+  if(ents.length>1&&el2){
+    const mixes=ents.map(channelMix);
+    const chans=Array.from(new Set([].concat.apply([],mixes.map(function(m){return Object.keys(m);}))));
+    chans.sort(function(a,b){ return mixes.reduce(function(s,m){return s+(m[b]||0);},0)-mixes.reduce(function(s,m){return s+(m[a]||0);},0); });
+    const totals=mixes.map(function(m){ return Object.keys(m).reduce(function(s,k){return s+m[k];},0)||1; });
+    const ds=chans.map(function(ch,i){ return {label:ch,data:mixes.map(function(m,j){return +((m[ch]||0)/totals[j]*100).toFixed(1);}),backgroundColor:CHANNEL_COLORS[i%CHANNEL_COLORS.length]}; });
+    charts['ch-inflow-cmp']=new Chart(el2,{type:'bar',data:{labels:ents.map(function(p){return (meta(p).role==='competitor'?'⚔️ ':'⭐ ')+sn(p);}),datasets:ds},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.parsed.x+'%';}}}},scales:{x:{stacked:true,max:100,ticks:{font:{size:9},callback:function(v){return v+'%';}}},y:{stacked:true,ticks:{font:{size:11}}}}}});
+  }
 }
 function buildAgeChart(){
   const e=((D.ages&&D.ages.buyer)||[]).find(function(x){return String(x.pid)===String(S.pid)||String(x.product||'').indexOf(S.pid)>=0;});

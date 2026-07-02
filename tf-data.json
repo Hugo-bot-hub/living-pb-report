@@ -14,7 +14,7 @@
       "율리아(마케팅)",
       "휘(디자인)"
     ],
-    "version": "v19",
+    "version": "v20",
     "dataSourceSRP": "search.commerce_srp_dataset_daily_v0_0_2 (object_idx=순위, monthly_sales_score=selling_score)",
     "dataSourceInflow": "log.analyst_log_table (category=IMPRESSION/CLICK, object_type=PRODUCTION, object_id=상품)",
     "cvrBasis": "CVR(UV) = purchase_user_join / pdpview_user_join (프리즘 공식, ba_preserved.commerce_daily_user_count_v3, paid_type='total'). Notion 기준 근접.",
