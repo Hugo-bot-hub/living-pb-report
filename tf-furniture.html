@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🛏️ 숏헤드 PB — 가구(매트리스) 특수뷰 v18</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--border:#e2e4ea;--text:#1a1d27;--text2:#6b6e7d;--text3:#9a9dad;--accent:#6c5ce7;--green:#00b894;--red:#ff6b6b;--orange:#e6a817;--blue:#3b82f6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Pretendard',sans-serif;font-size:15px;line-height:1.5}
+.top-bar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 28px;display:flex;align-items:center;justify-content:space-between;height:56px}
+.top-bar .logo{font-size:17px;font-weight:700}
+.top-bar .logo .mission{color:var(--text2);font-weight:500;font-size:13px;margin-left:8px}
+.top-bar .v-badge{background:var(--accent);color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700}
+.tab-nav{display:flex;background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;position:sticky;top:56px;z-index:99;overflow-x:auto}
+.tab-btn{padding:12px 18px;font-size:14px;font-weight:600;color:var(--text2);background:none;border:none;cursor:pointer;position:relative;white-space:nowrap;font-family:inherit}
+.tab-btn.active{color:var(--accent)}
+.tab-btn.active::after{content:'';position:absolute;bottom:0;left:10px;right:10px;height:2px;background:var(--accent);border-radius:1px}
+.tab-content{display:none;padding:20px 28px 40px}
+.tab-content.active{display:block}
+.wrap{padding:20px 28px 40px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px}
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.card h3{font-size:15px;font-weight:600;margin-bottom:12px}
+.card .note{font-size:12px;color:var(--text3);margin-top:8px;font-style:italic}
+.sec{font-size:16px;font-weight:700;margin:22px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.ch{position:relative;width:100%;height:300px}.ch.lg{height:380px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;padding:9px 6px;border-bottom:1px solid var(--border);color:var(--text2);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.3px}
+td{padding:8px 6px;border-bottom:1px solid rgba(0,0,0,.04)}
+tr:hover td{background:rgba(108,92,231,.04)}
+.r{text-align:right}
+.pill{display:inline-block;padding:2px 7px;border-radius:99px;font-size:12px;font-weight:600;background:rgba(108,92,231,.12);color:var(--accent)}
+.pill.self{background:rgba(0,184,148,.14);color:var(--green)}
+.pill.comp{background:rgba(255,107,107,.12);color:var(--red)}
+.insight-box{background:linear-gradient(135deg,rgba(108,92,231,.06),rgba(162,155,254,.04));border-left:3px solid var(--accent);padding:12px 14px;border-radius:6px;margin:12px 0;font-size:14px;line-height:1.6}
+.insight-box strong{color:var(--accent)}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.kpi .lbl{font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;font-weight:600}
+.kpi .val{font-size:24px;font-weight:700}
+.kpi .sub{font-size:12px;color:var(--text3);margin-top:3px}
+.self-row{background:rgba(0,184,148,.06);font-weight:700}
+.err{background:#fee;border:1px solid #fcc;color:#a00;padding:12px;border-radius:8px;margin:20px}
+.hard-미디엄소프트{color:#3b82f6}.hard-미디엄{color:#00b894}.hard-미디엄하드{color:#e6a817}.hard-하드{color:#ff6b6b}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="logo">🛏️ 숏헤드 PB · 가구 <span class="v-badge">v18</span> <span class="mission">매트리스 특수뷰 — 인앱 SRP 전략</span></div>
+  <div class="meta" style="font-size:13px;color:var(--text2)">PM: Hugo · <span id="last-update">—</span></div>
+</div>
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab(event,'unit')">💰 사이즈·경도 객단가</button>
+  <button class="tab-btn" onclick="switchTab(event,'attach')">🔗 프레임 합구매(attach)</button>
+</div>
+
+<div id="tab-unit" class="tab-content active">
+  <div class="insight-box"><strong>왜 따로 보나:</strong> 매트리스는 <strong>표시가 ≠ 객단가</strong>. 사이즈(S/SS/D/Q/K/LK)와 경도(미디엄/미디엄소프트/미디엄하드)에 따라 가격이 달라, 표시가만 보면 실판매가·믹스를 오독함. 방수커버 옵션은 제외한 순수 매트리스 기준. <span style="color:var(--text3)">기간: <span id="win">—</span></span></div>
+  <div class="g3" id="unit-kpis"></div>
+  <div class="sec">📊 라인별 실판매 객단가 분포 (버블=판매량)</div>
+  <div class="card"><div class="ch lg"><canvas id="unit-scatter"></canvas></div><div class="note">X=사이즈, Y=객단가(원). 점 크기=판매수량. 경도별 색상. 같은 사이즈 안에서도 경도로 가격이 벌어짐.</div></div>
+  <div class="sec">📋 사이즈 × 경도 상세 (라인별)</div>
+  <div id="unit-tables"></div>
+</div>
+
+<div id="tab-attach" class="tab-content">
+  <div class="insight-box"><strong>합구매(attach) 2종류:</strong> ① <strong>프레임 옵션 매트리스</strong> — 호텔침대 프레임 PID 안의 '페이브 매트리스' 옵션(매트리스 상품번호 매출엔 안 잡힘). ② <strong>카트 교차구매</strong> — 같은 주문에 프레임 + 별도 매트리스를 담은 경우. 최근 3개월 프레임 주문 기준.</div>
+
+  <div class="sec">① 프레임 옵션 매트리스 — 월별 (소량)</div>
+  <div class="card"><div class="ch"><canvas id="attach-opt"></canvas></div><div class="note">프레임 옵션으로 붙는 매트리스는 월 1~7대로 미미. "매트리스 PID에 안 잡히는" 정의상 정확분이나 물량은 작음.</div></div>
+
+  <div class="sec">② 카트 교차구매 — 프레임과 함께 산 매트리스 (최근 3개월)</div>
+  <div class="insight-box" style="border-left-color:var(--red)"><strong>🚨 전략 시그널:</strong> 우리 호텔침대 프레임 구매자가 함께 담는 매트리스 1위가 <strong>경쟁사 수면밀도(35건·1,950만)</strong>. 우리 프레임이 매트리스 수요를 창출하는데 <strong>그 매출이 경쟁사로 샌다.</strong> 우리 매트리스(studio/refine/basic) 합계는 그 1/3 수준. → 프레임 PDP·번들에서 우리 매트리스 크로스셀 강화 여지.</div>
+  <div class="card"><div class="ch lg"><canvas id="attach-cosell"></canvas></div></div>
+  <div class="card" style="margin-top:14px"><table><thead><tr><th>매트리스</th><th>브랜드</th><th class="r">동시주문</th><th class="r">수량</th><th class="r">GMV</th></tr></thead><tbody id="cosell-tbl"></tbody></table></div>
+</div>
+
+<script>
+const SIZE_ORDER=['S','SS','D','Q','K','LK'];
+const HARD_COLOR={'미디엄소프트':'#3b82f6','미디엄':'#00b894','미디엄하드':'#e6a817','하드':'#ff6b6b'};
+const LINE_COLOR={'basic':'#3b82f6','refine':'#00b894','studio':'#8b5cf6'};
+let D=null;
+function fmtKRW(n){if(n==null||isNaN(n))return '—';if(Math.abs(n)>=100000000)return (n/100000000).toFixed(2)+'억';if(Math.abs(n)>=10000)return Math.round(n/10000).toLocaleString()+'만';return n.toLocaleString()}
+function switchTab(e,id){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));e.target.classList.add('active');document.getElementById('tab-'+id).classList.add('active');window.dispatchEvent(new Event('resize'))}
+const CH={};
+function mkCh(id,cfg){if(CH[id])CH[id].destroy();CH[id]=new Chart(document.getElementById(id),cfg);return CH[id]}
+
+async function load(){
+  try{
+    const res=await fetch('tf-mattress-data.json?t='+Date.now());D=await res.json();
+    document.getElementById('last-update').textContent='업데이트: '+D.meta.lastUpdate;
+    document.getElementById('win').textContent=D.meta.window;
+    render();
+  }catch(e){document.body.innerHTML='<div class="err">'+e.message+'</div>'}
+}
+
+function wavg(rows){const q=rows.reduce((a,r)=>a+r.qty,0);const g=rows.reduce((a,r)=>a+r.gmv,0);return q>0?g/q:0}
+
+function render(){
+  const pids=Object.keys(D.decomp);
+  // KPI cards
+  document.getElementById('unit-kpis').innerHTML=pids.map(pid=>{
+    const p=D.products[pid],rows=D.decomp[pid];
+    const q=rows.reduce((a,r)=>a+r.qty,0),g=rows.reduce((a,r)=>a+r.gmv,0);
+    const avg=wavg(rows);const comp=D.competitors[pid];
+    return `<div class="kpi"><div class="lbl">${p.line} · ${pid}</div>
+      <div class="val">${fmtKRW(avg)}<small style="font-size:13px;color:var(--text2)"> 실객단가</small></div>
+      <div class="sub">표시가 ${fmtKRW(p.base_price)} · 3개월 ${q}대 / ${fmtKRW(g)}</div>
+      <div class="sub">경쟁: ${comp.pid?comp.brand+' '+fmtKRW(comp.price):'보류'}</div></div>`;
+  }).join('');
+
+  // scatter: x=size index, y=unit, r=qty, color=hardness, per line dataset
+  const datasets=pids.map(pid=>{
+    const p=D.products[pid];
+    return {
+      label:p.line,
+      data:D.decomp[pid].map(r=>({x:SIZE_ORDER.indexOf(r.size),y:r.unit,r:Math.max(4,Math.sqrt(r.qty)*2),_n:r.name,_h:r.hardness,_q:r.qty,_s:r.size})),
+      backgroundColor:D.decomp[pid].map(r=>(HARD_COLOR[r.hardness]||'#9ca3af')+'cc'),
+      borderColor:LINE_COLOR[p.line],borderWidth:1.5
+    };
+  });
+  mkCh('unit-scatter',{type:'bubble',data:{datasets},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>{const d=c.raw;return `${c.dataset.label} ${d._s}·${d._h}: ${fmtKRW(d.y)} (${d._q}대)`}}}},
+    scales:{x:{min:-0.5,max:5.5,ticks:{stepSize:1,callback:v=>SIZE_ORDER[v]||''},title:{display:true,text:'사이즈'}},
+      y:{ticks:{callback:v=>fmtKRW(v)},title:{display:true,text:'객단가(원)'}}}}});
+
+  // per-line detail tables (size x hardness matrix)
+  document.getElementById('unit-tables').innerHTML=pids.map(pid=>{
+    const p=D.products[pid],rows=D.decomp[pid].slice().sort((a,b)=>(SIZE_ORDER.indexOf(a.size)-SIZE_ORDER.indexOf(b.size))||(b.unit-a.unit));
+    const body=rows.map(r=>`<tr><td><span class="hard-${r.hardness}" style="font-weight:600">${r.size}</span></td><td>${r.hardness}</td><td style="color:var(--text3);font-size:12px">${r.name}</td><td class="r">${r.qty}</td><td class="r">${fmtKRW(r.unit)}</td><td class="r">${fmtKRW(r.gmv)}</td></tr>`).join('');
+    return `<div class="card" style="margin-bottom:14px"><h3>${LINE_COLOR[p.line]?'<span style="color:'+LINE_COLOR[p.line]+'">●</span> ':''}${p.name} <span class="pill">${p.type}</span></h3>
+      <table><thead><tr><th>사이즈</th><th>경도</th><th>옵션명</th><th class="r">판매</th><th class="r">객단가</th><th class="r">GMV</th></tr></thead><tbody>${body}</tbody></table></div>`;
+  }).join('');
+
+  // attach frame option monthly
+  const ao=D.attach_frame_option;
+  mkCh('attach-opt',{type:'bar',data:{labels:ao.map(r=>r.yyyymm.slice(0,4)+'-'+r.yyyymm.slice(4)),datasets:[
+    {label:'attach GMV',data:ao.map(r=>r.gmv),backgroundColor:'#8b5cf6cc',yAxisID:'y'},
+    {label:'수량',type:'line',data:ao.map(r=>r.qty),borderColor:'#e6a817',backgroundColor:'transparent',yAxisID:'y1',tension:.3}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{position:'left',ticks:{callback:v=>fmtKRW(v)},title:{display:true,text:'GMV'}},y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'수량(대)'}}}}});
+
+  // cosell
+  const cs=D.cosell.slice().sort((a,b)=>b.gmv-a.gmv);
+  mkCh('attach-cosell',{type:'bar',data:{labels:cs.map(r=>r.brand+(r.is_self?' ★':'')),datasets:[{label:'동시구매 GMV',data:cs.map(r=>r.gmv),backgroundColor:cs.map(r=>r.is_self?'#00b894cc':'#ff6b6bcc')}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmtKRW(c.parsed.x)+' ('+cs[c.dataIndex].orders+'건)'}}},scales:{x:{ticks:{callback:v=>fmtKRW(v)}}}}});
+  document.getElementById('cosell-tbl').innerHTML=cs.map(r=>`<tr class="${r.is_self?'self-row':''}"><td>${r.name}</td><td><span class="pill ${r.is_self?'self':'comp'}">${r.brand}${r.is_self?' ★자사':''}</span></td><td class="r">${r.orders}</td><td class="r">${r.qty}</td><td class="r">${fmtKRW(r.gmv)}</td></tr>`).join('');
+}
+load();
+</script>
+</body>
+</html>
