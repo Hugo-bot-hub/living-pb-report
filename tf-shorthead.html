@@ -111,9 +111,13 @@ function srpKwCnt(pid){ return (D.srpMatrix||[]).filter(r=>String(r.pid)===Strin
 // SRP object_idx는 0-based(0=1위) → 사람이 읽는 순위는 +1 (표시단계에서만 보정, 데이터는 raw)
 function dispRank(v){ return (v==null||isNaN(v))?'-':(v+1).toFixed(1); }
 function dispBest(v){ return (v==null||isNaN(v))?'-':(v+1); }
-// 계열 색: 우리=진한 보라 실선 굵게 / 경쟁=확연히 다른색 파선
-const CMPCOL=['#e67e22','#ff6b6b','#0984e3'];
-function serStyle(i){ return i===0 ? {borderColor:COL.self,borderWidth:3,borderDash:[]} : {borderColor:CMPCOL[(i-1)%CMPCOL.length],borderWidth:2,borderDash:[6,4]}; }
+// 계열 고유색 팔레트: seriesPids 순서(0=우리)대로 배정, 어떤 두 시리즈도 같은 색 금지.
+// 우리(0)=진한 보라 굵은 실선, 경쟁(1+)=고유색 파선.
+const SERIES_PAL=['#6c5ce7','#e67e22','#16a085','#e74c3c','#2980b9','#8e44ad','#f39c12','#27ae60'];
+function serColor(i){ return SERIES_PAL[i%SERIES_PAL.length]; }
+function serStyle(i){ return {borderColor:serColor(i),borderWidth:i===0?3:2,borderDash:i===0?[]:[6,4]}; }
+// 전역 규칙: 포커스(우리 선택) 상품 시리즈는 어느 차트에서나 항상 보라 #6C5CE7. 그 외 시리즈는 index별 팔레트.
+function seriesColor(pid,i){ return String(pid)===String(S.pid) ? COL.self : serColor(i); }
 
 function renderNav(){
   document.getElementById('v-badge').textContent = D.meta.version||'v19';
@@ -380,9 +384,9 @@ function buildOverviewCharts(){
   selfPids(S.div).forEach(function(pid){ const dd=daily(pid); if(!dd.length) return;
     const lb=dd.map(function(r){return r.dt;});
     miniChart('ov-gmv-'+pid,lb,dd.map(function(r){return r.gmv;}),COL.self,{fill:false});
-    miniChart('ov-ctr-'+pid,lb,dd.map(function(r){return r.imp?+(r.pdp/r.imp*100).toFixed(2):null;}),COL.blue,{pctY:true,fill:false});
-    miniChart('ov-cvr-'+pid,lb,dd.map(function(r){return r.pdp_uv?+(r.buy_uv/r.pdp_uv*100).toFixed(2):null;}),COL.green,{pctY:true,fill:false});
-    const sd=(D.scoreTs&&D.scoreTs[pid])||[]; miniChart('ov-srp-'+pid,sd.map(function(r){return r.dt;}),sd.map(function(r){return r.score;}),'#f39c12',{fill:false,yMin:0,yMax:1});
+    miniChart('ov-ctr-'+pid,lb,dd.map(function(r){return r.imp?+(r.pdp/r.imp*100).toFixed(2):null;}),COL.self,{pctY:true,fill:false});
+    miniChart('ov-cvr-'+pid,lb,dd.map(function(r){return r.pdp_uv?+(r.buy_uv/r.pdp_uv*100).toFixed(2):null;}),COL.self,{pctY:true,fill:false});
+    const sd=(D.scoreTs&&D.scoreTs[pid])||[]; miniChart('ov-srp-'+pid,sd.map(function(r){return r.dt;}),sd.map(function(r){return r.score;}),COL.self,{fill:false,yMin:0,yMax:1});
   });
 }
 function mkBar(id,labels,data,colors,pctY){ const el=document.getElementById(id); if(!el) return;
@@ -446,7 +450,7 @@ function buildInflowChart(){
     const totals=mixes.map(function(m){ return Object.keys(m).reduce(function(s,k){return s+m[k];},0)||1; });
     // ① 절대 노출 — 채널 x축, 엔티티(우리 vs 경쟁)별 grouped bar
     const elA=document.getElementById('ch-inflow-cmp-abs');
-    if(elA){ const dsA=ents.map(function(p,j){ return {label:(meta(p).role==='competitor'?'⚔️ ':'⭐ ')+sn(p),data:chans.map(function(ch){return mixes[j][ch]||0;}),backgroundColor:j===0?COL.self:CMPCOL[(j-1)%CMPCOL.length]}; });
+    if(elA){ const dsA=ents.map(function(p,j){ return {label:(meta(p).role==='competitor'?'⚔️ ':'⭐ ')+sn(p),data:chans.map(function(ch){return mixes[j][ch]||0;}),backgroundColor:serColor(j)}; });
       charts['ch-inflow-cmp-abs']=new Chart(elA,{type:'bar',data:{labels:chans,datasets:dsA},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:12,font:{size:11}}}},scales:{x:{ticks:{font:{size:10}}},y:{beginAtZero:true,ticks:{font:{size:10},callback:function(v){return Math.abs(v)>=1e4?Math.round(v/1e4)+'만':v;}}}}}});
     }
     // ② 비중 — 엔티티별 100% 스택
