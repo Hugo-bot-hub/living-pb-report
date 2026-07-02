@@ -82,24 +82,12 @@ tr:hover td{background:rgba(108,92,231,.04)}
 .warn-chip{background:rgba(255,107,107,.12);color:var(--soft);font-size:12px;padding:2px 6px;border-radius:4px;font-weight:600}
 .cvr-note{background:rgba(230,168,23,.08);border-left:3px solid var(--orange);padding:10px 12px;border-radius:6px;font-size:13px;color:var(--text2);margin:10px 0;line-height:1.5}
 .err{background:#fee;border:1px solid #fcc;color:#a00;padding:12px;border-radius:8px}
-.div-nav{display:flex;gap:8px;background:#eef0f5;border-bottom:1px solid var(--border);padding:8px 28px}
-.div-nav a{text-decoration:none;padding:7px 18px;border-radius:8px;font-size:14px;font-weight:700;color:var(--text2);background:transparent;border:1px solid transparent}
-.div-nav a:hover{background:#fff}
-.div-nav a.active{background:var(--accent);color:#fff}
-.product-header.sixty{background:rgba(59,130,246,.08);border-left:3px solid var(--blue)}
-.kpi.sixty{border-left:3px solid var(--blue)}
-.card.sixty{border-top:3px solid var(--blue)}
-.pill.sixty{background:rgba(59,130,246,.12);color:var(--blue)}
 </style>
 </head>
 <body>
 <div class="top-bar">
-  <div class="logo">🎯 숏헤드 PB TF <span class="v-badge">v18</span> <span class="mission">Layer 이불 · TOP 10 자생 궤도</span></div>
+  <div class="logo">🎯 숏헤드 PB TF <span class="v-badge">v6</span> <span class="mission">Layer 이불 · TOP 10 자생 궤도</span></div>
   <div class="meta">PM: Hugo · <span id="last-update">—</span></div>
-</div>
-<div class="div-nav">
-  <a href="tf-shorthead.html" class="active">🛋️ 리빙</a>
-  <a href="tf-furniture.html">🛏️ 가구</a>
 </div>
 <div class="tab-nav">
   <button class="tab-btn active" onclick="switchTab(event,'overview')">Overview</button>
@@ -140,20 +128,6 @@ tr:hover td{background:rgba(108,92,231,.04)}
     <div class="card allergy"><h3>📊 일간 GMV <span class="scale-toggle"><button id="o-a-lin" class="active" onclick="setScale('oa','linear')">선형</button><button id="o-a-log" onclick="setScale('oa','log')">로그</button></span></h3><div class="ch"><canvas id="o-a-gmv-ch"></canvas></div></div>
     <div class="card allergy"><h3>📈 일간 CTR <span style="font-size:12px;color:var(--text3);font-weight:500">(Y축 0~8%)</span></h3><div class="ch"><canvas id="o-a-ctr-ch"></canvas></div></div>
     <div class="card allergy"><h3>📈 일간 CVR(UV) <span style="font-size:12px;color:var(--text3);font-weight:500">(Y축 0~12%)</span></h3><div class="ch"><canvas id="o-a-cvr-ch"></canvas></div></div>
-  </div>
-
-  <div class="product-header sixty">🛏️ 60수 호텔침구, 오늘의집 layer, 3640123 <span class="pill sixty">신규 · 인앱 SRP</span><span class="pid">50,900원</span></div>
-  <div class="g4">
-    <div class="kpi sixty"><div class="lbl">7일 GMV</div><div class="val" id="o-h-gmv">—</div><div class="sub" id="o-h-gmv-wow">—</div></div>
-    <div class="kpi sixty"><div class="lbl">7일 판매수량</div><div class="val" id="o-h-qty">—<small> 개</small></div><div class="sub">SS/D/Q</div></div>
-    <div class="kpi sixty"><div class="lbl">CTR 7일</div><div class="val" id="o-h-ctr">—<small>%</small></div><div class="sub" id="o-h-ctr-vs">vs 경쟁</div></div>
-    <div class="kpi sixty"><div class="lbl">CVR(UV) 7일</div><div class="val" id="o-h-cvr">—<small>%</small></div><div class="sub" id="o-h-cvr-vs">vs 경쟁</div></div>
-  </div>
-  <div class="insight-box" id="o-h-insight" style="margin-bottom:14px">—</div>
-  <div class="g3">
-    <div class="card sixty"><h3>📊 일간 GMV — vs 60수 경쟁</h3><div class="ch"><canvas id="o-h-gmv-ch"></canvas></div><div class="note">베이직톤 676405(60수 1위)·쁘리엘르 2731307(차순위)와 비교</div></div>
-    <div class="card sixty"><h3>📈 일간 CTR <span style="font-size:12px;color:var(--text3);font-weight:500">(Y축 0~8%)</span></h3><div class="ch"><canvas id="o-h-ctr-ch"></canvas></div></div>
-    <div class="card sixty"><h3>📈 일간 CVR(UV) <span style="font-size:12px;color:var(--text3);font-weight:500">(Y축 0~12%)</span></h3><div class="ch"><canvas id="o-h-cvr-ch"></canvas></div></div>
   </div>
 
   <div class="sec">🧭 TF 액션 타임라인</div>
@@ -365,40 +339,6 @@ function renderOverviewGMV(){
     COLORS.allergy,[COLORS.compA,COLORS.compB],SCALE.oa);
 }
 
-function renderSixty(){
-  const d=DATA.daily, pid='3640123', c1='676405', c2='2731307';
-  const self=d[pid]||[];
-  const ins=document.getElementById('o-h-insight');
-  if(!self.length){if(ins)ins.textContent='60수 데이터 없음';return;}
-  const s7=sumRecent(self,7), sp7=sumRecent(self.slice(0,-7),7);
-  const c1_7=sumRecent(d[c1]||[],7), c2_7=sumRecent(d[c2]||[],7);
-  const pct=(a,b)=>b>0?(a/b*100).toFixed(2):'—';
-  document.getElementById('o-h-gmv').textContent=fmtKRW(s7.gmv);
-  document.getElementById('o-h-gmv-wow').innerHTML='WoW <span class="'+(s7.gmv>=sp7.gmv?'chg up':'chg dn')+'">'+(sp7.gmv>0?((s7.gmv/sp7.gmv-1)*100).toFixed(1):'—')+'%</span>';
-  document.getElementById('o-h-qty').innerHTML=s7.qty.toLocaleString()+'<small> 개</small>';
-  document.getElementById('o-h-ctr').innerHTML=pct(s7.pdp,s7.imp)+'<small>%</small>';
-  document.getElementById('o-h-ctr-vs').textContent='베이직톤 '+pct(c1_7.pdp,c1_7.imp)+'% · 쁘리엘르 '+pct(c2_7.pdp,c2_7.imp)+'%';
-  document.getElementById('o-h-cvr').innerHTML=pct(s7.buy_uv,s7.pdp_uv)+'<small>%</small>';
-  document.getElementById('o-h-cvr-vs').textContent='베이직톤 '+pct(c1_7.buy_uv,c1_7.pdp_uv)+'% · 쁘리엘르 '+pct(c2_7.buy_uv,c2_7.pdp_uv)+'%';
-  if(ins)ins.innerHTML='<strong>60수 경쟁 구도:</strong> 베이직톤(676405)이 60수 카테 1위(월 8.7억), 우리 60수는 후발. 최근7일 GMV '+fmtKRW(s7.gmv)+' vs 베이직톤 '+fmtKRW(c1_7.gmv)+' · 쁘리엘르 '+fmtKRW(c2_7.gmv)+'. 인앱 SRP 순위 끌어올리는 게 과제.';
-  const r28=self.slice(-28);
-  const c1Map={};(d[c1]||[]).forEach(r=>c1Map[r.dt]=r);
-  const c2Map={};(d[c2]||[]).forEach(r=>c2Map[r.dt]=r);
-  const comps=[[c1Map,'⚔️ 베이직톤 60수, 676405',COLORS.compA],[c2Map,'⚔️ 쁘리엘르 60수, 2731307',COLORS.compB]];
-  mkCh('o-h-gmv-ch',{type:'line',data:{labels:r28.map(r=>fmtDate(r.dt)),datasets:[
-    {label:'🛏️ 60수 호텔침구, 3640123',data:r28.map(r=>r.gmv),borderColor:'#3b82f6',backgroundColor:'#3b82f622',fill:true,tension:.3,borderWidth:3,pointRadius:0,spanGaps:true},
-    ...comps.map(([m,lbl,col])=>({label:lbl,data:r28.map(r=>(m[r.dt]||{}).gmv??null),borderColor:col,borderDash:[5,5],tension:.3,pointRadius:0,borderWidth:2,spanGaps:true}))
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}}},scales:{y:{ticks:{callback:v=>fmtKRW(v)},title:{display:true,text:'GMV'}}}}});
-  mkCh('o-h-ctr-ch',{type:'line',data:{labels:r28.map(r=>fmtDate(r.dt)),datasets:[
-    {label:'🛏️ 60수 호텔침구',data:r28.map(clipCTR),borderColor:'#3b82f6',tension:.3,pointRadius:0,borderWidth:3,spanGaps:true},
-    ...comps.map(([m,lbl,col])=>({label:lbl,data:r28.map(r=>clipCTR(m[r.dt])),borderColor:col,tension:.3,pointRadius:0,borderWidth:2,spanGaps:true}))
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}}},scales:{y:{min:0,max:8,title:{display:true,text:'CTR %'}}}}});
-  mkCh('o-h-cvr-ch',{type:'line',data:{labels:r28.map(r=>fmtDate(r.dt)),datasets:[
-    {label:'🛏️ 60수 호텔침구',data:r28.map(clipCVR),borderColor:'#3b82f6',tension:.3,pointRadius:0,borderWidth:3,spanGaps:true},
-    ...comps.map(([m,lbl,col])=>({label:lbl,data:r28.map(r=>clipCVR(m[r.dt])),borderColor:col,tension:.3,pointRadius:0,borderWidth:2,spanGaps:true}))
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}}},scales:{y:{min:0,max:12,title:{display:true,text:'CVR(UV) %'}}}}});
-}
-
 function render(){
   const d=DATA.daily,soft=d['3918642'],allergy=d['3640244'],cas=d['767440'],puri=d['2636441'],don=d['1930788'],gard=d['442026'];
   const s7=sumRecent(soft,7),sp7=sumRecent(soft.slice(0,-7),7);
@@ -459,7 +399,6 @@ function render(){
   renderBenchmark();
   renderSRP();
   renderAges();
-  renderSixty();
 }
 
 function renderProductTab(p){
