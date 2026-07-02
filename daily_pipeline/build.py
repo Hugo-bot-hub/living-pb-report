@@ -1,0 +1,325 @@
+# -*- coding: utf-8 -*-
+"""결정적 빌더: daily_pipeline/tmp/{name}.json (Athena data 2D배열) → tf-data.json + tf-mattress-data.json 재구성.
+모든 변환·반올림·정렬·불변식 하드코딩. 기존 파일에서 products config·daily history 보존.
+tmp 파일 없으면 해당 섹션은 기존 값 유지(부분 실행 안전).
+"""
+import json, os, sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TMP = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tmp')
+TF = os.environ.get('TF_DATA_PATH', os.path.join(ROOT, 'tf-data.json'))
+MAT = os.environ.get('MAT_DATA_PATH', os.path.join(ROOT, 'tf-mattress-data.json'))
+TMP = os.environ.get('TF_TMP', TMP)
+
+SELF = ['3918642','3640244','3640123','1089824','3607491','3121605','3898593','3898584','3748221']
+COMP = ['767440','2636441','1930788','442026','676405','2731307','329364','1590911','2352818']
+ALL18 = SELF + COMP
+LAYER = '오늘의집 layer'
+
+def load(name):
+    p = os.path.join(TMP, name + '.json')
+    if not os.path.exists(p): return None
+    with open(p, encoding='utf-8') as f:
+        d = json.load(f)
+    return d.get('data', d) if isinstance(d, dict) else d
+
+def rows(name, cols):
+    data = load(name)
+    if data is None: return None
+    return [dict(zip(cols, r)) for r in data]
+
+def i(x):
+    if x in (None,''): return 0
+    return int(float(x))
+def f(x):
+    if x in (None,''): return 0.0
+    return float(x)
+
+with open(TF, encoding='utf-8') as fp: D = json.load(fp)
+with open(MAT, encoding='utf-8') as fp: M = json.load(fp)
+changed = []
+
+# ---------- daily (funnel∩UV + GMV leftjoin, history 보존) ----------
+fn = rows('daily_funnel', ['dt','pid','imp','pdp','purchase'])
+uv = rows('daily_uv', ['dt','pid','imp_uv','pdp_uv','buy_uv'])
+gm = rows('daily_gmv', ['dt','pid','gmv','gp','qty'])
+if fn is not None and uv is not None and gm is not None:
+    fmap = {(r['dt'],str(r['pid'])):r for r in fn}
+    umap = {(r['dt'],str(r['pid'])):r for r in uv}
+    gmap = {(r['dt'],str(r['pid'])):r for r in gm}
+    for pid in ALL18:
+        old = {r['dt']:r for r in D['daily'].get(pid, [])}
+        for (dt,p),fr in fmap.items():
+            if p != pid: continue
+            ur = umap.get((dt,p))
+            if ur is None: continue  # funnel∩UV 6필드 필수
+            gr = gmap.get((dt,p), {})
+            old[dt] = {'dt':dt, 'gmv':i(gr.get('gmv')), 'gp':round(f(gr.get('gp'))), 'qty':i(gr.get('qty')),
+                       'imp':i(fr['imp']), 'pdp':i(fr['pdp']), 'purchase':i(fr['purchase']),
+                       'imp_uv':i(ur['imp_uv']), 'pdp_uv':i(ur['pdp_uv']), 'buy_uv':i(ur['buy_uv'])}
+        D['daily'][pid] = [old[k] for k in sorted(old)]
+    changed.append('daily')
+
+# ---------- SRP base (matrix + keywordRank) ----------
+base = rows('srp_base14', ['pid','kw','rank','best','score','ctr','imp'])
+qc = rows('qc_integrated', ['kw','qc2w','qc4w'])
+if base is not None:
+    # srpMatrix: pid별 imp 상위 12
+    by_pid = {}
+    for r in base:
+        by_pid.setdefault(str(r['pid']), []).append(r)
+    matrix = []
+    for pid, rs in by_pid.items():
+        for r in sorted(rs, key=lambda x: -i(x['imp']))[:12]:
+            matrix.append({'pid':str(pid), 'kw':r['kw'], 'rank':round(f(r['rank']),2), 'best':i(r['best']),
+                           'score':round(f(r['score']),3), 'ctr':round(f(r['ctr'])*100,2), 'imp':i(r['imp'])})
+    D['srpMatrix'] = matrix
+    changed.append('srpMatrix')
+    # srpKeywordRank: qc(통합검색 2w) 조인, pid별 qc 상위 15
+    if qc is not None:
+        qmap = {r['kw']:r for r in qc}
+        krank = {}
+        for pid, rs in by_pid.items():
+            lst = []
+            for r in rs:
+                q = qmap.get(r['kw'])
+                if not q: continue
+                lst.append({'kw':r['kw'], 'qc':i(q['qc2w']), 'rank':round(f(r['rank']),1), 'best':i(r['best']),
+                            'imp':i(r['imp']), 'ctr':round(f(r['ctr'])*100,2), 'qc_4w_int':i(q['qc4w'])})
+            lst.sort(key=lambda x:-x['qc'])
+            krank[pid] = lst[:15]
+        D['srpKeywordRank'] = krank
+        changed.append('srpKeywordRank')
+
+# ---------- srpKeywords (자사 14d 키워드추세) ----------
+kt = rows('srp_kwtrend', ['dt','pid','kw','rank','best','score'])
+if kt is not None:
+    sk = {}
+    for r in kt:
+        sk.setdefault(str(r['pid']), []).append({'dt':r['dt'],'kw':r['kw'],'rank':round(f(r['rank']),1),'best':i(r['best']),'score':round(f(r['score']),3)})
+    for pid in sk: sk[pid].sort(key=lambda x:(x['dt'],x['kw']), reverse=True)
+    D['srpKeywords'] = sk
+    changed.append('srpKeywords')
+
+# ---------- scoreTs / featTs (self+comp 병합) ----------
+sc = (rows('scorets_self',['dt','pid','score']) or []) + (rows('scorets_comp',['dt','pid','score']) or [])
+if sc:
+    ts = {}
+    for r in sc: ts.setdefault(str(r['pid']),[]).append({'dt':r['dt'],'score':round(f(r['score']),3)})
+    for pid in ts: ts[pid].sort(key=lambda x:x['dt'])
+    D['scoreTs'] = ts; changed.append('scoreTs')
+ff = (rows('featts_self',['dt','pid','review','sell28','view28','spv28','wish','card','qc_rank']) or []) + \
+     (rows('featts_comp',['dt','pid','review','sell28','view28','spv28','wish','card','qc_rank']) or [])
+if ff:
+    ft = {}
+    for r in ff:
+        ft.setdefault(str(r['pid']),[]).append({'dt':r['dt'],'review':round(f(r['review']),4),'sell28':round(f(r['sell28']),4),
+            'view28':round(f(r['view28']),4),'spv28':round(f(r['spv28']),4),'wish':round(f(r['wish']),4),
+            'card':round(f(r['card']),4),'qc_rank':round(f(r['qc_rank']),2)})
+    for pid in ft: ft[pid].sort(key=lambda x:x['dt'])
+    D['srpFeatureTs'] = ft; changed.append('srpFeatureTs')
+
+# ---------- inflow (4윈도우 concat) ----------
+inf = []
+ok_inf = True
+for w in range(4):
+    r = rows(f'inflow_w{w}', ['dt','pid','inflow','imp','click','click_uv'])
+    if r is None: ok_inf = False; break
+    inf += r
+if ok_inf and inf:
+    D['inflow'] = sorted([{'dt':r['dt'],'pid':str(r['pid']),'inflow':r['inflow'],'imp':i(r['imp']),'click':i(r['click']),'click_uv':i(r['click_uv'])} for r in inf],
+                         key=lambda x:(x['dt'],x['pid'],-x['imp']))
+    changed.append('inflow')
+
+# ---------- inflowCvr ----------
+cv = rows('inflow_cvr', ['dt','pid','inflow','click_uv','buy_uv'])
+if cv is not None:
+    agg = {}
+    dts = set()
+    for r in cv:
+        dts.add(r['dt'])
+        cell = agg.setdefault(str(r['pid']),{}).setdefault(r['inflow'],{'click_uv':0,'buy_uv':0})
+        cell['click_uv']+=i(r['click_uv']); cell['buy_uv']+=i(r['buy_uv'])
+    for pid in agg:
+        for ch,c in agg[pid].items():
+            c['cvr']=round(c['buy_uv']/c['click_uv']*100,2) if c['click_uv'] else 0.0
+    ds=sorted(dts)
+    D['inflowCvr']={'period':f"{ds[0]} ~ {ds[-1]}" if ds else '', 'note':'Same-day click → purchase attribution (UV 기준, 7일)', 'data':agg}
+    changed.append('inflowCvr')
+
+# ---------- ages (월요일만 tmp 존재) ----------
+ag = rows('ages', ['pid','ag','cnt'])
+if ag is not None:
+    AGE=['20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60+']
+    cnt={p:{k:0 for k in AGE} for p in ALL18}
+    for r in ag:
+        p=str(r['pid'])
+        if p in cnt and r['ag'] in cnt[p]: cnt[p][r['ag']]=i(r['cnt'])
+    buyer=[]; parts=[]
+    for pid in ALL18:
+        s=sum(cnt[pid].values())
+        age={k:(round(cnt[pid][k]/s*100,1) if s else 0.0) for k in AGE}
+        sn=D['products'].get(pid,{}).get('shortName',pid)
+        e={'pid':pid,'product':f'{sn} ({pid})','sample':s,'age':age}
+        if s<100: e['warn']=True
+        buyer.append(e)
+        if pid in SELF: parts.append(f"{sn} 25-34세 {round(age['25-29']+age['30-34'],1)}% (샘플 {s})")
+    D['ages']['buyer']=buyer
+    D['ages']['insight']=' | '.join(parts)
+    changed.append('ages')
+
+# ---------- benchmarks (bedding/mattress/bed) ----------
+BANDS = {
+ 'bedding':[('01_<30k','<3만원'),('02_30-50k','3-5만원'),('03_50-70k','5-7만원'),('04_70-100k','7-10만원'),('05_100k+','10만원+')],
+ 'mattress':[('01_<20만','<20만'),('02_20-40만','20-40만'),('03_40-70만','40-70만'),('04_70-120만','70-120만'),('05_120만+','120만+')],
+ 'bed':[('01_<50만','<50만'),('02_50-80만','50-80만'),('03_80-120만','80-120만'),('04_120만+','120만+')],
+}
+def band_of(bk, price):
+    p=price
+    if bk=='bedding': return '01_<30k' if p<30000 else '02_30-50k' if p<50000 else '03_50-70k' if p<70000 else '04_70-100k' if p<100000 else '05_100k+'
+    if bk=='mattress': return '01_<20만' if p<200000 else '02_20-40만' if p<400000 else '03_40-70만' if p<700000 else '04_70-120만' if p<1200000 else '05_120만+'
+    return '01_<50만' if p<500000 else '02_50-80만' if p<800000 else '03_80-120만' if p<1200000 else '04_120만+'
+def pct(n,d): return round(n/d*100,2) if d else 0.0
+def ratio(a,b): return round(a/b,2) if b else 0.0
+
+benchmarks={}
+for bk in ['bedding','mattress','bed']:
+    bd = rows(f'bench_{bk}_bands', ['pb_flag','price_band','prod_cnt','imp_uv','pdp_uv','buy_uv'])
+    lu = rows(f'bench_{bk}_lineup', ['pid','product_name','selling_cost','brand_name','imp_uv','pdp_uv','buy_uv'])
+    if bd is None or lu is None:
+        benchmarks[bk] = D.get('benchmarks',{}).get(bk); continue
+    bmap={}
+    for r in bd: bmap[(r['pb_flag'],r['price_band'])]={'cnt':i(r['prod_cnt']),'imp':i(r['imp_uv']),'pdp':i(r['pdp_uv']),'buy':i(r['buy_uv'])}
+    p3tot=[0,0,0]; pbands=[]
+    for band,label in BANDS[bk]:
+        pb=bmap.get(('PB',band),{'cnt':0,'imp':0,'pdp':0,'buy':0}); p3=bmap.get(('3P',band),{'cnt':0,'imp':0,'pdp':0,'buy':0})
+        p3tot=[p3tot[0]+p3['imp'],p3tot[1]+p3['pdp'],p3tot[2]+p3['buy']]
+        pb_ctr=pct(pb['pdp'],pb['imp']); p3_ctr=pct(p3['pdp'],p3['imp']); pb_cvr=pct(pb['buy'],pb['pdp']); p3_cvr=pct(p3['buy'],p3['pdp'])
+        pbands.append({'band':band,'label':label,'pb_prod_cnt':pb['cnt'],'p3_prod_cnt':p3['cnt'],
+            'pb_imp_uv':pb['imp'],'pb_pdp_uv':pb['pdp'],'pb_buy_uv':pb['buy'],'p3_imp_uv':p3['imp'],'p3_pdp_uv':p3['pdp'],'p3_buy_uv':p3['buy'],
+            'pb_ctr':pb_ctr,'p3_ctr':p3_ctr,'ctr_ratio':ratio(pb_ctr,p3_ctr),'pb_cvr':pb_cvr,'p3_cvr':p3_cvr,'cvr_ratio':ratio(pb_cvr,p3_cvr)})
+    cate_ctr=pct(p3tot[1],p3tot[0]); cate_cvr=pct(p3tot[2],p3tot[1])
+    bl=[]; sp=[]
+    band_lu={b['band']:b for b in pbands}
+    for r in lu:
+        iu,pu,bu=i(r['imp_uv']),i(r['pdp_uv']),i(r['buy_uv'])
+        ctr=pct(pu,iu); cvr=pct(bu,pu); price=i(r['selling_cost'])
+        line = 'basic' if 'basic /' in (r['product_name'] or '') else 'refine' if 'refine /' in (r['product_name'] or '') else 'studio' if 'studio /' in (r['product_name'] or '') else ''
+        is_self = str(r['pid']) in SELF
+        bl.append({'pid':str(r['pid']),'name':r['product_name'],'line':line,'price':price,'is_self':is_self,'imp_uv':iu,'pdp_uv':pu,'buy_uv':bu,'ctr':ctr,'cvr':cvr})
+        if is_self:
+            bd2=band_of(bk,price); bb=band_lu.get(bd2,{})
+            sp.append({'pid':str(r['pid']),'name':r['product_name'],'line':line,'price':price,'price_band':bd2,'ctr':ctr,'cvr':cvr,
+                'imp_uv':iu,'pdp_uv':pu,'buy_uv':bu,'cate_p3_ctr':cate_ctr,'cate_p3_cvr':cate_cvr,
+                'cate_ctr_ratio':ratio(ctr,cate_ctr),'cate_cvr_ratio':ratio(cvr,cate_cvr),
+                'band_p3_ctr':bb.get('p3_ctr',0.0),'band_p3_cvr':bb.get('p3_cvr',0.0),
+                'band_ctr_ratio':ratio(ctr,bb.get('p3_ctr',0)),'band_cvr_ratio':ratio(cvr,bb.get('p3_cvr',0))})
+    benchmarks[bk]={'self_products':sp,'price_bands':pbands,'pb_lineup':bl,
+        'cate_3p_avg':{'imp_uv':p3tot[0],'pdp_uv':p3tot[1],'buy_uv':p3tot[2],'ctr':cate_ctr,'cvr':cate_cvr}}
+if any(f'bench_{b}_bands' for b in ['bedding','mattress','bed'] if load(f'bench_{b}_bands') is not None):
+    D['benchmarks']=benchmarks
+    if benchmarks.get('bedding'): D['categoryBenchmark']=benchmarks['bedding']
+    changed.append('benchmarks')
+
+# ---------- 매트리스 decomp (tf-mattress-data.json) ----------
+def parse_size(ex2, ex):
+    t=(ex2 or '')+' '+(ex or '')
+    for kw,sz in [('라지킹','LK'),('슈퍼싱글','SS'),('퀸','Q'),('킹','K'),('더블','D'),('싱글','S'),('LK','LK'),('SS','SS'),(' Q',' Q'),(' K',' K'),(' D',' D'),(' S',' S')]:
+        if kw in t: return sz.strip()
+    return ''
+def parse_hard(ex):
+    e=ex or ''
+    if '미디엄소프트' in e or '미디엄 소프트' in e or '포근한' in e: return '미디엄소프트'
+    if '미디엄하드' in e or '미디엄 하드' in e or '단단한' in e: return '미디엄하드'
+    if '미디엄' in e: return '미디엄'
+    return ''
+dc = rows('decomp', ['pid','explain','explain2','qty','gmv','unit'])
+if dc is not None:
+    decomp={}
+    for r in dc:
+        ex=r['explain'] or ''
+        if '커버' in ex: continue  # 방수커버 제외
+        decomp.setdefault(str(r['pid']),[]).append({'name':ex,'size':parse_size(r['explain2'],ex),'hardness':parse_hard(ex),
+            'qty':i(r['qty']),'unit':round(f(r['unit'])),'gmv':i(r['gmv'])})
+    for pid in decomp: decomp[pid].sort(key=lambda x:-x['gmv'])
+    M['decomp']=decomp; changed.append('decomp')
+
+# ---------- attach_frame_option ----------
+af = rows('attach_frame_option', ['yyyymm','typ','gmv','qty'])
+if af is not None:
+    mm={}
+    for r in af:
+        if r['typ']!='attach': continue
+        mm[r['yyyymm']]={'yyyymm':r['yyyymm'],'gmv':i(r['gmv']),'qty':i(r['qty'])}
+    # attach 없는 달도 0으로
+    allym=sorted({r['yyyymm'] for r in af})
+    M['attach_frame_option']=[mm.get(y,{'yyyymm':y,'gmv':0,'qty':0}) for y in allym]
+    changed.append('attach_frame_option')
+
+# ---------- cosell_by_tier (프레임→매트리스) ----------
+NAME={'1590911':'수면밀도','1089824':'basic매트리스(우리)','329364':'휴도','858905':'웰퍼니쳐',
+'2737888':'지누스','425266':'먼데이하우스','3607491':'refine매트리스(우리)','1525743':'웰퍼니쳐','3121605':'studio매트리스(우리)'}
+cs=rows('cosell_tier_summary',['tier','frame_users','bought_mat','our_mat','comp_only'])
+cd=rows('cosell_tier_dest',['tier','pid','brand_name','users','qty','gmv'])
+if cs is not None and cd is not None:
+    dest={}
+    for r in cd:
+        dest.setdefault(r['tier'],[]).append({'pid':str(r['pid']),'name':NAME.get(str(r['pid']),r['brand_name']),'brand':r['brand_name'],
+            'is_self':(r['brand_name']==LAYER),'users':i(r['users']),'qty':i(r['qty']),'gmv':i(r['gmv'])})
+    for t in dest: dest[t].sort(key=lambda x:-x['gmv'])
+    out={}; tot=[0,0,0,0]
+    for r in cs:
+        t=r['tier']
+        if t not in ('basic','refine','studio'): continue
+        fu,bm,om,co=i(r['frame_users']),i(r['bought_mat']),i(r['our_mat']),i(r['comp_only'])
+        tot=[tot[0]+fu,tot[1]+bm,tot[2]+om,tot[3]+co]
+        out[t]={'frame_users':fu,'bought_mat':bm,'our':om,'comp_only':co,
+            'rate_pct':round(bm/fu*100,1) if fu else 0.0,'leak_pct':round(co/bm*100,1) if bm else 0.0,'dest':dest.get(t,[])}
+    M['cosell_by_tier']=out
+    M['cosell_summary']={'method':'유저단위(별도주문 포함). 프레임구매→매트리스구매(전 layer 침대프레임 기준).',
+        'frame_users':tot[0],'bought_mat':tot[1],'rate_pct':round(tot[1]/tot[0]*100,1) if tot[0] else 0.0,
+        'our':tot[2],'comp_only':tot[3],'leak_pct':round(tot[3]/tot[1]*100,1) if tot[1] else 0.0,
+        'window':'프레임 최근3개월 / 매트리스 최근6개월 (유저단위)','note':'프레임 구매자의 매트리스 구매 중 경쟁사 유출 비중.'}
+    changed.append('cosell_by_tier')
+
+# ---------- mat_to_frame_by_tier (역방향) ----------
+ms=rows('m2f_summary',['tier','mat_users','bought_frame','our_frame','comp_only'])
+md=rows('m2f_dest',['tier','pid','product_name','brand_name','users','gmv'])
+if ms is not None and md is not None:
+    dest={}
+    for r in md:
+        dest.setdefault(r['tier'],[]).append({'pid':str(r['pid']),'name':r['product_name'],'brand':r['brand_name'],
+            'is_self':(r['brand_name']==LAYER),'users':i(r['users']),'gmv':i(r['gmv'])})
+    for t in dest: dest[t].sort(key=lambda x:-x['users'])
+    out={}
+    for r in ms:
+        t=r['tier']
+        if t not in ('basic','refine','studio'): continue
+        mu,bf,of_,co=i(r['mat_users']),i(r['bought_frame']),i(r['our_frame']),i(r['comp_only'])
+        out[t]={'mat_users':mu,'bought_frame':bf,'our':of_,'comp_only':co,
+            'rate_pct':round(bf/mu*100,1) if mu else 0.0,'leak_pct':round(co/bf*100,1) if bf else 0.0,'dest':dest.get(t,[])}
+    M['mat_to_frame_by_tier']=out
+    M['mat_to_frame_summary']={'method':'우리 매트리스 구매자→프레임 구매(유저단위).','note':'매트리스→프레임 방향 유출 추적.'}
+    changed.append('mat_to_frame_by_tier')
+
+# ---------- meta + lastUpdate ----------
+last = max((r['dt'] for pid in SELF for r in D['daily'].get(pid,[])), default=D['meta'].get('lastUpdate'))
+D['meta']['lastUpdate']=last
+D['meta']['version']='daily'
+D['meta']['srpWindow']={'matrix':'14d','keywords':'14d','keywordRank':'14d','ts':'60d'}
+D['meta']['qcSource']='INTEGRATED(통합검색)'
+
+# ---------- 불변식 검증 ----------
+assert isinstance(D['srpMatrix'],list) and isinstance(D['inflow'],list) and isinstance(D['ages']['buyer'],list)
+for bk in ['bedding','mattress','bed']:
+    b=D['benchmarks'].get(bk)
+    if b: assert isinstance(b['self_products'],list) and isinstance(b['price_bands'],list) and isinstance(b['pb_lineup'],list)
+m3=sum(r['gmv'] for r in D['daily']['3918642'] if r['dt'].startswith('2026-03'))
+assert m3==11553700, f"3월정합 실패 3918642={m3}"
+m3b=sum(r['gmv'] for r in D['daily']['3640244'] if r['dt'].startswith('2026-03'))
+assert m3b==45449200, f"3월정합 실패 3640244={m3b}"
+
+with open(TF,'w',encoding='utf-8') as fp: json.dump(D,fp,ensure_ascii=False,indent=2)
+with open(MAT,'w',encoding='utf-8') as fp: json.dump(M,fp,ensure_ascii=False,indent=2)
+print('BUILD OK. sections updated:', changed)
+print('lastUpdate:', last, '| daily pids:', len(D['daily']), '| srpMatrix:', len(D['srpMatrix']), '| 3월정합 OK')

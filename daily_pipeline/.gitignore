@@ -1,0 +1,5 @@
+tmp/
+tmp_test/
+tmp_empty/
+__pycache__/
+_names.json
