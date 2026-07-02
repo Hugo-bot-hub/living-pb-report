@@ -541,14 +541,208 @@
     }
   ],
   "cosell_summary": {
-    "frame_orders": 3331,
-    "with_mattress": 503,
-    "attach_rate_pct": 15.1,
-    "with_our_mattress": 113,
-    "with_competitor_mattress": 390,
-    "competitor_share_pct": 77.5,
-    "window": "2026-04~06 (3개월)",
-    "frame_scope": "전 layer 침대프레임(수납침대+일반침대, 매트리스포함 세트 제외)",
-    "note": "우리 프레임이 만든 매트리스 수요의 77.5%가 경쟁사로 유출. 수면밀도 89건 1위."
+    "method": "유저단위(별도주문 포함). 같은주문 기준 15%는 과소계상 — 유저단위 실측 27%.",
+    "frame_users": 3039,
+    "bought_mat": 825,
+    "rate_pct": 27.1,
+    "our": 153,
+    "comp_only": 672,
+    "leak_pct": 81.5,
+    "window": "프레임구매 2026-04~06 / 매트리스 2026-02~07 (유저단위)",
+    "note": "프레임 구매자의 27%가 매트리스 구매, 그중 81.5%가 경쟁사(수면밀도 1위)로 유출. studio tier 유출 88%로 최악."
+  },
+  "cosell_by_tier": {
+    "basic": {
+      "frame_users": 1724,
+      "bought_mat": 527,
+      "our": 88,
+      "comp_only": 439,
+      "rate_pct": 30.6,
+      "leak_pct": 83.3,
+      "dest": [
+        {
+          "pid": "1590911",
+          "name": "수면밀도",
+          "brand": "수면밀도",
+          "is_self": false,
+          "users": 72,
+          "qty": 118,
+          "gmv": 44811800
+        },
+        {
+          "pid": "1089824",
+          "name": "basic매트리스(우리)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 71,
+          "qty": 105,
+          "gmv": 17878500
+        },
+        {
+          "pid": "329364",
+          "name": "휴도",
+          "brand": "휴도",
+          "is_self": false,
+          "users": 66,
+          "qty": 103,
+          "gmv": 12896900
+        },
+        {
+          "pid": "858905",
+          "name": "웰퍼니쳐 더매직",
+          "brand": "웰퍼니쳐",
+          "is_self": false,
+          "users": 46,
+          "qty": 70,
+          "gmv": 18931700
+        },
+        {
+          "pid": "2737888",
+          "name": "지누스 얼티마",
+          "brand": "지누스",
+          "is_self": false,
+          "users": 37,
+          "qty": 56,
+          "gmv": 12309000
+        },
+        {
+          "pid": "425266",
+          "name": "먼데이하우스",
+          "brand": "먼데이하우스",
+          "is_self": false,
+          "users": 35,
+          "qty": 51,
+          "gmv": 5959000
+        }
+      ]
+    },
+    "refine": {
+      "frame_users": 669,
+      "bought_mat": 183,
+      "our": 53,
+      "comp_only": 130,
+      "rate_pct": 27.4,
+      "leak_pct": 71.0,
+      "dest": [
+        {
+          "pid": "1590911",
+          "name": "수면밀도",
+          "brand": "수면밀도",
+          "is_self": false,
+          "users": 33,
+          "qty": 57,
+          "gmv": 20447400
+        },
+        {
+          "pid": "3607491",
+          "name": "refine매트리스(우리)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 28,
+          "qty": 56,
+          "gmv": 12874100
+        },
+        {
+          "pid": "1089824",
+          "name": "basic매트리스(우리)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 21,
+          "qty": 33,
+          "gmv": 5226000
+        },
+        {
+          "pid": "858905",
+          "name": "웰퍼니쳐 더매직",
+          "brand": "웰퍼니쳐",
+          "is_self": false,
+          "users": 19,
+          "qty": 30,
+          "gmv": 8224500
+        },
+        {
+          "pid": "329364",
+          "name": "휴도",
+          "brand": "휴도",
+          "is_self": false,
+          "users": 10,
+          "qty": 15,
+          "gmv": 2051000
+        },
+        {
+          "pid": "1525743",
+          "name": "웰퍼니쳐 베어플러스",
+          "brand": "웰퍼니쳐",
+          "is_self": false,
+          "users": 8,
+          "qty": 14,
+          "gmv": 2528700
+        }
+      ]
+    },
+    "studio": {
+      "frame_users": 658,
+      "bought_mat": 121,
+      "our": 14,
+      "comp_only": 107,
+      "rate_pct": 18.4,
+      "leak_pct": 88.4,
+      "dest": [
+        {
+          "pid": "1590911",
+          "name": "수면밀도",
+          "brand": "수면밀도",
+          "is_self": false,
+          "users": 54,
+          "qty": 93,
+          "gmv": 40030400
+        },
+        {
+          "pid": "3607491",
+          "name": "refine매트리스(우리)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 7,
+          "qty": 21,
+          "gmv": 5105800
+        },
+        {
+          "pid": "329364",
+          "name": "휴도",
+          "brand": "휴도",
+          "is_self": false,
+          "users": 6,
+          "qty": 10,
+          "gmv": 1603000
+        },
+        {
+          "pid": "858905",
+          "name": "웰퍼니쳐 더매직",
+          "brand": "웰퍼니쳐",
+          "is_self": false,
+          "users": 5,
+          "qty": 9,
+          "gmv": 2603700
+        },
+        {
+          "pid": "3121605",
+          "name": "studio매트리스(우리)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 5,
+          "qty": 6,
+          "gmv": 9340000
+        },
+        {
+          "pid": "2737888",
+          "name": "지누스 얼티마",
+          "brand": "지누스",
+          "is_self": false,
+          "users": 5,
+          "qty": 8,
+          "gmv": 2207800
+        }
+      ]
+    }
   }
 }
