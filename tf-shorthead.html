@@ -238,8 +238,9 @@ function subSrp(pid){
   const hasScore=D.scoreTs&&D.scoreTs[pid]&&D.scoreTs[pid].length;
   const hasFeat=D.srpFeatureTs&&D.srpFeatureTs[pid]&&D.srpFeatureTs[pid].length;
   const kws=(D.srpKeywords&&D.srpKeywords[pid])||[];
+  const krank=(D.srpKeywordRank&&D.srpKeywordRank[pid])||[];
   const mtx=(D.srpMatrix||[]).filter(function(r){return String(r.pid)===String(pid);});
-  if(!hasScore&&!hasFeat&&!kws.length&&!mtx.length) return '<div class="ph">SRP 데이터 없음 (경쟁상품은 키워드 미수집)</div>';
+  if(!hasScore&&!hasFeat&&!krank.length&&!mtx.length) return '<div class="ph">SRP 데이터 없음</div>';
   const sp=seriesPids(pid); const hasCmp=sp.length>1; const isC=meta(pid).role==='competitor';
   const cmpLbl=hasCmp?(isC?'· vs 자사':'· vs 경쟁'):'';
   const cmpNote=hasCmp?('비교 대상: '+sp.slice(1).map(function(p){return sn(p);}).join(', ')):'경쟁 미지정(외부 전략) — 단독 추세';
@@ -250,10 +251,9 @@ function subSrp(pid){
       feats.map(function(f){return '<div><div class="mm-lbl">'+f[1]+'</div><div class="chart-box xs"><canvas id="ch-feat-'+f[0]+'"></canvas></div></div>';}).join('')+
       '</div><div class="note">항목별 시계열 — 우리=보라 굵은 실선, 경쟁=주황/빨강 파선. 리뷰~장바구니=0~1 점수(높을수록 우위), QC랭크=순위(낮을수록 우위). '+cmpNote+'</div></div>';
   }
-  if(kws.length){
-    const byKw={}; kws.forEach(function(k){ if(!byKw[k.kw]||k.dt>byKw[k.kw].dt) byKw[k.kw]=k; });
-    const rows=Object.keys(byKw).map(function(k){return byKw[k];}).sort(function(a,b){return a.rank-b.rank;}).map(function(k){return '<tr><td>'+k.kw+'</td><td class="num">'+dispRank(k.rank)+'</td><td class="num">'+dispBest(k.best)+'</td><td class="num">'+k.score+'</td></tr>';}).join('');
-    h+='<div class="card"><h3>🔍 검색 키워드 순위 <span style="font-weight:400;color:var(--text3);font-size:12px">· 최근 14일 평균</span></h3><table><thead><tr><th>키워드</th><th class="num">평균순위</th><th class="num">최고</th><th class="num">셀링스코어</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+  if(krank.length){
+    const rows=krank.map(function(k){var avg=Math.round(k.rank)+1;var hi=avg>30;return '<tr><td>'+k.kw+'</td><td class="num">'+(k.qc||0).toLocaleString()+'</td><td class="num"'+(hi?' style="color:#E67E22;font-weight:700"':'')+'>'+avg+'위</td><td class="num">'+((k.best||0)+1)+'위</td><td class="num">'+(k.imp||0).toLocaleString()+'</td><td class="num">'+pct(k.ctr)+'</td></tr>';}).join('');
+    h+='<div class="card"><h3>🔍 검색 키워드 순위 <span style="font-weight:400;color:var(--text3);font-size:12px">· 검색량(QC) 큰 순</span><span class="wbadge">최근 28일</span></h3><table><thead><tr><th>키워드</th><th class="num">검색량</th><th class="num">우리 평균순위</th><th class="num">최고</th><th class="num">노출</th><th class="num">CTR</th></tr></thead><tbody>'+rows+'</tbody></table><div class="note">검색량 큰 키워드부터. <span style="color:#E67E22;font-weight:700">주황</span>=평균 30위 밖(큰 키워드인데 우리가 묻힘 → 공략 대상).</div></div>';
   }
   if(mtx.length){
     const rows=mtx.slice().sort(function(a,b){return a.rank-b.rank;}).map(function(r){return '<tr><td>'+r.kw+'</td><td class="num">'+dispRank(r.rank)+'</td><td class="num">'+dispBest(r.best)+'</td><td class="num">'+r.score+'</td><td class="num">'+pct(r.ctr)+'</td><td class="num">'+(r.imp||0).toLocaleString()+'</td></tr>';}).join('');
@@ -329,7 +329,7 @@ function subBench(pid){
 function viewMprice(){
   if(!M||!M.decomp) return '<div class="ph">매트리스 데이터 없음</div>';
   const mats=selfPids('furniture').filter(function(p){return meta(p).group==='매트리스';});
-  let h='<div class="insight">매트리스 <b>실객단가는 표시가와 다름</b> — 사이즈(S/SS/D/Q/K/LK)·경도(미디엄/미디엄소프트/미디엄하드)별 옵션 객단가. 방수커버 옵션 제외.</div>';
+  let h='<div class="insight">매트리스 <b>실객단가는 표시가와 다름</b> — 사이즈(S/SS/D/Q/K/LK)·경도(미디엄/미디엄소프트/미디엄하드)별 옵션 객단가. 방수커버 옵션 제외. <span class="wbadge">2026-04~06 (3개월)</span></div>';
   h+='<div class="kpi-row">'+mats.map(function(pid){ const up=unitPrice(pid); return '<div class="kpi"><div class="lbl">'+sn(pid)+'</div><div class="val">'+won(up)+'</div><div class="sub">표시가 '+won(meta(pid).price)+'</div></div>';}).join('')+'</div>';
   mats.forEach(function(pid){
     const dc=((M.decomp&&M.decomp[pid])||[]).slice().sort(function(a,b){return (b.gmv||0)-(a.gmv||0);});
@@ -343,13 +343,19 @@ function viewMprice(){
 
 function viewAttach(){
   if(!M) return '<div class="ph">데이터 없음</div>';
-  const afo=M.attach_frame_option||[]; const cos=M.cosell||[];
-  let h='<div class="insight">🔗 <b>프레임 합구매 2종</b> — ①프레임 옵션으로 붙은 매트리스(극소량) ②같은 주문에 별도 담긴 매트리스(카트 교차구매). <b>수면밀도가 교차구매 1위 — 우리 프레임이 만든 매트리스 수요가 경쟁사로 유출</b>.</div>';
+  const afo=M.attach_frame_option||[]; const cos=M.cosell||[]; const cs=M.cosell_summary||null;
+  let h='<div class="insight">🔗 <b>프레임 합구매</b> — 우리 침대프레임을 산 고객이 같은 주문에 함께 담은 매트리스. <b>우리 프레임이 만든 매트리스 수요가 대거 경쟁사로 유출</b>(수면밀도 1위).</div>';
+  if(cs){ h+='<div class="card" style="border-left:4px solid #E74C3C"><h3>🚨 합구매 유출 요약 <span class="wbadge">'+(cs.window||'')+'</span></h3><div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-end">'+
+    '<div><div class="mm-lbl">프레임 주문</div><div style="font-size:22px;font-weight:700">'+(cs.frame_orders||0).toLocaleString()+'건</div></div>'+
+    '<div><div class="mm-lbl">매트리스 합구매</div><div style="font-size:22px;font-weight:700">'+(cs.with_mattress||0).toLocaleString()+'건 <span style="font-size:13px;color:var(--text3)">('+(cs.attach_rate_pct||0)+'%)</span></div></div>'+
+    '<div><div class="mm-lbl">우리 vs 경쟁</div><div style="font-size:22px;font-weight:700"><span style="color:#6C5CE7">'+(cs.with_our_mattress||0)+'</span> vs <span style="color:#E67E22">'+(cs.with_competitor_mattress||0)+'</span></div></div>'+
+    '<div><div class="mm-lbl">경쟁 유출률</div><div style="font-size:30px;font-weight:800;color:#E74C3C">'+(cs.competitor_share_pct||0)+'%</div></div>'+
+    '</div><div class="note">'+(cs.frame_scope||'')+'. '+(cs.note||'')+'</div></div>'; }
   h+='<div class="grid2">'+
-    '<div class="card"><h3>① 프레임 옵션 매트리스 (월별)</h3><div class="chart-box sm"><canvas id="at-afo"></canvas></div><div class="note">프레임 상품번호 옵션의 "페이브 매트리스". 매트리스 PID엔 안 잡히는 분. 월 1~7대로 소량.</div></div>'+
-    '<div class="card"><h3>② 카트 교차구매 매트리스 <span style="font-weight:400;color:var(--text3);font-size:12px">· 최근 3개월</span></h3>'+
+    '<div class="card"><h3>① 프레임 옵션 매트리스 (월별) <span class="wbadge">2026-02~07</span></h3><div class="chart-box sm"><canvas id="at-afo"></canvas></div><div class="note">프레임 상품번호 옵션의 "페이브 매트리스"(매트리스 PID엔 안 잡힘). 월 1~7대 소량.</div></div>'+
+    '<div class="card"><h3>② 카트 교차구매 매트리스 <span class="wbadge">최근 3개월·전 프레임</span></h3>'+
     (cos.length?'<table><thead><tr><th>매트리스</th><th>브랜드</th><th class="num">주문</th><th class="num">수량</th><th class="num">GMV</th></tr></thead><tbody>'+
-      cos.slice(0,15).map(function(c){return '<tr class="'+(c.is_self?'self-row':'')+'"><td>'+(c.is_self?'⭐':'')+' '+(c.name||'').slice(0,22)+'</td><td>'+(c.brand||'')+'</td><td class="num">'+(c.orders||0)+'</td><td class="num">'+(c.qty||0)+'</td><td class="num">'+won(c.gmv)+'</td></tr>';}).join('')+
+      cos.slice(0,20).map(function(c){return '<tr class="'+(c.is_self?'self-row':'')+'"><td>'+(c.is_self?'⭐':'')+' '+(c.name||'').slice(0,22)+'</td><td>'+(c.brand||'')+'</td><td class="num">'+(c.orders||0)+'</td><td class="num">'+(c.qty||0)+'</td><td class="num">'+won(c.gmv)+'</td></tr>';}).join('')+
       '</tbody></table>':'<div class="ph">데이터 없음</div>')+
     '</div></div>';
   return h;
