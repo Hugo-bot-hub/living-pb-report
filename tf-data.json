@@ -80497,6 +80497,26 @@
         "band_p3_cvr": 2.41,
         "band_ctr_ratio": 0.44,
         "band_cvr_ratio": 0.63
+      },
+      {
+        "pid": "3640123",
+        "name": "60수호텔침구",
+        "line": "refine",
+        "price": 59900,
+        "price_band": "03_50-70k",
+        "ctr": 2.44,
+        "cvr": 1.66,
+        "imp_uv": 100871,
+        "pdp_uv": 2465,
+        "buy_uv": 41,
+        "cate_p3_ctr": 4.38,
+        "cate_p3_cvr": 2.02,
+        "cate_ctr_ratio": 0.56,
+        "cate_cvr_ratio": 0.82,
+        "band_p3_ctr": 4.49,
+        "band_p3_cvr": 1.73,
+        "band_ctr_ratio": 0.54,
+        "band_cvr_ratio": 0.96
       }
     ],
     "price_bands": [
@@ -81371,6 +81391,26 @@
           "band_p3_cvr": 2.41,
           "band_ctr_ratio": 0.44,
           "band_cvr_ratio": 0.63
+        },
+        {
+          "pid": "3640123",
+          "name": "60수호텔침구",
+          "line": "refine",
+          "price": 59900,
+          "price_band": "03_50-70k",
+          "ctr": 2.44,
+          "cvr": 1.66,
+          "imp_uv": 100871,
+          "pdp_uv": 2465,
+          "buy_uv": 41,
+          "cate_p3_ctr": 4.38,
+          "cate_p3_cvr": 2.02,
+          "cate_ctr_ratio": 0.56,
+          "cate_cvr_ratio": 0.82,
+          "band_p3_ctr": 4.49,
+          "band_p3_cvr": 1.73,
+          "band_ctr_ratio": 0.54,
+          "band_cvr_ratio": 0.96
         }
       ],
       "price_bands": [
