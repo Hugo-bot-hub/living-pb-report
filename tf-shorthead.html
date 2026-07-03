@@ -341,12 +341,37 @@ function viewMprice(){
   return h;
 }
 
+function plink(pid){return pid?' <a href="https://ohouse.com/productions/'+pid+'" target="_blank" rel="noopener" style="font-size:11px;color:var(--text3);text-decoration:none" title="상품 페이지 열기">🔗</a>':'';}
+window.showFrameOpt=function(pid){
+  document.querySelectorAll('[id^="fopt-"]').forEach(function(e){e.style.display='none';});
+  document.querySelectorAll('[data-fpill]').forEach(function(e){e.style.background='#eef0f3';e.style.color='var(--text2)';});
+  var d=document.getElementById('fopt-'+pid); if(d)d.style.display='';
+  var p=document.querySelector('[data-fpill="'+pid+'"]'); if(p){p.style.background='#6C5CE7';p.style.color='#fff';}
+};
+function attachFrameSelector(adt){
+  var items=(adt&&Array.isArray(adt.items))?adt.items:[];
+  if(!items.length) return '<div class="ph">데이터 없음</div>';
+  var byF={};
+  items.forEach(function(x){var k=String(x.frame_pid); if(!byF[k])byF[k]={pid:k,name:x.frame_name||k,qty:0,gmv:0,opts:[]}; byF[k].qty+=(x.qty||0); byF[k].gmv+=(x.gmv||0); byF[k].opts.push(x);});
+  var frames=Object.keys(byF).map(function(k){return byF[k];}).sort(function(a,b){return b.qty-a.qty;});
+  var tot=adt.total||{qty:0,gmv:0};
+  var maxq=Math.max.apply(null,frames.map(function(f){return f.qty;}))||1;
+  var pills=frames.map(function(f){return '<button data-fpill="'+f.pid+'" onclick="showFrameOpt(\''+f.pid+'\')" style="border:1px solid var(--line);border-radius:14px;padding:4px 10px;font-size:12px;cursor:pointer;background:#eef0f3;color:var(--text2)">'+f.name+' <b>'+f.qty+'대</b></button>';}).join(' ');
+  var bars=frames.map(function(f){var w=Math.round(f.qty/maxq*100);return '<div style="display:flex;align-items:center;gap:8px;margin:2px 0;font-size:12px"><div style="width:120px;text-align:right;color:var(--text2)">'+f.name+plink(f.pid)+'</div><div style="flex:1;background:#eef0f3;border-radius:4px;overflow:hidden"><div style="width:'+Math.max(w,4)+'%;background:#6C5CE7;color:#fff;padding:1px 6px;font-size:11px;white-space:nowrap;text-align:right">'+f.qty+'대</div></div></div>';}).join('');
+  var panels=frames.map(function(f,i){
+    var rows=f.opts.slice().sort(function(a,b){return (b.gmv||0)-(a.gmv||0);}).map(function(x){return '<tr><td>'+(x.option_name||'').replace('[20% 할인] ','')+'</td><td class="num">'+(x.qty||0)+'</td><td class="num">'+won(x.gmv)+'</td></tr>';}).join('');
+    return '<div id="fopt-'+f.pid+'" style="display:'+(i===0?'':'none')+';margin-top:10px"><div class="mm-lbl" style="margin-bottom:4px">'+f.name+plink(f.pid)+' — 추가옵션 매트리스</div><table><thead><tr><th>옵션</th><th class="num">수량</th><th class="num">GMV</th></tr></thead><tbody>'+rows+'<tr style="font-weight:700;border-top:2px solid var(--line)"><td>소계</td><td class="num">'+f.qty+'</td><td class="num">'+won(f.gmv)+'</td></tr></tbody></table></div>';
+  }).join('');
+  return '<div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:10px"><div><div class="mm-lbl">총 부착 매트리스</div><div style="font-size:20px;font-weight:800">'+(tot.qty||0)+'대 <span style="font-size:13px;color:var(--text3)">'+won(tot.gmv)+'</span></div></div><div><div class="mm-lbl">옵션매트 보유 프레임</div><div style="font-size:20px;font-weight:800">'+frames.length+'종</div></div></div>'+
+    '<div style="margin-bottom:6px">'+bars+'</div>'+
+    '<div class="mm-lbl" style="margin-top:8px">프레임 선택 → 옵션 세부</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin:4px 0">'+pills+'</div>'+panels;
+}
 function tierCards(byTier, isFtoM){
   const TN={basic:'🟦 basic',refine:'🟨 refine',studio:'🟥 studio'};
   return ['basic','refine','studio'].map(function(t){ const x=byTier[t]; if(!x) return '';
     const from = isFtoM ? x.frame_users : x.mat_users;
     const got  = isFtoM ? x.bought_mat  : x.bought_frame;
-    const dest=(x.dest||[]).slice(0,5).map(function(d){return '<tr class="'+(d.is_self?'self-row':'')+'"><td>'+(d.is_self?'⭐':'⚔️')+' '+(d.name||'').slice(0,18)+'</td><td class="num">'+(d.users||0)+'명</td><td class="num">'+won(d.gmv)+'</td></tr>';}).join('');
+    const dest=(x.dest||[]).slice(0,5).map(function(d){return '<tr class="'+(d.is_self?'self-row':'')+'"><td>'+(d.is_self?'⭐':'⚔️')+' '+(d.name||'').slice(0,18)+plink(d.pid)+'</td><td class="num">'+(d.users||0)+'명</td><td class="num">'+won(d.gmv)+'</td></tr>';}).join('');
     return '<div class="card"><h3>'+TN[t]+' '+(isFtoM?'프레임':'매트리스')+' 구매자</h3>'+
       '<div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:8px">'+
       '<div><div class="mm-lbl">'+(isFtoM?'프레임구매자':'매트리스구매자')+'</div><div style="font-size:17px;font-weight:700">'+(from||0).toLocaleString()+'명</div></div>'+
@@ -357,7 +382,7 @@ function tierCards(byTier, isFtoM){
 }
 function compDestCard(cd, whatBought, destCat){
   if(!cd||!Array.isArray(cd.dest)||!cd.dest.length) return '';
-  const rows=cd.dest.slice(0,8).map(function(d){return '<tr class="'+(d.is_self?'self-row':'')+'"><td>'+(d.is_self?'⭐':'⚔️')+' '+(d.brand||'')+'<span style="color:var(--text3);font-size:11px"> '+((d.name||'').slice(0,12))+'</span></td><td class="num">'+(d.users||0)+'명</td><td class="num">'+won(d.gmv)+'</td></tr>';}).join('');
+  const rows=cd.dest.slice(0,8).map(function(d){return '<tr class="'+(d.is_self?'self-row':'')+'"><td>'+(d.is_self?'⭐':'⚔️')+' '+(d.brand||'')+'<span style="color:var(--text3);font-size:11px"> '+((d.name||'').slice(0,12))+'</span>'+plink(d.pid)+'</td><td class="num">'+(d.users||0)+'명</td><td class="num">'+won(d.gmv)+'</td></tr>';}).join('');
   return '<div class="card"><h3>⚔️ '+(cd.comp_name||'')+'</h3><div style="margin-bottom:6px"><span style="font-size:17px;font-weight:700">'+(cd.buyers||0).toLocaleString()+'명</span> <span class="mm-lbl">이 '+whatBought+' 구매 → '+destCat+' 행선지</span></div><table><thead><tr><th>'+destCat+' 행선지</th><th class="num">구매자</th><th class="num">GMV</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
 }
 function ecoBars(be){
@@ -387,8 +412,8 @@ function viewAttach(){
   // ④ 브랜드 생태계 락인
   h+='<div class="card" style="margin-top:18px"><h3>④ 브랜드 생태계 락인 <span class="wbadge">최근6개월</span> <span style="font-weight:400;color:var(--text3);font-size:12px">· 프레임 구매자가 같은 브랜드 매트리스도 산 비율</span></h3>'+ecoBars(be)+'<div class="note">같은 브랜드에서 프레임+매트리스 둘 다 산 비율 = 브랜드 생태계 강도. <b>옵션매트리스 복구 반영</b>(프레임옵션 매트=자동 같은브랜드). <b style="color:#6C5CE7">우리(layer)</b>는 보라 — 정정 후 상향. 세트 유도로 더 끌어올릴 여지. <b>옵션매칭률&lt;90%</b> 브랜드(⚠️)는 스냅샷 커버리지 낮아 <b>실제보다 과소(하한)</b> — layer는 99.9%로 정확. 시장 35%·저매칭 브랜드는 floor.</div></div>';
   // ⑤ 프레임 옵션 매트리스 상세 (상품별·옵션별)
-  h+='<div class="card" style="margin-top:18px"><h3>⑤ 프레임 옵션 매트리스 상세 (상품별·옵션별) <span class="wbadge">'+(adt.window||'최근6개월')+'</span></h3><div class="chart-box sm"><canvas id="at-afo"></canvas></div>';
-  if(Array.isArray(adt.items)&&adt.items.length){ h+='<table style="margin-top:10px"><thead><tr><th>프레임</th><th>추가옵션 매트리스</th><th class="num">수량</th><th class="num">GMV</th></tr></thead><tbody>'+adt.items.map(function(x){return '<tr><td>'+(x.frame_name||x.frame_pid)+'</td><td>'+(x.option_name||'').replace('[20% 할인] ','')+'</td><td class="num">'+(x.qty||0)+'</td><td class="num">'+won(x.gmv)+'</td></tr>';}).join('')+'<tr style="font-weight:700;border-top:2px solid var(--line)"><td colspan="2">합계</td><td class="num">'+((adt.total||{}).qty||0)+'</td><td class="num">'+won((adt.total||{}).gmv)+'</td></tr></tbody></table>'; }
+  h+='<div class="card" style="margin-top:18px"><h3>⑤ 프레임 옵션 매트리스 상세 <span style="font-weight:400;color:var(--text3);font-size:12px">· 프레임 선택 → 옵션 세부</span> <span class="wbadge">'+(adt.window||'최근 3개월')+'</span></h3><div class="chart-box sm"><canvas id="at-afo"></canvas></div>';
+  h+=attachFrameSelector(adt);
   h+='<div class="note">'+(adt.note||'')+' 프레임옵션 매트리스는 프레임 PID 옵션으로 잡혀 매트리스 PID엔 미집계 → 기존 합구매율 과소(27%)의 주원인. 복구 시 44%. 이건 <b>자사 포착분</b>(우리 프레임의 우리 매트리스 옵션).</div></div>';
   return h;
 }

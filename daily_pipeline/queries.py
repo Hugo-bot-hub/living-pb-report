@@ -361,7 +361,7 @@ QUERIES['q4_attach_detail'] = f"""
 WITH frames AS (SELECT product_id pid_b, {_TIER} tier FROM ba_preserved.comm_product_info_latest WHERE {_FRAME_FILTER_LAYER}),
 fo AS (SELECT o.product_id, o.option_id, SUM(o.gmv) gmv, SUM(o.option_quantity) qty
   FROM ba_preserved.commerce_gross_profit_orders o JOIN frames f ON CAST(o.product_id AS BIGINT)=f.pid_b
-  WHERE o.yyyymm >= date_format(DATE_ADD('month',-6,CURRENT_DATE),'%Y%m') AND o.option_quantity>0 GROUP BY o.product_id, o.option_id),
+  WHERE o.yyyymm >= date_format(DATE_ADD('month',-3,CURRENT_DATE),'%Y%m') AND o.option_quantity>0 GROUP BY o.product_id, o.option_id),
 nm AS (SELECT s.id, arbitrary(s.explain) explain, arbitrary({_TIER.replace('product_name','s2.product_name')}) tier
   FROM ba_preserved.commerce_snapshot_production_options s
   JOIN ba_preserved.comm_product_info_latest s2 ON s.production_id=s2.product_id

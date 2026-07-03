@@ -270,7 +270,7 @@ if ad is not None:
         t=x['tier']; opt_by_tier.setdefault(t,{'qty':0,'gmv':0}); opt_by_tier[t]['qty']+=x['qty']; opt_by_tier[t]['gmv']+=x['gmv']
     M['attach_frame_option_detail']={'items':items,
         'total':{'qty':sum(t['qty'] for t in items),'gmv':sum(t['gmv'] for t in items)},
-        'window':'최근 6개월','note':'전 layer 침대프레임(basic/refine/studio)의 추가옵션 매트리스 전수. 상품별·옵션별 세부.'}
+        'window':'최근 3개월','note':'전 layer 침대프레임(basic/refine/studio)의 추가옵션 매트리스 전수. 상품별·옵션별 세부.'}
     changed.append('attach_frame_option_detail')
 
 # ---------- cosell_by_tier (프레임→매트리스, 옵션매트리스 복구) ----------
