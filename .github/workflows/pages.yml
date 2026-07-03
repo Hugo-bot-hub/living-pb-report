@@ -7,9 +7,10 @@ permissions:
   contents: read
   pages: write
   id-token: write
+# 배포를 직렬 큐잉(취소 안 함) → 동시배포 충돌("try again later") 방지
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -22,5 +23,7 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
+      # 배포 일시 실패는 다음 푸시가 자동 복구 → 실패메일 방지(continue-on-error)
       - id: deployment
         uses: actions/deploy-pages@v4
+        continue-on-error: true
