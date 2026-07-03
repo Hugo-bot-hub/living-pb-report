@@ -256,33 +256,55 @@ if af is not None:
     M['attach_frame_option']=[mm.get(y,{'yyyymm':y,'gmv':0,'qty':0}) for y in allym]
     changed.append('attach_frame_option')
 
-# ---------- cosell_by_tier (프레임→매트리스) ----------
+# ---------- 프레임옵션 매트리스 상세 (전 layer 프레임·옵션별·tier) ----------
+FRAME_NM={'1243313':'basic 바른수납','1800535':'basic 접이식철제','3858646':'refine 빅수납','3652507':'refine 수납',
+ '3621320':'refine 파티션','2518275':'refine 빅수납호텔','3602793':'refine 저상형','3898593':'studio 코타수납',
+ '3898584':'studio 코타평상','3748221':'studio 페이브수납','3116503':'studio 페이브솔리드','3146345':'studio 페이브패브릭','3146405':'studio 페이브패브릭'}
+ad=rows('q4_attach_detail',['frame_pid','tier','option_name','qty','gmv'])
+opt_by_tier={}
+if ad is not None:
+    items=[{'frame_pid':str(x['frame_pid']),'frame_name':FRAME_NM.get(str(x['frame_pid']),str(x['frame_pid'])),
+            'tier':x.get('tier') or 'etc','option_name':x['option_name'],'qty':i(x['qty']),'gmv':i(x['gmv'])} for x in ad]
+    items.sort(key=lambda x:(x['tier'],x['frame_pid'],-x['gmv']))
+    for x in items:
+        t=x['tier']; opt_by_tier.setdefault(t,{'qty':0,'gmv':0}); opt_by_tier[t]['qty']+=x['qty']; opt_by_tier[t]['gmv']+=x['gmv']
+    M['attach_frame_option_detail']={'items':items,
+        'total':{'qty':sum(t['qty'] for t in items),'gmv':sum(t['gmv'] for t in items)},
+        'window':'최근 6개월','note':'전 layer 침대프레임(basic/refine/studio)의 추가옵션 매트리스 전수. 상품별·옵션별 세부.'}
+    changed.append('attach_frame_option_detail')
+
+# ---------- cosell_by_tier (프레임→매트리스, 옵션매트리스 복구) ----------
 NAME={'1590911':'수면밀도','1089824':'basic매트리스(우리)','329364':'휴도','858905':'웰퍼니쳐',
 '2737888':'지누스','425266':'먼데이하우스','3607491':'refine매트리스(우리)','1525743':'웰퍼니쳐','3121605':'studio매트리스(우리)'}
-cs=rows('cosell_tier_summary',['tier','frame_users','bought_mat','our_mat','comp_only'])
+cs=rows('cosell_tier_summary',['tier','frame_users','bought_mat','our_mat','comp_only','opt_mat'])
 cd=rows('cosell_tier_dest',['tier','pid','brand_name','users','qty','gmv'])
 if cs is not None and cd is not None:
     dest={}
     for r in cd:
         dest.setdefault(r['tier'],[]).append({'pid':str(r['pid']),'name':NAME.get(str(r['pid']),r['brand_name']),'brand':r['brand_name'],
             'is_self':(r['brand_name']==LAYER),'users':i(r['users']),'qty':i(r['qty']),'gmv':i(r['gmv'])})
-    for t in dest: dest[t].sort(key=lambda x:-x['gmv'])
-    out={}; tot=[0,0,0,0]
+    out={}; tot=[0,0,0,0,0]
     for r in cs:
         t=r['tier']
         if t not in ('basic','refine','studio'): continue
-        fu,bm,om,co=i(r['frame_users']),i(r['bought_mat']),i(r['our_mat']),i(r['comp_only'])
-        tot=[tot[0]+fu,tot[1]+bm,tot[2]+om,tot[3]+co]
-        out[t]={'frame_users':fu,'bought_mat':bm,'our':om,'comp_only':co,
-            'rate_pct':round(bm/fu*100,1) if fu else 0.0,'leak_pct':round(co/bm*100,1) if bm else 0.0,'dest':dest.get(t,[])}
+        fu,bm,om,co,op=i(r['frame_users']),i(r['bought_mat']),i(r['our_mat']),i(r['comp_only']),i(r['opt_mat'])
+        tot=[tot[0]+fu,tot[1]+bm,tot[2]+om,tot[3]+co,tot[4]+op]
+        dst=dest.get(t,[])
+        if op>0:  # 자사 프레임옵션 매트리스를 dest 행으로
+            ob=opt_by_tier.get(t,{'qty':0,'gmv':0})
+            dst=[{'pid':'opt','name':'프레임옵션 매트리스(자사)','brand':LAYER,'is_self':True,'users':op,'qty':ob['qty'],'gmv':ob['gmv']}]+dst
+        dst=sorted(dst,key=lambda x:-x['gmv'])
+        out[t]={'frame_users':fu,'bought_mat':bm,'our':om,'comp_only':co,'opt_mat':op,
+            'rate_pct':round(bm/fu*100,1) if fu else 0.0,'leak_pct':round(co/bm*100,1) if bm else 0.0,'dest':dst}
     M['cosell_by_tier']=out
-    M['cosell_summary']={'method':'유저단위(별도주문 포함). 프레임구매→매트리스구매(전 layer 침대프레임 기준).',
+    M['cosell_summary']={'method':'유저단위(별도 매트리스PID OR 프레임옵션 매트리스). 전 layer 침대프레임(수납/일반/깔판).',
         'frame_users':tot[0],'bought_mat':tot[1],'rate_pct':round(tot[1]/tot[0]*100,1) if tot[0] else 0.0,
-        'our':tot[2],'comp_only':tot[3],'leak_pct':round(tot[3]/tot[1]*100,1) if tot[1] else 0.0,
-        'window':'프레임 최근3개월 / 매트리스 최근6개월 (유저단위)','note':'프레임 구매자의 매트리스 구매 중 경쟁사 유출 비중.'}
+        'our':tot[2],'comp_only':tot[3],'opt_mat':tot[4],'leak_pct':round(tot[3]/tot[1]*100,1) if tot[1] else 0.0,
+        'market_rate_pct':35.1,'window':'프레임 최근3개월 / 매트리스 최근6개월 (유저단위, 옵션매트 복구·400일창)',
+        'note':'모수 착시였음(옵션매트 누락). 정정 44%로 시장(35%) 상위. 우리(옵션매트 포함) 포착 vs 경쟁 유출이 핵심. 옵션매트리스=자사 포착.'}
     changed.append('cosell_by_tier')
 
-# ---------- mat_to_frame_by_tier (역방향) ----------
+# ---------- mat_to_frame_by_tier (역방향, 프레임 전수) ----------
 ms=rows('m2f_summary',['tier','mat_users','bought_frame','our_frame','comp_only'])
 md=rows('m2f_dest',['tier','pid','product_name','brand_name','users','gmv'])
 if ms is not None and md is not None:
@@ -299,11 +321,10 @@ if ms is not None and md is not None:
         out[t]={'mat_users':mu,'bought_frame':bf,'our':of_,'comp_only':co,
             'rate_pct':round(bf/mu*100,1) if mu else 0.0,'leak_pct':round(co/bf*100,1) if bf else 0.0,'dest':dest.get(t,[])}
     M['mat_to_frame_by_tier']=out
-    M['mat_to_frame_summary']={'method':'우리 매트리스 구매자→프레임 구매(유저단위).','note':'매트리스→프레임 방향 유출 추적.'}
+    M['mat_to_frame_summary']={'method':'우리 매트리스 구매자→프레임 구매(유저단위, 프레임 전수).','note':'매트리스→프레임 방향 유출 추적.'}
     changed.append('mat_to_frame_by_tier')
 
-# ---------- 합구매 경쟁자 관점 (comp_frame_dest / comp_mattress_dest) ----------
-FRAME_NM={'3898593':'코타 수납','3898584':'코타 평상','3748221':'페이브 수납'}
+# ---------- 합구매 경쟁자 관점 (comp_frame_dest + 옵션매트 행 / comp_mattress_dest) ----------
 def _dest_block(nm_, comp_pid, comp_name):
     r=rows(nm_, ['buyers','pid','product_name','brand_name','users','gmv'])
     if r is None: return None
@@ -312,27 +333,23 @@ def _dest_block(nm_, comp_pid, comp_name):
     dest.sort(key=lambda x:-x['users'])
     return {'comp_pid':comp_pid,'comp_name':comp_name,'buyers':(i(r[0]['buyers']) if r else 0),'dest':dest[:8]}
 cf=_dest_block('q1_comp_frame_dest','2352818','데일리리빙 드레스덴(프레임 최대경쟁)')
+qo=rows('q1_opt',['users','gmv','qty'])
+if cf and qo:  # 데일리리빙 프레임옵션 매트리스(=데일리리빙 자체) 행 추가
+    o=qo[0]
+    cf['dest']=sorted(cf['dest']+[{'pid':'opt','name':'데일리리빙 프레임옵션 매트리스','brand':'데일리리빙','is_self':False,'users':i(o['users']),'gmv':i(o['gmv'])}],key=lambda x:-x['users'])[:9]
 if cf: M['comp_frame_dest']=cf; changed.append('comp_frame_dest')
 cm=_dest_block('q2_comp_mat_dest','1590911','수면밀도(매트리스 최대경쟁)')
 if cm: M['comp_mattress_dest']=cm; changed.append('comp_mattress_dest')
 
-# ---------- 브랜드 생태계 락인 ----------
-be=rows('q3_brand_eco',['brand','frame_buyers','same_brand_mat','rate_pct'])
+# ---------- 브랜드 생태계 락인 (옵션매트 복구) ----------
+be=rows('q3_brand_eco',['brand','frame_buyers','same_brand_mat','rate_pct','opt_join_match_pct'])
 if be is not None:
+    def _mp(x):
+        v=x.get('opt_join_match_pct'); return f(v) if v not in (None,'') else None
     M['brand_ecosystem']=[{'brand':x['brand'],'is_self':(x['brand']==LAYER),'frame_buyers':i(x['frame_buyers']),
-        'same_brand_mat':i(x['same_brand_mat']),'rate_pct':f(x['rate_pct'])} for x in be]
+        'same_brand_mat':i(x['same_brand_mat']),'rate_pct':f(x['rate_pct']),
+        'opt_match_pct':_mp(x),'underest':(_mp(x) is not None and _mp(x)<90)} for x in be]
     changed.append('brand_ecosystem')
-
-# ---------- 프레임옵션 매트리스 상세 (상품별·옵션별) ----------
-ad=rows('q4_attach_detail',['frame_pid','option_name','qty','gmv'])
-if ad is not None:
-    items=[{'frame_pid':str(x['frame_pid']),'frame_name':FRAME_NM.get(str(x['frame_pid']),str(x['frame_pid'])),
-            'option_name':x['option_name'],'qty':i(x['qty']),'gmv':i(x['gmv'])} for x in ad]
-    items.sort(key=lambda x:(x['frame_pid'],-x['gmv']))
-    M['attach_frame_option_detail']={'items':items,
-        'total':{'qty':sum(t['qty'] for t in items),'gmv':sum(t['gmv'] for t in items)},
-        'window':'최근 6개월','note':'studio 호텔침대(코타 수납/평상·페이브 수납) 추가옵션 매트리스만. 페이브 매트리스 옵션. 코타 평상형은 추옵 매트리스 0.'}
-    changed.append('attach_frame_option_detail')
 
 # ---------- meta + lastUpdate ----------
 last = max((r['dt'] for pid in SELF for r in D['daily'].get(pid,[])), default=D['meta'].get('lastUpdate'))
