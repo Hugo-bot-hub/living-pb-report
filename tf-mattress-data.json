@@ -937,5 +937,320 @@
   "mat_to_frame_summary": {
     "method": "우리 매트리스 구매자→프레임 구매(유저단위).",
     "note": "매트리스→프레임 방향 유출 추적."
+  },
+  "comp_frame_dest": {
+    "comp_pid": "2352818",
+    "comp_name": "데일리리빙 드레스덴(프레임 최대경쟁)",
+    "buyers": 5044,
+    "dest": [
+      {
+        "pid": "1590911",
+        "name": "허리 디스크 환자가 만든 매트리스 S/SS/Q/K/LK 미디엄하드 S",
+        "brand": "수면밀도",
+        "is_self": false,
+        "users": 398,
+        "gmv": 251883200
+      },
+      {
+        "pid": "329364",
+        "name": "지정일배송/무료설치ㅣ편안한 제주 25cm 본넬스프링 매트리스 S/SS/Q/K/LK",
+        "brand": "휴도",
+        "is_self": false,
+        "users": 167,
+        "gmv": 41211800
+      },
+      {
+        "pid": "425266",
+        "name": "[7/6 20시 라이브] 허리가 편안한 포켓스프링 매트리스25cm S/SS/Q/K/LK",
+        "brand": "먼데이하우스",
+        "is_self": false,
+        "users": 116,
+        "gmv": 26862000
+      },
+      {
+        "pid": "858905",
+        "name": "[쿠폰가 22.9만원 [무료내림]더매직 허리부담완화 포켓스프링매트리스 S/SS/Q/K/LK",
+        "brand": "웰퍼니쳐",
+        "is_self": false,
+        "users": 98,
+        "gmv": 46138300
+      },
+      {
+        "pid": "2737888",
+        "name": "[오늘의집 단독] 얼티마 하이브리드 스프링 침대 매트리스 25cm (S,SS,Q,K)",
+        "brand": "지누스",
+        "is_self": false,
+        "users": 61,
+        "gmv": 21943600
+      },
+      {
+        "pid": "111255",
+        "name": "[오늘의집 단독] 100일교환가능 Q4 15년보증 유로탑매트리스 롤팩 SS/Q/K/LK",
+        "brand": "퀵슬립",
+        "is_self": false,
+        "users": 48,
+        "gmv": 20622400
+      },
+      {
+        "pid": "3676050",
+        "name": "쿠폰가 143,200 / 모어 프리미엄 호텔식 포켓스프링 필로우탑 매트리스 SS/Q/K",
+        "brand": "퍼니코",
+        "is_self": false,
+        "users": 19,
+        "gmv": 5356000
+      },
+      {
+        "pid": "1089824",
+        "name": "[무료내림서비스] basic / 바른 숙면 매트리스, 본넬/포켓스프링, S/SS/D/Q",
+        "brand": "오늘의집 layer",
+        "is_self": true,
+        "users": 18,
+        "gmv": 4890900
+      }
+    ]
+  },
+  "comp_mattress_dest": {
+    "comp_pid": "1590911",
+    "comp_name": "수면밀도(매트리스 최대경쟁)",
+    "buyers": 6129,
+    "dest": [
+      {
+        "pid": "2352818",
+        "name": "[오늘의집 단독] 20%쿠폰ㅣ드레스덴 조야패브릭 호텔식 침대프레임 SS/Q/K/LK/CK",
+        "brand": "데일리리빙",
+        "is_self": false,
+        "users": 403,
+        "gmv": 137785000
+      },
+      {
+        "pid": "673573",
+        "name": "[오늘의집 단독] 레온 프리미엄 빅수납 호텔 침대 프레임(매트제외) SS/Q/K/LK",
+        "brand": "삼익가구",
+        "is_self": false,
+        "users": 138,
+        "gmv": 78429600
+      },
+      {
+        "pid": "1786951",
+        "name": "[오늘의집 단독] 91,560원+3%할인 노아06 빅서랍 수납침대 프레임 SS/Q 매트선택",
+        "brand": "크라운퍼니쳐",
+        "is_self": false,
+        "users": 129,
+        "gmv": 28641000
+      },
+      {
+        "pid": "3603649",
+        "name": "[오늘의집 단독] 120,690원+3%할인 노엘 반자동 리프트업 통수납 침대프레임 SS/Q",
+        "brand": "크라운퍼니쳐",
+        "is_self": false,
+        "users": 108,
+        "gmv": 37637000
+      },
+      {
+        "pid": "324336",
+        "name": "[오늘의집 단독] 협탁무료증정+3%할인 에디트 헤드리스 평상형침대프레임 SS/Q,K 호환",
+        "brand": "크라운퍼니쳐",
+        "is_self": false,
+        "users": 89,
+        "gmv": 14346000
+      },
+      {
+        "pid": "3767739",
+        "name": "[주말특가 5만원쿠폰] 아임빅 LED 무헤드/3단/4단 빅서랍 호텔침대 수납프레임 SS/Q",
+        "brand": "먼데이하우스",
+        "is_self": false,
+        "users": 77,
+        "gmv": 21294000
+      },
+      {
+        "pid": "1243313",
+        "name": "basic / 바른 수납 침대프레임, 무헤드/LED헤드, SS/Q",
+        "brand": "오늘의집 layer",
+        "is_self": true,
+        "users": 71,
+        "gmv": 24756420
+      },
+      {
+        "pid": "2445724",
+        "name": "[4만원쿠폰] 클라우드 아쿠아텍스/부클레 패브릭 호텔식 침대프레임 SS/Q/K/LK/CK",
+        "brand": "먼데이하우스",
+        "is_self": false,
+        "users": 70,
+        "gmv": 22591000
+      }
+    ]
+  },
+  "brand_ecosystem": [
+    {
+      "brand": "지누스",
+      "is_self": false,
+      "frame_buyers": 3048,
+      "same_brand_mat": 678,
+      "rate_pct": 22.2
+    },
+    {
+      "brand": "웰퍼니쳐",
+      "is_self": false,
+      "frame_buyers": 3121,
+      "same_brand_mat": 332,
+      "rate_pct": 10.6
+    },
+    {
+      "brand": "휴도",
+      "is_self": false,
+      "frame_buyers": 2970,
+      "same_brand_mat": 320,
+      "rate_pct": 10.8
+    },
+    {
+      "brand": "오늘의집 layer",
+      "is_self": true,
+      "frame_buyers": 5259,
+      "same_brand_mat": 276,
+      "rate_pct": 5.2
+    },
+    {
+      "brand": "먼데이하우스",
+      "is_self": false,
+      "frame_buyers": 8110,
+      "same_brand_mat": 248,
+      "rate_pct": 3.1
+    },
+    {
+      "brand": "삼익가구",
+      "is_self": false,
+      "frame_buyers": 9797,
+      "same_brand_mat": 230,
+      "rate_pct": 2.3
+    },
+    {
+      "brand": "수면밀도",
+      "is_self": false,
+      "frame_buyers": 573,
+      "same_brand_mat": 196,
+      "rate_pct": 34.2
+    },
+    {
+      "brand": "하포스침대",
+      "is_self": false,
+      "frame_buyers": 6648,
+      "same_brand_mat": 127,
+      "rate_pct": 1.9
+    },
+    {
+      "brand": "크라운퍼니쳐",
+      "is_self": false,
+      "frame_buyers": 18485,
+      "same_brand_mat": 78,
+      "rate_pct": 0.4
+    },
+    {
+      "brand": "한샘",
+      "is_self": false,
+      "frame_buyers": 1148,
+      "same_brand_mat": 58,
+      "rate_pct": 5.1
+    },
+    {
+      "brand": "누어",
+      "is_self": false,
+      "frame_buyers": 1772,
+      "same_brand_mat": 54,
+      "rate_pct": 3.0
+    },
+    {
+      "brand": "리바트",
+      "is_self": false,
+      "frame_buyers": 1739,
+      "same_brand_mat": 50,
+      "rate_pct": 2.9
+    }
+  ],
+  "attach_frame_option_detail": {
+    "items": [
+      {
+        "frame_pid": "3748221",
+        "frame_name": "페이브 수납",
+        "option_name": "[20% 할인] 페이브 매트리스 미디엄하드 LK",
+        "qty": 5,
+        "gmv": 6360000
+      },
+      {
+        "frame_pid": "3748221",
+        "frame_name": "페이브 수납",
+        "option_name": "[20% 할인] 페이브 매트리스 미디엄 LK",
+        "qty": 3,
+        "gmv": 3896000
+      },
+      {
+        "frame_pid": "3748221",
+        "frame_name": "페이브 수납",
+        "option_name": "[20% 할인] 페이브 매트리스  미디엄하드 Q",
+        "qty": 4,
+        "gmv": 3808000
+      },
+      {
+        "frame_pid": "3748221",
+        "frame_name": "페이브 수납",
+        "option_name": "[20% 할인] 페이브 매트리스 미디엄 Q",
+        "qty": 2,
+        "gmv": 1904000
+      },
+      {
+        "frame_pid": "3748221",
+        "frame_name": "페이브 수납",
+        "option_name": "[20% 할인] 페이브 매트리스 미디엄소프트 LK",
+        "qty": 1,
+        "gmv": 1272000
+      },
+      {
+        "frame_pid": "3748221",
+        "frame_name": "페이브 수납",
+        "option_name": "[20% 할인] 페이브 매트리스 미디엄 K",
+        "qty": 1,
+        "gmv": 1032000
+      },
+      {
+        "frame_pid": "3748221",
+        "frame_name": "페이브 수납",
+        "option_name": "[20% 할인] 페이브 매트리스 미디엄소프트 K",
+        "qty": 1,
+        "gmv": 1032000
+      },
+      {
+        "frame_pid": "3748221",
+        "frame_name": "페이브 수납",
+        "option_name": "[20% 할인] 페이브 매트리스 미디엄하드 K",
+        "qty": 1,
+        "gmv": 1032000
+      },
+      {
+        "frame_pid": "3748221",
+        "frame_name": "페이브 수납",
+        "option_name": "[20% 할인] 페이브 매트리스  미디엄소프트 Q",
+        "qty": 1,
+        "gmv": 952000
+      },
+      {
+        "frame_pid": "3898593",
+        "frame_name": "코타 수납",
+        "option_name": "[20% 할인] 페이브 매트리스 미디엄하드 LK",
+        "qty": 2,
+        "gmv": 2544000
+      },
+      {
+        "frame_pid": "3898593",
+        "frame_name": "코타 수납",
+        "option_name": "[20% 할인] 페이브 매트리스 미디엄하드 K",
+        "qty": 1,
+        "gmv": 1032000
+      }
+    ],
+    "total": {
+      "qty": 22,
+      "gmv": 24864000
+    },
+    "window": "최근 6개월",
+    "note": "studio 호텔침대(코타 수납/평상·페이브 수납) 추가옵션 매트리스만. 페이브 매트리스 옵션. 코타 평상형은 추옵 매트리스 0."
   }
 }

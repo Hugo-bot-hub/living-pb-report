@@ -302,6 +302,38 @@ if ms is not None and md is not None:
     M['mat_to_frame_summary']={'method':'우리 매트리스 구매자→프레임 구매(유저단위).','note':'매트리스→프레임 방향 유출 추적.'}
     changed.append('mat_to_frame_by_tier')
 
+# ---------- 합구매 경쟁자 관점 (comp_frame_dest / comp_mattress_dest) ----------
+FRAME_NM={'3898593':'코타 수납','3898584':'코타 평상','3748221':'페이브 수납'}
+def _dest_block(nm_, comp_pid, comp_name):
+    r=rows(nm_, ['buyers','pid','product_name','brand_name','users','gmv'])
+    if r is None: return None
+    dest=[{'pid':str(x['pid']),'name':x['product_name'],'brand':x['brand_name'],
+           'is_self':(x['brand_name']==LAYER),'users':i(x['users']),'gmv':i(x['gmv'])} for x in r]
+    dest.sort(key=lambda x:-x['users'])
+    return {'comp_pid':comp_pid,'comp_name':comp_name,'buyers':(i(r[0]['buyers']) if r else 0),'dest':dest[:8]}
+cf=_dest_block('q1_comp_frame_dest','2352818','데일리리빙 드레스덴(프레임 최대경쟁)')
+if cf: M['comp_frame_dest']=cf; changed.append('comp_frame_dest')
+cm=_dest_block('q2_comp_mat_dest','1590911','수면밀도(매트리스 최대경쟁)')
+if cm: M['comp_mattress_dest']=cm; changed.append('comp_mattress_dest')
+
+# ---------- 브랜드 생태계 락인 ----------
+be=rows('q3_brand_eco',['brand','frame_buyers','same_brand_mat','rate_pct'])
+if be is not None:
+    M['brand_ecosystem']=[{'brand':x['brand'],'is_self':(x['brand']==LAYER),'frame_buyers':i(x['frame_buyers']),
+        'same_brand_mat':i(x['same_brand_mat']),'rate_pct':f(x['rate_pct'])} for x in be]
+    changed.append('brand_ecosystem')
+
+# ---------- 프레임옵션 매트리스 상세 (상품별·옵션별) ----------
+ad=rows('q4_attach_detail',['frame_pid','option_name','qty','gmv'])
+if ad is not None:
+    items=[{'frame_pid':str(x['frame_pid']),'frame_name':FRAME_NM.get(str(x['frame_pid']),str(x['frame_pid'])),
+            'option_name':x['option_name'],'qty':i(x['qty']),'gmv':i(x['gmv'])} for x in ad]
+    items.sort(key=lambda x:(x['frame_pid'],-x['gmv']))
+    M['attach_frame_option_detail']={'items':items,
+        'total':{'qty':sum(t['qty'] for t in items),'gmv':sum(t['gmv'] for t in items)},
+        'window':'최근 6개월','note':'studio 호텔침대(코타 수납/평상·페이브 수납) 추가옵션 매트리스만. 페이브 매트리스 옵션. 코타 평상형은 추옵 매트리스 0.'}
+    changed.append('attach_frame_option_detail')
+
 # ---------- meta + lastUpdate ----------
 last = max((r['dt'] for pid in SELF for r in D['daily'].get(pid,[])), default=D['meta'].get('lastUpdate'))
 D['meta']['lastUpdate']=last

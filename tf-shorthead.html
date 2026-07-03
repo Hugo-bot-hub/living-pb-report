@@ -355,6 +355,17 @@ function tierCards(byTier, isFtoM){
       '</div><table><thead><tr><th>'+(isFtoM?'매트리스 행선지':'프레임 행선지')+'</th><th class="num">구매자</th><th class="num">GMV</th></tr></thead><tbody>'+dest+'</tbody></table></div>';
   }).join('');
 }
+function compDestCard(cd, whatBought, destCat){
+  if(!cd||!Array.isArray(cd.dest)||!cd.dest.length) return '';
+  const rows=cd.dest.slice(0,8).map(function(d){return '<tr class="'+(d.is_self?'self-row':'')+'"><td>'+(d.is_self?'⭐':'⚔️')+' '+(d.brand||'')+'<span style="color:var(--text3);font-size:11px"> '+((d.name||'').slice(0,12))+'</span></td><td class="num">'+(d.users||0)+'명</td><td class="num">'+won(d.gmv)+'</td></tr>';}).join('');
+  return '<div class="card"><h3>⚔️ '+(cd.comp_name||'')+'</h3><div style="margin-bottom:6px"><span style="font-size:17px;font-weight:700">'+(cd.buyers||0).toLocaleString()+'명</span> <span class="mm-lbl">이 '+whatBought+' 구매 → '+destCat+' 행선지</span></div><table><thead><tr><th>'+destCat+' 행선지</th><th class="num">구매자</th><th class="num">GMV</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+}
+function ecoBars(be){
+  if(!Array.isArray(be)||!be.length) return '<div class="ph">데이터 없음</div>';
+  const max=Math.max.apply(null,be.map(function(b){return b.rate_pct||0;}))||1;
+  return '<table><thead><tr><th>브랜드</th><th class="num">프레임구매자</th><th class="num">같은브랜드 매트리스</th><th>같은브랜드 비율</th></tr></thead><tbody>'+
+    be.map(function(b){var w=Math.round(((b.rate_pct||0)/max)*100);var col=b.is_self?'#6C5CE7':'#E67E22';return '<tr class="'+(b.is_self?'self-row':'')+'"><td>'+(b.is_self?'⭐ ':'')+b.brand+'</td><td class="num">'+(b.frame_buyers||0).toLocaleString()+'</td><td class="num">'+(b.same_brand_mat||0)+'명</td><td><div style="background:#eef0f3;border-radius:4px;overflow:hidden;min-width:60px"><div style="width:'+Math.max(w,8)+'%;background:'+col+';color:#fff;font-size:11px;padding:1px 5px;white-space:nowrap;text-align:right">'+(b.rate_pct||0)+'%</div></div></td></tr>';}).join('')+'</tbody></table>';
+}
 function viewAttach(){
   if(!M) return '<div class="ph">데이터 없음</div>';
   const afo=M.attach_frame_option||[]; const cs=M.cosell_summary||{}; const cbt=M.cosell_by_tier||{}; const mft=M.mat_to_frame_by_tier||{}; const mfs=M.mat_to_frame_summary||{};
@@ -369,7 +380,15 @@ function viewAttach(){
     '</div><div class="note">'+(cs.method||'')+' '+(cs.note||'')+'</div></div>';
   h+='<div style="'+sech+'">① 프레임 구매자 → 매트리스 행선지</div><div style="'+g3+'">'+tierCards(cbt,true)+'</div>';
   h+='<div style="'+sech+'">② 매트리스 구매자 → 프레임 행선지</div>'+(mfs.note?'<div class="note" style="margin:0 2px 8px">'+mfs.note+'</div>':'')+'<div style="'+g3+'">'+tierCards(mft,false)+'</div>';
-  h+='<div class="card" style="margin-top:18px"><h3>③ 프레임 옵션 매트리스 (월별) <span class="wbadge">2026-02~07</span></h3><div class="chart-box sm"><canvas id="at-afo"></canvas></div><div class="note">프레임 상품번호 옵션의 "페이브 매트리스"(매트리스 PID엔 안 잡힘). 월 1~7대 소량 — 대부분은 위 카트 교차구매(별도 주문)로 발생.</div></div>';
+  // ③ 경쟁사 관점 — 최대 경쟁자 구매자의 상대 카테고리 행선지
+  const cfd=M.comp_frame_dest||{}, cmd=M.comp_mattress_dest||{}, be=M.brand_ecosystem||[], adt=M.attach_frame_option_detail||{};
+  h+='<div style="'+sech+'">③ 경쟁사 관점 — 최대 경쟁자 구매자는 상대 상품을 어디서 사나</div><div style="'+g3+'">'+compDestCard(cfd,'프레임','매트리스')+compDestCard(cmd,'매트리스','프레임')+'</div>';
+  // ④ 브랜드 생태계 락인
+  h+='<div class="card" style="margin-top:18px"><h3>④ 브랜드 생태계 락인 <span class="wbadge">최근6개월</span> <span style="font-weight:400;color:var(--text3);font-size:12px">· 프레임 구매자가 같은 브랜드 매트리스도 산 비율</span></h3>'+ecoBars(be)+'<div class="note">같은 브랜드에서 프레임+매트리스 둘 다 산 비율 = 브랜드 생태계 강도. 지누스·수면밀도 높음. <b style="color:#6C5CE7">우리(layer)</b>는 보라. 우리는 프레임·매트리스 둘 다 파는데 같은브랜드 락인율이 낮음 → 세트 유도 여지.</div></div>';
+  // ⑤ 프레임 옵션 매트리스 상세 (상품별·옵션별)
+  h+='<div class="card" style="margin-top:18px"><h3>⑤ 프레임 옵션 매트리스 상세 (상품별·옵션별) <span class="wbadge">'+(adt.window||'최근6개월')+'</span></h3><div class="chart-box sm"><canvas id="at-afo"></canvas></div>';
+  if(Array.isArray(adt.items)&&adt.items.length){ h+='<table style="margin-top:10px"><thead><tr><th>프레임</th><th>추가옵션 매트리스</th><th class="num">수량</th><th class="num">GMV</th></tr></thead><tbody>'+adt.items.map(function(x){return '<tr><td>'+(x.frame_name||x.frame_pid)+'</td><td>'+(x.option_name||'').replace('[20% 할인] ','')+'</td><td class="num">'+(x.qty||0)+'</td><td class="num">'+won(x.gmv)+'</td></tr>';}).join('')+'<tr style="font-weight:700;border-top:2px solid var(--line)"><td colspan="2">합계</td><td class="num">'+((adt.total||{}).qty||0)+'</td><td class="num">'+won((adt.total||{}).gmv)+'</td></tr></tbody></table>'; }
+  h+='<div class="note">'+(adt.note||'')+' 이 프레임옵션 매트리스는 프레임 상품번호 옵션으로 잡혀 매트리스 PID엔 안 잡힘. 소량 — 대부분 합구매는 위 카트 교차구매(별도 주문).</div></div>';
   return h;
 }
 
