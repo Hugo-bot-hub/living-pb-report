@@ -123,8 +123,8 @@ function renderNav(){
   document.getElementById('v-badge').textContent = D.meta.version||'v19';
   document.getElementById('upd').textContent = '기준 '+(D.meta.lastUpdate||'');
   document.getElementById('div-nav').innerHTML=[['living','🛋️ 리빙'],['furniture','🛏️ 가구']].map(function(a){return '<button class="div-btn '+(S.div===a[0]?'active':'')+'" onclick="setDiv(\''+a[0]+'\')">'+a[1]+'</button>';}).join('');
-  const views = S.div==='living' ? [['overview','📊 Overview'],['detail','🔎 상품 상세']]
-    : [['overview','📊 Overview'],['detail','🔎 상품 상세'],['mprice','📐 매트리스 객단가'],['attach','🔗 프레임 합구매']];
+  const views = S.div==='living' ? [['overview','📊 Overview'],['detail','🔎 상품 상세'],['radar','🚨 경쟁레이더']]
+    : [['overview','📊 Overview'],['detail','🔎 상품 상세'],['mprice','📐 매트리스 객단가'],['attach','🔗 프레임 합구매'],['radar','🚨 경쟁레이더']];
   document.getElementById('view-nav').innerHTML = views.map(function(a){return '<button class="view-btn '+(S.view===a[0]?'active':'')+'" onclick="setView(\''+a[0]+'\')">'+a[1]+'</button>';}).join('');
 }
 function setDiv(d){ S.div=d; S.view='overview'; S.pid=null; render(); }
@@ -140,6 +140,7 @@ function render(){
     else if(S.view==='detail'){ c.innerHTML=viewDetail(); buildDetailCharts(); }
     else if(S.view==='mprice'){ c.innerHTML=viewMprice(); buildMpriceCharts(); }
     else if(S.view==='attach'){ c.innerHTML=viewAttach(); buildAttachCharts(); }
+    else if(S.view==='radar'){ c.innerHTML=viewRadar(); }
   }catch(e){ c.innerHTML='<div class="ph">렌더 오류: '+e.message+'</div>'; console.error(e); }
 }
 
@@ -178,6 +179,49 @@ function viewOverview(){
   '<table><thead><tr><th>상품</th><th class="num">어제 GMV</th><th class="num">7일 GMV</th><th class="num">WoW</th><th class="num">CTR</th><th class="num">CVR(UV)</th><th class="num">SRP 평균순위</th><th class="num">실객단가</th></tr></thead>'+
   '<tbody>'+rows+'</tbody></table>'+
   '<div class="note">CTR=PDP/노출, CVR(UV)=구매UV/PDP UV. WoW=최근7일 vs 이전7일 GMV. <b>SRP 평균순위=검색 노출키워드 노출가중 평균순위</b>(대표값, 최근14일). 괄호 "최고"=상위5%(P5) 노출순위(단발 1위 요행 제외). 실객단가=매트리스만(커버제외 가중), 그외 표시가.</div></div>'+trend;
+}
+
+function viewRadar(){
+  const RD=D.keywordRadar;
+  if(!RD||!RD.data) return '<div class="ph">경쟁 레이더 데이터 없음 (다음 데일리 갱신 시 생성).</div>';
+  const FKW=['매트리스','침대프레임','수납침대'], LKW=['이불','차렵이불','냉감이불'];
+  const kws=(S.div==='living'?LKW:FKW).filter(function(k){return RD.data[k];});
+  const sm=RD.summary||{};
+  function badge(x){
+    if(x.is_self) return '<span class="pill self">우리</span>';
+    var b='';
+    if(x.tags.indexOf('boost_suspect')>=0) b+='<span class="pill" style="background:#FDECEA;color:#C0392B;border:1px solid #E74C3C">⚠️ 부스트의심</span> ';
+    if(x.tags.indexOf('new_entrant')>=0) b+='<span class="pill" style="background:#FFF6E5;color:#B9770E">🆕 신규</span> ';
+    if(x.tags.indexOf('known_comp')>=0) b+='<span class="pill" style="background:#eef0f4;color:#666">경쟁사</span> ';
+    return b||'<span style="color:var(--text3)">-</span>';
+  }
+  var head='<div class="insight">🚨 <b>경쟁 레이더</b> — 핵심 키워드에서 <b>신규 진입자 · 프로모/광고로 순위만 산 상품</b>을 자동 감지. 지정경쟁사만 보던 사각지대를 보완. <span class="wbadge">'+(RD.window||'')+'</span></div>';
+  head+='<div class="card" style="border-left:4px solid #E74C3C"><h3>🚨 이번주 위협 요약</h3><div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-end">'+
+    '<div class="kpi"><div class="lbl">🆕 신규 진입</div><div class="val">'+(sm.new_threats||0)+'</div><div class="sub">전 키워드 상위20 (리뷰<300)</div></div>'+
+    '<div class="kpi"><div class="lbl">⚠️ 부스트/광고 의심</div><div class="val" style="color:#C0392B">'+(sm.boost_suspect||0)+'</div><div class="sub">순위↑ but 판매·리뷰 바닥</div></div>'+
+    '</div><div class="note">'+(RD.note||'')+'</div></div>';
+  var body=kws.map(function(kw){
+    var lst=RD.data[kw]||[]; var ob=(sm.our_best_rank||{})[kw];
+    var rows=lst.map(function(x){
+      var self=x.is_self, boost=x.tags.indexOf('boost_suspect')>=0;
+      var bg=self?'background:#F3F0FF':(boost?'background:#FDECEA':'');
+      var nm=(self?'<b style="color:#6C5CE7">':'')+(x.name||x.brand||x.pid)+(self?'</b>':'');
+      return '<tr style="'+bg+'"><td class="num"><b>'+x.rank+'</b></td>'+
+        '<td><a href="https://store.ohou.se/goods/'+x.pid+'" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;border-bottom:1px dotted #bbb">'+nm+'</a>'+
+        '<div style="font-size:10px;color:var(--text3)">'+(x.brand||'')+' · '+x.pid+'</div></td>'+
+        '<td class="num">'+(x.price?won(x.price):'-')+'</td>'+
+        '<td class="num">'+(x.imp||0).toLocaleString()+'</td>'+
+        '<td class="num">'+(x.ctr||0).toFixed(1)+'%</td>'+
+        '<td class="num'+(x.sell28<50?' chg dn':'')+'">'+x.sell28+'</td>'+
+        '<td class="num'+(x.rev<1000?' chg dn':'')+'">'+(x.rev||0).toLocaleString()+'</td>'+
+        '<td class="num">'+(x.ravg||'-')+'</td>'+
+        '<td>'+badge(x)+'</td></tr>';
+    }).join('');
+    return '<div class="card"><h3>🔑 '+kw+' <span class="wbadge">우리 최고순위 '+(ob!=null?ob+'위':'권외')+'</span></h3>'+
+      '<table><thead><tr><th class="num">순위</th><th>상품(브랜드)</th><th class="num">가격</th><th class="num">노출</th><th class="num">CTR</th><th class="num">28일판매</th><th class="num">리뷰</th><th class="num">평점</th><th>판정</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+      '<div class="note">⚠️ 부스트의심 = 순위 높은데 28일판매·리뷰 바닥(프로모/광고로 순위만 산 것). SRP원장은 광고/오가닉 미분리 → 순위 vs 오가닉실력 괴리로 추론. 상품명 클릭 = 오늘의집 상품페이지.</div></div>';
+  }).join('');
+  return head+body;
 }
 
 function viewDetail(){

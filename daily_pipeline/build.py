@@ -101,6 +101,37 @@ if kt is not None:
     D['srpKeywords'] = sk
     changed.append('srpKeywords')
 
+# ---------- keyword_radar (경쟁 레이더: 신규경쟁자·부스트/광고 의심 자동감지) ----------
+kr = rows('kw_radar', ['kw','pid','brand','name','price','rank','imp','ctr','sales_score','sell28','rev','ravg'])
+if kr is not None:
+    KW_ORDER = ['매트리스','침대프레임','수납침대','이불','차렵이불','냉감이불']
+    radar = {}
+    for r in kr:
+        pid = str(r['pid']); rank = f(r['rank']); sell28 = i(r['sell28']); rev = i(r['rev']); ss = f(r['sales_score'])
+        is_self = pid in SELF
+        tags = []
+        if is_self: tags.append('ours')
+        elif pid in COMP: tags.append('known_comp')
+        if rank <= 12 and (sell28 < 50 or ss < 0.7) and rev < 1000: tags.append('boost_suspect')
+        if rev < 300 and not is_self: tags.append('new_entrant')
+        radar.setdefault(r['kw'], []).append({'pid':pid,'brand':r['brand'] or '','name':r['name'] or '',
+            'price':i(r['price']),'rank':round(rank,1),'imp':i(r['imp']),'ctr':round(f(r['ctr']),1),
+            'sales_score':round(ss,3),'sell28':sell28,'rev':rev,'ravg':round(f(r['ravg']),2),
+            'is_self':is_self,'tags':tags})
+    out = {}
+    for kw in radar: out[kw] = sorted(radar[kw], key=lambda x:x['rank'])[:12]
+    new_threats = 0; boost_cnt = 0; our_best = {}
+    for kw, lst in out.items():
+        for x in lst:
+            if 'new_entrant' in x['tags']: new_threats += 1
+            if 'boost_suspect' in x['tags'] and not x['is_self']: boost_cnt += 1
+            if x['is_self'] and (kw not in our_best or x['rank'] < our_best[kw]): our_best[kw] = x['rank']
+    D['keywordRadar'] = {'keywords':[k for k in KW_ORDER if k in out]+[k for k in out if k not in KW_ORDER],
+        'data':out,'summary':{'new_threats':new_threats,'boost_suspect':boost_cnt,'our_best_rank':our_best},
+        'window':'최근 7일 (상위 20위 이내)',
+        'note':'SRP원장은 광고/오가닉 미분리 → 순위 높은데 28일판매·리뷰 바닥 = 프로모/광고로 순위만 산 것(⚠️부스트의심)으로 추론.'}
+    changed.append('keywordRadar')
+
 # ---------- scoreTs / featTs (self+comp 병합) ----------
 sc = (rows('scorets_self',['dt','pid','score']) or []) + (rows('scorets_comp',['dt','pid','score']) or [])
 if sc:

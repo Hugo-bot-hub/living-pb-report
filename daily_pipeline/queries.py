@@ -85,6 +85,24 @@ WHERE date >= CAST(DATE_ADD('day',-14,CURRENT_DATE) AS VARCHAR)
   AND object_id IN ({SELF_S}) AND object_idx BETWEEN 0 AND 100
 GROUP BY date, object_id, query_keyword HAVING COUNT(*) >= 10"""
 
+# ============ 경쟁 레이더: 핵심 키워드 신규경쟁자·부스트/광고 의심 자동감지 (7d, idx<=20) ============
+# 목적: 지정경쟁사만 보는 현 대시보드가 놓치는 신규 진입자/프로모·광고로 순위만 산 상품 감지.
+# 판정은 build.py: 순위 높은데 sell28·리뷰 바닥 = boost_suspect. SRP원장은 광고/오가닉 미분리 → 괴리로 추론.
+_RADAR_KW = "'매트리스','침대프레임','수납침대','이불','차렵이불','냉감이불'"
+QUERIES['kw_radar'] = f"""
+WITH s AS (
+  SELECT query_keyword kw, object_id pid, AVG(object_idx) rnk, COUNT(*) imp, SUM(is_clicked) clk,
+    MAX(monthly_sales_score) sales_score, MAX(sell_cnt_28_day) sell28, MAX(review_count) rev, MAX(review_avg) ravg
+  FROM search.commerce_srp_dataset_daily_v0_0_2
+  WHERE query_keyword IN ({_RADAR_KW})
+    AND date >= CAST(DATE_ADD('day',-7,CURRENT_DATE) AS VARCHAR) AND object_idx <= 20
+  GROUP BY query_keyword, object_id HAVING COUNT(*) > 40)
+SELECT s.kw, s.pid, p.brand_name brand, p.product_name name, p.selling_cost price,
+  ROUND(s.rnk,1)+1 rank, s.imp, ROUND(s.clk*100.0/s.imp,1) ctr,
+  ROUND(s.sales_score,3) sales_score, CAST(s.sell28 AS INT) sell28, s.rev, ROUND(s.ravg,2) ravg
+FROM s LEFT JOIN ba_preserved.comm_product_info_latest p ON TRY_CAST(s.pid AS BIGINT)=p.product_id
+ORDER BY s.kw, rank"""
+
 # scoreTs / featTs 60d — self/comp 분할 (18*60=1080>1000)
 for tag, grp in [('self', SELF), ('comp', COMP)]:
     gs = _in(grp)
