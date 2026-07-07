@@ -230,7 +230,15 @@ function viewLead(){
   if(!LF||!LF.products) return '<div class="ph">리드 퍼널 데이터 없음 (다음 데일리 갱신 시 생성).</div>';
   const sm=LF.summary||{};
   const TIERS=[['T4','🔥 핫','찜+재방문','#6C5CE7'],['T3','🌤 웜','찜만','#00b894'],['T2','❄ 쿨','재방문만','#0984e3'],['T1','· 콜드','1회조회','#b2bec3']];
-  var head='<div class="insight">🎯 <b>리드 퍼널</b> — 가구는 고관여라 리드가 쌓이고 시차 전환(찜 63% 지연·매출 71.5% 리드경유). 상품별 <b>의도등급(T1~T4) 리드·찜→구매 전환·미회수 핫리드</b> 관제. <span class="wbadge">'+(LF.window||'')+'</span></div>';
+  var head='<div class="insight">🎯 <b>리드 퍼널</b> — 가구는 고관여라 리드가 쌓이고 시차 전환(찜 63% 지연·매출 71.5% 리드경유). 상품별 <b>의도등급(T1~T4) 리드·찜→구매 전환·미회수 핫리드</b> 관제.</div>';
+  head+='<div class="card" style="border-left:4px solid #6C5CE7"><h3>📖 리드 정의 &amp; 측정</h3>'+
+    '<div class="note" style="margin-bottom:8px"><b>리드 단위</b> = user × 상품(사람마다 상품별 의도가 다름). &nbsp;<b>측정 기간</b> = <b>'+(LF.window||'최근 90일')+' (약 3개월) 관찰창</b> — 이 기간 내 찜/PDP 신호를 남긴 리드가 해당 상품을 기간 내 구매했는지로 전환 산정. (로그인 유저 기준, 비로그인 제외)</div>'+
+    '<table><thead><tr><th>등급</th><th>정의 (신호)</th><th>의미 · 액션</th></tr></thead><tbody>'+
+    '<tr><td><b style="color:#6C5CE7">🔥 T4 핫</b></td><td>찜 + PDP 재방문(2일↑)</td><td>가장 강한 구매의도 → PDP 닫기·세트·딜로 최우선 회수</td></tr>'+
+    '<tr><td><b style="color:#00b894">🌤 T3 웜</b></td><td>찜만 (재방문 X)</td><td>후기·UGC·딜로 재방문 유도 → T4 승급</td></tr>'+
+    '<tr><td><b style="color:#0984e3">❄ T2 쿨</b></td><td>PDP 재방문 (찜 X)</td><td>찜 유도(위시 CTA)</td></tr>'+
+    '<tr><td><b style="color:#b2bec3">· T1 콜드</b></td><td>PDP 1회 조회</td><td>전환 극저(0.2%) → 태우지 말 것</td></tr>'+
+    '</tbody></table></div>';
   head+='<div class="card" style="border-left:4px solid #6C5CE7"><h3>🎯 리드 요약</h3><div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-end">'+
     '<div class="kpi"><div class="lbl">🔥 가구 미회수 핫리드(T4)</div><div class="val" style="color:#6C5CE7">'+(sm.furniture_hot_uncaptured||0).toLocaleString()+'</div><div class="sub">90일 내 안 닫힌 찜+재방문 = 회수기회</div></div>'+
     '</div><div class="note">'+(LF.note||'')+'</div></div>';
