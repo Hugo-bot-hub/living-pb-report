@@ -252,6 +252,42 @@ function viewLead(){
   head+='<div class="card"><h3>📊 상품별 찜→구매 전환 <span class="wbadge">벤치 '+(sm.bench_scrap_to_buy||6.9)+'%</span></h3>'+
     '<table><thead><tr><th>상품</th><th class="num">총 리드</th><th class="num">찜→구매</th><th class="num">미회수 핫리드</th></tr></thead><tbody>'+rankRows+'</tbody></table>'+
     '<div class="note">찜→구매 = 찜 리드(T3+T4) 전환율. 벤치(리드문서 layer가구 6.9%) 이상=초록. 미회수 핫리드(T4 미전환)=닫기 최우선 대상.</div></div>';
+  var gen='';
+  var LG=D.leadGrowth;
+  if(LG&&LG.products){
+    var partial=LG.partial_ym;
+    var maxR=Math.max.apply(null,LG.products.map(function(p){return p.reach_to_lead;}))||1;
+    var reachRows=LG.products.map(function(p){
+      var w=Math.round(p.reach_to_lead/maxR*100);
+      return '<tr><td><b style="color:#6C5CE7">'+p.name+'</b></td>'+
+        '<td class="num">'+(p.pdp_users||0).toLocaleString()+'</td>'+
+        '<td class="num">'+(p.lead_users||0).toLocaleString()+'</td>'+
+        '<td style="min-width:120px"><div style="background:#eef0f4;border-radius:4px;overflow:hidden"><div style="width:'+w+'%;background:#6C5CE7;height:14px"></div></div></td>'+
+        '<td class="num"><b>'+p.reach_to_lead.toFixed(1)+'%</b></td></tr>';
+    }).join('');
+    gen+='<div class="card"><h3>🌱 노출→리드 도달률 <span class="wbadge">최근 90일</span></h3>'+
+      '<div class="note" style="margin-top:0">PDP 도달한 유저 중 <b>찜 or 재방문(2일↑)=리드</b>가 된 비율. 유입을 관심(리드)으로 얼마나 잘 전환하는가.</div>'+
+      '<table><thead><tr><th>상품</th><th class="num">PDP 도달</th><th class="num">리드</th><th>리드화율</th><th class="num">%</th></tr></thead><tbody>'+reachRows+'</tbody></table></div>';
+    var yms=LG.total_monthly.map(function(m){return m.ym;});
+    function spark(months){
+      var vals=yms.map(function(y){var fm=months.filter(function(m){return m.ym===y;})[0];return fm?fm.new_leads:0;});
+      var mx=Math.max.apply(null,vals)||1;
+      return '<div style="display:flex;gap:2px;align-items:flex-end;height:34px">'+vals.map(function(v,idx){
+        var h=Math.round(v/mx*34); var pt=(yms[idx]===partial);
+        return '<div title="'+yms[idx]+': '+v.toLocaleString()+(pt?" (진행중)":"")+'" style="width:14px;height:'+Math.max(h,2)+'px;background:'+(pt?'#c9c2f0':'#6C5CE7')+';border-radius:2px"></div>';
+      }).join('')+'</div>';
+    }
+    var growRows=LG.products.map(function(p){
+      var tr=p.trend_pct;
+      var arrow=(tr==null)?'-':(tr>=0?'<span class="chg up">▲ '+tr+'%</span>':'<span class="chg dn">▼ '+Math.abs(tr)+'%</span>');
+      return '<tr><td><b style="color:#6C5CE7">'+p.name+'</b></td><td>'+spark(p.monthly)+'</td><td class="num">'+arrow+'</td></tr>';
+    }).join('');
+    gen+='<div class="card"><h3>🌱 월별 신규 리드 추이 <span class="wbadge">최근 6개월</span></h3>'+
+      '<div class="note" style="margin-top:0">그 달에 처음 리드가 된 (user×상품) 수 = 리드 pool이 크고 있는가. 옅은 막대=진행중(부분)월. ▲▼=직전 완료월 대비.</div>'+
+      '<table><thead><tr><th>상품</th><th>월별 신규리드 ('+yms[0]+'~'+yms[yms.length-1]+')</th><th class="num">MoM</th></tr></thead><tbody>'+
+      '<tr style="background:#F3F0FF"><td><b>가구 전체</b></td><td>'+spark(LG.total_monthly)+'</td><td class="num">-</td></tr>'+growRows+'</tbody></table>'+
+      '<div class="note">'+(LG.note||'')+'</div></div>';
+  }
   var body=LF.products.map(function(p){
     var maxLeads=Math.max.apply(null,['T1','T2','T3','T4'].map(function(tk){return p.tiers[tk].leads;}))||1;
     var trows=TIERS.map(function(a){
@@ -266,7 +302,7 @@ function viewLead(){
       '<table><thead><tr><th>등급</th><th class="num">리드수</th><th>규모</th><th class="num">전환율</th><th class="num">미회수</th></tr></thead><tbody>'+trows+'</tbody></table>'+
       '<div class="note">T4 핫리드(찜+재방문)가 전환 최고 → PDP 닫기·세트·딜로 최우선 회수. T1 콜드는 태우지 말 것.</div></div>';
   }).join('');
-  return head+body;
+  return head+gen+body;
 }
 
 function viewDetail(){

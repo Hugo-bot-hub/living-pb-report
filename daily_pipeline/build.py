@@ -157,6 +157,38 @@ if lf is not None:
         'note':'리드=user×product 행동신호. T4 찜+PDP재방문(2일↑)/T3 찜만/T2 재방문만/T1 1회. 찜→구매=찜리드(T3+T4) 전환율(리드문서 벤치 6.9%). 로그인 유저 기준·비로그인 제외. 하반기 리드퍼널 문서 연결.'}
     changed.append('leadFunnel')
 
+# ---------- lead_growth (노출→리드 도달률 90일 + 월별 신규리드 성장추이 6개월) ----------
+lg = rows('lead_growth', ['pid','ym','new_leads','pdp_users','lead_users'])
+if lg is not None:
+    LFN = {'1243313':'basic 침대프레임'}
+    byp = {}; reach = {}
+    for r in lg:
+        pid = str(r['pid'])
+        if r['ym'] == '_REACH90':
+            pu = i(r['pdp_users']); lu = i(r['lead_users'])
+            reach[pid] = {'pdp_users':pu,'lead_users':lu,'reach_to_lead':round(lu*100.0/pu,1) if pu else 0.0}
+        else:
+            byp.setdefault(pid, []).append({'ym':r['ym'],'new_leads':i(r['new_leads'])})
+    all_ym = sorted({m['ym'] for lst in byp.values() for m in lst})
+    partial_ym = all_ym[-1] if all_ym else None
+    prods = []; total_monthly = {}
+    for pid, months in byp.items():
+        months.sort(key=lambda x:x['ym'])
+        for m in months: total_monthly[m['ym']] = total_monthly.get(m['ym'],0) + m['new_leads']
+        comp = [m for m in months if m['ym'] != partial_ym]  # 완료월만 추세계산(당월 부분 제외)
+        trend = None
+        if len(comp) >= 2 and comp[-2]['new_leads']:
+            trend = round((comp[-1]['new_leads']-comp[-2]['new_leads'])/comp[-2]['new_leads']*100)
+        rc = reach.get(pid, {})
+        name = D['products'].get(pid,{}).get('shortName') or LFN.get(pid, pid)
+        prods.append({'pid':pid,'name':name,'reach_to_lead':rc.get('reach_to_lead',0),
+            'pdp_users':rc.get('pdp_users',0),'lead_users':rc.get('lead_users',0),'monthly':months,'trend_pct':trend})
+    prods.sort(key=lambda x:-x['reach_to_lead'])
+    D['leadGrowth'] = {'products':prods,'total_monthly':[{'ym':y,'new_leads':total_monthly[y]} for y in sorted(total_monthly)],
+        'partial_ym':partial_ym,
+        'note':'리드화율=리드유저(찜 or PDP재방문2일↑)/PDP도달유저(90일). 월별 신규리드=그 달 처음 리드된 user×product(첫 찜 or 2번째 방문일). 오가닉/비오가닉 미구분(데이터 한계). 마지막 달=진행중(부분). 로그인 유저 기준.'}
+    changed.append('leadGrowth')
+
 # ---------- scoreTs / featTs (self+comp 병합) ----------
 sc = (rows('scorets_self',['dt','pid','score']) or []) + (rows('scorets_comp',['dt','pid','score']) or [])
 if sc:

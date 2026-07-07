@@ -137,6 +137,40 @@ FROM leads l LEFT JOIN buy b ON l.user_id=b.user_id AND l.product_id=b.product_i
 GROUP BY l.product_id, CASE WHEN l.scrapped=1 AND l.vd>=2 THEN 'T4' WHEN l.scrapped=1 THEN 'T3' WHEN l.vd>=2 THEN 'T2' ELSE 'T1' END
 ORDER BY pid, tier"""
 
+# ============ 리드 생성: 노출→리드 도달률(90일) + 월별 신규리드 성장추이(6개월) — 가구만 ============
+# reach_to_lead = 리드유저(찜 or PDP재방문2일↑) / PDP도달유저(90일). new lead월 = (user,product)가 처음 리드된 달(첫찜 or 2번째방문일).
+# 단일 쿼리로 둘 다 산출(6개월 파티션 1회 스캔). ym='_REACH90' 행=도달률. scan~35GB/run. 오가닉 미구분(데이터 한계).
+QUERIES['lead_growth'] = f"""
+WITH pdp AS (
+  SELECT CAST(user_id AS BIGINT) uid, product_id pid, base_dt bd
+  FROM ba_preserved.user_pdp_facts
+  WHERE base_dt >= date_trunc('month', DATE_ADD('month',-5,CURRENT_DATE))
+    AND product_id IN ({_FURN_LEAD}) AND user_id IS NOT NULL
+  GROUP BY CAST(user_id AS BIGINT), product_id, base_dt),
+pagg AS (
+  SELECT uid, pid, element_at(array_sort(array_agg(bd)),2) second_pdp,
+    MAX(CASE WHEN bd >= DATE_ADD('day',-90,CURRENT_DATE) THEN 1 ELSE 0 END) pdp90
+  FROM pdp GROUP BY uid, pid),
+scr AS (
+  SELECT CAST(user_id AS BIGINT) uid, TRY_CAST(object_id AS BIGINT) pid, MIN(CAST(base_dt AS DATE)) first_scrap
+  FROM ba_preserved.user_scrap_facts
+  WHERE base_dt >= CAST(date_trunc('month', DATE_ADD('month',-5,CURRENT_DATE)) AS VARCHAR)
+    AND object_type='PRODUCTION' AND TRY_CAST(object_id AS BIGINT) IN ({_FURN_LEAD}) AND user_id IS NOT NULL
+  GROUP BY CAST(user_id AS BIGINT), TRY_CAST(object_id AS BIGINT)),
+j AS (
+  SELECT COALESCE(p.uid,s.uid) uid, COALESCE(p.pid,s.pid) pid, COALESCE(p.pdp90,0) pdp90,
+    CASE WHEN s.first_scrap IS NULL THEN p.second_pdp WHEN p.second_pdp IS NULL THEN s.first_scrap
+         ELSE LEAST(s.first_scrap,p.second_pdp) END lead_date
+  FROM pagg p FULL OUTER JOIN scr s ON p.uid=s.uid AND p.pid=s.pid)
+SELECT CAST(pid AS VARCHAR) pid, date_format(lead_date,'%Y%m') ym, COUNT(*) new_leads, 0 pdp_users, 0 lead_users
+FROM j WHERE lead_date IS NOT NULL AND lead_date >= date_trunc('month', DATE_ADD('month',-5,CURRENT_DATE))
+GROUP BY pid, date_format(lead_date,'%Y%m')
+UNION ALL
+SELECT CAST(pid AS VARCHAR) pid, '_REACH90' ym, 0,
+  SUM(CASE WHEN pdp90=1 THEN 1 ELSE 0 END), SUM(CASE WHEN pdp90=1 AND lead_date IS NOT NULL THEN 1 ELSE 0 END)
+FROM j GROUP BY pid
+ORDER BY pid, ym"""
+
 # scoreTs / featTs 60d — self/comp 분할 (18*60=1080>1000)
 for tag, grp in [('self', SELF), ('comp', COMP)]:
     gs = _in(grp)
