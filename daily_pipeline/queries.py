@@ -103,6 +103,40 @@ SELECT s.kw, s.pid, p.brand_name brand, p.product_name name, p.selling_cost pric
 FROM s LEFT JOIN ba_preserved.comm_product_info_latest p ON TRY_CAST(s.pid AS BIGINT)=p.product_id
 ORDER BY s.kw, rank"""
 
+# ============ 리드 퍼널: 가구 상품 의도등급(T1~T4) 리드·찜→구매 전환 (90일 관찰창) ============
+# 리드=(user,product). T4 찜+PDP재방문(2일↑)/T3 찜만/T2 재방문만/T1 1회. 전환=관찰창내 해당상품 구매(net,필터無).
+# ⚠️ 타입: user_pdp_facts.base_dt=date, user_scrap_facts.base_dt=VARCHAR, user_id는 bigint 캐스팅 통일.
+# 대상=가구 self만(매트3+basic프레임+studio침대3). scan~8.5GB/run(90일 파티션 프루닝). 하반기 리드퍼널 문서 §5-3 정의.
+_FURN_LEAD = '1089824,3607491,3121605,1243313,3748221,3898593,3898584'
+QUERIES['lead_funnel'] = f"""
+WITH pdp AS (
+  SELECT CAST(user_id AS BIGINT) user_id, product_id, COUNT(DISTINCT base_dt) vd
+  FROM ba_preserved.user_pdp_facts
+  WHERE base_dt >= DATE_ADD('day',-90,CURRENT_DATE)
+    AND product_id IN ({_FURN_LEAD}) AND user_id IS NOT NULL
+  GROUP BY CAST(user_id AS BIGINT), product_id),
+scr AS (
+  SELECT CAST(user_id AS BIGINT) user_id, TRY_CAST(object_id AS BIGINT) product_id
+  FROM ba_preserved.user_scrap_facts
+  WHERE base_dt >= CAST(DATE_ADD('day',-90,CURRENT_DATE) AS VARCHAR)
+    AND object_type='PRODUCTION' AND TRY_CAST(object_id AS BIGINT) IN ({_FURN_LEAD}) AND user_id IS NOT NULL
+  GROUP BY CAST(user_id AS BIGINT), TRY_CAST(object_id AS BIGINT)),
+buy AS (
+  SELECT DISTINCT CAST(user_id AS BIGINT) user_id, CAST(product_id AS BIGINT) product_id
+  FROM ba_preserved.commerce_gross_profit_orders
+  WHERE CAST(product_id AS BIGINT) IN ({_FURN_LEAD})
+    AND yyyymm >= date_format(DATE_ADD('month',-4,CURRENT_DATE),'%Y%m') AND base_dt >= DATE_ADD('day',-90,CURRENT_DATE) AND user_id IS NOT NULL),
+leads AS (
+  SELECT COALESCE(p.user_id,s.user_id) user_id, COALESCE(p.product_id,s.product_id) product_id,
+    COALESCE(p.vd,0) vd, CASE WHEN s.user_id IS NOT NULL THEN 1 ELSE 0 END scrapped
+  FROM pdp p FULL OUTER JOIN scr s ON p.user_id=s.user_id AND p.product_id=s.product_id)
+SELECT CAST(l.product_id AS VARCHAR) pid,
+  CASE WHEN l.scrapped=1 AND l.vd>=2 THEN 'T4' WHEN l.scrapped=1 THEN 'T3' WHEN l.vd>=2 THEN 'T2' ELSE 'T1' END tier,
+  COUNT(*) leads, SUM(CASE WHEN b.user_id IS NOT NULL THEN 1 ELSE 0 END) conv
+FROM leads l LEFT JOIN buy b ON l.user_id=b.user_id AND l.product_id=b.product_id
+GROUP BY l.product_id, CASE WHEN l.scrapped=1 AND l.vd>=2 THEN 'T4' WHEN l.scrapped=1 THEN 'T3' WHEN l.vd>=2 THEN 'T2' ELSE 'T1' END
+ORDER BY pid, tier"""
+
 # scoreTs / featTs 60d — self/comp 분할 (18*60=1080>1000)
 for tag, grp in [('self', SELF), ('comp', COMP)]:
     gs = _in(grp)

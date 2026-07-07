@@ -124,7 +124,7 @@ function renderNav(){
   document.getElementById('upd').textContent = '기준 '+(D.meta.lastUpdate||'');
   document.getElementById('div-nav').innerHTML=[['living','🛋️ 리빙'],['furniture','🛏️ 가구']].map(function(a){return '<button class="div-btn '+(S.div===a[0]?'active':'')+'" onclick="setDiv(\''+a[0]+'\')">'+a[1]+'</button>';}).join('');
   const views = S.div==='living' ? [['overview','📊 Overview'],['detail','🔎 상품 상세'],['radar','🚨 경쟁레이더']]
-    : [['overview','📊 Overview'],['detail','🔎 상품 상세'],['mprice','📐 매트리스 객단가'],['attach','🔗 프레임 합구매'],['radar','🚨 경쟁레이더']];
+    : [['overview','📊 Overview'],['detail','🔎 상품 상세'],['mprice','📐 매트리스 객단가'],['attach','🔗 프레임 합구매'],['lead','🎯 리드퍼널'],['radar','🚨 경쟁레이더']];
   document.getElementById('view-nav').innerHTML = views.map(function(a){return '<button class="view-btn '+(S.view===a[0]?'active':'')+'" onclick="setView(\''+a[0]+'\')">'+a[1]+'</button>';}).join('');
 }
 function setDiv(d){ S.div=d; S.view='overview'; S.pid=null; render(); }
@@ -141,6 +141,7 @@ function render(){
     else if(S.view==='mprice'){ c.innerHTML=viewMprice(); buildMpriceCharts(); }
     else if(S.view==='attach'){ c.innerHTML=viewAttach(); buildAttachCharts(); }
     else if(S.view==='radar'){ c.innerHTML=viewRadar(); }
+    else if(S.view==='lead'){ c.innerHTML=viewLead(); }
   }catch(e){ c.innerHTML='<div class="ph">렌더 오류: '+e.message+'</div>'; console.error(e); }
 }
 
@@ -220,6 +221,42 @@ function viewRadar(){
     return '<div class="card"><h3>🔑 '+kw+' <span class="wbadge">우리 최고순위 '+(ob!=null?ob+'위':'권외')+'</span></h3>'+
       '<table><thead><tr><th class="num">순위</th><th>상품(브랜드)</th><th class="num">가격</th><th class="num">노출</th><th class="num">CTR</th><th class="num">28일판매</th><th class="num">리뷰</th><th class="num">평점</th><th>판정</th></tr></thead><tbody>'+rows+'</tbody></table>'+
       '<div class="note">⚠️ 부스트의심 = 순위 높은데 28일판매·리뷰 바닥(프로모/광고로 순위만 산 것). SRP원장은 광고/오가닉 미분리 → 순위 vs 오가닉실력 괴리로 추론. 상품명 클릭 = 오늘의집 상품페이지.</div></div>';
+  }).join('');
+  return head+body;
+}
+
+function viewLead(){
+  const LF=D.leadFunnel;
+  if(!LF||!LF.products) return '<div class="ph">리드 퍼널 데이터 없음 (다음 데일리 갱신 시 생성).</div>';
+  const sm=LF.summary||{};
+  const TIERS=[['T4','🔥 핫','찜+재방문','#6C5CE7'],['T3','🌤 웜','찜만','#00b894'],['T2','❄ 쿨','재방문만','#0984e3'],['T1','· 콜드','1회조회','#b2bec3']];
+  var head='<div class="insight">🎯 <b>리드 퍼널</b> — 가구는 고관여라 리드가 쌓이고 시차 전환(찜 63% 지연·매출 71.5% 리드경유). 상품별 <b>의도등급(T1~T4) 리드·찜→구매 전환·미회수 핫리드</b> 관제. <span class="wbadge">'+(LF.window||'')+'</span></div>';
+  head+='<div class="card" style="border-left:4px solid #6C5CE7"><h3>🎯 리드 요약</h3><div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-end">'+
+    '<div class="kpi"><div class="lbl">🔥 가구 미회수 핫리드(T4)</div><div class="val" style="color:#6C5CE7">'+(sm.furniture_hot_uncaptured||0).toLocaleString()+'</div><div class="sub">90일 내 안 닫힌 찜+재방문 = 회수기회</div></div>'+
+    '</div><div class="note">'+(LF.note||'')+'</div></div>';
+  var rankRows=LF.products.slice().sort(function(a,b){return b.summary.scrap_to_buy_rate-a.summary.scrap_to_buy_rate;}).map(function(p){
+    var r=p.summary.scrap_to_buy_rate, bench=sm.bench_scrap_to_buy||6.9;
+    return '<tr><td><b style="color:#6C5CE7">'+p.name+'</b><div style="font-size:10px;color:var(--text3)">'+p.pid+'</div></td>'+
+      '<td class="num">'+p.summary.total_leads.toLocaleString()+'</td>'+
+      '<td class="num '+(r>=bench?'chg up':'chg dn')+'"><b>'+r.toFixed(1)+'%</b></td>'+
+      '<td class="num" style="color:#6C5CE7"><b>'+p.summary.hot_uncaptured.toLocaleString()+'</b></td></tr>';
+  }).join('');
+  head+='<div class="card"><h3>📊 상품별 찜→구매 전환 <span class="wbadge">벤치 '+(sm.bench_scrap_to_buy||6.9)+'%</span></h3>'+
+    '<table><thead><tr><th>상품</th><th class="num">총 리드</th><th class="num">찜→구매</th><th class="num">미회수 핫리드</th></tr></thead><tbody>'+rankRows+'</tbody></table>'+
+    '<div class="note">찜→구매 = 찜 리드(T3+T4) 전환율. 벤치(리드문서 layer가구 6.9%) 이상=초록. 미회수 핫리드(T4 미전환)=닫기 최우선 대상.</div></div>';
+  var body=LF.products.map(function(p){
+    var maxLeads=Math.max.apply(null,['T1','T2','T3','T4'].map(function(tk){return p.tiers[tk].leads;}))||1;
+    var trows=TIERS.map(function(a){
+      var tk=a[0], t=p.tiers[tk]; var w=Math.round(t.leads/maxLeads*100);
+      return '<tr><td><b>'+a[1]+'</b> <span style="color:var(--text3);font-size:11px">'+a[2]+'</span></td>'+
+        '<td class="num">'+t.leads.toLocaleString()+'</td>'+
+        '<td style="min-width:120px"><div style="background:#eef0f4;border-radius:4px;overflow:hidden"><div style="width:'+w+'%;background:'+a[3]+';height:14px"></div></div></td>'+
+        '<td class="num"><b>'+t.rate.toFixed(1)+'%</b></td>'+
+        '<td class="num"'+(tk==='T4'?' style="color:#6C5CE7;font-weight:700"':'')+'>'+t.outstanding.toLocaleString()+'</td></tr>';
+    }).join('');
+    return '<div class="card"><h3>🎯 '+p.name+' <span class="wbadge">찜→구매 '+p.summary.scrap_to_buy_rate.toFixed(1)+'%</span></h3>'+
+      '<table><thead><tr><th>등급</th><th class="num">리드수</th><th>규모</th><th class="num">전환율</th><th class="num">미회수</th></tr></thead><tbody>'+trows+'</tbody></table>'+
+      '<div class="note">T4 핫리드(찜+재방문)가 전환 최고 → PDP 닫기·세트·딜로 최우선 회수. T1 콜드는 태우지 말 것.</div></div>';
   }).join('');
   return head+body;
 }
