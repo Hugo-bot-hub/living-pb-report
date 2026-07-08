@@ -240,7 +240,7 @@ function viewLead(){
     '<tr><td><b style="color:#b2bec3">· T1 콜드</b></td><td>PDP 1회 조회</td><td>전환 극저(0.2%) → 태우지 말 것</td></tr>'+
     '</tbody></table></div>';
   head+='<div class="card" style="border-left:4px solid #6C5CE7"><h3>🎯 리드 요약</h3><div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-end">'+
-    '<div class="kpi"><div class="lbl">💰 가구 리드 1개 가치 (블렌디드)</div><div class="val" style="color:#6C5CE7">'+(sm.lead_value_blended||0).toLocaleString()+'원</div><div class="sub">찜 유저가 3개월 내 그 상품 산 실현GMV ÷ 찜 유저</div></div>'+
+    '<div class="kpi"><div class="lbl">💰 가구 리드 1개 평균가치 (7상품 가중평균)</div><div class="val" style="color:#6C5CE7">'+(sm.lead_value_blended||0).toLocaleString()+'원</div><div class="sub">7상품 찜 실현GMV 합 ÷ 총 찜 리드. 상품별 34K~172K 편차 큼 → 아래 상품별 표가 실제</div></div>'+
     '<div class="kpi"><div class="lbl">🔥 가구 미회수 핫리드(T4)</div><div class="val" style="color:#6C5CE7">'+(sm.furniture_hot_uncaptured||0).toLocaleString()+'</div><div class="sub">코호트 3개월 내 안 닫힌 찜+재방문 = 회수기회</div></div>'+
     '</div><div class="note">'+(LF.note||'')+'</div></div>';
   var rankRows=LF.products.slice().sort(function(a,b){return b.summary.scrap_to_buy_rate-a.summary.scrap_to_buy_rate;}).map(function(p){
