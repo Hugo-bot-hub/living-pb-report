@@ -103,36 +103,39 @@ SELECT s.kw, s.pid, p.brand_name brand, p.product_name name, p.selling_cost pric
 FROM s LEFT JOIN ba_preserved.comm_product_info_latest p ON TRY_CAST(s.pid AS BIGINT)=p.product_id
 ORDER BY s.kw, rank"""
 
-# ============ 리드 퍼널: 가구 상품 의도등급(T1~T4) 리드·찜→구매 전환 (90일 관찰창) ============
-# 리드=(user,product). T4 찜+PDP재방문(2일↑)/T3 찜만/T2 재방문만/T1 1회. 전환=관찰창내 해당상품 구매(net,필터無).
-# ⚠️ 타입: user_pdp_facts.base_dt=date, user_scrap_facts.base_dt=VARCHAR, user_id는 bigint 캐스팅 통일.
-# 대상=가구 self만(매트3+basic프레임+studio침대3). scan~8.5GB/run(90일 파티션 프루닝). 하반기 리드퍼널 문서 §5-3 정의.
+# ============ 리드 퍼널(표준 통일): 가구 리드가치(gross·상품매칭·성숙 코호트) + 의도등급 T1~T4 ============
+# 리드가치 = 찜한 distinct 유저가 [찜월 forward 3개월] 내 [그 찜한 상품]을 산 실현 GMV ÷ 찜 유저. (통합공식 문서 정의블록)
+# 코호트 c0=date_trunc(month,오늘)-3M. 찜/PDP형성=코호트월[c0,c0+1M) · vd/구매관찰=[c0,c0+3M). 리드가치=T3+T4(찜리드).
+# ⚠️ user_pdp_facts.base_dt=date, user_scrap_facts.base_dt=VARCHAR. scan~10GB/run. 하반기 리드퍼널 문서 §5-3 + 리드가치 표준.
 _FURN_LEAD = '1089824,3607491,3121605,1243313,3748221,3898593,3898584'
 QUERIES['lead_funnel'] = f"""
-WITH pdp AS (
-  SELECT CAST(user_id AS BIGINT) user_id, product_id, COUNT(DISTINCT base_dt) vd
-  FROM ba_preserved.user_pdp_facts
-  WHERE base_dt >= DATE_ADD('day',-90,CURRENT_DATE)
-    AND product_id IN ({_FURN_LEAD}) AND user_id IS NOT NULL
-  GROUP BY CAST(user_id AS BIGINT), product_id),
+WITH cm AS (SELECT date_trunc('month',CURRENT_DATE)-interval '3' month AS c0),
+pdpf AS (
+  SELECT CAST(p.user_id AS BIGINT) user_id, p.product_id, COUNT(DISTINCT p.base_dt) vd,
+    MAX(CASE WHEN p.base_dt < cm.c0+interval '1' month THEN 1 ELSE 0 END) in_cm
+  FROM ba_preserved.user_pdp_facts p, cm
+  WHERE p.base_dt>=cm.c0 AND p.base_dt<cm.c0+interval '3' month
+    AND p.product_id IN ({_FURN_LEAD}) AND p.user_id IS NOT NULL
+  GROUP BY 1,2),
 scr AS (
-  SELECT CAST(user_id AS BIGINT) user_id, TRY_CAST(object_id AS BIGINT) product_id
-  FROM ba_preserved.user_scrap_facts
-  WHERE base_dt >= CAST(DATE_ADD('day',-90,CURRENT_DATE) AS VARCHAR)
-    AND object_type='PRODUCTION' AND TRY_CAST(object_id AS BIGINT) IN ({_FURN_LEAD}) AND user_id IS NOT NULL
-  GROUP BY CAST(user_id AS BIGINT), TRY_CAST(object_id AS BIGINT)),
+  SELECT CAST(s.user_id AS BIGINT) user_id, TRY_CAST(s.object_id AS BIGINT) product_id
+  FROM ba_preserved.user_scrap_facts s, cm
+  WHERE s.base_dt>=CAST(cm.c0 AS VARCHAR) AND s.base_dt<CAST(cm.c0+interval '1' month AS VARCHAR)
+    AND s.object_type='PRODUCTION' AND TRY_CAST(s.object_id AS BIGINT) IN ({_FURN_LEAD}) AND s.user_id IS NOT NULL
+  GROUP BY 1,2),
 buy AS (
-  SELECT DISTINCT CAST(user_id AS BIGINT) user_id, CAST(product_id AS BIGINT) product_id
-  FROM ba_preserved.commerce_gross_profit_orders
-  WHERE CAST(product_id AS BIGINT) IN ({_FURN_LEAD})
-    AND yyyymm >= date_format(DATE_ADD('month',-4,CURRENT_DATE),'%Y%m') AND base_dt >= DATE_ADD('day',-90,CURRENT_DATE) AND user_id IS NOT NULL),
+  SELECT CAST(o.user_id AS BIGINT) user_id, CAST(o.product_id AS BIGINT) product_id, SUM(o.gmv) gmv
+  FROM ba_preserved.commerce_gross_profit_orders o, cm
+  WHERE CAST(o.product_id AS BIGINT) IN ({_FURN_LEAD})
+    AND o.base_dt>=cm.c0 AND o.base_dt<cm.c0+interval '3' month AND o.yyyymm>=date_format(cm.c0,'%Y%m') AND o.user_id IS NOT NULL
+  GROUP BY 1,2),
 leads AS (
-  SELECT COALESCE(p.user_id,s.user_id) user_id, COALESCE(p.product_id,s.product_id) product_id,
-    COALESCE(p.vd,0) vd, CASE WHEN s.user_id IS NOT NULL THEN 1 ELSE 0 END scrapped
-  FROM pdp p FULL OUTER JOIN scr s ON p.user_id=s.user_id AND p.product_id=s.product_id)
+  SELECT COALESCE(s.user_id,p.user_id) user_id, COALESCE(s.product_id,p.product_id) product_id,
+    CASE WHEN s.user_id IS NOT NULL THEN 1 ELSE 0 END scrapped, COALESCE(p.vd,0) vd
+  FROM scr s FULL OUTER JOIN (SELECT * FROM pdpf WHERE in_cm=1) p ON s.user_id=p.user_id AND s.product_id=p.product_id)
 SELECT CAST(l.product_id AS VARCHAR) pid,
   CASE WHEN l.scrapped=1 AND l.vd>=2 THEN 'T4' WHEN l.scrapped=1 THEN 'T3' WHEN l.vd>=2 THEN 'T2' ELSE 'T1' END tier,
-  COUNT(*) leads, SUM(CASE WHEN b.user_id IS NOT NULL THEN 1 ELSE 0 END) conv
+  COUNT(*) leads, SUM(CASE WHEN b.user_id IS NOT NULL THEN 1 ELSE 0 END) conv, COALESCE(SUM(b.gmv),0) gmv
 FROM leads l LEFT JOIN buy b ON l.user_id=b.user_id AND l.product_id=b.product_id
 GROUP BY l.product_id, CASE WHEN l.scrapped=1 AND l.vd>=2 THEN 'T4' WHEN l.scrapped=1 THEN 'T3' WHEN l.vd>=2 THEN 'T2' ELSE 'T1' END
 ORDER BY pid, tier"""

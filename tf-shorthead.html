@@ -230,9 +230,9 @@ function viewLead(){
   if(!LF||!LF.products) return '<div class="ph">리드 퍼널 데이터 없음 (다음 데일리 갱신 시 생성).</div>';
   const sm=LF.summary||{};
   const TIERS=[['T4','🔥 핫','찜+재방문','#6C5CE7'],['T3','🌤 웜','찜만','#00b894'],['T2','❄ 쿨','재방문만','#0984e3'],['T1','· 콜드','1회조회','#b2bec3']];
-  var head='<div class="insight">🎯 <b>리드 퍼널</b> — 가구는 고관여라 리드가 쌓이고 시차 전환(찜 63% 지연·매출 71.5% 리드경유). 상품별 <b>의도등급(T1~T4) 리드·찜→구매 전환·미회수 핫리드</b> 관제.</div>';
-  head+='<div class="card" style="border-left:4px solid #6C5CE7"><h3>📖 리드 정의 &amp; 측정</h3>'+
-    '<div class="note" style="margin-bottom:8px"><b>리드 단위</b> = user × 상품(사람마다 상품별 의도가 다름). &nbsp;<b>측정 기간</b> = <b>'+(LF.window||'최근 90일')+' (약 3개월) 관찰창</b> — 이 기간 내 찜/PDP 신호를 남긴 리드가 해당 상품을 기간 내 구매했는지로 전환 산정. (로그인 유저 기준, 비로그인 제외)</div>'+
+  var head='<div class="insight">🎯 <b>리드 퍼널</b> — 가구는 고관여라 리드가 쌓이고 시차 전환. 상품별 <b>리드 1개 가치(찜→3개월 실현GMV/찜유저)·의도등급 T1~T4·찜→구매 전환</b> 관제. <b>리드가치 vs 리드 CAC</b>로 매체 투자 판정.</div>';
+  head+='<div class="card" style="border-left:4px solid #6C5CE7"><h3>📖 리드가치 정의 &amp; 측정 (통합공식 문서 정의블록)</h3>'+
+    '<div class="note" style="margin-bottom:8px"><b>리드</b> = 그 상품을 찜한 <b>distinct 유저</b>(상품 단위). &nbsp;<b>리드가치</b> = 찜 유저가 <b>찜월 forward 3개월</b> 내 <b>그 찜한 상품</b>을 산 실현 GMV ÷ 찜 유저 (gross·상품매칭). &nbsp;<b>코호트</b> = <b>'+(LF.window||'찜월→3개월')+'</b>(관측시점 기준 성숙월). &nbsp;<b>용도</b> = 리드가치 &gt; 리드 CAC(지출÷귀속리드)면 그 매체·상품 강화. (로그인 유저 기준)</div>'+
     '<table><thead><tr><th>등급</th><th>정의 (신호)</th><th>의미 · 액션</th></tr></thead><tbody>'+
     '<tr><td><b style="color:#6C5CE7">🔥 T4 핫</b></td><td>찜 + PDP 재방문(2일↑)</td><td>가장 강한 구매의도 → PDP 닫기·세트·딜로 최우선 회수</td></tr>'+
     '<tr><td><b style="color:#00b894">🌤 T3 웜</b></td><td>찜만 (재방문 X)</td><td>후기·UGC·딜로 재방문 유도 → T4 승급</td></tr>'+
@@ -240,18 +240,20 @@ function viewLead(){
     '<tr><td><b style="color:#b2bec3">· T1 콜드</b></td><td>PDP 1회 조회</td><td>전환 극저(0.2%) → 태우지 말 것</td></tr>'+
     '</tbody></table></div>';
   head+='<div class="card" style="border-left:4px solid #6C5CE7"><h3>🎯 리드 요약</h3><div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-end">'+
-    '<div class="kpi"><div class="lbl">🔥 가구 미회수 핫리드(T4)</div><div class="val" style="color:#6C5CE7">'+(sm.furniture_hot_uncaptured||0).toLocaleString()+'</div><div class="sub">90일 내 안 닫힌 찜+재방문 = 회수기회</div></div>'+
+    '<div class="kpi"><div class="lbl">💰 가구 리드 1개 가치 (블렌디드)</div><div class="val" style="color:#6C5CE7">'+(sm.lead_value_blended||0).toLocaleString()+'원</div><div class="sub">찜 유저가 3개월 내 그 상품 산 실현GMV ÷ 찜 유저</div></div>'+
+    '<div class="kpi"><div class="lbl">🔥 가구 미회수 핫리드(T4)</div><div class="val" style="color:#6C5CE7">'+(sm.furniture_hot_uncaptured||0).toLocaleString()+'</div><div class="sub">코호트 3개월 내 안 닫힌 찜+재방문 = 회수기회</div></div>'+
     '</div><div class="note">'+(LF.note||'')+'</div></div>';
   var rankRows=LF.products.slice().sort(function(a,b){return b.summary.scrap_to_buy_rate-a.summary.scrap_to_buy_rate;}).map(function(p){
     var r=p.summary.scrap_to_buy_rate, bench=sm.bench_scrap_to_buy||6.9;
     return '<tr><td><b style="color:#6C5CE7">'+p.name+'</b><div style="font-size:10px;color:var(--text3)">'+p.pid+'</div></td>'+
-      '<td class="num">'+p.summary.total_leads.toLocaleString()+'</td>'+
+      '<td class="num">'+(p.summary.scrap_leads||0).toLocaleString()+'</td>'+
       '<td class="num '+(r>=bench?'chg up':'chg dn')+'"><b>'+r.toFixed(1)+'%</b></td>'+
-      '<td class="num" style="color:#6C5CE7"><b>'+p.summary.hot_uncaptured.toLocaleString()+'</b></td></tr>';
+      '<td class="num" style="color:#6C5CE7"><b>'+(p.summary.lead_value||0).toLocaleString()+'원</b></td>'+
+      '<td class="num" style="color:var(--text3)">'+p.summary.hot_uncaptured.toLocaleString()+'</td></tr>';
   }).join('');
-  head+='<div class="card"><h3>📊 상품별 찜→구매 전환 <span class="wbadge">벤치 '+(sm.bench_scrap_to_buy||6.9)+'%</span></h3>'+
-    '<table><thead><tr><th>상품</th><th class="num">총 리드</th><th class="num">찜→구매</th><th class="num">미회수 핫리드</th></tr></thead><tbody>'+rankRows+'</tbody></table>'+
-    '<div class="note">찜→구매 = 찜 리드(T3+T4) 전환율. 벤치(리드문서 layer가구 6.9%) 이상=초록. 미회수 핫리드(T4 미전환)=닫기 최우선 대상.</div></div>';
+  head+='<div class="card"><h3>📊 상품별 리드가치 · 찜→구매 전환 <span class="wbadge">벤치 '+(sm.bench_scrap_to_buy||6.9)+'%</span></h3>'+
+    '<table><thead><tr><th>상품</th><th class="num">찜 리드</th><th class="num">찜→구매</th><th class="num">리드 1개 가치</th><th class="num">미회수 핫리드</th></tr></thead><tbody>'+rankRows+'</tbody></table>'+
+    '<div class="note"><b>리드 1개 가치</b> = 찜 유저(T3+T4)가 3개월 내 그 상품 산 실현 GMV ÷ 찜 유저(성숙 코호트·상품매칭). 이 값 &gt; 리드 CAC면 그 매체·상품 강화. 찜→구매=찜 리드 전환율(벤치 6.9% 이상 초록). 미회수 핫리드(T4 미전환)=닫기 최우선.</div></div>';
   var gen='';
   var LG=D.leadGrowth;
   if(LG&&LG.products){
@@ -296,10 +298,11 @@ function viewLead(){
         '<td class="num">'+t.leads.toLocaleString()+'</td>'+
         '<td style="min-width:120px"><div style="background:#eef0f4;border-radius:4px;overflow:hidden"><div style="width:'+w+'%;background:'+a[3]+';height:14px"></div></div></td>'+
         '<td class="num"><b>'+t.rate.toFixed(1)+'%</b></td>'+
+        '<td class="num">'+(t.value?t.value.toLocaleString()+'원':'-')+'</td>'+
         '<td class="num"'+(tk==='T4'?' style="color:#6C5CE7;font-weight:700"':'')+'>'+t.outstanding.toLocaleString()+'</td></tr>';
     }).join('');
-    return '<div class="card"><h3>🎯 '+p.name+' <span class="wbadge">찜→구매 '+p.summary.scrap_to_buy_rate.toFixed(1)+'%</span></h3>'+
-      '<table><thead><tr><th>등급</th><th class="num">리드수</th><th>규모</th><th class="num">전환율</th><th class="num">미회수</th></tr></thead><tbody>'+trows+'</tbody></table>'+
+    return '<div class="card"><h3>🎯 '+p.name+' <span class="wbadge">리드가치 '+(p.summary.lead_value||0).toLocaleString()+'원 · 찜→구매 '+p.summary.scrap_to_buy_rate.toFixed(1)+'%</span></h3>'+
+      '<table><thead><tr><th>등급</th><th class="num">리드수</th><th>규모</th><th class="num">전환율</th><th class="num">리드가치</th><th class="num">미회수</th></tr></thead><tbody>'+trows+'</tbody></table>'+
       '<div class="note">T4 핫리드(찜+재방문)가 전환 최고 → PDP 닫기·세트·딜로 최우선 회수. T1 콜드는 태우지 말 것.</div></div>';
   }).join('');
   return head+gen+body;

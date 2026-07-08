@@ -132,29 +132,35 @@ if kr is not None:
         'note':'SRP원장은 광고/오가닉 미분리 → 순위 높은데 28일판매·리뷰 바닥 = 프로모/광고로 순위만 산 것(⚠️부스트의심)으로 추론.'}
     changed.append('keywordRadar')
 
-# ---------- lead_funnel (가구 리드 의도등급 T1~T4 · 찜→구매 전환, 90일 관찰창) ----------
-lf = rows('lead_funnel', ['pid','tier','leads','conv'])
+# ---------- lead_funnel (표준통일: 가구 리드가치 gross·상품매칭·성숙코호트 + 의도등급 T1~T4) ----------
+lf = rows('lead_funnel', ['pid','tier','leads','conv','gmv'])
 if lf is not None:
     LF_NAME = {'1243313':'basic 침대프레임'}
     byp = {}
     for r in lf:
-        byp.setdefault(str(r['pid']), {})[r['tier']] = {'leads':i(r['leads']),'conv':i(r['conv'])}
-    prods = []; total_hot_out = 0
+        byp.setdefault(str(r['pid']), {})[r['tier']] = {'leads':i(r['leads']),'conv':i(r['conv']),'gmv':i(r['gmv'])}
+    prods = []; total_hot_out = 0; tot_scrap_leads = 0; tot_scrap_gmv = 0
     for pid, tiers in byp.items():
         t = {}
         for tk in ['T1','T2','T3','T4']:
-            v = tiers.get(tk, {'leads':0,'conv':0}); leads = v['leads']; conv = v['conv']
-            t[tk] = {'leads':leads,'conv':conv,'rate':round(conv*100.0/leads,1) if leads else 0.0,'outstanding':leads-conv}
+            v = tiers.get(tk, {'leads':0,'conv':0,'gmv':0}); leads = v['leads']; conv = v['conv']; gmv = v['gmv']
+            t[tk] = {'leads':leads,'conv':conv,'gmv':gmv,'rate':round(conv*100.0/leads,1) if leads else 0.0,
+                     'value':round(gmv/leads) if leads else 0,'outstanding':leads-conv}
         total_leads = sum(t[tk]['leads'] for tk in t)
         scrap_leads = t['T3']['leads']+t['T4']['leads']; scrap_conv = t['T3']['conv']+t['T4']['conv']
+        scrap_gmv = t['T3']['gmv']+t['T4']['gmv']
+        lead_value = round(scrap_gmv/scrap_leads) if scrap_leads else 0
+        tot_scrap_leads += scrap_leads; tot_scrap_gmv += scrap_gmv
         hot_out = t['T4']['outstanding']; total_hot_out += hot_out
         name = D['products'].get(pid,{}).get('shortName') or LF_NAME.get(pid, pid)
         prods.append({'pid':pid,'name':name,'tiers':t,'summary':{'total_leads':total_leads,
-            'scrap_to_buy_rate':round(scrap_conv*100.0/scrap_leads,1) if scrap_leads else 0.0,'hot_uncaptured':hot_out}})
-    prods.sort(key=lambda x:-x['summary']['hot_uncaptured'])
-    D['leadFunnel'] = {'products':prods,'window':'최근 90일 관찰창',
-        'summary':{'furniture_hot_uncaptured':total_hot_out,'bench_scrap_to_buy':6.9},
-        'note':'리드=user×product 행동신호. T4 찜+PDP재방문(2일↑)/T3 찜만/T2 재방문만/T1 1회. 찜→구매=찜리드(T3+T4) 전환율(리드문서 벤치 6.9%). 로그인 유저 기준·비로그인 제외. 하반기 리드퍼널 문서 연결.'}
+            'scrap_to_buy_rate':round(scrap_conv*100.0/scrap_leads,1) if scrap_leads else 0.0,
+            'scrap_leads':scrap_leads,'lead_value':lead_value,'hot_uncaptured':hot_out}})
+    prods.sort(key=lambda x:-x['summary']['lead_value'])
+    D['leadFunnel'] = {'products':prods,'window':'찜월→forward 3개월 성숙 코호트',
+        'summary':{'furniture_hot_uncaptured':total_hot_out,'bench_scrap_to_buy':6.9,
+            'lead_value_blended':round(tot_scrap_gmv/tot_scrap_leads) if tot_scrap_leads else 0},
+        'note':'리드가치 = 찜한 distinct 유저가 찜월 forward 3개월 내 그 찜한 상품을 산 실현 GMV ÷ 찜 유저(gross·상품매칭·성숙 코호트). vs 리드 CAC로 매체 투자 판정(정의블록=통합공식 문서). T4 찜+재방문/T3 찜만/T2 재방문만/T1 1회. 찜→구매=찜리드(T3+T4) 전환율(벤치 6.9%). 로그인 유저·비로그인 제외.'}
     changed.append('leadFunnel')
 
 # ---------- lead_growth (노출→리드 도달률 90일 + 월별 신규리드 성장추이 6개월) ----------
