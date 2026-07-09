@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>매트리스 진단 · 실험 프로토타입 (오늘의집 × layer)</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+  :root{
+    --bg:#eef0f4; --ink:#20242a; --mut:#8a9099; --line:#eceef1;
+    --accent:#12b5a5; --accent-d:#0e9a8c; --layer:#2f3438; --gold:#f0a500;
+    --card:#ffffff; --soft:#f6f7f9;
+    --shadow:0 20px 60px rgba(30,36,50,.18);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,'Apple SD Gothic Neo','Segoe UI',sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#f7f8fa,#e7eaf0);
+    color:var(--ink); min-height:100vh; padding:28px 16px 60px;
+  }
+  .wrap{max-width:960px;margin:0 auto}
+  .head{text-align:center;margin-bottom:22px}
+  .head h1{font-size:22px;margin:0 0 6px;letter-spacing:-.02em}
+  .head p{margin:0;color:var(--mut);font-size:13.5px;line-height:1.6}
+  .badge-proto{display:inline-block;background:#fff;border:1px solid var(--line);color:var(--mut);
+    font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:999px;margin-bottom:12px}
+  .stage{display:grid;grid-template-columns:340px 1fr;gap:26px;align-items:start}
+  @media(max-width:760px){.stage{grid-template-columns:1fr;gap:18px}}
+
+  /* phone */
+  .phone{width:340px;margin:0 auto;background:#000;border-radius:44px;padding:10px;box-shadow:var(--shadow)}
+  .screen{position:relative;width:100%;height:660px;background:#fff;border-radius:36px;overflow:hidden}
+  .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:26px;background:#000;border-radius:0 0 16px 16px;z-index:40}
+  .view{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;transform:translateY(14px);
+    pointer-events:none;transition:opacity .45s ease,transform .45s ease}
+  .view.on{opacity:1;transform:none;pointer-events:auto}
+
+  /* top bar */
+  .topbar{padding:34px 14px 8px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);background:#fff}
+  .ic{width:26px;height:26px;flex:0 0 auto;color:var(--ink);opacity:.85}
+  .searchbox{flex:1;display:flex;align-items:center;gap:8px;background:var(--soft);border-radius:12px;padding:9px 12px;font-size:14px;color:var(--ink)}
+  .searchbox .cur{border-right:2px solid var(--accent);padding-right:1px;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{border-color:transparent}}
+  .filterrow{display:flex;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);overflow-x:auto}
+  .chip{font-size:12.5px;color:var(--mut);background:var(--soft);padding:6px 12px;border-radius:999px;white-space:nowrap}
+  .chip.act{color:#fff;background:var(--ink)}
+  .body{flex:1;overflow-y:auto;padding:14px}
+
+  /* diagnostic entry slot (the injected feature) */
+  .diagslot{position:relative;border-radius:18px;padding:16px 16px;color:#fff;overflow:hidden;cursor:pointer;
+    background:linear-gradient(120deg,#12b5a5,#0e9a8c 60%,#0b8fb0);box-shadow:0 10px 24px rgba(14,154,140,.35);
+    transform:translateZ(0);transition:transform .15s}
+  .diagslot:active{transform:scale(.98)}
+  .diagslot .tag{font-size:11px;font-weight:700;opacity:.9;letter-spacing:.02em}
+  .diagslot h3{margin:6px 0 4px;font-size:16.5px;letter-spacing:-.01em}
+  .diagslot p{margin:0;font-size:12.5px;opacity:.92;line-height:1.5}
+  .diagslot .go{position:absolute;right:14px;bottom:14px;font-size:22px;opacity:.9}
+  .diagslot .glow{position:absolute;inset:-2px;border-radius:20px;box-shadow:0 0 0 0 rgba(18,181,165,.55)}
+  .pulse .glow{animation:pulse 1.6s ease-out infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(18,181,165,.5)}100%{box-shadow:0 0 0 16px rgba(18,181,165,0)}}
+
+  .slabel{font-size:11px;color:var(--mut);font-weight:700;margin:16px 2px 8px}
+  /* product cards (SRP) */
+  .prod{display:flex;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line)}
+  .thumb{width:78px;height:78px;border-radius:12px;flex:0 0 auto;background:linear-gradient(135deg,#e9edf1,#dfe4ea);
+    display:flex;align-items:center;justify-content:center;font-size:26px}
+  .prod .info{flex:1;min-width:0}
+  .prod .bn{font-size:11.5px;color:var(--mut)}
+  .prod .nm{font-size:13.5px;margin:2px 0 6px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .prod .pr{font-size:15px;font-weight:800}
+  .prod .pr small{font-weight:600;color:var(--mut);font-size:11px;margin-left:4px}
+
+  /* quiz */
+  .qtop{padding:34px 16px 10px}
+  .qback{font-size:20px;color:var(--ink);cursor:pointer;width:28px}
+  .prog{height:6px;background:var(--soft);border-radius:99px;margin:14px 0 4px;overflow:hidden}
+  .prog>i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .45s ease}
+  .qcount{font-size:11.5px;color:var(--mut)}
+  .qwrap{flex:1;overflow-y:auto;padding:8px 18px 18px;display:flex;flex-direction:column}
+  .qq{font-size:19px;font-weight:700;letter-spacing:-.02em;margin:18px 0 18px;line-height:1.4}
+  .opt{border:1.5px solid var(--line);border-radius:14px;padding:16px 16px;font-size:15px;margin-bottom:11px;cursor:pointer;
+    display:flex;align-items:center;justify-content:space-between;transition:.15s;background:#fff}
+  .opt:hover{border-color:#cfd3d9}
+  .opt.sel{border-color:var(--accent);background:#f0fbfa;color:var(--accent-d);font-weight:700}
+  .opt .em{font-size:20px;margin-right:10px}
+  .opt .l{display:flex;align-items:center}
+  .qhint{font-size:11.5px;color:var(--mut);text-align:center;margin-top:auto;padding-top:14px}
+
+  /* result */
+  .rtop{padding:34px 16px 8px;border-bottom:1px solid var(--line)}
+  .rx{font-size:11.5px;color:var(--mut)}
+  .rprescribe{background:linear-gradient(120deg,#eafcf9,#f3fbf6);border:1px solid #d6f2ec;border-radius:16px;padding:14px 16px;margin:0 14px}
+  .rprescribe .lab{font-size:11.5px;color:var(--accent-d);font-weight:700}
+  .rprescribe .big{font-size:20px;font-weight:800;letter-spacing:-.02em;margin:4px 0 4px}
+  .rprescribe .why{font-size:12px;color:#4b8f86;line-height:1.5}
+  .neu{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mut);margin:14px 16px 4px}
+  .neu b{color:var(--ink)}
+  .rlist{padding:2px 14px 20px}
+  .rcard{border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:12px;display:flex;gap:12px;position:relative;
+    opacity:0;transform:translateY(10px);animation:rise .5s forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .rcard .thumb{width:66px;height:66px;font-size:22px}
+  .rk{position:absolute;top:-9px;left:-9px;width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;
+    font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(0,0,0,.2)}
+  .rcard.win .rk{background:var(--accent)}
+  .rinfo{flex:1;min-width:0}
+  .pill{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:99px;margin-right:5px;vertical-align:middle}
+  .pill.layer{background:var(--layer);color:#fff}
+  .pill.tp{background:var(--soft);color:var(--mut)}
+  .pill.fit{background:#eafaf7;color:var(--accent-d)}
+  .rnm{font-size:13px;font-weight:600;margin:5px 0 3px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .rspec{font-size:11px;color:var(--mut);line-height:1.45}
+  .rbot{display:flex;align-items:center;justify-content:space-between;margin-top:7px}
+  .rpr{font-size:14px;font-weight:800}
+  .pdpbtn{font-size:11.5px;font-weight:700;color:#fff;background:var(--ink);border:none;border-radius:10px;padding:7px 12px;cursor:pointer}
+  .fitbar{height:5px;background:var(--soft);border-radius:99px;margin-top:7px;overflow:hidden}
+  .fitbar>i{display:block;height:100%;background:linear-gradient(90deg,#12b5a5,#0b8fb0);border-radius:99px}
+  .restart{margin:6px 14px 18px;text-align:center}
+  .restart button{font-size:12.5px;color:var(--mut);background:var(--soft);border:none;border-radius:10px;padding:10px 16px;cursor:pointer;width:100%}
+
+  /* toast */
+  .toast{position:absolute;left:14px;right:14px;bottom:16px;background:rgba(32,36,42,.96);color:#fff;border-radius:14px;
+    padding:13px 15px;font-size:12.5px;line-height:1.5;z-index:60;opacity:0;transform:translateY(12px);transition:.3s;pointer-events:none}
+  .toast.on{opacity:1;transform:none}
+  .toast b{color:#5fe6d5}
+
+  /* side explainer */
+  .side{display:flex;flex-direction:column;gap:12px}
+  .steprow{display:flex;gap:12px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;transition:.3s;opacity:.55}
+  .steprow.act{opacity:1;border-color:var(--accent);box-shadow:0 8px 22px rgba(18,181,165,.12)}
+  .stepno{width:30px;height:30px;flex:0 0 auto;border-radius:9px;background:var(--soft);color:var(--mut);font-weight:800;
+    display:flex;align-items:center;justify-content:center;font-size:14px}
+  .steprow.act .stepno{background:var(--accent);color:#fff}
+  .steprow h4{margin:0 0 4px;font-size:14px;letter-spacing:-.01em}
+  .steprow p{margin:0;font-size:12px;color:var(--mut);line-height:1.55}
+  .steprow .vchk{display:inline-block;margin-top:7px;font-size:11px;font-weight:700;color:var(--accent-d);background:#eafaf7;padding:3px 9px;border-radius:99px}
+  .controls{display:flex;gap:8px;margin-top:4px}
+  .controls button{flex:1;font-size:13px;font-weight:700;border-radius:12px;padding:12px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink)}
+  .controls button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .foot{max-width:960px;margin:26px auto 0;color:var(--mut);font-size:11.5px;line-height:1.7;text-align:center}
+  .foot code{background:#fff;border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="badge-proto">실험 프로토타입 · 목업 (실데이터 아님)</div>
+    <h1>🛏️ 매트리스 진단 — 오늘의집 화면에서 어떻게 동작하나</h1>
+    <p>유저가 <b>'매트리스'를 검색한 순간</b> → 진단 진입점 노출(STEP 1) → 문진(STEP 2) → <b>중립 랭킹 결과·PDP</b>(STEP 3).<br>아래 <b>자동 시연 ▶</b>을 누르거나, 폰 화면을 직접 눌러 체험하세요.</p>
+  </div>
+
+  <div class="stage">
+    <!-- phone -->
+    <div>
+      <div class="phone">
+        <div class="screen">
+          <div class="notch"></div>
+
+          <!-- STEP 1: search result -->
+          <div class="view on" id="v-search">
+            <div class="topbar">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+              <div class="searchbox">
+                <svg class="ic" style="width:18px;height:18px;opacity:.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-3.5-3.5"/></svg>
+                <span id="searchtext"></span><span class="cur" id="cursor"></span>
+              </div>
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.4 12.3a2 2 0 0 0 2 1.7h8.7a2 2 0 0 0 2-1.6L23 7H6"/></svg>
+            </div>
+            <div class="filterrow">
+              <span class="chip act">전체</span><span class="chip">인기순</span><span class="chip">낮은가격</span><span class="chip">리뷰많은</span><span class="chip">브랜드</span>
+            </div>
+            <div class="body">
+              <div class="diagslot pulse" id="diagslot" onclick="startQuiz()">
+                <div class="glow"></div>
+                <div class="tag">오늘의집 AI · 매트리스 큐레이터</div>
+                <h3>1분 매트리스 진단</h3>
+                <p>체형·수면자세로 나에게 맞는 경도를<br>중립 비교로 찾아드려요</p>
+                <div class="go">→</div>
+              </div>
+              <div class="slabel">'매트리스' 검색결과 · 12,480</div>
+              <div class="prod"><div class="thumb">🛏️</div><div class="info"><div class="bn">수면밀도</div><div class="nm">허리디스크 환자가 만든 매트리스 미디엄하드</div><div class="pr">299,000<small>원</small></div></div></div>
+              <div class="prod"><div class="thumb">🛏️</div><div class="info"><div class="bn">지누스</div><div class="nm">그린티 하이브리드 스프링 매트리스 25cm</div><div class="pr">154,000<small>원</small></div></div></div>
+              <div class="prod"><div class="thumb">🛏️</div><div class="info"><div class="bn">오늘의집layer</div><div class="nm">basic 바른 숙면 매트리스 본넬/포켓</div><div class="pr">109,900<small>원</small></div></div></div>
+            </div>
+          </div>
+
+          <!-- STEP 2: quiz -->
+          <div class="view" id="v-quiz">
+            <div class="qtop">
+              <div class="qback" onclick="backToSearch()">←</div>
+              <div class="prog"><i id="progbar"></i></div>
+              <div class="qcount" id="qcount">1 / 4</div>
+            </div>
+            <div class="qwrap">
+              <div class="qq" id="qq">질문</div>
+              <div id="opts"></div>
+              <div class="qhint">✔ 주관적인 "단단 vs 소프트"가 아니라 <b>객관 사실</b>만 묻습니다</div>
+            </div>
+          </div>
+
+          <!-- STEP 3: result -->
+          <div class="view" id="v-result">
+            <div class="rtop"><div class="rx">STEP 3 · 진단 결과</div></div>
+            <div class="body" style="padding:14px 0">
+              <div class="rprescribe">
+                <div class="lab">당신에게 맞는 경도</div>
+                <div class="big" id="presc">미디엄</div>
+                <div class="why" id="why">근거</div>
+              </div>
+              <div class="neu">🟢 <b>중립 랭킹</b> — 조건에 맞으면 3P도 상위에, <span style="color:var(--layer);font-weight:700">오늘의집layer</span>는 자격 있는 곳에만</div>
+              <div class="rlist" id="rlist"></div>
+              <div class="restart"><button onclick="reset(true)">↺ 처음부터 다시</button></div>
+            </div>
+          </div>
+
+          <div class="toast" id="toast"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- side explainer -->
+    <div class="side">
+      <div class="steprow act" id="s1">
+        <div class="stepno">1</div>
+        <div><h4>검색 순간, 진단 진입점 노출</h4>
+        <p>'매트리스' 검색결과 상단에 진단 슬롯을 <b>반응형으로</b> 띄운다. (검색광고·큐레이션 슬롯 = 앱 개발 없이)</p>
+        <span class="vchk">검증 ① 수요 — 이걸 누르나 (CTR·완료율)</span></div>
+      </div>
+      <div class="steprow" id="s2">
+        <div class="stepno">2</div>
+        <div><h4>객관 사실 4문항 문진</h4>
+        <p>체중·수면자세·허리·더위만 묻고 → 알고리즘이 경도를 <b>계산</b>. 체형데이터 없이 문진으로 해결.</p>
+        <span class="vchk">검증 ① 완료율 — 끝까지 하나</span></div>
+      </div>
+      <div class="steprow" id="s3">
+        <div class="stepno">3</div>
+        <div><h4>중립 랭킹 결과 → PDP</h4>
+        <p>경도·핏% 순으로 layer+3P를 함께 랭킹. 조건 맞으면 layer가 상위에, 아니면 3P가.</p>
+        <span class="vchk">검증 ② 구매 증분 · ③ layer 회수(PB성장)</span></div>
+      </div>
+      <div class="controls">
+        <button class="primary" id="playbtn" onclick="autoPlay()">▶ 자동 시연</button>
+        <button onclick="reset(true)">↺ 리셋</button>
+      </div>
+      <div class="steprow" style="opacity:1;border-style:dashed">
+        <div class="stepno" style="background:#fff;color:var(--gold)">✦</div>
+        <div><h4 style="font-size:13px">이 프로토타입이 증명하려는 것</h4>
+        <p><b>① 고객이 원하나</b> · <b>② 구매가 더 잘 되나</b> · <b>③ 우리 PB가 크나</b> — 앱 빌드 전에 이 3개만 싸게 검증.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    목업 화면·예시 수치입니다(실데이터 아님). 실제로는 리뷰 실측 경도·세그먼트 핏으로 랭킹합니다.<br>
+    관련 전략 문서: 브랜드전략 &gt; 숏헤드 PB TF &gt; <code>매트리스 마케팅 전략 — 디커플링</code>
+  </div>
+</div>
+
+<script>
+const Q=[
+  {id:'pos',q:'주로 어떤 자세로 주무세요?',opts:[
+    {t:'옆으로 (측면)',v:'side',em:'🛌'},{t:'똑바로 (정자세)',v:'back',em:'😴'},{t:'엎드려서',v:'prone',em:'🙃'}]},
+  {id:'weight',q:'체중대가 어떻게 되세요?',opts:[
+    {t:'~60kg',v:'light',em:'🪶'},{t:'60~80kg',v:'mid',em:'⚖️'},{t:'80kg 이상',v:'heavy',em:'💪'}]},
+  {id:'back',q:'허리·목 통증이 있으세요?',opts:[
+    {t:'있어요',v:'yes',em:'🩹'},{t:'없어요',v:'no',em:'👍'}]},
+  {id:'hot',q:'잠잘 때 더위를 타는 편인가요?',opts:[
+    {t:'네, 더워요',v:'yes',em:'🥵'},{t:'아니요',v:'no',em:'🙂'}]},
+];
+// products (illustrative). firm 0(soft)~100(firm)
+const P=[
+  {nm:'허리디스크 환자가 만든 매트리스 미디엄하드',bn:'수면밀도',layer:false,firm:70,price:299000,tags:['허리'],spec:'고밀도·허리특화·리뷰 2.2만'},
+  {nm:'refine · 허리가 편한 매트리스 유로탑 포켓',bn:'오늘의집layer',layer:true,firm:62,price:349900,tags:['허리'],spec:'유로탑 포켓스프링·허리 지지'},
+  {nm:'basic · 바른 숙면 매트리스 본넬/포켓',bn:'오늘의집layer',layer:true,firm:34,price:109900,tags:['가성비'],spec:'본넬·포켓 선택·가성비'},
+  {nm:'studio · 페이브 유로탑 매트리스 38cm',bn:'오늘의집layer',layer:true,firm:54,price:990000,tags:['프리미엄','쿨링'],spec:'38cm 유로탑·30일 체험·프리미엄'},
+  {nm:'호텔식 포켓스프링 매트리스 25cm',bn:'먼데이하우스',layer:false,firm:44,price:88000,tags:['가성비'],spec:'포켓스프링·가성비 호텔식'},
+  {nm:'그린티 하이브리드 스프링 매트리스',bn:'지누스',layer:false,firm:40,price:154000,tags:['쿨링','가성비'],spec:'메모리폼 하이브리드·쿨링'},
+  {nm:'Q4 유로탑 롤팩 매트리스 15년보증',bn:'퀵슬립',layer:false,firm:60,price:179900,tags:['가성비'],spec:'롤팩 배송·15년 보증'},
+];
+const A={};
+let qi=0, auto=false;
+const $=s=>document.querySelector(s);
+function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));$(id).classList.add('on');}
+function setStep(n){['s1','s2','s3'].forEach((s,i)=>$('#'+s).classList.toggle('act',i===n-1));}
+
+// STEP1 typing
+function typeSearch(){
+  const t='매트리스';let i=0;$('#searchtext').textContent='';
+  clearInterval(window._ty);
+  window._ty=setInterval(()=>{i++;$('#searchtext').textContent=t.slice(0,i);if(i>=t.length){clearInterval(window._ty);$('#cursor').style.display='none';}},110);
+}
+function startQuiz(){setStep(2);show('#v-quiz');qi=0;renderQ();}
+function backToSearch(){setStep(1);show('#v-search');}
+function renderQ(){
+  const q=Q[qi];
+  $('#qq').textContent=q.q;
+  $('#qcount').textContent=(qi+1)+' / '+Q.length;
+  $('#progbar').style.width=((qi)/Q.length*100)+'%';
+  const box=$('#opts');box.innerHTML='';
+  q.opts.forEach(o=>{
+    const d=document.createElement('div');d.className='opt';d.dataset.v=o.v;
+    d.innerHTML='<span class="l"><span class="em">'+o.em+'</span>'+o.t+'</span><span style="opacity:.4">›</span>';
+    d.onclick=()=>answer(o.v,d);
+    box.appendChild(d);
+  });
+}
+function answer(v,el){
+  A[Q[qi].id]=v;
+  if(el){el.parentNode.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');}
+  $('#progbar').style.width=((qi+1)/Q.length*100)+'%';
+  setTimeout(()=>{ qi++; if(qi<Q.length){renderQ();} else {buildResult();} }, auto?260:340);
+}
+function firmLabel(f){return f<30?'소프트':f<45?'미디엄소프트':f<58?'미디엄':f<72?'미디엄하드':'하드';}
+function targetFirm(){
+  let t=50;
+  t+=({side:-15,back:8,prone:14})[A.pos]||0;
+  t+=({light:-10,mid:0,heavy:14})[A.weight]||0;
+  if(A.back==='yes')t+=8;
+  return Math.max(18,Math.min(88,t));
+}
+function buildResult(){
+  setStep(3);show('#v-result');
+  const t=targetFirm();
+  const lo=firmLabel(t-8), hi=firmLabel(t+8);
+  $('#presc').textContent = lo===hi? lo : lo+'~'+hi;
+  const posK={side:'측면수면(어깨·골반 압력분산)',back:'정자세',prone:'엎드림'}[A.pos];
+  const wK={light:'가벼운 체중',mid:'중간 체중',heavy:'무거운 체중(안 꺼지게 지지)'}[A.weight];
+  $('#why').textContent = posK+' · '+wK+(A.back==='yes'?' · 허리 지지 보정':'')+(A.hot==='yes'?' · 쿨링 소재 우선':'')+' 반영';
+  // score
+  const scored=P.map(p=>{
+    let fit=96-Math.abs(p.firm-t)*0.85;
+    if(A.back==='yes'&&p.tags.includes('허리'))fit+=9;
+    if(A.hot==='yes'&&p.tags.includes('쿨링'))fit+=5;
+    if(A.weight==='light'&&p.tags.includes('가성비'))fit+=2;
+    if(A.weight==='heavy'&&p.firm<45)fit-=6;
+    fit=Math.max(61,Math.min(97,Math.round(fit)));
+    return {...p,fit};
+  }).sort((a,b)=>b.fit-a.fit).slice(0,5);
+  const list=$('#rlist');list.innerHTML='';
+  scored.forEach((p,i)=>{
+    const c=document.createElement('div');c.className='rcard'+(i===0?' win':'');c.style.animationDelay=(i*70)+'ms';
+    c.innerHTML=
+      '<div class="rk">'+(i+1)+'</div>'+
+      '<div class="thumb">🛏️</div>'+
+      '<div class="rinfo">'+
+        '<div>'+(p.layer?'<span class="pill layer">오늘의집layer</span>':'<span class="pill tp">'+p.bn+'</span>')+
+        '<span class="pill fit">핏 '+p.fit+'%</span></div>'+
+        '<div class="rnm">'+p.nm+'</div>'+
+        '<div class="rspec">'+firmLabel(p.firm)+' · '+p.spec+'</div>'+
+        '<div class="fitbar"><i style="width:'+p.fit+'%"></i></div>'+
+        '<div class="rbot"><div class="rpr">'+p.price.toLocaleString()+'<small style="font-weight:600;color:var(--mut);font-size:10px">원</small></div>'+
+        '<button class="pdpbtn" onclick="pdp('+(p.layer?1:0)+')">PDP 보기</button></div>'+
+      '</div>';
+    list.appendChild(c);
+  });
+}
+function pdp(isLayer){
+  const t=$('#toast');
+  t.innerHTML = isLayer
+    ? '실제로는 <b>오늘의집layer PDP</b>로 이동 → 여기서 <b>구매 증분</b>과 <b>layer 회수(=PB 성장)</b>를 측정합니다.'
+    : '실제로는 해당 <b>상품 PDP</b>로 이동 → 중립 랭킹이라 자격 있으면 3P로도 보냅니다(신뢰 유지).';
+  t.classList.add('on');clearTimeout(window._ts);window._ts=setTimeout(()=>t.classList.remove('on'),3200);
+}
+function reset(manual){
+  auto=false;$('#playbtn').textContent='▶ 자동 시연';$('#playbtn').disabled=false;
+  for(const k in A)delete A[k];qi=0;setStep(1);show('#v-search');$('#cursor').style.display='';typeSearch();
+  $('#toast').classList.remove('on');
+}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+async function autoPlay(){
+  if(auto)return; auto=true;
+  const btn=$('#playbtn');btn.textContent='● 시연 중…';btn.disabled=true;
+  reset(); auto=true; await wait(1400);           // typing search
+  // click diagnostic slot
+  const slot=$('#diagslot');slot.style.transform='scale(.97)';await wait(180);slot.style.transform='';
+  startQuiz(); await wait(700);
+  const answers=['side','mid','yes','yes'];
+  for(let k=0;k<Q.length;k++){
+    const el=[...document.querySelectorAll('#opts .opt')].find(x=>x.dataset.v===answers[k]);
+    if(el){el.classList.add('sel');} await wait(650);
+    answer(answers[k],el); await wait(760);
+  }
+  await wait(1100);
+  // tap the winning card PDP
+  const b=document.querySelector('#rlist .rcard .pdpbtn'); if(b){b.click();}
+  await wait(300);
+  btn.textContent='▶ 다시 시연';btn.disabled=false;auto=false;
+}
+// init
+typeSearch();
+</script>
+</body>
+</html>
