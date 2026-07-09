@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stage 2 · 검색 트리거 실험 설계 (매트리스 진단)</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+  :root{
+    --ink:#20242a;--mut:#8a9099;--line:#eceef1;--soft:#f6f7f9;
+    --accent:#12b5a5;--accent-d:#0e9a8c;--layer:#2f3438;--gold:#f0a500;
+    --a:#9aa3ad;--b:#6f8bd6;--c:#12b5a5;--buy:#22a565;
+    --shadow:0 20px 60px rgba(30,36,50,.14);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,'Apple SD Gothic Neo',sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#f7f8fa,#e7eaf0);color:var(--ink);padding:28px 16px 60px}
+  .wrap{max-width:1040px;margin:0 auto}
+  .head{text-align:center;margin-bottom:8px}
+  .badge{display:inline-block;background:#fff;border:1px solid var(--line);color:var(--mut);font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:999px;margin-bottom:12px}
+  .head h1{font-size:22px;margin:0 0 6px;letter-spacing:-.02em}
+  .head p{margin:0 auto;color:var(--mut);font-size:13.5px;line-height:1.65;max-width:640px}
+  .head a{color:var(--accent-d);font-weight:700;text-decoration:none;border-bottom:1.5px solid #bfeae4}
+  .why{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin:18px auto 22px;max-width:720px;
+    font-size:12.5px;color:#4b5158;line-height:1.65;text-align:center}
+  .why b{color:var(--ink)}
+
+  .flow{display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:center}
+  @media(max-width:820px){.flow{grid-template-columns:1fr}}
+  .pool{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 14px;text-align:center;box-shadow:var(--shadow)}
+  .pool .n{font-size:24px;font-weight:800;letter-spacing:-.02em}
+  .pool .l{font-size:12px;color:var(--mut);margin-top:2px;line-height:1.4}
+  .pool .split{margin-top:12px;font-size:11px;color:var(--accent-d);font-weight:700;background:#eafaf7;border-radius:8px;padding:6px 8px}
+
+  .arms{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:560px){.arms{grid-template-columns:1fr}}
+  .arm{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 15px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .arm .dot{position:absolute;top:14px;right:14px;width:12px;height:12px;border-radius:50%}
+  .arm h3{margin:0 0 2px;font-size:15px;letter-spacing:-.01em}
+  .arm .sub{font-size:11.5px;color:var(--mut);min-height:30px;line-height:1.45}
+  .stat{margin-top:10px}
+  .stat .row{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--mut);margin-bottom:3px}
+  .stat .row b{font-size:15px;font-weight:800;color:var(--ink)}
+  .bar{height:7px;background:var(--soft);border-radius:99px;overflow:hidden;margin:2px 0 9px}
+  .bar>i{display:block;height:100%;width:0;border-radius:99px;transition:width .9s cubic-bezier(.5,0,.2,1)}
+  .arm.A .dot{background:var(--a)} .arm.B .dot{background:var(--b)} .arm.C .dot{background:var(--c)}
+  .arm.C{border-color:#bfeae4;box-shadow:0 14px 34px rgba(18,181,165,.15)}
+  .tagline{font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:99px;display:inline-block;margin-top:2px}
+  .arm.A .tagline{background:#f0f1f3;color:#6b727a}
+  .arm.B .tagline{background:#eef2fb;color:#4c67b0}
+  .arm.C .tagline{background:#eafaf7;color:var(--accent-d)}
+  .layerchip{font-size:10.5px;color:#fff;background:var(--layer);border-radius:99px;padding:2px 7px;font-weight:700}
+
+  .measure{margin-top:24px}
+  .mtitle{font-size:13px;font-weight:800;color:var(--mut);text-align:center;margin-bottom:14px;letter-spacing:.02em}
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:680px){.tiles{grid-template-columns:1fr}}
+  .tile{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 16px;box-shadow:var(--shadow);opacity:0;transform:translateY(12px);transition:.5s}
+  .tile.on{opacity:1;transform:none}
+  .tile .q{font-size:12px;color:var(--mut);font-weight:700}
+  .tile .big{font-size:26px;font-weight:800;letter-spacing:-.02em;margin:8px 0 4px}
+  .tile .cmp{font-size:12px;color:#5b636b;line-height:1.5}
+  .tile .verdict{margin-top:10px;font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:99px;display:inline-block}
+  .tile.p1 .big{color:var(--c)} .tile.p1 .verdict{background:#eafaf7;color:var(--accent-d)}
+  .tile.p2 .big{color:var(--buy)} .tile.p2 .verdict{background:#eaf7f0;color:#1c854f}
+  .tile.p3 .big{color:var(--layer)} .tile.p3 .verdict{background:#f0f1f3;color:#3a4048}
+
+  .controls{display:flex;gap:10px;justify-content:center;margin:24px 0 8px}
+  .controls button{font-size:13.5px;font-weight:700;border-radius:12px;padding:12px 22px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink)}
+  .controls button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .controls button:disabled{opacity:.5;cursor:default}
+  .foot{color:var(--mut);font-size:11.5px;line-height:1.7;text-align:center;margin-top:20px}
+  .foot code{background:#fff;border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+  .pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:14px 0 0}
+  .keypill{font-size:11.5px;color:#4b5158;background:#fff;border:1px solid var(--line);border-radius:99px;padding:6px 12px}
+  .keypill b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="badge">Stage 2 · 실험 설계 · 예시 수치(목업)</div>
+    <h1>🔬 검색 트리거 실험 — 어떻게 싸게 검증하나</h1>
+    <p>최종적으로 하고 싶은 건 <a href="mattress-quiz.html">→ 진단 경험 그 자체</a>. <b>이 페이지는 그걸 앱 개발 없이 검증하는 실험</b>이다.<br>매트리스 검색자를 <b>홀드아웃 3-arm</b>으로 나눠, 3개 질문(수요·증분·PB성장)을 깨끗하게 잰다.</p>
+  </div>
+
+  <div class="why">
+    <b>왜 이렇게?</b> 최종은 앱에 네이티브로 박는 거지만 개발이 크다. 그래서 실험은 <b>'매트리스' 검색 슬롯(광고·큐레이션) → 외부 진단 페이지 → 기존 PDP</b>로 — <b>앱 개발 없이</b> 검색 순간(=최종과 같은 맥락)에서 테스트한다.
+  </div>
+
+  <div class="flow">
+    <div class="pool">
+      <div class="n" id="poolN">0</div>
+      <div class="l">'매트리스'<br>검색자</div>
+      <div class="split">랜덤 3-분할 →</div>
+    </div>
+
+    <div class="arms">
+      <div class="arm A">
+        <div class="dot"></div>
+        <h3>A · 무노출</h3>
+        <div class="sub">진입점 없이 검색결과만 <span class="tagline">홀드아웃(대조)</span></div>
+        <div class="stat">
+          <div class="row"><span>매트리스 구매율</span><b id="a_cvr">0%</b></div>
+          <div class="bar"><i id="a_cvr_b" style="background:var(--a)"></i></div>
+          <div class="row"><span>이 중 <span class="layerchip">layer</span> 비중</span><b id="a_lay">0%</b></div>
+          <div class="bar"><i id="a_lay_b" style="background:var(--layer)"></i></div>
+        </div>
+      </div>
+
+      <div class="arm B">
+        <div class="dot"></div>
+        <h3>B · 맹탕 슬롯</h3>
+        <div class="sub">그냥 매트리스 큐레이션 슬롯(진단 아님) <span class="tagline">플라시보</span></div>
+        <div class="stat">
+          <div class="row"><span>슬롯 클릭률</span><b id="b_ctr">0%</b></div>
+          <div class="bar"><i id="b_ctr_b" style="background:var(--b)"></i></div>
+          <div class="row"><span>매트리스 구매율</span><b id="b_cvr">0%</b></div>
+          <div class="bar"><i id="b_cvr_b" style="background:var(--b)"></i></div>
+        </div>
+      </div>
+
+      <div class="arm C">
+        <div class="dot"></div>
+        <h3>C · 진단 슬롯</h3>
+        <div class="sub">'1분 진단' 슬롯 → 외부 진단 → PDP <span class="tagline">본 처치</span></div>
+        <div class="stat">
+          <div class="row"><span>진단 진입률</span><b id="c_ctr">0%</b></div>
+          <div class="bar"><i id="c_ctr_b" style="background:var(--c)"></i></div>
+          <div class="row"><span>문진 완료율</span><b id="c_done">0%</b></div>
+          <div class="bar"><i id="c_done_b" style="background:var(--c)"></i></div>
+          <div class="row"><span>매트리스 구매율</span><b id="c_cvr">0%</b></div>
+          <div class="bar"><i id="c_cvr_b" style="background:var(--c)"></i></div>
+          <div class="row"><span>이 중 <span class="layerchip">layer</span> 비중</span><b id="c_lay">0%</b></div>
+          <div class="bar"><i id="c_lay_b" style="background:var(--layer)"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="measure">
+    <div class="mtitle">— 이 실험이 3개 질문에 답하는 법 —</div>
+    <div class="tiles">
+      <div class="tile p1" id="t1">
+        <div class="q">① 고객이 원하나?</div>
+        <div class="big" id="t1big">–</div>
+        <div class="cmp">진단 진입 <b id="t1a">–</b> · 문진 완료 <b id="t1b">–</b> (C arm)</div>
+        <div class="verdict" id="t1v">—</div>
+      </div>
+      <div class="tile p2" id="t2">
+        <div class="q">② 구매가 더 잘 되나? (증분)</div>
+        <div class="big" id="t2big">–</div>
+        <div class="cmp">C <b id="t2c">–</b> − A(홀드아웃) <b id="t2a">–</b><br>진단 순효과(C−B) <b id="t2net">–</b></div>
+        <div class="verdict" id="t2v">—</div>
+      </div>
+      <div class="tile p3" id="t3">
+        <div class="q">③ 우리 PB가 크나?</div>
+        <div class="big" id="t3big">–</div>
+        <div class="cmp">layer 비중 A <b id="t3a">–</b> → C <b id="t3c">–</b><br><b>중립 랭킹인데도</b> 회수↑</div>
+        <div class="verdict" id="t3v">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="primary" id="play" onclick="run()">▶ 실험 시뮬레이션</button>
+    <button onclick="reset()">↺ 리셋</button>
+  </div>
+
+  <div class="pills">
+    <span class="keypill">🛠️ <b>앱 개발 0</b> · 검색 슬롯 + 외부 페이지</span>
+    <span class="keypill">🎯 <b>홀드아웃</b> = 깨끗한 증분</span>
+    <span class="keypill">🟢 <b>중립</b> · 3P로도 정당히 보냄</span>
+  </div>
+
+  <div class="foot">
+    수치는 <b>측정 방식을 보여주는 예시(목업)</b>입니다 — 실제 값은 실험으로 채웁니다.<br>
+    실측 vs 대조는 <code>노출군 vs 홀드아웃(오디언스·지역 분할)</code>으로. 관련: 브랜드전략 &gt; 숏헤드 PB TF &gt; <code>매트리스 마케팅 전략 — 디커플링</code> §8
+  </div>
+</div>
+
+<script>
+// illustrative values (mock) — showing HOW it's measured
+const V={
+  pool:24800,
+  a:{cvr:2.3, lay:8},
+  b:{ctr:14, cvr:2.6},
+  c:{ctr:22, done:65, cvr:3.4, lay:22}
+};
+const $=s=>document.querySelector(s);
+function setBar(id,pct,max){$('#'+id).style.width=Math.min(100,(pct/max)*100)+'%';}
+function count(el,to,dur,fmt){
+  const start=performance.now(),from=0;
+  function tick(t){
+    let k=Math.min(1,(t-start)/dur);k=1-Math.pow(1-k,3);
+    el.textContent=fmt(from+(to-from)*k);
+    if(k<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+const pct=v=>v.toFixed(1)+'%';
+const pct0=v=>Math.round(v)+'%';
+const num=v=>Math.round(v).toLocaleString();
+let running=false;
+async function run(){
+  if(running)return;running=true;reset(true);
+  const btn=$('#play');btn.disabled=true;btn.textContent='● 시뮬레이션 중…';
+  const w=ms=>new Promise(r=>setTimeout(r,ms));
+  count($('#poolN'),V.pool,900,num); await w(700);
+  // arm A
+  count($('#a_cvr'),V.a.cvr,800,pct);setBar('a_cvr_b',V.a.cvr,6);
+  count($('#a_lay'),V.a.lay,800,pct0);setBar('a_lay_b',V.a.lay,40); await w(760);
+  // arm B
+  count($('#b_ctr'),V.b.ctr,800,pct0);setBar('b_ctr_b',V.b.ctr,30);
+  count($('#b_cvr'),V.b.cvr,800,pct);setBar('b_cvr_b',V.b.cvr,6); await w(760);
+  // arm C
+  count($('#c_ctr'),V.c.ctr,800,pct0);setBar('c_ctr_b',V.c.ctr,30); await w(220);
+  count($('#c_done'),V.c.done,800,pct0);setBar('c_done_b',V.c.done,100); await w(220);
+  count($('#c_cvr'),V.c.cvr,800,pct);setBar('c_cvr_b',V.c.cvr,6); await w(220);
+  count($('#c_lay'),V.c.lay,800,pct0);setBar('c_lay_b',V.c.lay,40); await w(900);
+  // tiles
+  $('#t1a').textContent=pct0(V.c.ctr);$('#t1b').textContent=pct0(V.c.done);
+  $('#t1big').textContent=pct0(V.c.ctr)+' 진입';$('#t1v').textContent='✔ 원한다 (기준선 상회 시)';
+  $('#t1').classList.add('on'); await w(650);
+  const inc=(V.c.cvr-V.a.cvr), net=(V.c.cvr-V.b.cvr);
+  $('#t2c').textContent=pct(V.c.cvr);$('#t2a').textContent=pct(V.a.cvr);$('#t2net').textContent='+'+net.toFixed(1)+'%p';
+  $('#t2big').textContent='+'+inc.toFixed(1)+'%p';$('#t2v').textContent='✔ 더 산다 (증분+)';
+  $('#t2').classList.add('on'); await w(650);
+  $('#t3a').textContent=pct0(V.a.lay);$('#t3c').textContent=pct0(V.c.lay);
+  $('#t3big').textContent='+'+(V.c.lay-V.a.lay)+'%p';$('#t3v').textContent='✔ PB 큰다 (layer 회수↑)';
+  $('#t3').classList.add('on');
+  btn.disabled=false;btn.textContent='▶ 다시 시뮬레이션';running=false;
+}
+function reset(keepRun){
+  if(!keepRun){running=false;$('#play').disabled=false;$('#play').textContent='▶ 실험 시뮬레이션';}
+  ['poolN','a_cvr','a_lay','b_ctr','b_cvr','c_ctr','c_done','c_cvr','c_lay'].forEach(id=>$('#'+id).textContent=id==='poolN'?'0':'0%');
+  document.querySelectorAll('.bar>i').forEach(i=>i.style.width='0');
+  ['t1','t2','t3'].forEach(id=>$('#'+id).classList.remove('on'));
+  ['t1big','t2big','t3big'].forEach(id=>$('#'+id).textContent='–');
+}
+reset();
+</script>
+</body>
+</html>
