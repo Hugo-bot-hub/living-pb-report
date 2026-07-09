@@ -34,7 +34,7 @@
   .screen{position:relative;width:100%;height:660px;background:#fff;border-radius:36px;overflow:hidden}
   .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:26px;background:#000;border-radius:0 0 16px 16px;z-index:40}
   .view{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;transform:translateY(14px);
-    pointer-events:none;transition:opacity .45s ease,transform .45s ease}
+    pointer-events:none;transition:opacity .6s ease,transform .6s ease}
   .view.on{opacity:1;transform:none;pointer-events:auto}
 
   /* top bar */
@@ -289,7 +289,7 @@ function setStep(n){['s1','s2','s3'].forEach((s,i)=>$('#'+s).classList.toggle('a
 function typeSearch(){
   const t='매트리스';let i=0;$('#searchtext').textContent='';
   clearInterval(window._ty);
-  window._ty=setInterval(()=>{i++;$('#searchtext').textContent=t.slice(0,i);if(i>=t.length){clearInterval(window._ty);$('#cursor').style.display='none';}},110);
+  window._ty=setInterval(()=>{i++;$('#searchtext').textContent=t.slice(0,i);if(i>=t.length){clearInterval(window._ty);$('#cursor').style.display='none';}},150);
 }
 function startQuiz(){setStep(2);show('#v-quiz');qi=0;renderQ();}
 function backToSearch(){setStep(1);show('#v-search');}
@@ -310,7 +310,7 @@ function answer(v,el){
   A[Q[qi].id]=v;
   if(el){el.parentNode.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');}
   $('#progbar').style.width=((qi+1)/Q.length*100)+'%';
-  setTimeout(()=>{ qi++; if(qi<Q.length){renderQ();} else {buildResult();} }, auto?260:340);
+  setTimeout(()=>{ qi++; if(qi<Q.length){renderQ();} else {buildResult();} }, auto?440:540);
 }
 function firmLabel(f){return f<30?'소프트':f<45?'미디엄소프트':f<58?'미디엄':f<72?'미디엄하드':'하드';}
 function targetFirm(){
@@ -372,17 +372,17 @@ const wait=ms=>new Promise(r=>setTimeout(r,ms));
 async function autoPlay(){
   if(auto)return; auto=true;
   const btn=$('#playbtn');btn.textContent='● 시연 중…';btn.disabled=true;
-  reset(); auto=true; await wait(1400);           // typing search
+  reset(); auto=true; await wait(1950);           // typing search
   // click diagnostic slot
   const slot=$('#diagslot');slot.style.transform='scale(.97)';await wait(180);slot.style.transform='';
-  startQuiz(); await wait(700);
+  startQuiz(); await wait(1000);
   const answers=['side','mid','yes','yes'];
   for(let k=0;k<Q.length;k++){
     const el=[...document.querySelectorAll('#opts .opt')].find(x=>x.dataset.v===answers[k]);
-    if(el){el.classList.add('sel');} await wait(650);
-    answer(answers[k],el); await wait(760);
+    if(el){el.classList.add('sel');} await wait(900);
+    answer(answers[k],el); await wait(1050);
   }
-  await wait(1100);
+  await wait(1500);
   // tap the winning card PDP
   const b=document.querySelector('#rlist .rcard .pdpbtn'); if(b){b.click();}
   await wait(300);

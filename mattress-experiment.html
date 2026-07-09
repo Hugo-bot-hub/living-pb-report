@@ -43,7 +43,7 @@
   .stat .row{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--mut);margin-bottom:3px}
   .stat .row b{font-size:15px;font-weight:800;color:var(--ink)}
   .bar{height:7px;background:var(--soft);border-radius:99px;overflow:hidden;margin:2px 0 9px}
-  .bar>i{display:block;height:100%;width:0;border-radius:99px;transition:width .9s cubic-bezier(.5,0,.2,1)}
+  .bar>i{display:block;height:100%;width:0;border-radius:99px;transition:width 1.25s cubic-bezier(.5,0,.2,1)}
   .arm.A .dot{background:var(--a)} .arm.B .dot{background:var(--b)} .arm.C .dot{background:var(--c)}
   .arm.C{border-color:#bfeae4;box-shadow:0 14px 34px rgba(18,181,165,.15)}
   .tagline{font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:99px;display:inline-block;margin-top:2px}
@@ -207,26 +207,26 @@ async function run(){
   if(running)return;running=true;reset(true);
   const btn=$('#play');btn.disabled=true;btn.textContent='● 시뮬레이션 중…';
   const w=ms=>new Promise(r=>setTimeout(r,ms));
-  count($('#poolN'),V.pool,900,num); await w(700);
+  count($('#poolN'),V.pool,1200,num); await w(1000);
   // arm A
-  count($('#a_cvr'),V.a.cvr,800,pct);setBar('a_cvr_b',V.a.cvr,6);
-  count($('#a_lay'),V.a.lay,800,pct0);setBar('a_lay_b',V.a.lay,40); await w(760);
+  count($('#a_cvr'),V.a.cvr,1150,pct);setBar('a_cvr_b',V.a.cvr,6);
+  count($('#a_lay'),V.a.lay,1150,pct0);setBar('a_lay_b',V.a.lay,40); await w(1050);
   // arm B
-  count($('#b_ctr'),V.b.ctr,800,pct0);setBar('b_ctr_b',V.b.ctr,30);
-  count($('#b_cvr'),V.b.cvr,800,pct);setBar('b_cvr_b',V.b.cvr,6); await w(760);
+  count($('#b_ctr'),V.b.ctr,1150,pct0);setBar('b_ctr_b',V.b.ctr,30);
+  count($('#b_cvr'),V.b.cvr,1150,pct);setBar('b_cvr_b',V.b.cvr,6); await w(1050);
   // arm C
-  count($('#c_ctr'),V.c.ctr,800,pct0);setBar('c_ctr_b',V.c.ctr,30); await w(220);
-  count($('#c_done'),V.c.done,800,pct0);setBar('c_done_b',V.c.done,100); await w(220);
-  count($('#c_cvr'),V.c.cvr,800,pct);setBar('c_cvr_b',V.c.cvr,6); await w(220);
-  count($('#c_lay'),V.c.lay,800,pct0);setBar('c_lay_b',V.c.lay,40); await w(900);
+  count($('#c_ctr'),V.c.ctr,1150,pct0);setBar('c_ctr_b',V.c.ctr,30); await w(330);
+  count($('#c_done'),V.c.done,1150,pct0);setBar('c_done_b',V.c.done,100); await w(330);
+  count($('#c_cvr'),V.c.cvr,1150,pct);setBar('c_cvr_b',V.c.cvr,6); await w(330);
+  count($('#c_lay'),V.c.lay,1150,pct0);setBar('c_lay_b',V.c.lay,40); await w(1250);
   // tiles
   $('#t1a').textContent=pct0(V.c.ctr);$('#t1b').textContent=pct0(V.c.done);
   $('#t1big').textContent=pct0(V.c.ctr)+' 진입';$('#t1v').textContent='✔ 원한다 (기준선 상회 시)';
-  $('#t1').classList.add('on'); await w(650);
+  $('#t1').classList.add('on'); await w(880);
   const inc=(V.c.cvr-V.a.cvr), net=(V.c.cvr-V.b.cvr);
   $('#t2c').textContent=pct(V.c.cvr);$('#t2a').textContent=pct(V.a.cvr);$('#t2net').textContent='+'+net.toFixed(1)+'%p';
   $('#t2big').textContent='+'+inc.toFixed(1)+'%p';$('#t2v').textContent='✔ 더 산다 (증분+)';
-  $('#t2').classList.add('on'); await w(650);
+  $('#t2').classList.add('on'); await w(880);
   $('#t3a').textContent=pct0(V.a.lay);$('#t3c').textContent=pct0(V.c.lay);
   $('#t3big').textContent='+'+(V.c.lay-V.a.lay)+'%p';$('#t3v').textContent='✔ PB 큰다 (layer 회수↑)';
   $('#t3').classList.add('on');
