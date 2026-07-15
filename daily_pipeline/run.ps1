@@ -18,6 +18,9 @@ Log "######## [daily-batch] START ########"
 if ($LASTEXITCODE -ne 0){ Log "[ALERT] queries dump 실패"; Add-Content $alert "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] [ALERT] daily-batch queries dump 실패" -Encoding UTF8; exit 1 }
 
 # (b) 배치 병렬 추출 (페이지네이션)
+# tmp 선청소 필수: 쿼리 실패 시 파일을 안 남겨야 build.py가 기존 섹션값을 보존함.
+# (안 지우면 실패한 쿼리가 직전 실행 결과를 남겨 build.py가 stale 데이터를 최신으로 오인)
+Remove-Item "$repo\daily_pipeline\tmp\*.json" -Force -ErrorAction SilentlyContinue
 & $node "$repo\daily_pipeline\athena_batch.mjs" "daily_pipeline\_queries.json" "daily_pipeline\tmp" 5 *>> $log
 $batchCode = $LASTEXITCODE
 Log "[daily-batch] athena_batch exit=$batchCode"
