@@ -156,7 +156,7 @@ if lf is not None:
         prods.append({'pid':pid,'name':name,'tiers':t,'summary':{'total_leads':total_leads,
             'scrap_to_buy_rate':round(scrap_conv*100.0/scrap_leads,1) if scrap_leads else 0.0,
             'scrap_leads':scrap_leads,'lead_value':lead_value,'hot_uncaptured':hot_out}})
-    prods.sort(key=lambda x:-x['summary']['lead_value'])
+    prods.sort(key=lambda x:(-x['summary']['lead_value'],x['pid']))
     D['leadFunnel'] = {'products':prods,'window':'찜월→forward 3개월 성숙 코호트',
         'summary':{'furniture_hot_uncaptured':total_hot_out,'bench_scrap_to_buy':6.9,
             'lead_value_blended':round(tot_scrap_gmv/tot_scrap_leads) if tot_scrap_leads else 0},
@@ -189,7 +189,7 @@ if lg is not None:
         name = D['products'].get(pid,{}).get('shortName') or LFN.get(pid, pid)
         prods.append({'pid':pid,'name':name,'reach_to_lead':rc.get('reach_to_lead',0),
             'pdp_users':rc.get('pdp_users',0),'lead_users':rc.get('lead_users',0),'monthly':months,'trend_pct':trend})
-    prods.sort(key=lambda x:-x['reach_to_lead'])
+    prods.sort(key=lambda x:(-x['reach_to_lead'],x['pid']))
     D['leadGrowth'] = {'products':prods,'total_monthly':[{'ym':y,'new_leads':total_monthly[y]} for y in sorted(total_monthly)],
         'partial_ym':partial_ym,
         'note':'리드화율=리드유저(찜 or PDP재방문2일↑)/PDP도달유저(90일). 월별 신규리드=그 달 처음 리드된 user×product(첫 찜 or 2번째 방문일). 오가닉/비오가닉 미구분(데이터 한계). 마지막 달=진행중(부분). 로그인 유저 기준.'}
@@ -222,7 +222,7 @@ for w in range(4):
     inf += r
 if ok_inf and inf:
     D['inflow'] = sorted([{'dt':r['dt'],'pid':str(r['pid']),'inflow':r['inflow'],'imp':i(r['imp']),'click':i(r['click']),'click_uv':i(r['click_uv'])} for r in inf],
-                         key=lambda x:(x['dt'],x['pid'],-x['imp']))
+                         key=lambda x:(x['dt'],x['pid'],-x['imp'],x['inflow']))  # imp 동점 → 채널명으로 완전순서
     changed.append('inflow')
 
 # ---------- inflowCvr ----------
@@ -308,6 +308,8 @@ for bk in ['bedding','mattress','bed']:
                 'cate_ctr_ratio':ratio(ctr,cate_ctr),'cate_cvr_ratio':ratio(cvr,cate_cvr),
                 'band_p3_ctr':bb.get('p3_ctr',0.0),'band_p3_cvr':bb.get('p3_cvr',0.0),
                 'band_ctr_ratio':ratio(ctr,bb.get('p3_ctr',0)),'band_cvr_ratio':ratio(cvr,bb.get('p3_cvr',0))})
+    # Athena 가 lu 를 어떤 순서로 주든 동일 출력이 되도록 정렬(내용은 같고 순서만 흔들리던 것)
+    bl.sort(key=lambda x:(-x['imp_uv'],x['pid'])); sp.sort(key=lambda x:(-x['imp_uv'],x['pid']))
     benchmarks[bk]={'self_products':sp,'price_bands':pbands,'pb_lineup':bl,
         'cate_3p_avg':{'imp_uv':p3tot[0],'pdp_uv':p3tot[1],'buy_uv':p3tot[2],'ctr':cate_ctr,'cvr':cate_cvr}}
 if any(f'bench_{b}_bands' for b in ['bedding','mattress','bed'] if load(f'bench_{b}_bands') is not None):
@@ -378,7 +380,7 @@ if af is not None:
         prods.append({'pid':pid,'name':FRAME_NM.get(pid,pid),'months':ms,'frame_qty':tf,'attach_qty':ta,
             'attach_gmv':sum(m['attach_gmv'] for m in ms),'unknown_qty':uk,
             'rate_pct':round(ta*100.0/tf,1) if tf>0 else 0.0})
-    prods.sort(key=lambda x:-x['rate_pct'])
+    prods.sort(key=lambda x:(-x['rate_pct'],x['pid']))
     # unknown = 옵션명 미매칭. frame 에 섞으면 분모가 부풀어 부착률이 과소 → 별도 분리하고 규모를 노출.
     M['attach_rate_by_frame']={'products':prods,'window':'최근 6개월','unknown_qty':tot_unknown,
         'note':'부착률=같은 PID 안에서 매트리스 옵션 수량 ÷ 프레임 본체 수량. 액세서리(패널·협탁·400 서랍/선반형·패드·커버)는 분모·분자 모두 제외. '
@@ -394,7 +396,7 @@ opt_by_tier={}
 if ad is not None:
     items=[{'frame_pid':str(x['frame_pid']),'frame_name':FRAME_NM.get(str(x['frame_pid']),str(x['frame_pid'])),
             'tier':x.get('tier') or 'etc','option_name':x['option_name'],'qty':i(x['qty']),'gmv':i(x['gmv'])} for x in ad]
-    items.sort(key=lambda x:(x['tier'],x['frame_pid'],-x['gmv']))
+    items.sort(key=lambda x:(x['tier'],x['frame_pid'],-x['gmv'],x['option_name']))  # 동점 gmv → 이름으로 완전순서
     for x in items:
         t=x['tier']; opt_by_tier.setdefault(t,{'qty':0,'gmv':0}); opt_by_tier[t]['qty']+=x['qty']; opt_by_tier[t]['gmv']+=x['gmv']
     M['attach_frame_option_detail']={'items':items,
@@ -422,7 +424,7 @@ if cs is not None and cd is not None:
         if op>0:  # 자사 프레임옵션 매트리스를 dest 행으로
             ob=opt_by_tier.get(t,{'qty':0,'gmv':0})
             dst=[{'pid':'opt','name':'프레임옵션 매트리스(자사)','brand':LAYER,'is_self':True,'users':op,'qty':ob['qty'],'gmv':ob['gmv']}]+dst
-        dst=sorted(dst,key=lambda x:-x['gmv'])
+        dst=sorted(dst,key=lambda x:(-x['gmv'],str(x['pid'])))
         out[t]={'frame_users':fu,'bought_mat':bm,'our':om,'comp_only':co,'opt_mat':op,
             'rate_pct':round(bm/fu*100,1) if fu else 0.0,'leak_pct':round(co/bm*100,1) if bm else 0.0,'dest':dst}
     M['cosell_by_tier']=out
