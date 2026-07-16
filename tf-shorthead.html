@@ -519,6 +519,30 @@ function ecoBars(be){
   return '<table><thead><tr><th>브랜드</th><th class="num">프레임구매자</th><th class="num">같은브랜드 매트리스</th><th>같은브랜드 비율</th><th class="num" title="프레임 옵션명 스냅샷 커버리지율. 90%미만이면 옵션매트 일부 미집계로 실제보다 과소(하한)">옵션매칭</th></tr></thead><tbody>'+
     be.map(function(b){var w=Math.round(((b.rate_pct||0)/max)*100);var col=b.is_self?'#6C5CE7':'#E67E22';return '<tr class="'+(b.is_self?'self-row':'')+'"><td>'+(b.is_self?'⭐ ':'')+b.brand+'</td><td class="num">'+(b.frame_buyers||0).toLocaleString()+'</td><td class="num">'+(b.same_brand_mat||0)+'명</td><td><div style="background:#eef0f3;border-radius:4px;overflow:hidden;min-width:60px"><div style="width:'+Math.max(w,8)+'%;background:'+col+';color:#fff;font-size:11px;padding:1px 5px;white-space:nowrap;text-align:right">'+(b.rate_pct||0)+'%</div></div></td><td class="num" '+(b.underest?'style="color:#E67E22;font-weight:700" title="옵션명 커버리지 낮아 실제보다 과소일 수 있음"':'')+'>'+(b.opt_match_pct!=null?b.opt_match_pct+'%'+(b.underest?' ⚠️':''):'-')+'</td></tr>';}).join('')+'</tbody></table>';
 }
+// 프레임별 매트리스 부착률 = 같은 PID 옵션에서 매트리스 수량 ÷ 프레임 본체 수량.
+function attachRateSection(ar){
+  var ps=(ar&&Array.isArray(ar.products))?ar.products:[];
+  if(!ps.length) return '';
+  var yms=[]; ps.forEach(function(p){(p.months||[]).forEach(function(m){if(yms.indexOf(m.yyyymm)<0)yms.push(m.yyyymm);});});
+  yms.sort();
+  var rows=ps.map(function(p){
+    var cells=yms.map(function(y){
+      var m=(p.months||[]).filter(function(x){return x.yyyymm===y;})[0];
+      if(!m||!m.frame_qty) return '<td style="text-align:right;color:var(--text3)">–</td>';
+      var r=m.rate_pct, col=r>=30?'#1E9E62':(r>=10?'#C9820A':'#E74C3C');
+      return '<td style="text-align:right;font-weight:700;color:'+col+'">'+r.toFixed(1)+'%<span style="font-weight:400;color:var(--text3);font-size:10px"> '+m.attach_qty+'/'+m.frame_qty+'</span></td>';
+    }).join('');
+    var tr=p.rate_pct, tcol=tr>=30?'#1E9E62':(tr>=10?'#C9820A':'#E74C3C');
+    return '<tr><td style="font-weight:700">'+p.name+'<span style="font-weight:400;color:var(--text3);font-size:10px"> '+p.pid+'</span></td>'+cells+
+      '<td style="text-align:right;font-weight:800;color:'+tcol+'">'+tr.toFixed(1)+'%</td></tr>';
+  }).join('');
+  return '<div class="card" style="margin-top:18px;border-left:4px solid #6C5CE7"><h3>🛏️ 프레임별 매트리스 부착률 <span style="font-weight:400;color:var(--text3);font-size:12px">· 같은 상품 안에서 매트리스 옵션을 함께 산 비율</span> <span class="wbadge">'+(ar.window||'')+'</span></h3>'+
+    '<div class="chart-box sm"><canvas id="at-rate"></canvas></div>'+
+    '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr style="border-bottom:2px solid #e6e8ec">'+
+    '<th style="text-align:left;padding:6px 4px">프레임</th>'+yms.map(function(y){return '<th style="text-align:right;padding:6px 4px">'+y.slice(4)+'월</th>';}).join('')+
+    '<th style="text-align:right;padding:6px 4px">누계</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    '<div class="note">'+(ar.note||'')+' 셀의 작은 숫자 = 매트리스 수량/프레임 본체 수량.</div></div>';
+}
 function viewAttach(){
   if(!M) return '<div class="ph">데이터 없음</div>';
   const afo=M.attach_frame_option||[]; const cs=M.cosell_summary||{}; const cbt=M.cosell_by_tier||{}; const mft=M.mat_to_frame_by_tier||{}; const mfs=M.mat_to_frame_summary||{};
@@ -532,6 +556,7 @@ function viewAttach(){
     '<div><div class="mm-lbl">경쟁 유출률</div><div style="font-size:30px;font-weight:800;color:#E74C3C">'+(cs.leak_pct||0)+'%</div></div>'+
     '<div><div class="mm-lbl">시장 벤치(정정)</div><div style="font-size:20px;font-weight:700;color:var(--text2)">'+(cs.market_rate_pct||35)+'%</div></div>'+
     '</div><div class="note">'+(cs.method||'')+' '+(cs.note||'')+'</div></div>';
+  h+=attachRateSection(M.attach_rate_by_frame);
   h+='<div style="'+sech+'">① 프레임 구매자 → 매트리스 행선지</div><div style="'+g3+'">'+tierCards(cbt,true)+'</div>';
   h+='<div style="'+sech+'">② 매트리스 구매자 → 프레임 행선지</div>'+(mfs.note?'<div class="note" style="margin:0 2px 8px">'+mfs.note+'</div>':'')+'<div style="'+g3+'">'+tierCards(mft,false)+'</div>';
   // ③ 경쟁사 관점 — 최대 경쟁자 구매자의 상대 카테고리 행선지
@@ -665,7 +690,21 @@ function buildMpriceCharts(){
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{ticks:{font:{size:9},maxRotation:60}},y:{position:'left',ticks:{font:{size:9},callback:function(v){return Math.round(v/1e4)+'만';}}},y1:{position:'right',grid:{display:false},ticks:{font:{size:9}}}}}});
   });
 }
+function buildAttachRateChart(){
+  const ar=(M&&M.attach_rate_by_frame)||{}; const ps=Array.isArray(ar.products)?ar.products:[];
+  const el=document.getElementById('at-rate'); if(!el||!ps.length) return;
+  let yms=[]; ps.forEach(function(p){(p.months||[]).forEach(function(m){if(yms.indexOf(m.yyyymm)<0)yms.push(m.yyyymm);});});
+  yms.sort();
+  const pal=[COL.self,COL.c1,COL.c2,COL.green,COL.blue,COL.red,'#16A085','#E67E22'];
+  charts['at-rate']=new Chart(el,{type:'line',data:{labels:yms.map(function(y){return y.slice(4)+'월';}),
+    datasets:ps.map(function(p,i){return {label:p.name,borderColor:pal[i%pal.length],backgroundColor:pal[i%pal.length],fill:false,pointRadius:3,spanGaps:true,
+      data:yms.map(function(y){var m=(p.months||[]).filter(function(x){return x.yyyymm===y;})[0]; return (m&&m.frame_qty)?m.rate_pct:null;})};})},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},
+      tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.parsed.y+'%';}}}},
+      scales:{y:{beginAtZero:true,title:{display:true,text:'부착률(%)',font:{size:10}},ticks:{font:{size:9},callback:function(v){return v+'%';}}},x:{ticks:{font:{size:9}}}}}});
+}
 function buildAttachCharts(){
+  buildAttachRateChart();
   const afo=(M&&M.attach_frame_option)||[]; const el=document.getElementById('at-afo'); if(!el||!afo.length) return;
   charts['at-afo']=new Chart(el,{type:'bar',data:{labels:afo.map(function(r){return r.yyyymm;}),datasets:[{label:'GMV',data:afo.map(function(r){return r.gmv;}),backgroundColor:COL.self,yAxisID:'y'},{label:'수량',data:afo.map(function(r){return r.qty;}),type:'line',borderColor:COL.c1,pointRadius:3,yAxisID:'y1'}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{y:{position:'left',ticks:{font:{size:9},callback:function(v){return Math.round(v/1e4)+'만';}}},y1:{position:'right',grid:{display:false},beginAtZero:true,ticks:{font:{size:9}}}}}});

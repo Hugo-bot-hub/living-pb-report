@@ -5,12 +5,14 @@
 모든 날짜는 DATE_ADD 상대 → 매일 최신. object_idx BETWEEN 0 AND 100. net GMV=필터없음.
 """
 
-SELF = ['3918642','3640244','3640123','1089824','3607491','3121605','3898593','3898584','3748221']
+SELF = ['3918642','3640244','3640123','1089824','3607491','3121605','3898593','3898584','3748221','2518275']
 COMP = ['767440','2636441','1930788','442026','676405','2731307','329364','1590911','2352818']
 ALL18 = SELF + COMP
-SELF_SRPKW = ['3918642','3640244','3640123','1089824','3607491','3121605','3898593','3898584','3748221']  # 키워드추세는 자사만
+SELF_SRPKW = ['3918642','3640244','3640123','1089824','3607491','3121605','3898593','3898584','3748221','2518275']  # 키워드추세는 자사만
 MATTRESS = ['1089824','3607491','3121605']  # basic/refine/studio 매트리스
-FRAMES_STUDIO_OPT = ['3898593','3898584','3748221']  # attach_frame_option 대상(프레임옵션 매트리스)
+# attach(프레임옵션 매트리스) 대상 프레임. 2518275=refine 빅수납호텔(2026-07-01 재런칭).
+# basic 1243313·refine 3858646는 볼륨 최대 + 부착률 상위 → tier 비교 기준선으로 포함(studio가 왜 0%인지 대조군).
+FRAMES_ATTACH = ['3898593','3898584','3748221','2518275','1243313','3858646']
 
 def _in(pids):
     return ",".join("'%s'" % p for p in pids)
@@ -22,7 +24,26 @@ ALL_B = _inb(ALL18)         # bigint IN
 SELF_S = _in(SELF_SRPKW)
 MAT_S = _in(MATTRESS)
 MAT_B = _inb(MATTRESS)
-FOPT_S = _in(FRAMES_STUDIO_OPT)
+FOPT_S = _in(FRAMES_ATTACH)
+
+# 🔴 옵션명 매트리스 판정 단일 정본 (attach_frame_option / cosell 공용).
+# '매트리스 미포함'·'매트리스커버'·토퍼 등 오탐 제외 필수 — 2518275 "Q/K (매트리스 미포함)" 4,785만이
+# 약한 필터(패드·밀림방지만 제외)에선 attach로 오분류됨(2026-07-16 발견).
+_MAT_OPT_NOT = ['패드','밀림방지','커버','토퍼','미포함','별도','불포함','제외','선택안함','미선택']
+def _ismat(col):
+    return "(%s LIKE '%%매트리스%%' AND %s)" % (col, " AND ".join("%s NOT LIKE '%%%s%%'" % (col, w) for w in _MAT_OPT_NOT))
+# 프레임 액세서리 — 프레임 본체 수량이 attach율 분모라 액세서리가 섞이면 왜곡.
+# ⚠️ 키워드 선정 근거(2026-07-16 옵션 전수 확인). 본체와 액세서리를 가르는 경계가 미묘함:
+#   · '조명형'/'서랍형'은 400 시리즈 패널(15~25만) = 액세서리.
+#     반면 bare '조명'·'서랍'은 본체에도 붙음 — "LED 조명 헤드 SS"(41만)·"Q/K (양방서랍)"(98만)·
+#     "슈퍼싱글(3서랍)"은 전부 본체. bare 키워드를 쓰면 본체가 액세서리로 빠져 부착률이 부풀려짐.
+_ACC_WORDS = ['패널','협탁','선반','서랍형','조명형','화장대','룸스프레이','패드','커버','토퍼','밀림방지']
+_ISACC = lambda col: "(%s)" % " OR ".join("%s LIKE '%%%s%%'" % (col, w) for w in _ACC_WORDS)
+
+# 🔴 옵션명 조회 정본. arbitrary(explain)는 400일 창에서 실행마다 다른 값(공백 포함)을 돌려줘
+# 분류가 비결정적이 됨(같은 옵션이 어떤 런에선 ''로 잡혀 frame 로 오분류). 최신 비공백 이름으로 고정.
+_OPT_NM = """(SELECT id, max_by(explain, base_dt) explain FROM ba_preserved.commerce_snapshot_production_options
+   WHERE base_dt >= DATE_ADD('day',-400,CURRENT_DATE) AND explain IS NOT NULL AND TRIM(explain) <> '' GROUP BY id)"""
 
 # 최근 N개월 yyyymm 파티션 (문자열 비교). GMV/orders 6개월치 커버.
 YM6 = "yyyymm >= date_format(DATE_ADD('month',-6,CURRENT_DATE),'%Y%m')"
@@ -107,7 +128,7 @@ ORDER BY s.kw, rank"""
 # 리드가치 = 찜한 distinct 유저가 [찜월 forward 3개월] 내 [그 찜한 상품]을 산 실현 GMV ÷ 찜 유저. (통합공식 문서 정의블록)
 # 코호트 c0=date_trunc(month,오늘)-3M. 찜/PDP형성=코호트월[c0,c0+1M) · vd/구매관찰=[c0,c0+3M). 리드가치=T3+T4(찜리드).
 # ⚠️ user_pdp_facts.base_dt=date, user_scrap_facts.base_dt=VARCHAR. scan~10GB/run. 하반기 리드퍼널 문서 §5-3 + 리드가치 표준.
-_FURN_LEAD = '1089824,3607491,3121605,1243313,3748221,3898593,3898584'
+_FURN_LEAD = '1089824,3607491,3121605,1243313,3748221,3898593,3898584,2518275'
 QUERIES['lead_funnel'] = f"""
 WITH cm AS (SELECT date_trunc('month',CURRENT_DATE)-interval '3' month AS c0),
 pdpf AS (
@@ -310,20 +331,26 @@ SELECT mo.product_id pid, nm.explain, nm.explain2, mo.qty, mo.gmv,
 FROM mo LEFT JOIN nm ON CAST(mo.option_id AS BIGINT)=nm.id
 WHERE mo.qty>0"""
 
-# attach_frame_option: 프레임(3 studio) 옵션 중 매트리스 옵션 월별
+# attach_frame_option: 프레임 옵션을 매트리스/본체/액세서리 3분류로 월별·상품별 집계.
+# 🔴 2026-07-16 개편: ①매트리스 판정을 _ismat 정본으로 교체(미포함·커버 오탐 제거)
+#   ②상품별(pid) 분해 — 프레임별 attach율 비교가 핵심 지표(studio 0~2% vs basic/refine 21~52%)
+#   ③액세서리(패널·협탁) 분리 — 본체 수량이 attach율 분모라 액세서리 섞이면 왜곡
+# 스냅샷 창 160→400일: 160일은 옵션명 매칭 62%뿐(cosell 정정 때 확인), 400일 81.4%.
 QUERIES['attach_frame_option'] = f"""
 WITH fo AS (
-  SELECT product_id, option_id, yyyymm, SUM(gmv) gmv, SUM(option_quantity) qty
+  SELECT CAST(product_id AS VARCHAR) pid, option_id, yyyymm, SUM(gmv) gmv, SUM(option_quantity) qty
   FROM ba_preserved.commerce_gross_profit_orders
   WHERE product_id IN ({FOPT_S}) AND {YM6}
   GROUP BY product_id, option_id, yyyymm),
-nm AS (SELECT id, arbitrary(explain) explain FROM ba_preserved.commerce_snapshot_production_options
-       WHERE base_dt >= DATE_ADD('day',-160,CURRENT_DATE) GROUP BY id)
-SELECT fo.yyyymm,
-  CASE WHEN nm.explain LIKE '%매트리스%' AND nm.explain NOT LIKE '%패드%' AND nm.explain NOT LIKE '%밀림방지%' THEN 'attach' ELSE 'frame' END typ,
+nm AS {_OPT_NM}
+SELECT fo.pid, fo.yyyymm,
+  CASE WHEN {_ismat('nm.explain')} THEN 'attach'
+       WHEN {_ISACC('nm.explain')} THEN 'acc'
+       WHEN nm.explain IS NULL THEN 'unknown'
+       ELSE 'frame' END typ,
   SUM(fo.gmv) gmv, SUM(fo.qty) qty
 FROM fo LEFT JOIN nm ON CAST(fo.option_id AS BIGINT)=nm.id
-WHERE fo.qty>0 GROUP BY fo.yyyymm, 2"""
+GROUP BY fo.pid, fo.yyyymm, 3"""
 
 # ============ 합구매 cosell — 옵션매트리스 복구 + 프레임 전수(수납/일반/깔판) ============
 # 정정: 프레임 PID 안 추가옵션 매트리스(basic/refine 프레임의 "본넬매트리스" 등)를 복구.
@@ -331,7 +358,7 @@ WHERE fo.qty>0 GROUP BY fo.yyyymm, 2"""
 _FRAME_FILTER_LAYER = "brand_name='오늘의집 layer' AND cate_d2='침대' AND cate_d3 IN ('수납침대','일반침대','깔판') AND product_name NOT LIKE '%매트리스 포함%' AND product_name NOT LIKE '%사용 X%'"
 _FRAME_FILTER_ALL = "cate_d2='침대' AND cate_d3 IN ('수납침대','일반침대','깔판') AND product_name NOT LIKE '%매트리스 포함%' AND product_name NOT LIKE '%사용 X%'"
 _TIER = "CASE WHEN product_name LIKE '%basic /%' THEN 'basic' WHEN product_name LIKE '%refine /%' THEN 'refine' WHEN product_name LIKE '%studio /%' THEN 'studio' ELSE 'etc' END"
-_ISMAT = "(s.explain LIKE '%매트리스%' AND s.explain NOT LIKE '%패드%' AND s.explain NOT LIKE '%밀림방지%' AND s.explain NOT LIKE '%커버%' AND s.explain NOT LIKE '%토퍼%' AND s.explain NOT LIKE '%미포함%' AND s.explain NOT LIKE '%별도%' AND s.explain NOT LIKE '%불포함%' AND s.explain NOT LIKE '%제외%' AND s.explain NOT LIKE '%선택안함%' AND s.explain NOT LIKE '%미선택%')"
+_ISMAT = _ismat('s.explain')  # 정본 단일화(구 인라인 정의와 동일 판정)
 _SNAP400 = "s.base_dt >= DATE_ADD('day',-400,CURRENT_DATE)"
 _MAT3 = "o.yyyymm >= date_format(DATE_ADD('month',-6,CURRENT_DATE),'%Y%m')"
 _FRAME3 = "o.yyyymm >= date_format(DATE_ADD('month',-3,CURRENT_DATE),'%Y%m')"

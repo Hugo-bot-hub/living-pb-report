@@ -11,7 +11,7 @@ TF = os.environ.get('TF_DATA_PATH', os.path.join(ROOT, 'tf-data.json'))
 MAT = os.environ.get('MAT_DATA_PATH', os.path.join(ROOT, 'tf-mattress-data.json'))
 TMP = os.environ.get('TF_TMP', TMP)
 
-SELF = ['3918642','3640244','3640123','1089824','3607491','3121605','3898593','3898584','3748221']
+SELF = ['3918642','3640244','3640123','1089824','3607491','3121605','3898593','3898584','3748221','2518275']
 COMP = ['767440','2636441','1930788','442026','676405','2731307','329364','1590911','2352818']
 ALL18 = SELF + COMP
 LAYER = '오늘의집 layer'
@@ -338,22 +338,57 @@ if dc is not None:
     for pid in decomp: decomp[pid].sort(key=lambda x:-x['gmv'])
     M['decomp']=decomp; changed.append('decomp')
 
+# 프레임 PID→표시명. attach_rate_by_frame·attach_frame_option_detail 공용이라 두 섹션보다 먼저 정의.
+FRAME_NM={'1243313':'basic 바른수납','1800535':'basic 접이식철제','3858646':'refine 빅수납','3652507':'refine 수납',
+ '3621320':'refine 파티션','2518275':'refine 빅수납호텔','3602793':'refine 저상형','3898593':'studio 코타수납',
+ '3898584':'studio 코타평상','3748221':'studio 페이브수납','3116503':'studio 페이브솔리드','3146345':'studio 페이브패브릭','3146405':'studio 페이브패브릭'}
+
 # ---------- attach_frame_option ----------
-af = rows('attach_frame_option', ['yyyymm','typ','gmv','qty'])
+# 쿼리가 pid·typ(attach/frame/acc) 3분류로 확장(2026-07-16). 산출물 2개:
+#  ① attach_frame_option = 월별 attach 합계 flat array (기존 차트 하위호환, 구조 불변)
+#  ② attach_rate_by_frame = 프레임별 월별 부착률(attach_qty/frame_qty). acc(패널·협탁)는 분모에서 제외.
+af = rows('attach_frame_option', ['pid','yyyymm','typ','gmv','qty'])
 if af is not None:
     mm={}
     for r in af:
         if r['typ']!='attach': continue
-        mm[r['yyyymm']]={'yyyymm':r['yyyymm'],'gmv':i(r['gmv']),'qty':i(r['qty'])}
+        y=r['yyyymm']; e=mm.setdefault(y,{'yyyymm':y,'gmv':0,'qty':0})
+        e['gmv']+=i(r['gmv']); e['qty']+=i(r['qty'])
     # attach 없는 달도 0으로
     allym=sorted({r['yyyymm'] for r in af})
     M['attach_frame_option']=[mm.get(y,{'yyyymm':y,'gmv':0,'qty':0}) for y in allym]
     changed.append('attach_frame_option')
 
+    # ② 프레임별 부착률
+    cell={}
+    for r in af:
+        k=(str(r['pid']), r['yyyymm']); c=cell.setdefault(k,{})
+        t=r['typ']; c[t+'_gmv']=c.get(t+'_gmv',0)+i(r['gmv']); c[t+'_qty']=c.get(t+'_qty',0)+i(r['qty'])
+    byf={}
+    for (pid,ym),c in sorted(cell.items()):
+        fq=c.get('frame_qty',0); aq=c.get('attach_qty',0)
+        byf.setdefault(pid,[]).append({'yyyymm':ym,'frame_qty':fq,'attach_qty':aq,'acc_qty':c.get('acc_qty',0),
+            'unknown_qty':c.get('unknown_qty',0),
+            'frame_gmv':c.get('frame_gmv',0),'attach_gmv':c.get('attach_gmv',0),'acc_gmv':c.get('acc_gmv',0),
+            'rate_pct':round(aq*100.0/fq,1) if fq>0 else 0.0})
+    prods=[]; tot_unknown=0
+    for pid,ms in byf.items():
+        tf=sum(m['frame_qty'] for m in ms); ta=sum(m['attach_qty'] for m in ms)
+        uk=sum(m['unknown_qty'] for m in ms); tot_unknown+=uk
+        prods.append({'pid':pid,'name':FRAME_NM.get(pid,pid),'months':ms,'frame_qty':tf,'attach_qty':ta,
+            'attach_gmv':sum(m['attach_gmv'] for m in ms),'unknown_qty':uk,
+            'rate_pct':round(ta*100.0/tf,1) if tf>0 else 0.0})
+    prods.sort(key=lambda x:-x['rate_pct'])
+    # unknown = 옵션명 미매칭. frame 에 섞으면 분모가 부풀어 부착률이 과소 → 별도 분리하고 규모를 노출.
+    M['attach_rate_by_frame']={'products':prods,'window':'최근 6개월','unknown_qty':tot_unknown,
+        'note':'부착률=같은 PID 안에서 매트리스 옵션 수량 ÷ 프레임 본체 수량. 액세서리(패널·협탁·400 서랍/선반형·패드·커버)는 분모·분자 모두 제외. '
+               '옵션명 "매트리스 미포함"·"매트리스커버"는 매트리스로 세지 않음. 100% 초과 가능(프레임 1대에 매트리스 2개 등). '
+               '(2026-07-16: 오탐 필터·비결정 옵션명·본체/액세서리 경계 수정)'}
+    changed.append('attach_rate_by_frame')
+    if tot_unknown:
+        print('  [warn] attach_rate_by_frame: 옵션명 미매칭 %d개 — 부착률 분모에서 제외됨' % tot_unknown)
+
 # ---------- 프레임옵션 매트리스 상세 (전 layer 프레임·옵션별·tier) ----------
-FRAME_NM={'1243313':'basic 바른수납','1800535':'basic 접이식철제','3858646':'refine 빅수납','3652507':'refine 수납',
- '3621320':'refine 파티션','2518275':'refine 빅수납호텔','3602793':'refine 저상형','3898593':'studio 코타수납',
- '3898584':'studio 코타평상','3748221':'studio 페이브수납','3116503':'studio 페이브솔리드','3146345':'studio 페이브패브릭','3146405':'studio 페이브패브릭'}
 ad=rows('q4_attach_detail',['frame_pid','tier','option_name','qty','gmv'])
 opt_by_tier={}
 if ad is not None:
