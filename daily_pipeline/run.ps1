@@ -17,6 +17,27 @@ Log "######## [daily-batch] START ########"
 & $py -c "import daily_pipeline.queries as q,json,datetime; d=dict(q.QUERIES); [d.pop(k,None) for k in (('ages','lead_growth') if datetime.date.today().weekday()!=0 else ())]; json.dump(d,open('daily_pipeline/_queries.json','w',encoding='utf-8'),ensure_ascii=False); print('dumped',len(d))" *>> $log
 if ($LASTEXITCODE -ne 0){ Log "[ALERT] queries dump 실패"; Add-Content $alert "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] [ALERT] daily-batch queries dump 실패" -Encoding UTF8; exit 1 }
 
+# (a2) 소스 적재 게이트 (8MB·2초). 어제분 UV/퍼널이 아직 없으면 34쿼리 풀런(~160GB)은 통째로 낭비 —
+# 없는 데이터로 어제 날짜를 다시 빌드하고 SUCCESS로 끝나 겉보기 정상이 됨. 헬스체크가 09:20~10:00
+# 10분마다 재시도하므로, 적재 즉시 다음 시도에서 풀런된다.
+# fail-open: 게이트 판정 불가(쿼리 실패·파싱 실패)면 풀런 진행 = 게이트 없던 기존 동작.
+$gateDir = "$repo\daily_pipeline\_gate"
+$gateSql = "SELECT MIN(mx) AS mx FROM (SELECT CAST(MAX(base_dt) AS VARCHAR) AS mx FROM ba_preserved.commerce_daily_user_count_v3 WHERE CAST(base_dt AS VARCHAR) >= CAST(DATE_ADD('day',-5,CURRENT_DATE) AS VARCHAR) AND base='product' AND paid_type='total' UNION ALL SELECT CAST(MAX(period) AS VARCHAR) AS mx FROM ba_preserved.comm_product_perform WHERE yyyymm IN (date_format(CURRENT_DATE,'%Y%m'), date_format(DATE_ADD('month',-1,CURRENT_DATE),'%Y%m')) AND period_base='day' AND period >= CAST(DATE_ADD('day',-5,CURRENT_DATE) AS VARCHAR))"
+Remove-Item "$gateDir\*.json" -Force -ErrorAction SilentlyContinue
+# node의 JSON.parse는 BOM에서 깨지므로 BOM 없이 기록
+[IO.File]::WriteAllText("$repo\daily_pipeline\_gate.json", (@{readiness=$gateSql} | ConvertTo-Json -Compress), (New-Object Text.UTF8Encoding $false))
+& $node "$repo\daily_pipeline\athena_batch.mjs" "daily_pipeline\_gate.json" "daily_pipeline\_gate" 1 *>> $log
+$srcMax = $null
+try { $srcMax = (Get-Content "$gateDir\readiness.json" -Raw -Encoding UTF8 | ConvertFrom-Json).data[0][0] } catch { }
+$want = (Get-Date).Date.AddDays(-1)
+$gateOk = $true
+if ($srcMax) { try { $gateOk = ([datetime]::ParseExact($srcMax,'yyyy-MM-dd',$null) -ge $want) } catch { $gateOk = $true } }
+if (-not $gateOk) {
+  Log "######## [daily-batch] SKIP: 소스 미적재 src_max=$srcMax (want>=$($want.ToString('yyyy-MM-dd'))). 풀런 생략 — 헬스체크가 재시도 ########"
+  exit 0
+}
+Log "[daily-batch] gate OK src_max=$srcMax"
+
 # (b) 배치 병렬 추출 (페이지네이션)
 # tmp 선청소 필수: 쿼리 실패 시 파일을 안 남겨야 build.py가 기존 섹션값을 보존함.
 # (안 지우면 실패한 쿼리가 직전 실행 결과를 남겨 build.py가 stale 데이터를 최신으로 오인)
