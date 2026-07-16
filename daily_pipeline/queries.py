@@ -40,10 +40,18 @@ def _ismat(col):
 _ACC_WORDS = ['패널','협탁','선반','서랍형','조명형','화장대','룸스프레이','패드','커버','토퍼','밀림방지']
 _ISACC = lambda col: "(%s)" % " OR ".join("%s LIKE '%%%s%%'" % (col, w) for w in _ACC_WORDS)
 
-# 🔴 옵션명 조회 정본. arbitrary(explain)는 400일 창에서 실행마다 다른 값(공백 포함)을 돌려줘
-# 분류가 비결정적이 됨(같은 옵션이 어떤 런에선 ''로 잡혀 frame 로 오분류). 최신 비공백 이름으로 고정.
-_OPT_NM = """(SELECT id, max_by(explain, base_dt) explain FROM ba_preserved.commerce_snapshot_production_options
-   WHERE base_dt >= DATE_ADD('day',-400,CURRENT_DATE) AND explain IS NOT NULL AND TRIM(explain) <> '' GROUP BY id)"""
+# 🔴 옵션명 조회 정본. arbitrary(explain)는 한 옵션이 창 안에서 여러 스냅샷 행을 가질 때
+# 그중 아무 행이나 집어옴 → 이름이 바뀌었거나 공백인 행이 섞이면 실행마다 결과가 달라짐
+# (실측: 코타수납 옵션이 어떤 런에선 ''(→frame 오분류), 다른 런에선 '400 서랍 조명형'(→acc)).
+# max_by(explain, base_dt) = 최신 스냅샷 이름으로 고정 → 결정적. 공백 행은 후보에서 제외.
+# 전제: (id, base_dt) 당 explain 이 유일해야 max_by 에 타이가 없음. 2026-07-16 실측 위반 0건 —
+# 스냅샷 소스가 하루 2행을 쓰게 되면 이 전제가 깨지므로 그때 재검증할 것.
+# explain2 도 같은 행에서 함께 가져와 explain 과 짝이 맞음(독립 arbitrary 2개는 서로 다른 날 값이 섞일 수 있음).
+def _opt_nm(days=400, ex2=False):
+    cols = "max_by(explain, base_dt) explain" + (", max_by(explain2, base_dt) explain2" if ex2 else "")
+    return """(SELECT id, %s FROM ba_preserved.commerce_snapshot_production_options
+   WHERE base_dt >= DATE_ADD('day',-%d,CURRENT_DATE) AND explain IS NOT NULL AND TRIM(explain) <> '' GROUP BY id)""" % (cols, days)
+_OPT_NM = _opt_nm(400)
 
 # 최근 N개월 yyyymm 파티션 (문자열 비교). GMV/orders 6개월치 커버.
 YM6 = "yyyymm >= date_format(DATE_ADD('month',-6,CURRENT_DATE),'%Y%m')"
@@ -324,8 +332,7 @@ WITH mo AS (
   FROM ba_preserved.commerce_gross_profit_orders
   WHERE product_id IN ({MAT_S}) AND yyyymm >= date_format(DATE_ADD('month',-3,CURRENT_DATE),'%Y%m')
   GROUP BY product_id, option_id),
-nm AS (SELECT id, arbitrary(explain) explain, arbitrary(explain2) explain2 FROM ba_preserved.commerce_snapshot_production_options
-       WHERE base_dt >= DATE_ADD('day',-120,CURRENT_DATE) GROUP BY id)
+nm AS {_opt_nm(120, ex2=True)}
 SELECT mo.product_id pid, nm.explain, nm.explain2, mo.qty, mo.gmv,
   CAST(mo.gmv AS DOUBLE)/NULLIF(mo.qty,0) unit
 FROM mo LEFT JOIN nm ON CAST(mo.option_id AS BIGINT)=nm.id
@@ -473,18 +480,22 @@ SELECT fu.b brand, COUNT(DISTINCT fu.uid) frame_buyers,
 FROM fu LEFT JOIN mb ON fu.uid=mb.uid AND fu.b=mb.b LEFT JOIN mr ON fu.b=mr.b
 GROUP BY fu.b HAVING COUNT(DISTINCT fu.uid)>=50 ORDER BY same_brand_mat DESC LIMIT 12"""
 
+# 🔴 2026-07-16 수정 2건:
+#  ① 매트리스 판정이 옛 약한 필터(패드·밀림방지·커버·토퍼만 제외)라 "Q/K (매트리스 미포함)"를
+#     프레임옵션 매트리스로 집계 — 2518275 에서 39개·1,712만 오계상(live 버그). _ismat 정본으로 교체.
+#     이 값은 cosell_by_tier 의 opt 행 qty/gmv 로도 흘러가, users(=_ISMAT 엄격판정)와 기준이 어긋나 있었음.
+#  ② arbitrary(explain)/arbitrary(tier) → 결정적 소스로. tier 는 frames CTE 에서 직접 가져옴
+#     (옵션→상품 조인 후 arbitrary 로 뽑을 이유가 없음).
 QUERIES['q4_attach_detail'] = f"""
 WITH frames AS (SELECT product_id pid_b, {_TIER} tier FROM ba_preserved.comm_product_info_latest WHERE {_FRAME_FILTER_LAYER}),
-fo AS (SELECT o.product_id, o.option_id, SUM(o.gmv) gmv, SUM(o.option_quantity) qty
+fo AS (SELECT o.product_id, f.tier, o.option_id, SUM(o.gmv) gmv, SUM(o.option_quantity) qty
   FROM ba_preserved.commerce_gross_profit_orders o JOIN frames f ON CAST(o.product_id AS BIGINT)=f.pid_b
-  WHERE o.yyyymm >= date_format(DATE_ADD('month',-3,CURRENT_DATE),'%Y%m') AND o.option_quantity>0 GROUP BY o.product_id, o.option_id),
-nm AS (SELECT s.id, arbitrary(s.explain) explain, arbitrary({_TIER.replace('product_name','s2.product_name')}) tier
-  FROM ba_preserved.commerce_snapshot_production_options s
-  JOIN ba_preserved.comm_product_info_latest s2 ON s.production_id=s2.product_id
-  WHERE {_SNAP400} GROUP BY s.id)
-SELECT fo.product_id frame_pid, nm.tier, nm.explain option_name, fo.qty, fo.gmv
-FROM fo LEFT JOIN nm ON CAST(fo.option_id AS BIGINT)=nm.id
-WHERE nm.explain LIKE '%매트리스%' AND nm.explain NOT LIKE '%패드%' AND nm.explain NOT LIKE '%밀림방지%' AND nm.explain NOT LIKE '%커버%' AND nm.explain NOT LIKE '%토퍼%' AND fo.qty>0
+  WHERE o.yyyymm >= date_format(DATE_ADD('month',-3,CURRENT_DATE),'%Y%m') AND o.option_quantity>0
+  GROUP BY o.product_id, f.tier, o.option_id),
+nm AS {_OPT_NM}
+SELECT fo.product_id frame_pid, fo.tier, nm.explain option_name, fo.qty, fo.gmv
+FROM fo JOIN nm ON CAST(fo.option_id AS BIGINT)=nm.id
+WHERE {_ismat('nm.explain')} AND fo.qty>0
 ORDER BY fo.product_id, fo.gmv DESC"""
 
 # Q1 데일리리빙 프레임 옵션매트리스 (행선지 자사옵션 행 추가용)
