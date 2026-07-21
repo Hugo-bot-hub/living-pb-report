@@ -83,18 +83,29 @@ FROM ba_preserved.commerce_gross_profit_orders
 WHERE CAST(product_id AS BIGINT) IN ({ALL_B}) AND {YM6} AND base_dt >= DATE_ADD('day',-50,CURRENT_DATE)
 GROUP BY base_dt, product_id"""
 
-# ============ SRP: base 14d (rank=AVG, best=P5, imp, ctr) — matrix+keywordRank 공통 소스 ============
-# 단일 쿼리로 P5 1회 산출(approx_percentile 실행간 흔들림 방지 → matrix/keywordRank 일치)
+# ============ SRP: base (노출순위·주간판매·ctr·imp) — matrix+keywordRank 공통 소스 ============
+# 🔴 2026-07-21 소스 교체(= kw_radar와 동일 사유): 구 commerce_srp_dataset_daily_v0_0_2 07-06 동결.
+#   구 지표(avg_object_idx 절대순위·monthly_sales_score·P5)를 가진 agg_* 테이블도 전부 동결/빈파티션.
+#   → 유일 신선 소스 commerce_srp_query_product_metrics_v0_1(query×item 주간 노출/클릭/구매).
+#   순위 = 키워드 내 주간 노출량 DENSE_RANK 근사순위(0-based). best=rank(P5 부재→최고순위=최고노출순위키워드).
+#   score = 주간판매(query_product_purchases_1w). imps_1w가 이미 7일 롤링이라 최신 1파티션이면 충분.
 QUERIES['srp_base14'] = f"""
-SELECT object_id pid, query_keyword kw,
-  AVG(object_idx) rank, CAST(approx_percentile(object_idx,0.05) AS INT) best,
-  AVG(monthly_sales_score) score, SUM(is_clicked)*1.0/COUNT(*) ctr, COUNT(*) imp
-FROM search.commerce_srp_dataset_daily_v0_0_2
-WHERE date >= CAST(DATE_ADD('day',-14,CURRENT_DATE) AS VARCHAR)
-  AND object_id IN ({ALL_S}) AND object_idx BETWEEN 0 AND 100
-GROUP BY object_id, query_keyword HAVING COUNT(*) >= 20"""
+WITH ours AS (
+  SELECT DISTINCT query FROM search.commerce_srp_query_product_metrics_v0_1
+  WHERE date=(SELECT max(date) FROM search.commerce_srp_query_product_metrics_v0_1)
+    AND item_id IN ({ALL_S}) AND query_product_imps_1w >= 30),
+u AS (
+  SELECT query kw, item_id pid, query_product_imps_1w imp, query_product_clicks_1w clk, query_product_purchases_1w buy,
+    DENSE_RANK() OVER (PARTITION BY query ORDER BY query_product_imps_1w DESC) rnk
+  FROM search.commerce_srp_query_product_metrics_v0_1
+  WHERE date=(SELECT max(date) FROM search.commerce_srp_query_product_metrics_v0_1)
+    AND query IN (SELECT query FROM ours))
+SELECT pid, kw, (rnk-1) rank, (rnk-1) best, buy score, ROUND(clk*1.0/NULLIF(imp,0),4) ctr, imp
+FROM u WHERE pid IN ({ALL_S}) AND imp >= 30
+ORDER BY pid, imp DESC, kw"""
 
-# 통합검색량(통검) qc: query_qc_mart INTEGRATED, 2w(qc)+4w(qc4). 최신 date 파티션.
+# 통합검색량(통검) qc: query_qc_mart INTEGRATED, 2w(qc)+4w(qc4). 최신 date 파티션. (마트 자체는 정상 신선)
+# 키워드 유니버스만 신 metrics 테이블에서 도출(구 동결 srp 테이블 대체).
 QUERIES['qc_integrated'] = f"""
 SELECT q.search_keyword kw,
   MAX(CASE WHEN q.period='2w' THEN q.qc END) qc2w,
@@ -103,12 +114,12 @@ FROM search.query_qc_mart q
 WHERE q.date = (SELECT max(date) FROM search.query_qc_mart)
   AND q.source='INTEGRATED' AND q.period IN ('2w','4w')
   AND q.search_keyword IN (
-    SELECT DISTINCT query_keyword FROM search.commerce_srp_dataset_daily_v0_0_2
-    WHERE date >= CAST(DATE_ADD('day',-14,CURRENT_DATE) AS VARCHAR)
-      AND object_id IN ({ALL_S}) AND object_idx BETWEEN 0 AND 100)
+    SELECT DISTINCT query FROM search.commerce_srp_query_product_metrics_v0_1
+    WHERE date=(SELECT max(date) FROM search.commerce_srp_query_product_metrics_v0_1)
+      AND item_id IN ({ALL_S}) AND query_product_imps_1w >= 30)
 GROUP BY q.search_keyword"""
 
-# srpKeywords 자사 14d 키워드추세 (일별)
+# srpKeywords 키워드추세: HTML에서 미렌더(dead) + 구 소스 동결. 유지하되 빈결과는 build.py rows_req가 보존.
 QUERIES['srp_kwtrend'] = f"""
 SELECT date dt, object_id pid, query_keyword kw, AVG(object_idx) rank, CAST(approx_percentile(object_idx,0.05) AS INT) best, AVG(monthly_sales_score) score
 FROM search.commerce_srp_dataset_daily_v0_0_2
