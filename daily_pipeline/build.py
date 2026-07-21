@@ -28,6 +28,13 @@ def rows(name, cols):
     if data is None: return None
     return [dict(zip(cols, r)) for r in data]
 
+def rows_req(name, cols):
+    # 빈 결과(=상류 소스 동결/타임아웃)를 None 취급 → 해당 섹션 기존 값 보존.
+    # 2026-07-21: SRP 소스(commerce_srp_dataset_daily_v0_0_2) 07-06 동결이 빈 배열을 반환해
+    # srpMatrix/srpKeywords/srpKeywordRank/keywordRadar를 조용히 덮어쓴 사고 재발 방지.
+    r = rows(name, cols)
+    return r if r else None
+
 def i(x):
     if x in (None,''): return 0
     return int(float(x))
@@ -61,8 +68,8 @@ if fn is not None and uv is not None and gm is not None:
     changed.append('daily')
 
 # ---------- SRP base (matrix + keywordRank) ----------
-base = rows('srp_base14', ['pid','kw','rank','best','score','ctr','imp'])
-qc = rows('qc_integrated', ['kw','qc2w','qc4w'])
+base = rows_req('srp_base14', ['pid','kw','rank','best','score','ctr','imp'])
+qc = rows_req('qc_integrated', ['kw','qc2w','qc4w'])
 if base is not None:
     # srpMatrix: pid별 imp 상위 12
     by_pid = {}
@@ -92,7 +99,7 @@ if base is not None:
         changed.append('srpKeywordRank')
 
 # ---------- srpKeywords (자사 14d 키워드추세) ----------
-kt = rows('srp_kwtrend', ['dt','pid','kw','rank','best','score'])
+kt = rows_req('srp_kwtrend', ['dt','pid','kw','rank','best','score'])
 if kt is not None:
     sk = {}
     for r in kt:
@@ -102,22 +109,25 @@ if kt is not None:
     changed.append('srpKeywords')
 
 # ---------- keyword_radar (경쟁 레이더: 신규경쟁자·부스트/광고 의심 자동감지) ----------
-kr = rows('kw_radar', ['kw','pid','brand','name','price','rank','imp','ctr','sales_score','sell28','rev','ravg'])
+kr = rows_req('kw_radar', ['kw','pid','brand','name','price','rank','imp','ctr','buy','rev'])
 if kr is not None:
     KW_ORDER = ['매트리스','침대프레임','수납침대','이불','차렵이불','냉감이불']
     radar = {}
     for r in kr:
-        pid = str(r['pid']); rank = f(r['rank']); sell28 = i(r['sell28']); rev = i(r['rev']); ss = f(r['sales_score'])
-        is_self = pid in SELF
+        pid = str(r['pid']); rank = f(r['rank']); buy = i(r['buy']); rev = i(r['rev'])
+        # 자사 판정 = 숏헤드 로스터(SELF) OR 브랜드명이 layer (로스터 밖 layer 상품도 '우리'로 인식, 경쟁사 오인 방지)
+        is_self = (pid in SELF) or (r['brand'] == LAYER)
         tags = []
-        if is_self: tags.append('ours')
-        elif pid in COMP: tags.append('known_comp')
-        if rank <= 12 and (sell28 < 50 or ss < 0.7) and rev < 1000: tags.append('boost_suspect')
-        if rev < 300 and not is_self: tags.append('new_entrant')
+        if is_self:
+            tags.append('ours')
+        else:
+            if pid in COMP: tags.append('known_comp')
+            # 부스트/광고 의심 = 노출 상위(근사순위<=10)인데 주간판매(<3)·리뷰(<1000) 바닥.
+            if rank <= 10 and buy < 3 and rev < 1000: tags.append('boost_suspect')
+            if rev < 300: tags.append('new_entrant')
         radar.setdefault(r['kw'], []).append({'pid':pid,'brand':r['brand'] or '','name':r['name'] or '',
             'price':i(r['price']),'rank':round(rank,1),'imp':i(r['imp']),'ctr':round(f(r['ctr']),1),
-            'sales_score':round(ss,3),'sell28':sell28,'rev':rev,'ravg':round(f(r['ravg']),2),
-            'is_self':is_self,'tags':tags})
+            'buy':buy,'rev':rev,'is_self':is_self,'tags':tags})
     out = {}
     for kw in radar: out[kw] = sorted(radar[kw], key=lambda x:x['rank'])[:12]
     new_threats = 0; boost_cnt = 0; our_best = {}
@@ -128,8 +138,8 @@ if kr is not None:
             if x['is_self'] and (kw not in our_best or x['rank'] < our_best[kw]): our_best[kw] = x['rank']
     D['keywordRadar'] = {'keywords':[k for k in KW_ORDER if k in out]+[k for k in out if k not in KW_ORDER],
         'data':out,'summary':{'new_threats':new_threats,'boost_suspect':boost_cnt,'our_best_rank':our_best},
-        'window':'최근 7일 (상위 20위 이내)',
-        'note':'SRP원장은 광고/오가닉 미분리 → 순위 높은데 28일판매·리뷰 바닥 = 프로모/광고로 순위만 산 것(⚠️부스트의심)으로 추론.'}
+        'window':'최근 7일 노출 기준 (상위 15위)',
+        'note':'노출순위 = 주간 노출량 기준 근사순위(검색 원장에 절대순위 없음). ⚠️부스트/광고 의심 = 노출 상위인데 주간판매·리뷰 바닥. 소스: commerce_srp_query_product_metrics_v0_1.'}
     changed.append('keywordRadar')
 
 # ---------- lead_funnel (표준통일: 가구 리드가치 gross·상품매칭·성숙코호트 + 의도등급 T1~T4) ----------

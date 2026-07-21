@@ -116,23 +116,27 @@ WHERE date >= CAST(DATE_ADD('day',-14,CURRENT_DATE) AS VARCHAR)
   AND object_id IN ({SELF_S}) AND object_idx BETWEEN 0 AND 100
 GROUP BY date, object_id, query_keyword HAVING COUNT(*) >= 10"""
 
-# ============ 경쟁 레이더: 핵심 키워드 신규경쟁자·부스트/광고 의심 자동감지 (7d, idx<=20) ============
+# ============ 경쟁 레이더: 핵심 키워드 신규경쟁자·부스트/광고 의심 자동감지 (7d 노출 기준) ============
 # 목적: 지정경쟁사만 보는 현 대시보드가 놓치는 신규 진입자/프로모·광고로 순위만 산 상품 감지.
-# 판정은 build.py: 순위 높은데 sell28·리뷰 바닥 = boost_suspect. SRP원장은 광고/오가닉 미분리 → 괴리로 추론.
+# 판정은 build.py: 노출 상위인데 주간판매·리뷰 바닥 = boost_suspect.
+# 🔴 2026-07-21 소스 교체: 구 search.commerce_srp_dataset_daily_v0_0_2 가 2026-07-06 이후 상류 동결(파티션 중단).
+#   신 소스 = search.commerce_srp_query_product_metrics_v0_1 (query×item 주간 노출/클릭/구매, 07-18까지 최신).
+#   신 테이블엔 절대순위(object_idx) 없음 → 주간 노출량 기준 DENSE_RANK 근사순위(prom_rank)로 대체.
 _RADAR_KW = "'매트리스','침대프레임','수납침대','이불','차렵이불','냉감이불'"
 QUERIES['kw_radar'] = f"""
-WITH s AS (
-  SELECT query_keyword kw, object_id pid, AVG(object_idx) rnk, COUNT(*) imp, SUM(is_clicked) clk,
-    MAX(monthly_sales_score) sales_score, MAX(sell_cnt_28_day) sell28, MAX(review_count) rev, MAX(review_avg) ravg
-  FROM search.commerce_srp_dataset_daily_v0_0_2
-  WHERE query_keyword IN ({_RADAR_KW})
-    AND date >= CAST(DATE_ADD('day',-7,CURRENT_DATE) AS VARCHAR) AND object_idx <= 20
-  GROUP BY query_keyword, object_id HAVING COUNT(*) > 40)
-SELECT s.kw, s.pid, p.brand_name brand, p.product_name name, p.selling_cost price,
-  ROUND(s.rnk,1)+1 rank, s.imp, ROUND(s.clk*100.0/s.imp,1) ctr,
-  ROUND(s.sales_score,3) sales_score, CAST(s.sell28 AS INT) sell28, s.rev, ROUND(s.ravg,2) ravg
-FROM s LEFT JOIN ba_preserved.comm_product_info_latest p ON TRY_CAST(s.pid AS BIGINT)=p.product_id
-ORDER BY s.kw, rank"""
+WITH m AS (
+  SELECT query kw, item_id pid,
+    query_product_imps_1w imp, query_product_clicks_1w clk, query_product_purchases_1w buy
+  FROM search.commerce_srp_query_product_metrics_v0_1
+  WHERE date = (SELECT max(date) FROM search.commerce_srp_query_product_metrics_v0_1)
+    AND query IN ({_RADAR_KW}) AND query_product_imps_1w > 200),
+r AS (
+  SELECT kw, pid, imp, clk, buy,
+    DENSE_RANK() OVER (PARTITION BY kw ORDER BY imp DESC) rank FROM m)
+SELECT r.kw, r.pid, p.brand_name brand, p.product_name name, p.selling_cost price,
+  r.rank, r.imp, ROUND(r.clk*100.0/r.imp,1) ctr, r.buy, COALESCE(p.review_cnt_cum,0) rev
+FROM r LEFT JOIN ba_preserved.comm_product_info_latest p ON TRY_CAST(r.pid AS BIGINT)=p.product_id
+WHERE r.rank <= 15 ORDER BY r.kw, r.rank"""
 
 # ============ 리드 퍼널(표준 통일): 가구 리드가치(gross·상품매칭·성숙 코호트) + 의도등급 T1~T4 ============
 # 리드가치 = 찜한 distinct 유저가 [찜월 forward 3개월] 내 [그 찜한 상품]을 산 실현 GMV ÷ 찜 유저. (통합공식 문서 정의블록)

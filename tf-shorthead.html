@@ -213,14 +213,13 @@ function viewRadar(){
         '<td class="num">'+(x.price?won(x.price):'-')+'</td>'+
         '<td class="num">'+(x.imp||0).toLocaleString()+'</td>'+
         '<td class="num">'+(x.ctr||0).toFixed(1)+'%</td>'+
-        '<td class="num'+(x.sell28<50?' chg dn':'')+'">'+x.sell28+'</td>'+
+        '<td class="num'+(x.buy<3?' chg dn':'')+'">'+(x.buy||0)+'</td>'+
         '<td class="num'+(x.rev<1000?' chg dn':'')+'">'+(x.rev||0).toLocaleString()+'</td>'+
-        '<td class="num">'+(x.ravg||'-')+'</td>'+
         '<td>'+badge(x)+'</td></tr>';
     }).join('');
     return '<div class="card"><h3>🔑 '+kw+' <span class="wbadge">우리 최고순위 '+(ob!=null?ob+'위':'권외')+'</span></h3>'+
-      '<table><thead><tr><th class="num">순위</th><th>상품(브랜드)</th><th class="num">가격</th><th class="num">노출</th><th class="num">CTR</th><th class="num">28일판매</th><th class="num">리뷰</th><th class="num">평점</th><th>판정</th></tr></thead><tbody>'+rows+'</tbody></table>'+
-      '<div class="note">⚠️ 부스트의심 = 순위 높은데 28일판매·리뷰 바닥(프로모/광고로 순위만 산 것). SRP원장은 광고/오가닉 미분리 → 순위 vs 오가닉실력 괴리로 추론. 상품명 클릭 = 오늘의집 상품페이지.</div></div>';
+      '<table><thead><tr><th class="num">노출순위</th><th>상품(브랜드)</th><th class="num">가격</th><th class="num">노출</th><th class="num">CTR</th><th class="num">주간판매</th><th class="num">리뷰</th><th>판정</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+      '<div class="note">⚠️ 부스트의심 = 노출 상위인데 주간판매·리뷰 바닥(프로모/광고로 노출만 산 것). 노출순위 = 주간 노출량 기준 근사순위(검색 원장에 절대순위 없음). 상품명 클릭 = 오늘의집 상품페이지.</div></div>';
   }).join('');
   return head+body;
 }
