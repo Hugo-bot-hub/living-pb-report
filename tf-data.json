@@ -47,13 +47,15 @@
       ]
     },
     "srpWindow": {
-      "matrix": "14d",
-      "keywords": "14d",
-      "keywordRank": "14d",
+      "matrix": "7d",
+      "keywords": "7d",
+      "keywordRank": "7d",
       "ts": "60d"
     },
     "srpKeywordRankWindow": "통합검색 2주(≈14일)",
-    "qcSource": "INTEGRATED(통합검색)"
+    "qcSource": "INTEGRATED(통합검색)",
+    "srpSource": "query_object_metrics_with_order_mart(노출가중)+search_object_with_order_mart(P5)",
+    "srpRefreshed": "2026-07-20"
   },
   "products": {
     "442026": {

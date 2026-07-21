@@ -51,6 +51,13 @@ $buildOut = & $py "daily_pipeline\build.py" 2>&1
 $buildOut | ForEach-Object { Add-Content $log $_ -Encoding UTF8 }
 $ok = ($buildOut -match 'BUILD OK') -and ($buildOut -match '3.*OK')
 
+# SRP 소스 동결 감시: build.py가 SRP 미갱신 WARN을 내면 tf-alert.log로 전달(daily는 최신인데 SRP만 낡는 사각지대 차단)
+$srpWarn = $buildOut | Select-String 'WARN: SRP'
+if ($srpWarn) {
+  Add-Content $alert "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] [ALERT] $($srpWarn.Line)" -Encoding UTF8
+  Log "[daily-batch] SRP stale WARN → tf-alert.log 전달"
+}
+
 if ($ok) {
   & git add tf-data.json tf-mattress-data.json *>> $log
   & git commit -m "data: 데일리 전섹션 자동 재추출 (배치 파이프라인)" *>> $log

@@ -496,8 +496,21 @@ if be is not None:
 last = max((r['dt'] for pid in SELF for r in D['daily'].get(pid,[])), default=D['meta'].get('lastUpdate'))
 D['meta']['lastUpdate']=last
 D['meta']['version']='daily'
-D['meta']['srpWindow']={'matrix':'14d','keywords':'14d','keywordRank':'14d','ts':'60d'}
+D['meta']['srpWindow']={'matrix':'7d','keywords':'7d','keywordRank':'7d','ts':'60d'}
 D['meta']['qcSource']='INTEGRATED(통합검색)'
+D['meta']['srpSource']='query_object_metrics_with_order_mart(노출가중)+search_object_with_order_mart(P5)'
+
+# ---------- SRP 신선도 감시 (소스 동결 시 조용한 낡음 방지) ----------
+# srp_base14/kw_radar는 매일 실행. 소스(SRP 마트)가 동결되면 rows_req가 빈결과→기존값 보존(블랭크는 막지만 낡음).
+# 그 경우 해당 섹션이 changed에 없다 = 이번 런에서 갱신 실패 → WARN 출력(run.ps1이 tf-alert.log로 전달).
+_srp_crit=['srpMatrix','keywordRadar','srpKeywordRank']
+_srp_stale=[s for s in _srp_crit if s not in changed]
+if _srp_stale:
+    D['meta']['srpStaleWarn']={'sections':_srp_stale,'since':D['meta'].get('srpRefreshed','?')}
+    print('WARN: SRP sections not refreshed this run:', _srp_stale, '- SRP 소스(query_object_metrics_with_order_mart/search_object_with_order_mart) 동결/장애 확인 필요')
+else:
+    D['meta'].pop('srpStaleWarn',None)
+    D['meta']['srpRefreshed']=last
 
 # ---------- 불변식 검증 ----------
 assert isinstance(D['srpMatrix'],list) and isinstance(D['inflow'],list) and isinstance(D['ages']['buyer'],list)
