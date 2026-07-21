@@ -83,30 +83,38 @@ FROM ba_preserved.commerce_gross_profit_orders
 WHERE CAST(product_id AS BIGINT) IN ({ALL_B}) AND {YM6} AND base_dt >= DATE_ADD('day',-50,CURRENT_DATE)
 GROUP BY base_dt, product_id"""
 
-# ============ SRP: base (실측 평균순위·P5최고·주간판매·ctr·imp) — matrix+keywordRank 공통 소스 ============
-# 🔴 2026-07-21 소스 교체: 구 commerce_srp_dataset_daily_v0_0_2 07-06 동결(avg_object_idx·score 가진 agg_*도 전부 동결).
-#   🎯 정밀 복원: att_log(전사 액션 원장, 07-20 신선)의 '스토어 검색 결과' 상품 클릭 object_idx = 그 상품의 실제 노출 위치.
-#   상품별 집계 시 클릭편향이 자기 위치를 왜곡 안 함 → AVG(object_idx)=실측 평균순위, P5(0.05)=로버스트 최고순위(구 P5와 동일 의미).
-#   노출량·CTR·주간판매는 metrics_v0_1(query×item)에서 조인. rank/best 0-based(HTML dispRank/dispBest가 +1).
-#   ⚠️ att_log object_idx=varchar → TRY_CAST. 광고섹션 제외(오가닉 순위). 최근 7일, 클릭>=8인 (kw,pid)만(노이즈 컷).
+# ============ SRP: base (노출가중 실측 평균순위·진짜P5·노출·CTR·주간판매) — matrix+keywordRank 공통 소스 ============
+# 🔴 2026-07-21 소스 교체: 구 commerce_srp_dataset_daily_v0_0_2 07-06 동결.
+#   🎯 정본 = search.query_object_metrics_with_order_mart (SRP 마트, 07-19 신선). 구 v0_0_2와 동일 계보:
+#     avg_object_idx = 노출가중 실제 평균순위(클릭편향 없음), n_impression/n_clicked/n_purchased 보유.
+#   🎯 P5 최고순위 = search.search_object_with_order_mart (노출단위 원본, object_idx per 노출) approx_percentile(0.05).
+#   ✅ 검증: 마트 노출가중 순위가 동결 전 v0_0_2 실제값과 일치(studio매트 21.95→20.39). att_log 클릭방식(16.3)의 낙관편향 제거.
+#   오가닉만 = source='STORE_SRP' AND object_section='스토어 검색 결과'(광고·유사상품·중간광고 제외). 최근 7일. rank/best 0-based.
+#   상품별 top-15(노출순) = 1000행캡 내 유지. rank=노출가중avg, best=P5.
 QUERIES['srp_base14'] = f"""
-WITH pos AS (
-  SELECT search_keyword kw, object_id pid,
-    AVG(CAST(object_idx AS DOUBLE)) rank, approx_percentile(CAST(object_idx AS INT),0.05) best, COUNT(*) clk_pos
-  FROM ba_preserved.att_log
+WITH agg AS (
+  SELECT query_keyword kw, object_id pid,
+    SUM(avg_object_idx*n_impression)/SUM(n_impression) rank,
+    SUM(n_impression) imp, SUM(n_clicked) clk, SUM(n_purchased) buy
+  FROM search.query_object_metrics_with_order_mart
   WHERE date >= CAST(DATE_ADD('day',-7,CURRENT_DATE) AS VARCHAR)
-    AND category='CLICK' AND object_type='PRODUCTION' AND object_section='스토어 검색 결과'
+    AND source='STORE_SRP' AND object_section='스토어 검색 결과' AND object_type='PRODUCTION'
+    AND object_id IN ({ALL_S})
+  GROUP BY query_keyword, object_id HAVING SUM(n_impression) >= 20),
+p5 AS (
+  SELECT query_keyword kw, object_id pid, approx_percentile(CAST(object_idx AS INT),0.05) best
+  FROM search.search_object_with_order_mart
+  WHERE date >= CAST(DATE_ADD('day',-7,CURRENT_DATE) AS VARCHAR)
+    AND source='STORE_SRP' AND object_section='스토어 검색 결과' AND object_type='PRODUCTION'
     AND object_id IN ({ALL_S}) AND TRY_CAST(object_idx AS INT) IS NOT NULL
-  GROUP BY search_keyword, object_id HAVING COUNT(*) >= 5),
-met AS (
-  SELECT query kw, item_id pid, query_product_imps_1w imp, query_product_clicks_1w clk, query_product_purchases_1w buy
-  FROM search.commerce_srp_query_product_metrics_v0_1
-  WHERE date=(SELECT max(date) FROM search.commerce_srp_query_product_metrics_v0_1)
-    AND item_id IN ({ALL_S}))
-SELECT p.pid, p.kw, ROUND(p.rank,2) rank, CAST(p.best AS INT) best, COALESCE(m.buy,0) score,
-  COALESCE(ROUND(m.clk*1.0/NULLIF(m.imp,0),4),0) ctr, COALESCE(m.imp, p.clk_pos) imp
-FROM pos p LEFT JOIN met m ON p.kw=m.kw AND p.pid=m.pid
-ORDER BY p.pid, imp DESC, p.kw"""
+  GROUP BY query_keyword, object_id),
+j AS (
+  SELECT a.pid, a.kw, a.rank, COALESCE(p.best, CAST(round(a.rank) AS INT)) best, a.buy, a.imp, a.clk,
+    ROW_NUMBER() OVER (PARTITION BY a.pid ORDER BY a.imp DESC, a.kw) rn
+  FROM agg a LEFT JOIN p5 p ON a.kw=p.kw AND a.pid=p.pid)
+SELECT pid, kw, ROUND(rank,2) rank, CAST(best AS INT) best, buy score,
+  ROUND(clk*1.0/NULLIF(imp,0),4) ctr, imp
+FROM j WHERE rn <= 15 ORDER BY pid, imp DESC, kw"""
 
 # 통합검색량(통검) qc: query_qc_mart INTEGRATED, 2w(qc)+4w(qc4). 최신 date 파티션. (마트 자체는 정상 신선)
 # 키워드 유니버스만 신 metrics 테이블에서 도출(구 동결 srp 테이블 대체).
