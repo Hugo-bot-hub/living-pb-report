@@ -100,7 +100,9 @@ WITH agg AS (
   WHERE date >= CAST(DATE_ADD('day',-7,CURRENT_DATE) AS VARCHAR)
     AND source='STORE_SRP' AND object_section='스토어 검색 결과' AND object_type='PRODUCTION'
     AND object_id IN ({ALL_S})
-  GROUP BY query_keyword, object_id HAVING SUM(n_impression) >= 20),
+  GROUP BY query_keyword, object_id
+  -- 구 v0_0_2와 동일 스코프: 평균 노출위치 상위 100위 이내만(광범위 키워드 깊은 묻힘 노이즈 제외)
+  HAVING SUM(n_impression) >= 20 AND SUM(avg_object_idx*n_impression)/SUM(n_impression) <= 100),
 p5 AS (
   SELECT query_keyword kw, object_id pid, approx_percentile(CAST(object_idx AS INT),0.05) best
   FROM search.search_object_with_order_mart
