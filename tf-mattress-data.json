@@ -1,7 +1,7 @@
 {
   "meta": {
-    "lastUpdate": "2026-07-01",
-    "window": "객단가·attach·합구매 = 2026-04~06(3개월). 합구매는 전 layer 침대프레임 기준(기존 studio 3개→전 프레임 확장).",
+    "lastUpdate": "2026-07-22",
+    "window": "프레임 합구매/attach=최근3개월, 매트리스 교차=최근6개월, 객단가=최근3개월 (유저단위·롤링, CURRENT_DATE 자동, 기준 2026-07-22)",
     "note": "매트리스 객단가는 표시가와 다름(사이즈×경도별). 방수커버 옵션 제외. attach=프레임과 함께 팔린 매트리스(매트리스 PID 매출엔 미포함).",
     "source": "commerce_gross_profit_orders × commerce_snapshot_production_options(옵션명 explain)",
     "cosellUpdate": "전 프레임 확장 2026-07-02"

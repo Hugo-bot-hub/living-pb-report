@@ -500,6 +500,12 @@ D['meta']['srpWindow']={'matrix':'7d','keywords':'7d','keywordRank':'7d','ts':'6
 D['meta']['qcSource']='INTEGRATED(통합검색)'
 D['meta']['srpSource']='query_object_metrics_with_order_mart(노출가중)+search_object_with_order_mart(P5)'
 
+# ---------- 매트리스 파일 meta 갱신 (2026-07-23: 라벨 stale 버그 수정) ----------
+# 데이터는 롤링 윈도우로 매일 재계산되는데 M['meta']는 안 건드려서 lastUpdate/window가 07-01·04~06에 박제돼 있었음.
+# D만 갱신하던 것을 M도 last 기준으로 동기화 → 라벨이 롤링을 반영.
+M['meta']['lastUpdate']=last
+M['meta']['window']='프레임 합구매/attach=최근3개월, 매트리스 교차=최근6개월, 객단가=최근3개월 (유저단위·롤링, CURRENT_DATE 자동, 기준 '+str(last)+')'
+
 # ---------- SRP 신선도 감시 (소스 동결 시 조용한 낡음 방지) ----------
 # srp_base14/kw_radar는 매일 실행. 소스(SRP 마트)가 동결되면 rows_req가 빈결과→기존값 보존(블랭크는 막지만 낡음).
 # 그 경우 해당 섹션이 changed에 없다 = 이번 런에서 갱신 실패 → WARN 출력(run.ps1이 tf-alert.log로 전달).
