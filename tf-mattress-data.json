@@ -1,7 +1,7 @@
 {
   "meta": {
-    "lastUpdate": "2026-07-23",
-    "window": "프레임 합구매/attach=최근3개월, 매트리스 교차=최근6개월, 객단가=최근3개월 (유저단위·롤링, CURRENT_DATE 자동, 기준 2026-07-23)",
+    "lastUpdate": "2026-07-24",
+    "window": "프레임 합구매/attach=최근3개월, 매트리스 교차=최근6개월, 객단가=최근3개월 (유저단위·롤링, CURRENT_DATE 자동, 기준 2026-07-24)",
     "note": "매트리스 객단가는 표시가와 다름(사이즈×경도별). 방수커버 옵션 제외. attach=프레임과 함께 팔린 매트리스(매트리스 PID 매출엔 미포함).",
     "source": "commerce_gross_profit_orders × commerce_snapshot_production_options(옵션명 explain)",
     "cosellUpdate": "전 프레임 확장 2026-07-02"
@@ -145,6 +145,120 @@
         "gmv": 6460000
       }
     ],
+    "1089824": [
+      {
+        "name": "미디엄하드",
+        "size": "SS",
+        "hardness": "미디엄하드",
+        "qty": 266,
+        "unit": 194942,
+        "gmv": 51854500
+      },
+      {
+        "name": "미디엄소프트",
+        "size": "SS",
+        "hardness": "미디엄소프트",
+        "qty": 223,
+        "unit": 194139,
+        "gmv": 43293100
+      },
+      {
+        "name": "미디엄하드",
+        "size": "Q",
+        "hardness": "미디엄하드",
+        "qty": 143,
+        "unit": 261131,
+        "gmv": 37341700
+      },
+      {
+        "name": "미디엄소프트",
+        "size": "Q",
+        "hardness": "미디엄소프트",
+        "qty": 130,
+        "unit": 258632,
+        "gmv": 33622100
+      },
+      {
+        "name": "하드",
+        "size": "SS",
+        "hardness": "",
+        "qty": 228,
+        "unit": 142967,
+        "gmv": 32596400
+      },
+      {
+        "name": "미디엄하드",
+        "size": "D",
+        "hardness": "미디엄하드",
+        "qty": 124,
+        "unit": 241978,
+        "gmv": 30005300
+      },
+      {
+        "name": "미디엄소프트",
+        "size": "D",
+        "hardness": "미디엄소프트",
+        "qty": 86,
+        "unit": 240580,
+        "gmv": 20689900
+      },
+      {
+        "name": "하드",
+        "size": "Q",
+        "hardness": "",
+        "qty": 77,
+        "unit": 192939,
+        "gmv": 14856300
+      },
+      {
+        "name": "소프트",
+        "size": "Q",
+        "hardness": "",
+        "qty": 40,
+        "unit": 317405,
+        "gmv": 12696200
+      },
+      {
+        "name": "소프트",
+        "size": "SS",
+        "hardness": "",
+        "qty": 50,
+        "unit": 252596,
+        "gmv": 12629800
+      },
+      {
+        "name": "하드",
+        "size": "S",
+        "hardness": "",
+        "qty": 59,
+        "unit": 109458,
+        "gmv": 6458000
+      },
+      {
+        "name": "미디엄하드",
+        "size": "S",
+        "hardness": "미디엄하드",
+        "qty": 33,
+        "unit": 175276,
+        "gmv": 5784100
+      },
+      {
+        "name": "미디엄소프트",
+        "size": "S",
+        "hardness": "미디엄소프트",
+        "qty": 23,
+        "unit": 175278,
+        "gmv": 4031400
+      },
+      {
+        "name": "소프트",
+        "size": "S",
+        "hardness": "",
+        "qty": 4,
+        "unit": 224225,
+        "gmv": 896900
+      }
+    ],
     "3607491": [
       {
         "name": "단단한 타입(미디엄 하드)",
@@ -166,9 +280,9 @@
         "name": "단단한 타입(미디엄 하드)",
         "size": "Q",
         "hardness": "미디엄하드",
-        "qty": 57,
-        "unit": 473126,
-        "gmv": 26968200
+        "qty": 58,
+        "unit": 473588,
+        "gmv": 27468100
       },
       {
         "name": "포근한 타입(미디엄 소프트)",
@@ -210,120 +324,6 @@
         "unit": 550943,
         "gmv": 3856600
       }
-    ],
-    "1089824": [
-      {
-        "name": "미디엄하드",
-        "size": "SS",
-        "hardness": "미디엄하드",
-        "qty": 266,
-        "unit": 194942,
-        "gmv": 51854500
-      },
-      {
-        "name": "미디엄소프트",
-        "size": "SS",
-        "hardness": "미디엄소프트",
-        "qty": 223,
-        "unit": 194139,
-        "gmv": 43293100
-      },
-      {
-        "name": "미디엄하드",
-        "size": "Q",
-        "hardness": "미디엄하드",
-        "qty": 143,
-        "unit": 261131,
-        "gmv": 37341700
-      },
-      {
-        "name": "미디엄소프트",
-        "size": "Q",
-        "hardness": "미디엄소프트",
-        "qty": 129,
-        "unit": 258544,
-        "gmv": 33352200
-      },
-      {
-        "name": "하드",
-        "size": "SS",
-        "hardness": "",
-        "qty": 228,
-        "unit": 142967,
-        "gmv": 32596400
-      },
-      {
-        "name": "미디엄하드",
-        "size": "D",
-        "hardness": "미디엄하드",
-        "qty": 123,
-        "unit": 241914,
-        "gmv": 29755400
-      },
-      {
-        "name": "미디엄소프트",
-        "size": "D",
-        "hardness": "미디엄소프트",
-        "qty": 85,
-        "unit": 240471,
-        "gmv": 20440000
-      },
-      {
-        "name": "하드",
-        "size": "Q",
-        "hardness": "",
-        "qty": 77,
-        "unit": 192939,
-        "gmv": 14856300
-      },
-      {
-        "name": "소프트",
-        "size": "SS",
-        "hardness": "",
-        "qty": 50,
-        "unit": 252596,
-        "gmv": 12629800
-      },
-      {
-        "name": "소프트",
-        "size": "Q",
-        "hardness": "",
-        "qty": 39,
-        "unit": 316828,
-        "gmv": 12356300
-      },
-      {
-        "name": "하드",
-        "size": "S",
-        "hardness": "",
-        "qty": 59,
-        "unit": 109458,
-        "gmv": 6458000
-      },
-      {
-        "name": "미디엄하드",
-        "size": "S",
-        "hardness": "미디엄하드",
-        "qty": 33,
-        "unit": 175276,
-        "gmv": 5784100
-      },
-      {
-        "name": "미디엄소프트",
-        "size": "S",
-        "hardness": "미디엄소프트",
-        "qty": 23,
-        "unit": 175278,
-        "gmv": 4031400
-      },
-      {
-        "name": "소프트",
-        "size": "S",
-        "hardness": "",
-        "qty": 4,
-        "unit": 224225,
-        "gmv": 896900
-      }
     ]
   },
   "attach_frame_option": [
@@ -359,8 +359,8 @@
     },
     {
       "yyyymm": "202607",
-      "gmv": 60293800,
-      "qty": 211
+      "gmv": 61669000,
+      "qty": 216
     }
   ],
   "cosell": [
@@ -547,94 +547,20 @@
   ],
   "cosell_summary": {
     "method": "유저단위(별도 매트리스PID OR 프레임옵션 매트리스). 전 layer 침대프레임(수납/일반/깔판).",
-    "frame_users": 3960,
-    "bought_mat": 1788,
+    "frame_users": 3980,
+    "bought_mat": 1799,
     "rate_pct": 45.2,
-    "our": 971,
-    "comp_only": 817,
-    "opt_mat": 793,
+    "our": 977,
+    "comp_only": 822,
+    "opt_mat": 799,
     "leak_pct": 45.7,
     "market_rate_pct": 35.1,
     "window": "프레임 최근3개월 / 매트리스 최근6개월 (유저단위, 옵션매트 복구·400일창)",
     "note": "모수 착시였음(옵션매트 누락). 정정 44%로 시장(35%) 상위. 우리(옵션매트 포함) 포착 vs 경쟁 유출이 핵심. 옵션매트리스=자사 포착."
   },
   "cosell_by_tier": {
-    "refine": {
-      "frame_users": 1016,
-      "bought_mat": 517,
-      "our": 344,
-      "comp_only": 173,
-      "opt_mat": 292,
-      "rate_pct": 50.9,
-      "leak_pct": 33.5,
-      "dest": [
-        {
-          "pid": "opt",
-          "name": "프레임옵션 매트리스(자사)",
-          "brand": "오늘의집 layer",
-          "is_self": true,
-          "users": 292,
-          "qty": 355,
-          "gmv": 99855920
-        },
-        {
-          "pid": "1590911",
-          "name": "수면밀도",
-          "brand": "수면밀도",
-          "is_self": false,
-          "users": 42,
-          "qty": 73,
-          "gmv": 26254100
-        },
-        {
-          "pid": "3607491",
-          "name": "refine매트리스(우리)",
-          "brand": "오늘의집 layer",
-          "is_self": true,
-          "users": 35,
-          "qty": 67,
-          "gmv": 16647600
-        },
-        {
-          "pid": "858905",
-          "name": "웰퍼니쳐",
-          "brand": "웰퍼니쳐",
-          "is_self": false,
-          "users": 23,
-          "qty": 38,
-          "gmv": 10269200
-        },
-        {
-          "pid": "1089824",
-          "name": "basic매트리스(우리)",
-          "brand": "오늘의집 layer",
-          "is_self": true,
-          "users": 27,
-          "qty": 40,
-          "gmv": 6684400
-        },
-        {
-          "pid": "1525743",
-          "name": "웰퍼니쳐",
-          "brand": "웰퍼니쳐",
-          "is_self": false,
-          "users": 10,
-          "qty": 16,
-          "gmv": 2946700
-        },
-        {
-          "pid": "329364",
-          "name": "휴도",
-          "brand": "휴도",
-          "is_self": false,
-          "users": 12,
-          "qty": 19,
-          "gmv": 2567000
-        }
-      ]
-    },
     "studio": {
-      "frame_users": 811,
+      "frame_users": 812,
       "bought_mat": 169,
       "our": 35,
       "comp_only": 134,
@@ -708,31 +634,31 @@
       ]
     },
     "basic": {
-      "frame_users": 2133,
-      "bought_mat": 1102,
-      "our": 592,
-      "comp_only": 510,
-      "opt_mat": 485,
+      "frame_users": 2144,
+      "bought_mat": 1108,
+      "our": 596,
+      "comp_only": 512,
+      "opt_mat": 489,
       "rate_pct": 51.7,
-      "leak_pct": 46.3,
+      "leak_pct": 46.2,
       "dest": [
         {
           "pid": "opt",
           "name": "프레임옵션 매트리스(자사)",
           "brand": "오늘의집 layer",
           "is_self": true,
-          "users": 485,
-          "qty": 544,
-          "gmv": 120709880
+          "users": 489,
+          "qty": 549,
+          "gmv": 121956780
         },
         {
           "pid": "1590911",
           "name": "수면밀도",
           "brand": "수면밀도",
           "is_self": false,
-          "users": 87,
-          "qty": 144,
-          "gmv": 54041200
+          "users": 88,
+          "qty": 145,
+          "gmv": 54490200
         },
         {
           "pid": "858905",
@@ -780,9 +706,199 @@
           "gmv": 7168000
         }
       ]
+    },
+    "refine": {
+      "frame_users": 1024,
+      "bought_mat": 522,
+      "our": 346,
+      "comp_only": 176,
+      "opt_mat": 294,
+      "rate_pct": 51.0,
+      "leak_pct": 33.7,
+      "dest": [
+        {
+          "pid": "opt",
+          "name": "프레임옵션 매트리스(자사)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 294,
+          "qty": 357,
+          "gmv": 100575920
+        },
+        {
+          "pid": "1590911",
+          "name": "수면밀도",
+          "brand": "수면밀도",
+          "is_self": false,
+          "users": 44,
+          "qty": 77,
+          "gmv": 27360100
+        },
+        {
+          "pid": "3607491",
+          "name": "refine매트리스(우리)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 35,
+          "qty": 67,
+          "gmv": 16647600
+        },
+        {
+          "pid": "858905",
+          "name": "웰퍼니쳐",
+          "brand": "웰퍼니쳐",
+          "is_self": false,
+          "users": 24,
+          "qty": 39,
+          "gmv": 10628200
+        },
+        {
+          "pid": "1089824",
+          "name": "basic매트리스(우리)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 27,
+          "qty": 40,
+          "gmv": 6684400
+        },
+        {
+          "pid": "1525743",
+          "name": "웰퍼니쳐",
+          "brand": "웰퍼니쳐",
+          "is_self": false,
+          "users": 10,
+          "qty": 16,
+          "gmv": 2946700
+        },
+        {
+          "pid": "329364",
+          "name": "휴도",
+          "brand": "휴도",
+          "is_self": false,
+          "users": 12,
+          "qty": 19,
+          "gmv": 2567000
+        }
+      ]
     }
   },
   "mat_to_frame_by_tier": {
+    "basic": {
+      "mat_users": 1450,
+      "bought_frame": 751,
+      "our": 132,
+      "comp_only": 619,
+      "rate_pct": 51.8,
+      "leak_pct": 82.4,
+      "dest": [
+        {
+          "pid": "2093235",
+          "name": "[쿠폰가 5.6만] 로우슬립 저상형 침대프레임 MS/S/SS/D/Q/K/LK (높이선택)",
+          "brand": "바스포르",
+          "is_self": false,
+          "users": 116,
+          "gmv": 16266400
+        },
+        {
+          "pid": "1243313",
+          "name": "basic / 바른 수납 침대프레임, 무헤드/LED헤드, SS/Q",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 90,
+          "gmv": 29132030
+        },
+        {
+          "pid": "125056",
+          "name": "침대 프레임 매트리스 깔판 저상형 패밀리 받침대 미니싱글 600",
+          "brand": "노르웨이숲",
+          "is_self": false,
+          "users": 34,
+          "gmv": 2126400
+        },
+        {
+          "pid": "1786951",
+          "name": "[오늘의집 단독] 단하루 91,560원 노아06 빅서랍 수납침대 프레임 SS/Q 매트선택",
+          "brand": "크라운퍼니쳐",
+          "is_self": false,
+          "users": 30,
+          "gmv": 5766000
+        },
+        {
+          "pid": "324336",
+          "name": "[오늘의집 단독] 협탁무료증정 에디트 헤드리스 평상형침대프레임 SS/Q,K 호환 매트선택",
+          "brand": "크라운퍼니쳐",
+          "is_self": false,
+          "users": 30,
+          "gmv": 5032000
+        },
+        {
+          "pid": "2352818",
+          "name": "[오늘의집 단독] 20%쿠폰ㅣ드레스덴 조야패브릭 호텔식 침대프레임 SS/Q/K/LK/CK",
+          "brand": "데일리리빙",
+          "is_self": false,
+          "users": 22,
+          "gmv": 6959000
+        }
+      ]
+    },
+    "refine": {
+      "mat_users": 345,
+      "bought_frame": 213,
+      "our": 57,
+      "comp_only": 156,
+      "rate_pct": 61.7,
+      "leak_pct": 73.2,
+      "dest": [
+        {
+          "pid": "2093235",
+          "name": "[쿠폰가 5.6만] 로우슬립 저상형 침대프레임 MS/S/SS/D/Q/K/LK (높이선택)",
+          "brand": "바스포르",
+          "is_self": false,
+          "users": 19,
+          "gmv": 2845000
+        },
+        {
+          "pid": "3858646",
+          "name": "refine / 두 배 더 깊어진 빅수납 침대프레임 4colors, SS/D/Q,K",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 17,
+          "gmv": 9480000
+        },
+        {
+          "pid": "1243313",
+          "name": "basic / 바른 수납 침대프레임, 무헤드/LED헤드, SS/Q",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 16,
+          "gmv": 4768800
+        },
+        {
+          "pid": "3652507",
+          "name": "refine / 오래 써도 튼튼한 수납형 침대프레임, 무헤드/패널헤드, SS/D/Q,K",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 13,
+          "gmv": 6279300
+        },
+        {
+          "pid": "2510855",
+          "name": "국내생산 E0등급 이브 LED/무헤드 서랍형 학생 원룸 조명 수납 침대프레임 SS/D/Q",
+          "brand": "알파침대",
+          "is_self": false,
+          "users": 6,
+          "gmv": 1762600
+        },
+        {
+          "pid": "3603649",
+          "name": "[오늘의집 단독] 단하루 120,690원 노엘 반자동 리프트업 통수납 침대프레임 SS/Q",
+          "brand": "크라운퍼니쳐",
+          "is_self": false,
+          "users": 5,
+          "gmv": 1964000
+        }
+      ]
+    },
     "studio": {
       "mat_users": 173,
       "bought_frame": 88,
@@ -840,122 +956,6 @@
           "gmv": 1524900
         }
       ]
-    },
-    "refine": {
-      "mat_users": 345,
-      "bought_frame": 213,
-      "our": 57,
-      "comp_only": 156,
-      "rate_pct": 61.7,
-      "leak_pct": 73.2,
-      "dest": [
-        {
-          "pid": "2093235",
-          "name": "[쿠폰가 5.6만] 로우슬립 저상형 침대프레임 MS/S/SS/D/Q/K/LK (높이선택)",
-          "brand": "바스포르",
-          "is_self": false,
-          "users": 19,
-          "gmv": 2845000
-        },
-        {
-          "pid": "3858646",
-          "name": "refine / 두 배 더 깊어진 빅수납 침대프레임 4colors, SS/D/Q,K",
-          "brand": "오늘의집 layer",
-          "is_self": true,
-          "users": 17,
-          "gmv": 9480000
-        },
-        {
-          "pid": "1243313",
-          "name": "basic / 바른 수납 침대프레임, 무헤드/LED헤드, SS/Q",
-          "brand": "오늘의집 layer",
-          "is_self": true,
-          "users": 16,
-          "gmv": 4768800
-        },
-        {
-          "pid": "3652507",
-          "name": "refine / 오래 써도 튼튼한 수납형 침대프레임, 무헤드/패널헤드, SS/D/Q,K",
-          "brand": "오늘의집 layer",
-          "is_self": true,
-          "users": 13,
-          "gmv": 6279300
-        },
-        {
-          "pid": "2510855",
-          "name": "국내생산 이브 LED/무헤드 서랍형 친환경시트 학생 원룸 조명 수납 침대프레임 SS/D/Q",
-          "brand": "알파침대",
-          "is_self": false,
-          "users": 6,
-          "gmv": 1762600
-        },
-        {
-          "pid": "3603649",
-          "name": "[오늘의집 단독] 단하루 120,690원 노엘 반자동 리프트업 통수납 침대프레임 SS/Q",
-          "brand": "크라운퍼니쳐",
-          "is_self": false,
-          "users": 5,
-          "gmv": 1625000
-        }
-      ]
-    },
-    "basic": {
-      "mat_users": 1445,
-      "bought_frame": 745,
-      "our": 132,
-      "comp_only": 613,
-      "rate_pct": 51.6,
-      "leak_pct": 82.3,
-      "dest": [
-        {
-          "pid": "2093235",
-          "name": "[쿠폰가 5.6만] 로우슬립 저상형 침대프레임 MS/S/SS/D/Q/K/LK (높이선택)",
-          "brand": "바스포르",
-          "is_self": false,
-          "users": 113,
-          "gmv": 15899400
-        },
-        {
-          "pid": "1243313",
-          "name": "basic / 바른 수납 침대프레임, 무헤드/LED헤드, SS/Q",
-          "brand": "오늘의집 layer",
-          "is_self": true,
-          "users": 90,
-          "gmv": 29132030
-        },
-        {
-          "pid": "125056",
-          "name": "침대 프레임 매트리스 깔판 저상형 패밀리 받침대 미니싱글 600",
-          "brand": "노르웨이숲",
-          "is_self": false,
-          "users": 32,
-          "gmv": 2026600
-        },
-        {
-          "pid": "1786951",
-          "name": "[오늘의집 단독] 단하루 91,560원 노아06 빅서랍 수납침대 프레임 SS/Q 매트선택",
-          "brand": "크라운퍼니쳐",
-          "is_self": false,
-          "users": 30,
-          "gmv": 5766000
-        },
-        {
-          "pid": "324336",
-          "name": "[오늘의집 단독] 협탁무료증정 에디트 헤드리스 평상형침대프레임 SS/Q,K 호환 매트선택",
-          "brand": "크라운퍼니쳐",
-          "is_self": false,
-          "users": 30,
-          "gmv": 5032000
-        },
-        {
-          "pid": "2352818",
-          "name": "[오늘의집 단독] 20%쿠폰ㅣ드레스덴 조야패브릭 호텔식 침대프레임 SS/Q/K/LK/CK",
-          "brand": "데일리리빙",
-          "is_self": false,
-          "users": 22,
-          "gmv": 6959000
-        }
-      ]
     }
   },
   "mat_to_frame_summary": {
@@ -965,15 +965,15 @@
   "comp_frame_dest": {
     "comp_pid": "2352818",
     "comp_name": "데일리리빙 드레스덴(프레임 최대경쟁)",
-    "buyers": 6205,
+    "buyers": 6233,
     "dest": [
       {
         "pid": "1590911",
         "name": "허리 디스크 환자가 만든 매트리스 S/SS/Q/K/LK 미디엄하드 S",
         "brand": "수면밀도",
         "is_self": false,
-        "users": 493,
-        "gmv": 313221900
+        "users": 497,
+        "gmv": 315775600
       },
       {
         "pid": "opt",
@@ -988,24 +988,24 @@
         "name": "지정일배송/무료설치ㅣ편안한 제주 25cm 본넬스프링 매트리스 S/SS/Q/K/LK",
         "brand": "휴도",
         "is_self": false,
-        "users": 215,
-        "gmv": 52333800
+        "users": 216,
+        "gmv": 52729800
       },
       {
         "pid": "425266",
         "name": "[지정일배송/무료설치]허리가 편안한 호텔식 포켓스프링 매트리스25cm S/SS/Q/K/LK",
         "brand": "먼데이하우스",
         "is_self": false,
-        "users": 143,
-        "gmv": 32985000
+        "users": 144,
+        "gmv": 33224000
       },
       {
         "pid": "858905",
         "name": "[쿠폰가 24.9만] [무료내림]더매직 허리부담완화 포켓스프링매트리스 S/SS/Q/K/LK",
         "brand": "웰퍼니쳐",
         "is_self": false,
-        "users": 117,
-        "gmv": 53868900
+        "users": 118,
+        "gmv": 54307900
       },
       {
         "pid": "2737888",
@@ -1020,8 +1020,8 @@
         "name": "[오늘의집 단독] 100일교환가능 Q4 15년보증 유로탑매트리스 롤팩 SS/Q/K/LK",
         "brand": "퀵슬립",
         "is_self": false,
-        "users": 54,
-        "gmv": 23647900
+        "users": 55,
+        "gmv": 23977600
       },
       {
         "pid": "3676050",
@@ -1032,51 +1032,51 @@
         "gmv": 6143000
       },
       {
-        "pid": "1089824",
-        "name": "[무료내림서비스] basic / 바른 숙면 매트리스, 본넬/포켓스프링, S/SS/D/Q",
-        "brand": "오늘의집 layer",
-        "is_self": true,
+        "pid": "853690",
+        "name": "[오늘의집 단독] 프라임 유로탑 독립스프링 롤팩 매트리스 S/SS/Q",
+        "brand": "삼익가구",
+        "is_self": false,
         "users": 22,
-        "gmv": 5852400
+        "gmv": 5893900
       }
     ]
   },
   "comp_mattress_dest": {
     "comp_pid": "1590911",
     "comp_name": "수면밀도(매트리스 최대경쟁)",
-    "buyers": 7265,
+    "buyers": 7310,
     "dest": [
       {
         "pid": "2352818",
         "name": "[오늘의집 단독] 20%쿠폰ㅣ드레스덴 조야패브릭 호텔식 침대프레임 SS/Q/K/LK/CK",
         "brand": "데일리리빙",
         "is_self": false,
-        "users": 497,
-        "gmv": 167681000
+        "users": 501,
+        "gmv": 168597000
       },
       {
         "pid": "2093235",
         "name": "[쿠폰가 5.6만] 로우슬립 저상형 침대프레임 MS/S/SS/D/Q/K/LK (높이선택)",
         "brand": "바스포르",
         "is_self": false,
-        "users": 182,
-        "gmv": 30862800
+        "users": 184,
+        "gmv": 31120800
       },
       {
         "pid": "673573",
         "name": "[오늘의집 단독] 레온 프리미엄 빅수납 호텔 침대 프레임(매트제외) SS/Q/K/LK",
         "brand": "삼익가구",
         "is_self": false,
-        "users": 154,
-        "gmv": 90233600
+        "users": 155,
+        "gmv": 91369600
       },
       {
         "pid": "1786951",
         "name": "[오늘의집 단독] 단하루 91,560원 노아06 빅서랍 수납침대 프레임 SS/Q 매트선택",
         "brand": "크라운퍼니쳐",
         "is_self": false,
-        "users": 151,
-        "gmv": 32957000
+        "users": 152,
+        "gmv": 33096000
       },
       {
         "pid": "3603649",
@@ -1091,16 +1091,16 @@
         "name": "[오늘의집 단독] 협탁무료증정 에디트 헤드리스 평상형침대프레임 SS/Q,K 호환 매트선택",
         "brand": "크라운퍼니쳐",
         "is_self": false,
-        "users": 109,
-        "gmv": 17226000
+        "users": 111,
+        "gmv": 17464000
       },
       {
         "pid": "3767739",
         "name": "[주말특가 5만원쿠폰] 아임빅 LED 무헤드/3단/4단 빅서랍 호텔침대 수납프레임 SS/Q",
         "brand": "먼데이하우스",
         "is_self": false,
-        "users": 88,
-        "gmv": 25219000
+        "users": 90,
+        "gmv": 25815000
       },
       {
         "pid": "1243313",
@@ -1116,8 +1116,8 @@
     {
       "brand": "크라운퍼니쳐",
       "is_self": false,
-      "frame_buyers": 20156,
-      "same_brand_mat": 5276,
+      "frame_buyers": 20228,
+      "same_brand_mat": 5291,
       "rate_pct": 26.2,
       "opt_match_pct": 51.4,
       "underest": true
@@ -1125,8 +1125,8 @@
     {
       "brand": "먼데이하우스",
       "is_self": false,
-      "frame_buyers": 9061,
-      "same_brand_mat": 2955,
+      "frame_buyers": 9093,
+      "same_brand_mat": 2961,
       "rate_pct": 32.6,
       "opt_match_pct": 96.8,
       "underest": false
@@ -1134,8 +1134,8 @@
     {
       "brand": "삼익가구",
       "is_self": false,
-      "frame_buyers": 10635,
-      "same_brand_mat": 1881,
+      "frame_buyers": 10659,
+      "same_brand_mat": 1882,
       "rate_pct": 17.7,
       "opt_match_pct": 84.1,
       "underest": true
@@ -1143,17 +1143,17 @@
     {
       "brand": "데일리리빙",
       "is_self": false,
-      "frame_buyers": 17852,
-      "same_brand_mat": 1709,
+      "frame_buyers": 17911,
+      "same_brand_mat": 1714,
       "rate_pct": 9.6,
-      "opt_match_pct": 49.9,
+      "opt_match_pct": 50.0,
       "underest": true
     },
     {
       "brand": "퍼니코",
       "is_self": false,
-      "frame_buyers": 6455,
-      "same_brand_mat": 1621,
+      "frame_buyers": 6477,
+      "same_brand_mat": 1627,
       "rate_pct": 25.1,
       "opt_match_pct": 93.9,
       "underest": false
@@ -1161,8 +1161,8 @@
     {
       "brand": "오늘의집 layer",
       "is_self": true,
-      "frame_buyers": 6201,
-      "same_brand_mat": 1394,
+      "frame_buyers": 6221,
+      "same_brand_mat": 1400,
       "rate_pct": 22.5,
       "opt_match_pct": 99.8,
       "underest": false
@@ -1170,8 +1170,8 @@
     {
       "brand": "휴도",
       "is_self": false,
-      "frame_buyers": 4499,
-      "same_brand_mat": 1036,
+      "frame_buyers": 4515,
+      "same_brand_mat": 1039,
       "rate_pct": 23.0,
       "opt_match_pct": 73.8,
       "underest": true
@@ -1179,8 +1179,8 @@
     {
       "brand": "바스포르",
       "is_self": false,
-      "frame_buyers": 9597,
-      "same_brand_mat": 905,
+      "frame_buyers": 9642,
+      "same_brand_mat": 906,
       "rate_pct": 9.4,
       "opt_match_pct": 100.0,
       "underest": false
@@ -1188,26 +1188,26 @@
     {
       "brand": "웰퍼니쳐",
       "is_self": false,
-      "frame_buyers": 3463,
-      "same_brand_mat": 869,
+      "frame_buyers": 3479,
+      "same_brand_mat": 872,
       "rate_pct": 25.1,
-      "opt_match_pct": 99.5,
+      "opt_match_pct": 99.4,
       "underest": false
     },
     {
       "brand": "알파침대",
       "is_self": false,
-      "frame_buyers": 3181,
-      "same_brand_mat": 827,
-      "rate_pct": 26.0,
-      "opt_match_pct": 90.8,
-      "underest": false
+      "frame_buyers": 3191,
+      "same_brand_mat": 828,
+      "rate_pct": 25.9,
+      "opt_match_pct": 87.6,
+      "underest": true
     },
     {
       "brand": "주빌리가구",
       "is_self": false,
-      "frame_buyers": 2468,
-      "same_brand_mat": 808,
+      "frame_buyers": 2481,
+      "same_brand_mat": 812,
       "rate_pct": 32.7,
       "opt_match_pct": 97.0,
       "underest": false
@@ -1215,8 +1215,8 @@
     {
       "brand": "지누스",
       "is_self": false,
-      "frame_buyers": 3449,
-      "same_brand_mat": 804,
+      "frame_buyers": 3464,
+      "same_brand_mat": 806,
       "rate_pct": 23.3,
       "opt_match_pct": 100.0,
       "underest": false
@@ -1245,16 +1245,16 @@
         "frame_name": "basic 바른수납",
         "tier": "basic",
         "option_name": "[10% 할인] basic 하드 매트리스 SS",
-        "qty": 98,
-        "gmv": 13801070
+        "qty": 99,
+        "gmv": 13931970
       },
       {
         "frame_pid": "1243313",
         "frame_name": "basic 바른수납",
         "tier": "basic",
         "option_name": "[10% 할인] refine 미디엄하드 매트리스 SS",
-        "qty": 35,
-        "gmv": 11262840
+        "qty": 37,
+        "gmv": 11892840
       },
       {
         "frame_pid": "1243313",
@@ -1292,17 +1292,17 @@
         "frame_pid": "1243313",
         "frame_name": "basic 바른수납",
         "tier": "basic",
-        "option_name": "[10% 할인] basic 소프트 매트리스 Q",
-        "qty": 23,
-        "gmv": 7214610
+        "option_name": "[10% 할인] basic 미디엄하드 매트리스 Q",
+        "qty": 30,
+        "gmv": 7563330
       },
       {
         "frame_pid": "1243313",
         "frame_name": "basic 바른수납",
         "tier": "basic",
-        "option_name": "[10% 할인] basic 미디엄하드 매트리스 Q",
-        "qty": 28,
-        "gmv": 7077330
+        "option_name": "[10% 할인] basic 소프트 매트리스 Q",
+        "qty": 23,
+        "gmv": 7214610
       },
       {
         "frame_pid": "1243313",
@@ -1509,8 +1509,8 @@
         "frame_name": "refine 빅수납",
         "tier": "refine",
         "option_name": "[10% 할인] refine 미디엄하드 매트리스 SS",
-        "qty": 68,
-        "gmv": 21199920
+        "qty": 69,
+        "gmv": 21514920
       },
       {
         "frame_pid": "3858646",
@@ -1524,17 +1524,17 @@
         "frame_pid": "3858646",
         "frame_name": "refine 빅수납",
         "tier": "refine",
-        "option_name": "[10% 할인] basic 미디엄소프트 매트리스 SS",
-        "qty": 52,
-        "gmv": 9441640
+        "option_name": "[10% 할인] refine 미디엄하드 매트리스 D",
+        "qty": 24,
+        "gmv": 9562640
       },
       {
         "frame_pid": "3858646",
         "frame_name": "refine 빅수납",
         "tier": "refine",
-        "option_name": "[10% 할인] refine 미디엄하드 매트리스 D",
-        "qty": 23,
-        "gmv": 9157640
+        "option_name": "[10% 할인] basic 미디엄소프트 매트리스 SS",
+        "qty": 52,
+        "gmv": 9441640
       },
       {
         "frame_pid": "3858646",
@@ -1722,8 +1722,8 @@
       }
     ],
     "total": {
-      "qty": 917,
-      "gmv": 241941800
+      "qty": 924,
+      "gmv": 243908700
     },
     "window": "최근 3개월",
     "note": "전 layer 침대프레임(basic/refine/studio)의 추가옵션 매트리스 전수. 상품별·옵션별 세부."
@@ -1791,19 +1791,19 @@
           },
           {
             "yyyymm": "202607",
-            "frame_qty": 237,
-            "attach_qty": 88,
-            "acc_qty": 26,
+            "frame_qty": 244,
+            "attach_qty": 90,
+            "acc_qty": 28,
             "unknown_qty": 0,
-            "frame_gmv": 92234900,
-            "attach_gmv": 23283000,
-            "acc_gmv": 383400,
-            "rate_pct": 37.1
+            "frame_gmv": 95197900,
+            "attach_gmv": 24003000,
+            "acc_gmv": 403200,
+            "rate_pct": 36.9
           }
         ],
-        "frame_qty": 899,
-        "attach_qty": 275,
-        "attach_gmv": 73198260,
+        "frame_qty": 906,
+        "attach_qty": 277,
+        "attach_gmv": 73918260,
         "unknown_qty": 0,
         "rate_pct": 30.6
       },
@@ -1879,19 +1879,19 @@
           },
           {
             "yyyymm": "202607",
-            "frame_qty": 351,
-            "attach_qty": 106,
-            "acc_qty": 26,
+            "frame_qty": 358,
+            "attach_qty": 109,
+            "acc_qty": 25,
             "unknown_qty": 0,
-            "frame_gmv": 93308500,
-            "attach_gmv": 23930800,
-            "acc_gmv": 661400,
-            "rate_pct": 30.2
+            "frame_gmv": 95187800,
+            "attach_gmv": 24586000,
+            "acc_gmv": 651500,
+            "rate_pct": 30.4
           }
         ],
-        "frame_qty": 3351,
-        "attach_qty": 639,
-        "attach_gmv": 136290260,
+        "frame_qty": 3358,
+        "attach_qty": 642,
+        "attach_gmv": 136945460,
         "unknown_qty": 0,
         "rate_pct": 19.1
       },
@@ -1967,17 +1967,17 @@
           },
           {
             "yyyymm": "202607",
-            "frame_qty": 55,
+            "frame_qty": 56,
             "attach_qty": 12,
-            "acc_qty": 64,
+            "acc_qty": 65,
             "unknown_qty": 0,
-            "frame_gmv": 32105000,
+            "frame_gmv": 32614000,
             "attach_gmv": 7120000,
-            "acc_gmv": 11109400,
-            "rate_pct": 21.8
+            "acc_gmv": 11334600,
+            "rate_pct": 21.4
           }
         ],
-        "frame_qty": 163,
+        "frame_qty": 164,
         "attach_qty": 16,
         "attach_gmv": 8026000,
         "unknown_qty": 0,
@@ -2055,17 +2055,17 @@
           },
           {
             "yyyymm": "202607",
-            "frame_qty": 64,
+            "frame_qty": 63,
             "attach_qty": 3,
-            "acc_qty": 85,
+            "acc_qty": 83,
             "unknown_qty": 0,
-            "frame_gmv": 56970000,
+            "frame_gmv": 55920000,
             "attach_gmv": 3896000,
-            "acc_gmv": 13438400,
-            "rate_pct": 4.7
+            "acc_gmv": 13094400,
+            "rate_pct": 4.8
           }
         ],
-        "frame_qty": 476,
+        "frame_qty": 475,
         "attach_qty": 17,
         "attach_gmv": 19144000,
         "unknown_qty": 0,
@@ -2198,17 +2198,17 @@
           },
           {
             "yyyymm": "202607",
-            "frame_qty": 24,
+            "frame_qty": 25,
             "attach_qty": 1,
-            "acc_qty": 39,
+            "acc_qty": 41,
             "unknown_qty": 0,
-            "frame_gmv": 20170000,
+            "frame_gmv": 20970000,
             "attach_gmv": 1032000,
-            "acc_gmv": 6613300,
-            "rate_pct": 4.2
+            "acc_gmv": 6997300,
+            "rate_pct": 4.0
           }
         ],
-        "frame_qty": 157,
+        "frame_qty": 158,
         "attach_qty": 1,
         "attach_gmv": 1032000,
         "unknown_qty": 0,
