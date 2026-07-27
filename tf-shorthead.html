@@ -430,7 +430,7 @@ function subBench(pid){
   if(!b) return '<div class="ph">벤치마크 데이터 없음</div>';
   const self=(b.self_products||[]).find(function(x){return String(x.pid)===String(pid);});
   const bands=b.price_bands||[]; const ca=b.cate_3p_avg||{};
-  let h='<div class="insight">카테고리 <b>'+(key==='bedding'?'이불/이불커버':key==='mattress'?'매트리스':'침대')+'</b> · 자사 PB vs 3P 벤치마크 (최근 7일 UV)</div>';
+  let h='<div class="insight">카테고리 <b>'+(key==='bedding'?'차렵이불 세트':key==='mattress'?'매트리스':'침대')+'</b> · 자사 PB vs 3P 벤치마크 (최근 7일 UV)</div>';
   if(self){
     var rc=function(r){return r?'<span class="'+(r>=1?'chg up':'chg dn')+'">'+r.toFixed(2)+'x</span>':'';};
     h+='<div class="kpi-row">'+

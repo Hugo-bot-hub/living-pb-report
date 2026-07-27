@@ -331,7 +331,9 @@ WHERE u.birthday IS NOT NULL AND LENGTH(u.birthday)>=4 AND CAST(SUBSTR(u.birthda
 GROUP BY 1,2"""
 
 # ============ benchmarks: bedding / mattress / bed (7d UV, 가격밴드 PB vs 3P) ============
-_BENCH_CATE = {'bedding':"cate_d3='이불/이불커버'", 'mattress':"cate_d2='매트리스(150T이상)'", 'bed':"cate_d2='침대'"}
+# 🔴 2026-07-27 bedding 벤치 뎁스 교정: cate_d3='이불/이불커버'(단품·이불커버·홑이불 혼재로 우리에게 관대)
+#   → 우리 상품 실제 뎁스 = cate_d4='차렵이불' + '세트'(3918642·3640244·3640123 전부 차렵이불세트). 동일 뎁스로 3P 비교해야 정확.
+_BENCH_CATE = {'bedding':"cate_d3='이불/이불커버' AND cate_d4='차렵이불' AND product_name LIKE '%세트%'", 'mattress':"cate_d2='매트리스(150T이상)'", 'bed':"cate_d2='침대'"}
 _BENCH_BANDS = {
  'bedding':"CASE WHEN p.selling_cost<30000 THEN '01_<30k' WHEN p.selling_cost<50000 THEN '02_30-50k' WHEN p.selling_cost<70000 THEN '03_50-70k' WHEN p.selling_cost<100000 THEN '04_70-100k' ELSE '05_100k+' END",
  'mattress':"CASE WHEN p.selling_cost<200000 THEN '01_<20만' WHEN p.selling_cost<400000 THEN '02_20-40만' WHEN p.selling_cost<700000 THEN '03_40-70만' WHEN p.selling_cost<1200000 THEN '04_70-120만' ELSE '05_120만+' END",
