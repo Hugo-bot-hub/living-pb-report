@@ -167,7 +167,7 @@ WHERE r.rank <= 15 ORDER BY r.kw, r.rank"""
 # 리드가치 = 찜한 distinct 유저가 [찜월 forward 3개월] 내 [그 찜한 상품]을 산 실현 GMV ÷ 찜 유저. (통합공식 문서 정의블록)
 # 코호트 c0=date_trunc(month,오늘)-3M. 찜/PDP형성=코호트월[c0,c0+1M) · vd/구매관찰=[c0,c0+3M). 리드가치=T3+T4(찜리드).
 # ⚠️ user_pdp_facts.base_dt=date, user_scrap_facts.base_dt=VARCHAR. scan~10GB/run. 하반기 리드퍼널 문서 §5-3 + 리드가치 표준.
-_FURN_LEAD = '1089824,3607491,3121605,1243313,3748221,3898593,3898584,2518275'
+_FURN_LEAD = '1089824,3607491,3121605,1243313,3748221,3898593,3898584,2518275,3858646'
 QUERIES['lead_funnel'] = f"""
 WITH cm AS (SELECT date_trunc('month',CURRENT_DATE)-interval '3' month AS c0),
 pdpf AS (

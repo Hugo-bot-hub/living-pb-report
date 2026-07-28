@@ -145,7 +145,7 @@ if kr is not None:
 # ---------- lead_funnel (표준통일: 가구 리드가치 gross·상품매칭·성숙코호트 + 의도등급 T1~T4) ----------
 lf = rows('lead_funnel', ['pid','tier','leads','conv','gmv'])
 if lf is not None:
-    LF_NAME = {'1243313':'basic 침대프레임'}
+    LF_NAME = {'1243313':'basic 침대프레임','3858646':'refine 빅수납프레임'}
     byp = {}
     for r in lf:
         byp.setdefault(str(r['pid']), {})[r['tier']] = {'leads':i(r['leads']),'conv':i(r['conv']),'gmv':i(r['gmv'])}
@@ -176,7 +176,7 @@ if lf is not None:
 # ---------- lead_growth (노출→리드 도달률 90일 + 월별 신규리드 성장추이 6개월) ----------
 lg = rows('lead_growth', ['pid','ym','new_leads','pdp_users','lead_users'])
 if lg is not None:
-    LFN = {'1243313':'basic 침대프레임'}
+    LFN = {'1243313':'basic 침대프레임','3858646':'refine 빅수납프레임'}
     byp = {}; reach = {}
     for r in lg:
         pid = str(r['pid'])

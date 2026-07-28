@@ -230,6 +230,40 @@ function viewLead(){
   const sm=LF.summary||{};
   const TIERS=[['T4','🔥 핫','찜+재방문','#6C5CE7'],['T3','🌤 웜','찜만','#00b894'],['T2','❄ 쿨','재방문만','#0984e3'],['T1','· 콜드','1회조회','#b2bec3']];
   var head='<div class="insight">🎯 <b>리드 퍼널</b> — 가구는 고관여라 리드가 쌓이고 시차 전환. 상품별 <b>리드 1개 가치(찜→3개월 실현GMV/찜유저)·의도등급 T1~T4·찜→구매 전환</b> 관제. <b>리드가치 vs 리드 CAC</b>로 매체 투자 판정.</div>';
+  // ── 리드 풀 성장 판정 헤드라인 (leadGrowth.total_monthly 집계 · CRM 회수전략 전제 검증) ──
+  (function(){
+    var _lg=D.leadGrowth;
+    if(!_lg||!_lg.total_monthly||_lg.total_monthly.length<2) return;
+    var tm=_lg.total_monthly, py=_lg.partial_ym;
+    var comp=tm.filter(function(m){return m.ym!==py;});
+    if(comp.length<2) return;
+    var cur=comp[comp.length-1], prev=comp[comp.length-2];
+    var mom=prev.new_leads?Math.round((cur.new_leads-prev.new_leads)/prev.new_leads*100):null;
+    // 판정은 단월 MoM 노이즈 대신 3개월 변화(분기 추세)로 — 시즌성·단발 흔들림 방지
+    var base3=comp.length>=4?comp[comp.length-4]:comp[0];
+    var qoq=base3.new_leads?Math.round((cur.new_leads-base3.new_leads)/base3.new_leads*100):null;
+    var verdict,vcolor,vemoji;
+    if(qoq==null){verdict='판정불가';vcolor='#b2bec3';vemoji='•';}
+    else if(qoq>=15){verdict='성장';vcolor='#00b894';vemoji='📈';}
+    else if(qoq<=-15){verdict='둔화';vcolor='#e17055';vemoji='📉';}
+    else{verdict='정체(고원)';vcolor='#f0a500';vemoji='➡️';}
+    var mx=Math.max.apply(null,tm.map(function(m){return m.new_leads;}))||1;
+    var bars='<div style="display:flex;gap:3px;align-items:flex-end;height:44px">'+tm.map(function(m){
+      var h=Math.max(Math.round(m.new_leads/mx*44),3),pt=(m.ym===py);
+      return '<div title="'+m.ym+': '+m.new_leads.toLocaleString()+(pt?" (진행중)":"")+'" style="width:26px;height:'+h+'px;background:'+(pt?'#c9c2f0':'#6C5CE7')+';border-radius:2px"></div>';
+    }).join('')+'</div>';
+    var labels='<div style="display:flex;gap:3px;margin-top:2px">'+tm.map(function(m){
+      return '<div style="width:26px;font-size:9px;color:var(--text3);text-align:center">'+m.ym.slice(4)+'월</div>';
+    }).join('')+'</div>';
+    head+='<div class="card" style="border-left:4px solid '+vcolor+'"><h3>📈 숏헤드 리드 풀이 계속 크고 있나? <span class="wbadge" style="background:'+vcolor+';color:#fff">'+vemoji+' '+verdict+'</span></h3>'+
+      '<div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-end">'+
+      '<div><div>'+bars+labels+'</div></div>'+
+      '<div class="kpi"><div class="lbl">3개월 변화 <span style="font-size:9px">(판정기준)</span></div><div class="val" style="color:'+vcolor+'">'+(qoq==null?'-':(qoq>=0?'+':'')+qoq+'%')+'</div><div class="sub">'+base3.ym+' → '+cur.ym+'</div></div>'+
+      '<div class="kpi"><div class="lbl">최근 완료월 MoM</div><div class="val">'+(mom==null?'-':(mom>=0?'+':'')+mom+'%')+'</div><div class="sub">'+prev.ym+' → '+cur.ym+' (단월·참고)</div></div>'+
+      '<div class="kpi"><div class="lbl">최근 완료월 신규 리드</div><div class="val" style="color:#6C5CE7">'+cur.new_leads.toLocaleString()+'</div><div class="sub">자사 숏헤드 합계(user×상품 첫 리드)</div></div>'+
+      '</div>'+
+      '<div class="note">리드 풀 현재 <b>'+verdict+'</b> 국면(25년 하반기~26.3 강한 성장 후 고원). ⚠️ <b>CRM 회수 논거는 리드 "성장"이 아니라 쌓인 고의도 리드(T4) "스톡"에 있음</b> — 정체여도 매달 신규 리드가 유입돼 nurture 풀은 마르지 않는다. 성장이 재점화되면 회수 상방이 더 커질 뿐. 상세 추이=아래 상품별 카드.</div></div>';
+  })();
   head+='<div class="card" style="border-left:4px solid #6C5CE7"><h3>📖 리드가치 정의 &amp; 측정 (통합공식 문서 정의블록)</h3>'+
     '<div class="note" style="margin-bottom:8px"><b>리드</b> = 그 상품을 찜한 <b>distinct 유저</b>(상품 단위). &nbsp;<b>리드가치</b> = 찜 유저가 <b>찜월 forward 3개월</b> 내 <b>그 찜한 상품</b>을 산 실현 GMV ÷ 찜 유저 (gross·상품매칭). &nbsp;<b>코호트</b> = <b>'+(LF.window||'찜월→3개월')+'</b>(관측시점 기준 성숙월). &nbsp;<b>용도</b> = 리드가치 &gt; 리드 CAC(지출÷귀속리드)면 그 매체·상품 강화. (로그인 유저 기준)</div>'+
     '<table><thead><tr><th>등급</th><th>정의 (신호)</th><th>의미 · 액션</th></tr></thead><tbody>'+

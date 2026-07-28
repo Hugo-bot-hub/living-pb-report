@@ -88131,6 +88131,51 @@
         }
       },
       {
+        "pid": "3858646",
+        "name": "refine 빅수납프레임",
+        "tiers": {
+          "T1": {
+            "leads": 5850,
+            "conv": 3,
+            "gmv": 1086900,
+            "rate": 0.1,
+            "value": 186,
+            "outstanding": 5847
+          },
+          "T2": {
+            "leads": 3796,
+            "conv": 39,
+            "gmv": 14867250,
+            "rate": 1.0,
+            "value": 3917,
+            "outstanding": 3757
+          },
+          "T3": {
+            "leads": 1356,
+            "conv": 9,
+            "gmv": 3582830,
+            "rate": 0.7,
+            "value": 2642,
+            "outstanding": 1347
+          },
+          "T4": {
+            "leads": 925,
+            "conv": 140,
+            "gmv": 67077580,
+            "rate": 15.1,
+            "value": 72516,
+            "outstanding": 785
+          }
+        },
+        "summary": {
+          "total_leads": 11927,
+          "scrap_to_buy_rate": 6.5,
+          "scrap_leads": 2281,
+          "lead_value": 30978,
+          "hot_uncaptured": 785
+        }
+      },
+      {
         "pid": "2518275",
         "name": "refine빅수납호텔",
         "tiers": {
@@ -88178,9 +88223,9 @@
     ],
     "window": "찜월→forward 3개월 성숙 코호트",
     "summary": {
-      "furniture_hot_uncaptured": 5718,
+      "furniture_hot_uncaptured": 6503,
       "bench_scrap_to_buy": 6.9,
-      "lead_value_blended": 50297
+      "lead_value_blended": 47299
     },
     "note": "리드가치 = 찜한 distinct 유저가 찜월 forward 3개월 내 그 찜한 상품을 산 실현 GMV ÷ 찜 유저(gross·상품매칭·성숙 코호트). vs 리드 CAC로 매체 투자 판정(정의블록=통합공식 문서). T4 찜+재방문/T3 찜만/T2 재방문만/T1 1회. 찜→구매=찜리드(T3+T4) 전환율(벤치 6.9%). 로그인 유저·비로그인 제외."
   },
@@ -88189,9 +88234,9 @@
       {
         "pid": "3898593",
         "name": "코타수납",
-        "reach_to_lead": 43.4,
-        "pdp_users": 30914,
-        "lead_users": 13423,
+        "reach_to_lead": 43.5,
+        "pdp_users": 30925,
+        "lead_users": 13459,
         "monthly": [
           {
             "ym": "202602",
@@ -88215,7 +88260,7 @@
           },
           {
             "ym": "202607",
-            "new_leads": 3043
+            "new_leads": 3168
           }
         ],
         "trend_pct": -10
@@ -88223,9 +88268,9 @@
       {
         "pid": "3898584",
         "name": "코타평상",
-        "reach_to_lead": 42.8,
-        "pdp_users": 12314,
-        "lead_users": 5272,
+        "reach_to_lead": 43.0,
+        "pdp_users": 12313,
+        "lead_users": 5289,
         "monthly": [
           {
             "ym": "202602",
@@ -88249,7 +88294,41 @@
           },
           {
             "ym": "202607",
-            "new_leads": 1228
+            "new_leads": 1294
+          }
+        ],
+        "trend_pct": -10
+      },
+      {
+        "pid": "3858646",
+        "name": "refine 빅수납프레임",
+        "reach_to_lead": 42.9,
+        "pdp_users": 37306,
+        "lead_users": 15987,
+        "monthly": [
+          {
+            "ym": "202602",
+            "new_leads": 246
+          },
+          {
+            "ym": "202603",
+            "new_leads": 2649
+          },
+          {
+            "ym": "202604",
+            "new_leads": 4671
+          },
+          {
+            "ym": "202605",
+            "new_leads": 5761
+          },
+          {
+            "ym": "202606",
+            "new_leads": 5164
+          },
+          {
+            "ym": "202607",
+            "new_leads": 5463
           }
         ],
         "trend_pct": -10
@@ -88258,8 +88337,8 @@
         "pid": "1089824",
         "name": "basic매트리스",
         "reach_to_lead": 39.3,
-        "pdp_users": 32043,
-        "lead_users": 12585,
+        "pdp_users": 32112,
+        "lead_users": 12616,
         "monthly": [
           {
             "ym": "202602",
@@ -88283,7 +88362,7 @@
           },
           {
             "ym": "202607",
-            "new_leads": 3391
+            "new_leads": 3531
           }
         ],
         "trend_pct": 0
@@ -88292,8 +88371,8 @@
         "pid": "3748221",
         "name": "페이브침대",
         "reach_to_lead": 38.6,
-        "pdp_users": 36610,
-        "lead_users": 14137,
+        "pdp_users": 36444,
+        "lead_users": 14079,
         "monthly": [
           {
             "ym": "202602",
@@ -88317,7 +88396,7 @@
           },
           {
             "ym": "202607",
-            "new_leads": 3154
+            "new_leads": 3258
           }
         ],
         "trend_pct": -33
@@ -88325,9 +88404,9 @@
       {
         "pid": "1243313",
         "name": "basic 침대프레임",
-        "reach_to_lead": 38.3,
-        "pdp_users": 54952,
-        "lead_users": 21073,
+        "reach_to_lead": 38.4,
+        "pdp_users": 55073,
+        "lead_users": 21142,
         "monthly": [
           {
             "ym": "202602",
@@ -88351,7 +88430,7 @@
           },
           {
             "ym": "202607",
-            "new_leads": 5977
+            "new_leads": 6306
           }
         ],
         "trend_pct": 15
@@ -88359,9 +88438,9 @@
       {
         "pid": "3121605",
         "name": "studio매트리스",
-        "reach_to_lead": 34.8,
-        "pdp_users": 10688,
-        "lead_users": 3717,
+        "reach_to_lead": 34.9,
+        "pdp_users": 10634,
+        "lead_users": 3706,
         "monthly": [
           {
             "ym": "202602",
@@ -88385,7 +88464,7 @@
           },
           {
             "ym": "202607",
-            "new_leads": 607
+            "new_leads": 629
           }
         ],
         "trend_pct": -39
@@ -88393,9 +88472,9 @@
       {
         "pid": "3607491",
         "name": "refine매트리스",
-        "reach_to_lead": 34.4,
-        "pdp_users": 11966,
-        "lead_users": 4113,
+        "reach_to_lead": 34.5,
+        "pdp_users": 12034,
+        "lead_users": 4147,
         "monthly": [
           {
             "ym": "202602",
@@ -88419,7 +88498,7 @@
           },
           {
             "ym": "202607",
-            "new_leads": 1082
+            "new_leads": 1146
           }
         ],
         "trend_pct": -22
@@ -88428,8 +88507,8 @@
         "pid": "2518275",
         "name": "refine빅수납호텔",
         "reach_to_lead": 28.5,
-        "pdp_users": 14466,
-        "lead_users": 4116,
+        "pdp_users": 14755,
+        "lead_users": 4198,
         "monthly": [
           {
             "ym": "202602",
@@ -88453,7 +88532,7 @@
           },
           {
             "ym": "202607",
-            "new_leads": 2611
+            "new_leads": 2733
           }
         ],
         "trend_pct": -79
@@ -88462,27 +88541,27 @@
     "total_monthly": [
       {
         "ym": "202602",
-        "new_leads": 16691
+        "new_leads": 16937
       },
       {
         "ym": "202603",
-        "new_leads": 21248
+        "new_leads": 23897
       },
       {
         "ym": "202604",
-        "new_leads": 24395
+        "new_leads": 29066
       },
       {
         "ym": "202605",
-        "new_leads": 23435
+        "new_leads": 29196
       },
       {
         "ym": "202606",
-        "new_leads": 20624
+        "new_leads": 25788
       },
       {
         "ym": "202607",
-        "new_leads": 21093
+        "new_leads": 27528
       }
     ],
     "partial_ym": "202607",
