@@ -268,6 +268,41 @@ SELECT date_format(l.cm,'%Y-%m') ym,
 FROM leads l JOIN cv ON l.uid=cv.uid AND l.pid=cv.pid AND l.cm=cv.cm
 GROUP BY 1,2 ORDER BY ym, tier"""
 
+# ============ 리드 경유 비중(역추적): 구매자 중 구매 전 리드신호 보유 비율 — 가구 합산 ============
+# 퍼널 카드가 "리드→구매"(분모=리드)라면 이건 "구매→리드 역추적"(분모=구매자).
+# 구매창=최근 완료 3개월[thisM-3,thisM), 신호 룩백=2025-12(런칭)~. 신호 <= 구매일(거쳐서=사전).
+# 실측(2026-07-30, 4~6월): 구매자의 90%가 리드 경유(장바구니 81%·찜/장바구니 86%·재방문 63%), 직접구매 10%.
+# ⚠️ pdp_facts 스캔 ~28GB → 월요일만(run.ps1 skip). 1행.
+QUERIES['lead_attribution'] = f"""
+WITH lp AS (SELECT pid FROM (VALUES {_inb([1089824,3607491,3121605,1243313,3748221,3898593,3898584,2518275,3858646])}) t(pid)),
+buys AS (
+  SELECT CAST(user_id AS BIGINT) uid, CAST(product_id AS BIGINT) pid, MIN(base_dt) buy_dt
+  FROM ba_preserved.commerce_gross_profit_orders
+  WHERE CAST(product_id AS BIGINT) IN (SELECT pid FROM lp)
+    AND base_dt >= date_add('month',-3,date_trunc('month',CURRENT_DATE)) AND base_dt < date_trunc('month',CURRENT_DATE)
+    AND yyyymm >= date_format(date_add('month',-3,date_trunc('month',CURRENT_DATE)),'%Y%m')
+    AND user_id IS NOT NULL AND option_quantity>0
+  GROUP BY 1,2),
+scr AS (
+  SELECT CAST(user_id AS BIGINT) uid, TRY_CAST(object_id AS BIGINT) pid,
+    MIN(CASE WHEN category='SCRAP' THEN CAST(base_dt AS DATE) END) scrap_dt,
+    MIN(CASE WHEN category='CART' THEN CAST(base_dt AS DATE) END) cart_dt
+  FROM ba_preserved.user_scrap_facts
+  WHERE base_dt >= '2025-12-01' AND object_type='PRODUCTION' AND category IN ('SCRAP','CART')
+    AND TRY_CAST(object_id AS BIGINT) IN (SELECT pid FROM lp) AND user_id IS NOT NULL
+  GROUP BY 1,2),
+pdp AS (
+  SELECT uid, pid, element_at(array_sort(array_agg(bd)),2) revisit_dt
+  FROM (SELECT CAST(user_id AS BIGINT) uid, product_id pid, base_dt bd FROM ba_preserved.user_pdp_facts
+        WHERE base_dt >= DATE '2025-12-01' AND product_id IN (SELECT pid FROM lp) AND user_id IS NOT NULL
+        GROUP BY 1,2,3) GROUP BY 1,2)
+SELECT COUNT(*) buyers,
+  SUM(CASE WHEN (s.scrap_dt IS NOT NULL AND s.scrap_dt<=b.buy_dt) OR (s.cart_dt IS NOT NULL AND s.cart_dt<=b.buy_dt) OR (p.revisit_dt IS NOT NULL AND p.revisit_dt<=b.buy_dt) THEN 1 ELSE 0 END) via_any,
+  SUM(CASE WHEN (s.scrap_dt IS NOT NULL AND s.scrap_dt<=b.buy_dt) OR (s.cart_dt IS NOT NULL AND s.cart_dt<=b.buy_dt) THEN 1 ELSE 0 END) via_sc,
+  SUM(CASE WHEN s.cart_dt IS NOT NULL AND s.cart_dt<=b.buy_dt THEN 1 ELSE 0 END) via_cart,
+  SUM(CASE WHEN p.revisit_dt IS NOT NULL AND p.revisit_dt<=b.buy_dt THEN 1 ELSE 0 END) via_revisit
+FROM buys b LEFT JOIN scr s ON b.uid=s.uid AND b.pid=s.pid LEFT JOIN pdp p ON b.uid=p.uid AND b.pid=p.pid"""
+
 # ============ 리드 생성: 노출→리드 도달률(90일) + 월별 신규리드 성장추이(6개월) — 가구만 ============
 # reach_to_lead = 리드유저(찜 or PDP재방문2일↑) / PDP도달유저(90일). new lead월 = (user,product)가 처음 리드된 달(첫찜 or 2번째방문일).
 # 단일 쿼리로 둘 다 산출(6개월 파티션 1회 스캔). ym='_REACH90' 행=도달률. scan~35GB/run. 오가닉 미구분(데이터 한계).

@@ -323,6 +323,22 @@ function viewLead(){
       '<div class="note" style="margin-top:0">가구 리드 9종 합산. <b>"리드"를 어디까지로 보느냐(분모)에 따라 전환율이 크게 달라짐</b> — 조회자 전체 기준 <b>'+(fb[0]?fb[0].rate.toFixed(1):'-')+'%</b>지만 대부분이 1회조회(T1)라 희석된 값. 의도를 보인 <b>저장리드(T3~T5·찜·장바구니) 기준 '+(fb[2]?fb[2].rate.toFixed(1):'-')+'%</b>가 실질 전환. 구매자=리드수−미회수.</div>'+
       '<table><thead><tr><th>리드 정의 (분모)</th><th class="num">리드수</th><th class="num">구매자</th><th class="num">미회수</th><th class="num">전환율</th></tr></thead><tbody>'+frows+'</tbody></table></div>';
   }
+  if(sm.attribution&&sm.attribution.buyers){
+    var at=sm.attribution;
+    head+='<div class="card" style="border-left:4px solid #00b894"><h3>🎣 구매자 리드 경유 비중 <span class="wbadge">역추적 · 최근 3개월 구매</span></h3>'+
+      '<div class="note" style="margin-top:0">위가 "리드→구매"(분모=리드)라면 이건 <b>"구매→리드 역추적"(분모=구매자)</b> — 산 사람이 구매 전에 리드신호(찜·장바구니·PDP재방문)를 남겼나. 가구 9종·최근 완료 3개월 구매·룩백 런칭(2025-12)~·신호는 구매일 이전.</div>'+
+      '<div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-end">'+
+      '<div class="kpi"><div class="lbl">🎣 리드 경유 구매 비중</div><div class="val" style="color:#00b894">'+at.rate_any.toFixed(1)+'%</div><div class="sub">구매자 '+at.buyers.toLocaleString()+'명 중 '+at.via_any.toLocaleString()+'명이 구매 전 신호 보유</div></div>'+
+      '<div class="kpi"><div class="lbl">⚡ 직접구매(신호 없이 바로)</div><div class="val" style="color:var(--text3)">'+at.rate_direct.toFixed(1)+'%</div><div class="sub">1회조회 후 즉시 = 충동/직행</div></div>'+
+      '</div>'+
+      '<table style="margin-top:10px"><thead><tr><th>구매 전 신호</th><th class="num">구매자 중 비중</th></tr></thead><tbody>'+
+      '<tr><td>🛒 장바구니 거침</td><td class="num"><b>'+at.rate_cart.toFixed(1)+'%</b></td></tr>'+
+      '<tr><td>💾 찜 or 장바구니</td><td class="num"><b>'+at.rate_sc.toFixed(1)+'%</b></td></tr>'+
+      '<tr><td>🔁 PDP 재방문(2일↑)</td><td class="num">'+at.rate_revisit.toFixed(1)+'%</td></tr>'+
+      '<tr style="font-weight:600;background:#eefcf6"><td>= 리드(위 중 하나 이상) 경유</td><td class="num">'+at.rate_any.toFixed(1)+'%</td></tr>'+
+      '</tbody></table>'+
+      '<div class="note">가구는 고관여라 <b>충동구매가 거의 없음</b> — 산 사람 10명 중 9명이 리드를 거침(특히 장바구니 '+at.rate_cart.toFixed(0)+'%). = 리드 확보가 매출의 거의 전부를 설명 → 리드 투자 근거. (분모=구매자 ↔ 위 퍼널카드 분모=리드, 방향 반대)</div></div>';
+  }
   var rankRows=LF.products.slice().sort(function(a,b){return b.summary.saved_to_buy_rate-a.summary.saved_to_buy_rate;}).map(function(p){
     var r=p.summary.saved_to_buy_rate, bench=sm.bench_scrap_to_buy||6.9;
     return '<tr><td><b style="color:#6C5CE7">'+p.name+'</b><div style="font-size:10px;color:var(--text3)">'+p.pid+'</div></td>'+

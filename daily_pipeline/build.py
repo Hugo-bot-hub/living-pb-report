@@ -200,6 +200,15 @@ if lf is not None:
         _band(['T3','T4','T5'],'저장 (T3~T5 · 찜·장바구니)'),
         _band(['T4','T5'],'장바구니 (T4~T5)'),
         _band(['T5'],'핫 (T5 · 장바구니+재방문)')]}
+    # ── 리드 경유 비중(역추적): 구매자 중 구매 전 리드신호 보유 %. 주1회 → 없는 날 직전값 보존 ──
+    la = rows('lead_attribution', ['buyers','via_any','via_sc','via_cart','via_revisit'])
+    attribution = D.get('leadFunnel',{}).get('summary',{}).get('attribution')
+    if la:
+        a = la[0]; bq = i(a['buyers'])
+        rate = lambda x: round(i(x)*100.0/bq,1) if bq else 0.0
+        attribution = {'buyers':bq,'via_any':i(a['via_any']),'via_sc':i(a['via_sc']),'via_cart':i(a['via_cart']),'via_revisit':i(a['via_revisit']),
+            'rate_any':rate(a['via_any']),'rate_sc':rate(a['via_sc']),'rate_cart':rate(a['via_cart']),'rate_revisit':rate(a['via_revisit']),
+            'rate_direct':round(100-rate(a['via_any']),1)}
     cohort = _cohort()
     # ── 코호트 시계열(형성월별 반복측정). 주1회 쿼리 → 없는 날은 기존 cohortTrend 보존(leadFunnel은 매일 재구성됨) ──
     cts = rows('lead_cohort_ts', ['ym','tier','leads','conv','gmv'])
@@ -226,7 +235,7 @@ if lf is not None:
     D['leadFunnel'] = {'products':prods,'window':'찜/장바구니월→forward 3개월 성숙 코호트','tierKeys':TIER_KEYS,'cohort':cohort,'cohortTrend':cohort_trend,
         'summary':{'furniture_hot_uncaptured':total_hot_out,'bench_scrap_to_buy':6.9,
             'lead_value_blended':round(tot_saved_gmv/tot_saved_leads) if tot_saved_leads else 0,
-            'funnel_overall':funnel_overall},
+            'funnel_overall':funnel_overall,'attribution':attribution},
         'note':'의도등급(강신호 우선·전환율 실측 단조·상호배타): T5 장바구니+재방문 / T4 장바구니 / T3 찜(장바구니X) / T2 재방문(찜/장바구니X) / T1 1회조회. 각 리드는 최고 신호 1개 등급에만 배정(중복없음). 신호는 전부 형성월[c0,c0+1M) 측정, 구매관찰 3개월. 리드가치 = T3~T5(찜·장바구니) 리드가 3개월 내 그 상품 산 실현 GMV ÷ T3~T5 리드(gross·상품매칭). vs 리드 CAC로 매체 판정. 미회수 핫리드=장바구니(T4·T5) 미전환=CRM 최우선. 로그인 유저 기준(비로그인 제외).'}
     changed.append('leadFunnel')
 
