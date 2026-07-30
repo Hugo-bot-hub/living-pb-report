@@ -215,6 +215,17 @@ FROM tiered t LEFT JOIN buy b ON t.user_id=b.user_id AND CAST(t.pid AS BIGINT)=b
 GROUP BY t.pid, t.tier
 ORDER BY t.pid, t.tier"""
 
+# 리드 코호트 경계일 sentinel (무스캔). lead_funnel 과 동일한 CURRENT_DATE 로직으로 실제 형성월·관찰창을
+# 뽑아 대시보드에 표기(파이썬 today() 계산은 월초 자정 UTC 경계에서 하루 어긋날 수 있어 SQL 로 위임).
+QUERIES['lead_cohort'] = """
+SELECT date_format(c0,'%Y-%m') fmonth,
+  date_format(c0,'%Y-%m-%d') form_start,
+  date_format(c0+interval '1' month-interval '1' day,'%Y-%m-%d') form_end,
+  date_format(c0,'%Y-%m-%d') obs_start,
+  date_format(c0+interval '3' month-interval '1' day,'%Y-%m-%d') obs_end,
+  date_format(CURRENT_DATE,'%Y-%m-%d') built_on
+FROM (SELECT date_trunc('month',CURRENT_DATE)-interval '3' month c0)"""
+
 # ============ 리드 생성: 노출→리드 도달률(90일) + 월별 신규리드 성장추이(6개월) — 가구만 ============
 # reach_to_lead = 리드유저(찜 or PDP재방문2일↑) / PDP도달유저(90일). new lead월 = (user,product)가 처음 리드된 달(첫찜 or 2번째방문일).
 # 단일 쿼리로 둘 다 산출(6개월 파티션 1회 스캔). ym='_REACH90' 행=도달률. scan~35GB/run. 오가닉 미구분(데이터 한계).

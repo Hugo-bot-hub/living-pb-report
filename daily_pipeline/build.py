@@ -146,6 +146,20 @@ if kr is not None:
 # 저장리드(saved) = 찜 or 장바구니 = T3+T4+T5 → 리드가치·저장리드전환의 분모.
 # 장바구니리드(cart) = T4+T5. 미회수 핫리드 = 장바구니 리드 중 미전환(T4+T5 outstanding) = CRM 최우선 풀.
 lf = rows('lead_funnel', ['pid','tier','leads','conv','gmv'])
+# 코호트 경계일: sentinel 쿼리 우선(SQL=lead_funnel과 동일 CURRENT_DATE), 없으면 파이썬 폴백(월초 UTC경계 오차 가능)
+def _cohort():
+    lc = rows('lead_cohort', ['fmonth','form_start','form_end','obs_start','obs_end','built_on'])
+    if lc:
+        r = lc[0]
+        return {'formation_month':r['fmonth'],'formation':r['form_start']+' ~ '+r['form_end'],
+                'observation':r['obs_start']+' ~ '+r['obs_end'],'built_on':r['built_on']}
+    import datetime
+    def am(d,n):
+        m=d.month-1+n; return datetime.date(d.year+m//12, m%12+1, 1)
+    t=datetime.date.today(); c0=am(t.replace(day=1),-3)
+    fe=am(c0,1)-datetime.timedelta(days=1); oe=am(c0,3)-datetime.timedelta(days=1)
+    return {'formation_month':c0.strftime('%Y-%m'),'formation':c0.isoformat()+' ~ '+fe.isoformat(),
+            'observation':c0.isoformat()+' ~ '+oe.isoformat(),'built_on':t.isoformat()}
 if lf is not None:
     LF_NAME = {'1243313':'basic 침대프레임','3858646':'refine 빅수납프레임'}
     TIER_KEYS = ['T1','T2','T3','T4','T5']
@@ -172,7 +186,7 @@ if lf is not None:
             'saved_to_buy_rate':round(saved_conv*100.0/saved_leads,1) if saved_leads else 0.0,
             'saved_leads':saved_leads,'cart_leads':cart_leads,'lead_value':lead_value,'hot_uncaptured':hot_out}})
     prods.sort(key=lambda x:(-x['summary']['lead_value'],x['pid']))
-    D['leadFunnel'] = {'products':prods,'window':'찜/장바구니월→forward 3개월 성숙 코호트','tierKeys':TIER_KEYS,
+    D['leadFunnel'] = {'products':prods,'window':'찜/장바구니월→forward 3개월 성숙 코호트','tierKeys':TIER_KEYS,'cohort':_cohort(),
         'summary':{'furniture_hot_uncaptured':total_hot_out,'bench_scrap_to_buy':6.9,
             'lead_value_blended':round(tot_saved_gmv/tot_saved_leads) if tot_saved_leads else 0},
         'note':'의도등급(강신호 우선·전환율 실측 단조): T5 장바구니+재방문 / T4 장바구니 / T3 찜(장바구니X) / T2 재방문(찜/장바구니X) / T1 1회조회. 신호는 전부 형성월[c0,c0+1M) 측정, 구매관찰 3개월. 저장리드(찜 or 장바구니=T3~T5) 리드가치 = 저장 유저가 3개월 내 그 상품 산 실현 GMV ÷ 저장 유저(gross·상품매칭). vs 리드 CAC로 매체 판정. 미회수 핫리드=장바구니(T4+T5) 미전환=CRM 최우선. 로그인 유저 기준(비로그인 제외).'}

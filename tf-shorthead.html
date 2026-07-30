@@ -228,8 +228,11 @@ function viewLead(){
   const LF=D.leadFunnel;
   if(!LF||!LF.products) return '<div class="ph">리드 퍼널 데이터 없음 (다음 데일리 갱신 시 생성).</div>';
   const sm=LF.summary||{};
+  const co=LF.cohort||{};
+  const cohortLine='📅 <b>코호트 형성월 '+(co.formation_month||'-')+'</b> (찜/장바구니·PDP 재방문 신호 측정: '+(co.formation||'-')+') · <b>구매 관찰창 '+(co.observation||'-')+'</b> (3개월 성숙) · 대상 <b>로그인 유저·상품 단위 distinct</b> · 데이터 기준일 '+(co.built_on||D.meta.lastUpdate||'-');
   const TIERS=[['T5','🔥 핫','장바구니+재방문','#6C5CE7'],['T4','🛒 장바구니','장바구니 담음','#e84393'],['T3','🌤 웜','찜 (장바구니X)','#00b894'],['T2','❄ 쿨','재방문 (찜/장바구니X)','#0984e3'],['T1','· 콜드','1회조회','#b2bec3']];
-  var head='<div class="insight">🎯 <b>리드 퍼널 (v2 · 장바구니 편입)</b> — 가구는 고관여라 리드가 쌓이고 시차 전환. 상품별 <b>리드 1개 가치·의도등급 T1~T5·저장리드(찜/장바구니)→구매 전환</b> 관제. 신호 강도 실측 = <b>장바구니 ≫ 재방문 &gt; 찜</b>. <b>리드가치 vs 리드 CAC</b>로 매체 투자 판정.</div>';
+  var head='<div class="insight">🎯 <b>리드 퍼널 (v2 · 장바구니 편입)</b> — 가구는 고관여라 리드가 쌓이고 시차 전환. 상품별 <b>리드 1개 가치·의도등급 T1~T5·저장리드(찜/장바구니)→구매 전환</b> 관제. 신호 강도 실측 = <b>장바구니 ≫ 재방문 &gt; 찜</b>. <b>리드가치 vs 리드 CAC</b>로 매체 투자 판정.</div>'+
+    '<div class="insight" style="background:#F3F0FF;border-left:3px solid #6C5CE7">'+cohortLine+'</div>';
   // ── 리드 풀 성장 판정 헤드라인 (leadGrowth.total_monthly 집계 · CRM 회수전략 전제 검증) ──
   (function(){
     var _lg=D.leadGrowth;
@@ -265,7 +268,8 @@ function viewLead(){
       '<div class="note">리드 풀 현재 <b>'+verdict+'</b> 국면(25년 하반기~26.3 강한 성장 후 고원). ⚠️ <b>CRM 회수 논거는 리드 "성장"이 아니라 쌓인 고의도 리드(장바구니 T4·T5) "스톡"에 있음</b> — 정체여도 매달 신규 리드가 유입돼 nurture 풀은 마르지 않는다. 성장이 재점화되면 회수 상방이 더 커질 뿐. 상세 추이=아래 상품별 카드.</div></div>';
   })();
   head+='<div class="card" style="border-left:4px solid #6C5CE7"><h3>📖 의도등급 T1~T5 정의 &amp; 리드가치 측정 <span class="wbadge">v2 · 장바구니 편입</span></h3>'+
-    '<div class="note" style="margin-bottom:8px"><b>저장 리드</b> = 그 상품을 <b>찜 or 장바구니</b> 담은 distinct 유저. &nbsp;<b>리드가치</b> = 저장 유저가 <b>형성월 forward 3개월</b> 내 <b>그 상품</b>을 산 실현 GMV ÷ 저장 유저 (gross·상품매칭). &nbsp;<b>코호트</b> = <b>'+(LF.window||'형성월→3개월')+'</b>. &nbsp;신호는 전부 형성월[c0,c0+1M)에서 측정(미래행동 누수 없음). &nbsp;<b>용도</b> = 리드가치 &gt; 리드 CAC(지출÷귀속리드)면 그 매체·상품 강화. (로그인 유저 기준)</div>'+
+    '<div class="note" style="margin-bottom:8px"><b>저장 리드</b> = 그 상품을 <b>찜 or 장바구니</b> 담은 distinct 유저. &nbsp;<b>리드가치</b> = 저장 유저가 <b>형성월 forward 3개월</b> 내 <b>그 상품</b>을 산 실현 GMV ÷ 저장 유저 (gross·상품매칭). &nbsp;<b>용도</b> = 리드가치 &gt; 리드 CAC(지출÷귀속리드)면 그 매체·상품 강화.</div>'+
+    '<div class="note" style="margin-bottom:8px">📅 <b>측정 기준</b>: 리드 신호(찜·장바구니·PDP 재방문)는 <b>형성월 '+(co.formation_month||'-')+'</b>('+(co.formation||'-')+') 안에서만 측정 → 미래행동 누수 없음. 구매는 <b>'+(co.observation||'-')+'</b>(형성월부터 3개월) 관찰. 상품 단위·로그인 유저 distinct. 데이터 기준일 '+(co.built_on||D.meta.lastUpdate||'-')+'. 매 데일리 갱신 때 관찰시점 기준으로 코호트가 한 칸씩 이동(rolling).</div>'+
     '<div class="note" style="margin-bottom:8px">🔬 <b>등급 사다리는 신호 경우의 수 전환율 실측으로 검증</b>(9개 가구 리드상품·3M 코호트): <b>장바구니(8~29%) ≫ 재방문(2%) &gt; 찜(1.2%)</b>. 구 "찜=2.2%"는 장바구니가 찜에 섞여 부풀려진 값 → 이번에 분리. 강신호 우선 배정, T1→T5 전환율 단조 상승(0.45%→28.8%, <b>64배</b>).</div>'+
     '<table><thead><tr><th>등급</th><th>정의 (신호)</th><th class="num">실측 전환</th><th>의미 · 액션</th></tr></thead><tbody>'+
     '<tr><td><b style="color:#6C5CE7">🔥 T5 핫</b></td><td>장바구니 + PDP 재방문(2일↑)</td><td class="num"><b>~29%</b></td><td>구매 초읽기 → 쿠폰·재고·배송 리마인드로 즉시 회수</td></tr>'+
@@ -339,7 +343,8 @@ function viewLead(){
         '<td class="num">'+(t.value?t.value.toLocaleString()+'원':'-')+'</td>'+
         '<td class="num"'+(CART_TK[tk]?' style="color:#e84393;font-weight:700"':'')+'>'+t.outstanding.toLocaleString()+'</td></tr>';
     }).join('');
-    return '<div class="card"><h3>🎯 '+p.name+' <span class="wbadge">리드가치 '+(p.summary.lead_value||0).toLocaleString()+'원 · 저장→구매 '+p.summary.saved_to_buy_rate.toFixed(1)+'%</span></h3>'+
+    return '<div class="card"><h3>🎯 '+p.name+' <span style="font-size:11px;color:var(--text3)">'+p.pid+'</span> <span class="wbadge">리드가치 '+(p.summary.lead_value||0).toLocaleString()+'원 · 저장→구매 '+p.summary.saved_to_buy_rate.toFixed(1)+'%</span></h3>'+
+      '<div class="note" style="margin-top:0;margin-bottom:6px">📅 형성월 <b>'+(co.formation_month||'-')+'</b> 신호(찜/장바구니·PDP재방문) → 구매관찰 <b>'+(co.observation||'-')+'</b> · 로그인 유저·상품단위 distinct · 리드수=코호트 유저수, 전환율=그 중 3개월 내 구매 %</div>'+
       '<table><thead><tr><th>등급</th><th class="num">리드수</th><th>규모</th><th class="num">전환율</th><th class="num">리드가치</th><th class="num">미회수</th></tr></thead><tbody>'+trows+'</tbody></table>'+
       '<div class="note">🛒 장바구니 리드(T4·T5)가 전환 최고(8~29%) → 쿠폰·재고·배송 리마인드로 최우선 회수. 미회수(분홍)=CRM 타겟. T1 콜드는 태우지 말 것.</div></div>';
   }).join('');

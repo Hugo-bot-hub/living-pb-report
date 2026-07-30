@@ -91272,6 +91272,12 @@
       "T4",
       "T5"
     ],
+    "cohort": {
+      "formation_month": "2026-04",
+      "formation": "2026-04-01 ~ 2026-04-30",
+      "observation": "2026-04-01 ~ 2026-06-30",
+      "built_on": "2026-07-30"
+    },
     "summary": {
       "furniture_hot_uncaptured": 5565,
       "bench_scrap_to_buy": 6.9,
