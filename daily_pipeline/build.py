@@ -11,7 +11,7 @@ TF = os.environ.get('TF_DATA_PATH', os.path.join(ROOT, 'tf-data.json'))
 MAT = os.environ.get('MAT_DATA_PATH', os.path.join(ROOT, 'tf-mattress-data.json'))
 TMP = os.environ.get('TF_TMP', TMP)
 
-SELF = ['3918642','3640244','3640123','1089824','3607491','3121605','3898593','3898584','3748221','2518275']
+SELF = ['3918642','3640244','3640123','1089824','3607491','3121605','3898593','3898584','3748221','2518275','3858646']
 COMP = ['767440','2636441','1930788','442026','676405','2731307','329364','1590911','2352818']
 ALL18 = SELF + COMP
 LAYER = '오늘의집 layer'
@@ -142,35 +142,40 @@ if kr is not None:
         'note':'노출순위 = 주간 노출량 기준 근사순위(검색 원장에 절대순위 없음). ⚠️부스트/광고 의심 = 노출 상위인데 주간판매·리뷰 바닥. 소스: commerce_srp_query_product_metrics_v0_1.'}
     changed.append('keywordRadar')
 
-# ---------- lead_funnel (표준통일: 가구 리드가치 gross·상품매칭·성숙코호트 + 의도등급 T1~T4) ----------
+# ---------- lead_funnel v2 (장바구니 편입·의도등급 T1~T5·강신호우선 사다리) ----------
+# 저장리드(saved) = 찜 or 장바구니 = T3+T4+T5 → 리드가치·저장리드전환의 분모.
+# 장바구니리드(cart) = T4+T5. 미회수 핫리드 = 장바구니 리드 중 미전환(T4+T5 outstanding) = CRM 최우선 풀.
 lf = rows('lead_funnel', ['pid','tier','leads','conv','gmv'])
 if lf is not None:
     LF_NAME = {'1243313':'basic 침대프레임','3858646':'refine 빅수납프레임'}
+    TIER_KEYS = ['T1','T2','T3','T4','T5']
+    SAVED = ['T3','T4','T5']; CART = ['T4','T5']
     byp = {}
     for r in lf:
         byp.setdefault(str(r['pid']), {})[r['tier']] = {'leads':i(r['leads']),'conv':i(r['conv']),'gmv':i(r['gmv'])}
-    prods = []; total_hot_out = 0; tot_scrap_leads = 0; tot_scrap_gmv = 0
+    prods = []; total_hot_out = 0; tot_saved_leads = 0; tot_saved_gmv = 0
     for pid, tiers in byp.items():
         t = {}
-        for tk in ['T1','T2','T3','T4']:
+        for tk in TIER_KEYS:
             v = tiers.get(tk, {'leads':0,'conv':0,'gmv':0}); leads = v['leads']; conv = v['conv']; gmv = v['gmv']
             t[tk] = {'leads':leads,'conv':conv,'gmv':gmv,'rate':round(conv*100.0/leads,1) if leads else 0.0,
                      'value':round(gmv/leads) if leads else 0,'outstanding':leads-conv}
         total_leads = sum(t[tk]['leads'] for tk in t)
-        scrap_leads = t['T3']['leads']+t['T4']['leads']; scrap_conv = t['T3']['conv']+t['T4']['conv']
-        scrap_gmv = t['T3']['gmv']+t['T4']['gmv']
-        lead_value = round(scrap_gmv/scrap_leads) if scrap_leads else 0
-        tot_scrap_leads += scrap_leads; tot_scrap_gmv += scrap_gmv
-        hot_out = t['T4']['outstanding']; total_hot_out += hot_out
+        saved_leads = sum(t[tk]['leads'] for tk in SAVED); saved_conv = sum(t[tk]['conv'] for tk in SAVED)
+        saved_gmv = sum(t[tk]['gmv'] for tk in SAVED)
+        cart_leads = sum(t[tk]['leads'] for tk in CART)
+        lead_value = round(saved_gmv/saved_leads) if saved_leads else 0
+        tot_saved_leads += saved_leads; tot_saved_gmv += saved_gmv
+        hot_out = sum(t[tk]['outstanding'] for tk in CART); total_hot_out += hot_out
         name = D['products'].get(pid,{}).get('shortName') or LF_NAME.get(pid, pid)
         prods.append({'pid':pid,'name':name,'tiers':t,'summary':{'total_leads':total_leads,
-            'scrap_to_buy_rate':round(scrap_conv*100.0/scrap_leads,1) if scrap_leads else 0.0,
-            'scrap_leads':scrap_leads,'lead_value':lead_value,'hot_uncaptured':hot_out}})
+            'saved_to_buy_rate':round(saved_conv*100.0/saved_leads,1) if saved_leads else 0.0,
+            'saved_leads':saved_leads,'cart_leads':cart_leads,'lead_value':lead_value,'hot_uncaptured':hot_out}})
     prods.sort(key=lambda x:(-x['summary']['lead_value'],x['pid']))
-    D['leadFunnel'] = {'products':prods,'window':'찜월→forward 3개월 성숙 코호트',
+    D['leadFunnel'] = {'products':prods,'window':'찜/장바구니월→forward 3개월 성숙 코호트','tierKeys':TIER_KEYS,
         'summary':{'furniture_hot_uncaptured':total_hot_out,'bench_scrap_to_buy':6.9,
-            'lead_value_blended':round(tot_scrap_gmv/tot_scrap_leads) if tot_scrap_leads else 0},
-        'note':'리드가치 = 찜한 distinct 유저가 찜월 forward 3개월 내 그 찜한 상품을 산 실현 GMV ÷ 찜 유저(gross·상품매칭·성숙 코호트). vs 리드 CAC로 매체 투자 판정(정의블록=통합공식 문서). T4 찜+재방문/T3 찜만/T2 재방문만/T1 1회. 찜→구매=찜리드(T3+T4) 전환율(벤치 6.9%). 로그인 유저·비로그인 제외.'}
+            'lead_value_blended':round(tot_saved_gmv/tot_saved_leads) if tot_saved_leads else 0},
+        'note':'의도등급(강신호 우선·전환율 실측 단조): T5 장바구니+재방문 / T4 장바구니 / T3 찜(장바구니X) / T2 재방문(찜/장바구니X) / T1 1회조회. 신호는 전부 형성월[c0,c0+1M) 측정, 구매관찰 3개월. 저장리드(찜 or 장바구니=T3~T5) 리드가치 = 저장 유저가 3개월 내 그 상품 산 실현 GMV ÷ 저장 유저(gross·상품매칭). vs 리드 CAC로 매체 판정. 미회수 핫리드=장바구니(T4+T5) 미전환=CRM 최우선. 로그인 유저 기준(비로그인 제외).'}
     changed.append('leadFunnel')
 
 # ---------- lead_growth (노출→리드 도달률 90일 + 월별 신규리드 성장추이 6개월) ----------
@@ -202,7 +207,7 @@ if lg is not None:
     prods.sort(key=lambda x:(-x['reach_to_lead'],x['pid']))
     D['leadGrowth'] = {'products':prods,'total_monthly':[{'ym':y,'new_leads':total_monthly[y]} for y in sorted(total_monthly)],
         'partial_ym':partial_ym,
-        'note':'리드화율=리드유저(찜 or PDP재방문2일↑)/PDP도달유저(90일). 월별 신규리드=그 달 처음 리드된 user×product(첫 찜 or 2번째 방문일). 오가닉/비오가닉 미구분(데이터 한계). 마지막 달=진행중(부분). 로그인 유저 기준.'}
+        'note':'리드화율=리드유저(찜/장바구니 or PDP재방문2일↑)/PDP도달유저(90일). 월별 신규리드=그 달 처음 리드된 user×product(첫 찜/장바구니 or 2번째 방문일). SHARE 등 기타 신호 제외. 오가닉/비오가닉 미구분(데이터 한계). 마지막 달=진행중(부분). 로그인 유저 기준.'}
     changed.append('leadGrowth')
 
 # ---------- scoreTs / featTs (self+comp 병합) ----------

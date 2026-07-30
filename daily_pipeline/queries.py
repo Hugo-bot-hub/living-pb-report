@@ -5,10 +5,11 @@
 모든 날짜는 DATE_ADD 상대 → 매일 최신. object_idx BETWEEN 0 AND 100. net GMV=필터없음.
 """
 
-SELF = ['3918642','3640244','3640123','1089824','3607491','3121605','3898593','3898584','3748221','2518275']
+SELF = ['3918642','3640244','3640123','1089824','3607491','3121605','3898593','3898584','3748221','2518275','3858646']
 COMP = ['767440','2636441','1930788','442026','676405','2731307','329364','1590911','2352818']
 ALL18 = SELF + COMP
-SELF_SRPKW = ['3918642','3640244','3640123','1089824','3607491','3121605','3898593','3898584','3748221','2518275']  # 키워드추세는 자사만
+SELF_SRPKW = ['3918642','3640244','3640123','1089824','3607491','3121605','3898593','3898584','3748221','2518275','3858646']  # 키워드추세는 자사만
+# 3858646 = refine 빅수납 침대프레임(259,000원·수납침대). 2026-07-30 전탭 편입(기존 리드/attach만 추적 → daily·SRP·유입·연령·벤치 전면).
 MATTRESS = ['1089824','3607491','3121605']  # basic/refine/studio 매트리스
 # attach(프레임옵션 매트리스) 대상 프레임. 2518275=refine 빅수납호텔(2026-07-01 재런칭).
 # basic 1243313·refine 3858646는 볼륨 최대 + 부착률 상위 → tier 비교 기준선으로 포함(studio가 왜 0%인지 대조군).
@@ -163,25 +164,34 @@ SELECT r.kw, r.pid, p.brand_name brand, p.product_name name, p.selling_cost pric
 FROM r LEFT JOIN ba_preserved.comm_product_info_latest p ON TRY_CAST(r.pid AS BIGINT)=p.product_id
 WHERE r.rank <= 15 ORDER BY r.kw, r.rank"""
 
-# ============ 리드 퍼널(표준 통일): 가구 리드가치(gross·상품매칭·성숙 코호트) + 의도등급 T1~T4 ============
-# 리드가치 = 찜한 distinct 유저가 [찜월 forward 3개월] 내 [그 찜한 상품]을 산 실현 GMV ÷ 찜 유저. (통합공식 문서 정의블록)
-# 코호트 c0=date_trunc(month,오늘)-3M. 찜/PDP형성=코호트월[c0,c0+1M) · vd/구매관찰=[c0,c0+3M). 리드가치=T3+T4(찜리드).
-# ⚠️ user_pdp_facts.base_dt=date, user_scrap_facts.base_dt=VARCHAR. scan~10GB/run. 하반기 리드퍼널 문서 §5-3 + 리드가치 표준.
+# ============ 리드 퍼널(v2·장바구니 편입): 가구 리드가치 + 의도등급 T1~T5 ============
+# 🆕 2026-07-30 장바구니(CART) 신호 추가 + 신호 분리 정정. 기존 scr 은 category 필터가 없어
+#   SCRAP∪CART∪SHARE 를 통째로 "찜"으로 셌음(리드측정 매뉴얼 지적 = 과대). → SCRAP/CART 분리.
+# 신호 경우의 수(cart×scrap×revisit) 전환율 실측(2026-07-30, 9개 가구리드상품 3M 코호트):
+#   cart+revisit 27~32% ≫ cart 7~8% ≫ 찜+재방문 4.8% ≫ 재방문 2.0% ≳ 찜 1.2% ≫ 1회조회 0.45%.
+#   ⇒ 장바구니가 압도적 최강 신호, 그 다음 재방문(찜보다 강함 — 구 "찜 2.18%"는 cart 섞여 부풀려진 값).
+# 검증된 단조 5단계(강신호 우선) 사다리 (T1 0.45%→T5 28.8%, 64배):
+#   T5 장바구니+재방문 / T4 장바구니 / T3 찜(no cart) / T2 재방문(no 찜/cart) / T1 1회조회.
+# 신호는 전부 formation window [c0,c0+1M) 에서 측정(구매관찰 [c0,c0+3M)) → 미래행동 누수 없음.
+# 코호트 c0=date_trunc(month,오늘)-3M. 리드가치·저장리드 = T3+T4+T5(찜 or 장바구니).
+# ⚠️ user_pdp_facts.base_dt=date, user_scrap_facts.base_dt=VARCHAR. scan~3.3GB/run.
 _FURN_LEAD = '1089824,3607491,3121605,1243313,3748221,3898593,3898584,2518275,3858646'
 QUERIES['lead_funnel'] = f"""
 WITH cm AS (SELECT date_trunc('month',CURRENT_DATE)-interval '3' month AS c0),
-pdpf AS (
-  SELECT CAST(p.user_id AS BIGINT) user_id, p.product_id, COUNT(DISTINCT p.base_dt) vd,
-    MAX(CASE WHEN p.base_dt < cm.c0+interval '1' month THEN 1 ELSE 0 END) in_cm
+pdpf AS (  -- 재방문 = formation window 내 서로 다른 방문일 수(vd)
+  SELECT CAST(p.user_id AS BIGINT) user_id, p.product_id, COUNT(DISTINCT p.base_dt) vd
   FROM ba_preserved.user_pdp_facts p, cm
-  WHERE p.base_dt>=cm.c0 AND p.base_dt<cm.c0+interval '3' month
+  WHERE p.base_dt>=cm.c0 AND p.base_dt<cm.c0+interval '1' month
     AND p.product_id IN ({_FURN_LEAD}) AND p.user_id IS NOT NULL
   GROUP BY 1,2),
-scr AS (
-  SELECT CAST(s.user_id AS BIGINT) user_id, TRY_CAST(s.object_id AS BIGINT) product_id
+scr AS (  -- 찜(SCRAP)·장바구니(CART) 분리. SHARE 등 기타 category 제외.
+  SELECT CAST(s.user_id AS BIGINT) user_id, TRY_CAST(s.object_id AS BIGINT) product_id,
+    MAX(CASE WHEN s.category='SCRAP' THEN 1 ELSE 0 END) is_scrap,
+    MAX(CASE WHEN s.category='CART' THEN 1 ELSE 0 END) is_cart
   FROM ba_preserved.user_scrap_facts s, cm
   WHERE s.base_dt>=CAST(cm.c0 AS VARCHAR) AND s.base_dt<CAST(cm.c0+interval '1' month AS VARCHAR)
-    AND s.object_type='PRODUCTION' AND TRY_CAST(s.object_id AS BIGINT) IN ({_FURN_LEAD}) AND s.user_id IS NOT NULL
+    AND s.object_type='PRODUCTION' AND s.category IN ('SCRAP','CART')
+    AND TRY_CAST(s.object_id AS BIGINT) IN ({_FURN_LEAD}) AND s.user_id IS NOT NULL
   GROUP BY 1,2),
 buy AS (
   SELECT CAST(o.user_id AS BIGINT) user_id, CAST(o.product_id AS BIGINT) product_id, SUM(o.gmv) gmv
@@ -191,14 +201,19 @@ buy AS (
   GROUP BY 1,2),
 leads AS (
   SELECT COALESCE(s.user_id,p.user_id) user_id, COALESCE(s.product_id,p.product_id) product_id,
-    CASE WHEN s.user_id IS NOT NULL THEN 1 ELSE 0 END scrapped, COALESCE(p.vd,0) vd
-  FROM scr s FULL OUTER JOIN (SELECT * FROM pdpf WHERE in_cm=1) p ON s.user_id=p.user_id AND s.product_id=p.product_id)
-SELECT CAST(l.product_id AS VARCHAR) pid,
-  CASE WHEN l.scrapped=1 AND l.vd>=2 THEN 'T4' WHEN l.scrapped=1 THEN 'T3' WHEN l.vd>=2 THEN 'T2' ELSE 'T1' END tier,
+    COALESCE(s.is_cart,0) cart, COALESCE(s.is_scrap,0) scrap,
+    CASE WHEN COALESCE(p.vd,0)>=2 THEN 1 ELSE 0 END revisit
+  FROM scr s FULL OUTER JOIN pdpf p ON s.user_id=p.user_id AND s.product_id=p.product_id),
+tiered AS (
+  SELECT CAST(product_id AS VARCHAR) pid, user_id,
+    CASE WHEN cart=1 AND revisit=1 THEN 'T5' WHEN cart=1 THEN 'T4'
+         WHEN scrap=1 THEN 'T3' WHEN revisit=1 THEN 'T2' ELSE 'T1' END tier
+  FROM leads)
+SELECT t.pid, t.tier,
   COUNT(*) leads, SUM(CASE WHEN b.user_id IS NOT NULL THEN 1 ELSE 0 END) conv, COALESCE(SUM(b.gmv),0) gmv
-FROM leads l LEFT JOIN buy b ON l.user_id=b.user_id AND l.product_id=b.product_id
-GROUP BY l.product_id, CASE WHEN l.scrapped=1 AND l.vd>=2 THEN 'T4' WHEN l.scrapped=1 THEN 'T3' WHEN l.vd>=2 THEN 'T2' ELSE 'T1' END
-ORDER BY pid, tier"""
+FROM tiered t LEFT JOIN buy b ON t.user_id=b.user_id AND CAST(t.pid AS BIGINT)=b.product_id
+GROUP BY t.pid, t.tier
+ORDER BY t.pid, t.tier"""
 
 # ============ 리드 생성: 노출→리드 도달률(90일) + 월별 신규리드 성장추이(6개월) — 가구만 ============
 # reach_to_lead = 리드유저(찜 or PDP재방문2일↑) / PDP도달유저(90일). new lead월 = (user,product)가 처음 리드된 달(첫찜 or 2번째방문일).
@@ -214,11 +229,12 @@ pagg AS (
   SELECT uid, pid, element_at(array_sort(array_agg(bd)),2) second_pdp,
     MAX(CASE WHEN bd >= DATE_ADD('day',-90,CURRENT_DATE) THEN 1 ELSE 0 END) pdp90
   FROM pdp GROUP BY uid, pid),
-scr AS (
+scr AS (  -- 리드 신호 = 찜(SCRAP) or 장바구니(CART). SHARE 등 제외(구버전은 무필터로 SHARE 포함).
   SELECT CAST(user_id AS BIGINT) uid, TRY_CAST(object_id AS BIGINT) pid, MIN(CAST(base_dt AS DATE)) first_scrap
   FROM ba_preserved.user_scrap_facts
   WHERE base_dt >= CAST(date_trunc('month', DATE_ADD('month',-5,CURRENT_DATE)) AS VARCHAR)
-    AND object_type='PRODUCTION' AND TRY_CAST(object_id AS BIGINT) IN ({_FURN_LEAD}) AND user_id IS NOT NULL
+    AND object_type='PRODUCTION' AND category IN ('SCRAP','CART')
+    AND TRY_CAST(object_id AS BIGINT) IN ({_FURN_LEAD}) AND user_id IS NOT NULL
   GROUP BY CAST(user_id AS BIGINT), TRY_CAST(object_id AS BIGINT)),
 j AS (
   SELECT COALESCE(p.uid,s.uid) uid, COALESCE(p.pid,s.pid) pid, COALESCE(p.pdp90,0) pdp90,
