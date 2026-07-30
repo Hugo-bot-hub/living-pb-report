@@ -91278,12 +91278,126 @@
       "observation": "2026-04-01 ~ 2026-06-30",
       "built_on": "2026-07-30"
     },
+    "cohortTrend": {
+      "months": [
+        {
+          "ym": "2025-10",
+          "matured": true,
+          "total_leads": 49803,
+          "saved_leads": 6894,
+          "saved_rate": 16.0,
+          "lead_value": 50328,
+          "cart_leads": 3817,
+          "cart_rate": 25.8,
+          "t5_leads": 1949,
+          "t5_rate": 37.2
+        },
+        {
+          "ym": "2025-11",
+          "matured": true,
+          "total_leads": 50497,
+          "saved_leads": 7396,
+          "saved_rate": 17.0,
+          "lead_value": 57973,
+          "cart_leads": 4183,
+          "cart_rate": 27.3,
+          "t5_leads": 2110,
+          "t5_rate": 38.5
+        },
+        {
+          "ym": "2025-12",
+          "matured": true,
+          "total_leads": 53351,
+          "saved_leads": 7857,
+          "saved_rate": 14.1,
+          "lead_value": 48828,
+          "cart_leads": 4033,
+          "cart_rate": 24.7,
+          "t5_leads": 2056,
+          "t5_rate": 36.4
+        },
+        {
+          "ym": "2026-01",
+          "matured": true,
+          "total_leads": 56281,
+          "saved_leads": 8321,
+          "saved_rate": 12.6,
+          "lead_value": 44035,
+          "cart_leads": 4195,
+          "cart_rate": 22.9,
+          "t5_leads": 2200,
+          "t5_rate": 33.0
+        },
+        {
+          "ym": "2026-02",
+          "matured": true,
+          "total_leads": 56627,
+          "saved_leads": 8864,
+          "saved_rate": 11.7,
+          "lead_value": 39926,
+          "cart_leads": 4632,
+          "cart_rate": 20.2,
+          "t5_leads": 2288,
+          "t5_rate": 30.6
+        },
+        {
+          "ym": "2026-03",
+          "matured": true,
+          "total_leads": 76290,
+          "saved_leads": 12837,
+          "saved_rate": 12.2,
+          "lead_value": 48527,
+          "cart_leads": 6796,
+          "cart_rate": 20.7,
+          "t5_leads": 3651,
+          "t5_rate": 31.1
+        },
+        {
+          "ym": "2026-04",
+          "matured": true,
+          "total_leads": 86172,
+          "saved_leads": 13583,
+          "saved_rate": 10.9,
+          "lead_value": 49480,
+          "cart_leads": 6880,
+          "cart_rate": 19.1,
+          "t5_leads": 3667,
+          "t5_rate": 28.8
+        },
+        {
+          "ym": "2026-05",
+          "matured": false,
+          "total_leads": 93521,
+          "saved_leads": 15167,
+          "saved_rate": 10.0,
+          "lead_value": 48098,
+          "cart_leads": 7529,
+          "cart_rate": 18.0,
+          "t5_leads": 3834,
+          "t5_rate": 28.3
+        },
+        {
+          "ym": "2026-06",
+          "matured": false,
+          "total_leads": 83256,
+          "saved_leads": 14509,
+          "saved_rate": 9.8,
+          "lead_value": 45117,
+          "cart_leads": 7400,
+          "cart_rate": 17.8,
+          "t5_leads": 3615,
+          "t5_rate": 28.2
+        }
+      ],
+      "matured_boundary": "2026-04",
+      "note": "형성월별 코호트 반복측정(전환 품질 추세). 성숙=구매관찰 3개월 완료(형성월 ≤ 2026-04) / 관찰중=3개월 미도달(전환은 하한, 더 오를 것). T3~T5=찜·장바구니 리드. 주1회(월요일) 갱신."
+    },
     "summary": {
       "furniture_hot_uncaptured": 5565,
       "bench_scrap_to_buy": 6.9,
       "lead_value_blended": 49480
     },
-    "note": "의도등급(강신호 우선·전환율 실측 단조): T5 장바구니+재방문 / T4 장바구니 / T3 찜(장바구니X) / T2 재방문(찜/장바구니X) / T1 1회조회. 신호는 전부 형성월[c0,c0+1M) 측정, 구매관찰 3개월. 저장리드(찜 or 장바구니=T3~T5) 리드가치 = 저장 유저가 3개월 내 그 상품 산 실현 GMV ÷ 저장 유저(gross·상품매칭). vs 리드 CAC로 매체 판정. 미회수 핫리드=장바구니(T4+T5) 미전환=CRM 최우선. 로그인 유저 기준(비로그인 제외)."
+    "note": "의도등급(강신호 우선·전환율 실측 단조·상호배타): T5 장바구니+재방문 / T4 장바구니 / T3 찜(장바구니X) / T2 재방문(찜/장바구니X) / T1 1회조회. 각 리드는 최고 신호 1개 등급에만 배정(중복없음). 신호는 전부 형성월[c0,c0+1M) 측정, 구매관찰 3개월. 리드가치 = T3~T5(찜·장바구니) 리드가 3개월 내 그 상품 산 실현 GMV ÷ T3~T5 리드(gross·상품매칭). vs 리드 CAC로 매체 판정. 미회수 핫리드=장바구니(T4·T5) 미전환=CRM 최우선. 로그인 유저 기준(비로그인 제외)."
   },
   "leadGrowth": {
     "products": [

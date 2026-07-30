@@ -14,7 +14,7 @@ function Log($m){ $t=(Get-Date).ToString('yyyy-MM-dd HH:mm:ss'); Add-Content $lo
 Log "######## [daily-batch] START ########"
 
 # (a) 쿼리 매니페스트 덤프 (월요일만 ages·lead_growth 포함; 그 외 요일엔 제외 → build.py가 기존 leadGrowth/ages 섹션 보존)
-& $py -c "import daily_pipeline.queries as q,json,datetime; d=dict(q.QUERIES); [d.pop(k,None) for k in (('ages','lead_growth') if datetime.date.today().weekday()!=0 else ())]; json.dump(d,open('daily_pipeline/_queries.json','w',encoding='utf-8'),ensure_ascii=False); print('dumped',len(d))" *>> $log
+& $py -c "import daily_pipeline.queries as q,json,datetime; d=dict(q.QUERIES); [d.pop(k,None) for k in (('ages','lead_growth','lead_cohort_ts') if datetime.date.today().weekday()!=0 else ())]; json.dump(d,open('daily_pipeline/_queries.json','w',encoding='utf-8'),ensure_ascii=False); print('dumped',len(d))" *>> $log
 if ($LASTEXITCODE -ne 0){ Log "[ALERT] queries dump 실패"; Add-Content $alert "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] [ALERT] daily-batch queries dump 실패" -Encoding UTF8; exit 1 }
 
 # (a2) 소스 적재 게이트 (8MB·2초). 어제분 UV/퍼널이 아직 없으면 34쿼리 풀런(~160GB)은 통째로 낭비 —

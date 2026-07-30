@@ -186,10 +186,32 @@ if lf is not None:
             'saved_to_buy_rate':round(saved_conv*100.0/saved_leads,1) if saved_leads else 0.0,
             'saved_leads':saved_leads,'cart_leads':cart_leads,'lead_value':lead_value,'hot_uncaptured':hot_out}})
     prods.sort(key=lambda x:(-x['summary']['lead_value'],x['pid']))
-    D['leadFunnel'] = {'products':prods,'window':'찜/장바구니월→forward 3개월 성숙 코호트','tierKeys':TIER_KEYS,'cohort':_cohort(),
+    cohort = _cohort()
+    # ── 코호트 시계열(형성월별 반복측정). 주1회 쿼리 → 없는 날은 기존 cohortTrend 보존(leadFunnel은 매일 재구성됨) ──
+    cts = rows('lead_cohort_ts', ['ym','tier','leads','conv','gmv'])
+    cohort_trend = D.get('leadFunnel',{}).get('cohortTrend')  # 폴백: 직전 값 보존
+    if cts is not None:
+        byym = {}
+        for r in cts:
+            byym.setdefault(r['ym'], {})[r['tier']] = {'leads':i(r['leads']),'conv':i(r['conv']),'gmv':i(r['gmv'])}
+        mb = cohort['formation_month']; months = []
+        for ym in sorted(byym):
+            tt = byym[ym]
+            g = lambda ks,fld: sum(tt.get(k,{}).get(fld,0) for k in ks)
+            saved = g(SAVED,'leads'); sconv = g(SAVED,'conv'); sgmv = g(SAVED,'gmv')
+            cart = g(CART,'leads'); cconv = g(CART,'conv')
+            t5 = tt.get('T5',{}); t5l = t5.get('leads',0); t5c = t5.get('conv',0)
+            months.append({'ym':ym,'matured':(ym <= mb),'total_leads':g(TIER_KEYS,'leads'),
+                'saved_leads':saved,'saved_rate':round(sconv*100.0/saved,1) if saved else 0.0,
+                'lead_value':round(sgmv/saved) if saved else 0,
+                'cart_leads':cart,'cart_rate':round(cconv*100.0/cart,1) if cart else 0.0,
+                't5_leads':t5l,'t5_rate':round(t5c*100.0/t5l,1) if t5l else 0.0})
+        cohort_trend = {'months':months,'matured_boundary':mb,
+            'note':'형성월별 코호트 반복측정(전환 품질 추세). 성숙=구매관찰 3개월 완료(형성월 ≤ '+mb+') / 관찰중=3개월 미도달(전환은 하한, 더 오를 것). T3~T5=찜·장바구니 리드. 주1회(월요일) 갱신.'}
+    D['leadFunnel'] = {'products':prods,'window':'찜/장바구니월→forward 3개월 성숙 코호트','tierKeys':TIER_KEYS,'cohort':cohort,'cohortTrend':cohort_trend,
         'summary':{'furniture_hot_uncaptured':total_hot_out,'bench_scrap_to_buy':6.9,
             'lead_value_blended':round(tot_saved_gmv/tot_saved_leads) if tot_saved_leads else 0},
-        'note':'의도등급(강신호 우선·전환율 실측 단조): T5 장바구니+재방문 / T4 장바구니 / T3 찜(장바구니X) / T2 재방문(찜/장바구니X) / T1 1회조회. 신호는 전부 형성월[c0,c0+1M) 측정, 구매관찰 3개월. 저장리드(찜 or 장바구니=T3~T5) 리드가치 = 저장 유저가 3개월 내 그 상품 산 실현 GMV ÷ 저장 유저(gross·상품매칭). vs 리드 CAC로 매체 판정. 미회수 핫리드=장바구니(T4+T5) 미전환=CRM 최우선. 로그인 유저 기준(비로그인 제외).'}
+        'note':'의도등급(강신호 우선·전환율 실측 단조·상호배타): T5 장바구니+재방문 / T4 장바구니 / T3 찜(장바구니X) / T2 재방문(찜/장바구니X) / T1 1회조회. 각 리드는 최고 신호 1개 등급에만 배정(중복없음). 신호는 전부 형성월[c0,c0+1M) 측정, 구매관찰 3개월. 리드가치 = T3~T5(찜·장바구니) 리드가 3개월 내 그 상품 산 실현 GMV ÷ T3~T5 리드(gross·상품매칭). vs 리드 CAC로 매체 판정. 미회수 핫리드=장바구니(T4·T5) 미전환=CRM 최우선. 로그인 유저 기준(비로그인 제외).'}
     changed.append('leadFunnel')
 
 # ---------- lead_growth (노출→리드 도달률 90일 + 월별 신규리드 성장추이 6개월) ----------
