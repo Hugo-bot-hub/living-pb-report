@@ -227,16 +227,17 @@ SELECT date_format(c0,'%Y-%m') fmonth,
 FROM (SELECT date_trunc('month',CURRENT_DATE)-interval '3' month c0)"""
 
 # ============ 리드 코호트 시계열: 형성월별 T1~T5 볼륨 + 3개월내 전환(성숙/관찰중) — 가구 합산 ============
-# 단일 4월 코호트 스냅샷이 아니라 형성월(9개월)별로 같은 사다리를 반복 측정 → 전환 품질 추세.
+# 단일 4월 코호트 스냅샷이 아니라 형성월별로 같은 사다리를 반복 측정 → 전환 품질 추세.
 # 형성월 M = 신호(찜·장바구니·PDP재방문) 관측월, 구매관찰 [M, M+3M). M+3M 미도달 월 = 관찰중(전환 하한).
-# ⚠️ pdp_facts 9개월 스캔 ~65GB → lead_growth 처럼 월요일만(run.ps1 skip). 45행(9월×5등급).
+# 🔴 형성월 하한 = 2025-12(layer 런칭월). 이전(10·11월)은 런칭 전 노이즈라 제외(Hugo 2026-07-30).
+# ⚠️ pdp_facts 스캔 ~수십GB → lead_growth 처럼 월요일만(run.ps1 skip). (형성월수)×5등급 행.
 QUERIES['lead_cohort_ts'] = f"""
 WITH lp AS (SELECT pid FROM (VALUES {_inb([1089824,3607491,3121605,1243313,3748221,3898593,3898584,2518275,3858646])}) t(pid)),
 scr AS (
   SELECT CAST(user_id AS BIGINT) uid, TRY_CAST(object_id AS BIGINT) pid, date_trunc('month',CAST(base_dt AS DATE)) cm,
     MAX(CASE WHEN category='SCRAP' THEN 1 ELSE 0 END) is_scrap, MAX(CASE WHEN category='CART' THEN 1 ELSE 0 END) is_cart
   FROM ba_preserved.user_scrap_facts
-  WHERE base_dt >= CAST(date_add('month',-9,date_trunc('month',CURRENT_DATE)) AS VARCHAR)
+  WHERE base_dt >= '2025-12-01'
     AND base_dt < CAST(date_trunc('month',CURRENT_DATE) AS VARCHAR)
     AND object_type='PRODUCTION' AND category IN ('SCRAP','CART')
     AND TRY_CAST(object_id AS BIGINT) IN (SELECT pid FROM lp) AND user_id IS NOT NULL
@@ -244,7 +245,7 @@ scr AS (
 pdp AS (
   SELECT CAST(user_id AS BIGINT) uid, product_id pid, date_trunc('month',base_dt) cm, COUNT(DISTINCT base_dt) vd
   FROM ba_preserved.user_pdp_facts
-  WHERE base_dt >= date_add('month',-9,date_trunc('month',CURRENT_DATE)) AND base_dt < date_trunc('month',CURRENT_DATE)
+  WHERE base_dt >= DATE '2025-12-01' AND base_dt < date_trunc('month',CURRENT_DATE)
     AND product_id IN (SELECT pid FROM lp) AND user_id IS NOT NULL
   GROUP BY 1,2,3),
 leads AS (
@@ -255,8 +256,7 @@ ord AS (
   SELECT CAST(user_id AS BIGINT) uid, CAST(product_id AS BIGINT) pid, date_trunc('month',base_dt) om, SUM(gmv) gmv
   FROM ba_preserved.commerce_gross_profit_orders
   WHERE CAST(product_id AS BIGINT) IN (SELECT pid FROM lp)
-    AND base_dt >= date_add('month',-9,date_trunc('month',CURRENT_DATE))
-    AND yyyymm >= date_format(date_add('month',-9,date_trunc('month',CURRENT_DATE)),'%Y%m') AND user_id IS NOT NULL
+    AND base_dt >= DATE '2025-12-01' AND yyyymm >= '202512' AND user_id IS NOT NULL
   GROUP BY 1,2,3),
 cv AS (
   SELECT l.uid, l.pid, l.cm, MAX(CASE WHEN o.uid IS NOT NULL THEN 1 ELSE 0 END) bought, COALESCE(SUM(o.gmv),0) gmv

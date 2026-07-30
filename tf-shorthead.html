@@ -298,6 +298,7 @@ function viewLead(){
     '<div class="note" style="margin-bottom:8px"><b>등급은 상호배타(독립)</b> — 각 리드(유저×상품)는 형성월에 도달한 <b>최고 신호 하나의 등급에만</b> 배정(강신호 우선). 퍼널을 순차 통과·중복 카운트가 아님(예: 장바구니+재방문 = T5에만, T1~T4엔 안 잡힘). &nbsp;<b>리드가치</b> = <b>T3~T5(찜·장바구니) 리드</b>가 형성월 forward 3개월 내 그 상품 산 실현 GMV ÷ T3~T5 리드 (gross·상품매칭). 리드가치 &gt; 리드 CAC(지출÷귀속리드)면 그 매체·상품 강화.</div>'+
     '<div class="note" style="margin-bottom:8px">📅 <b>측정 기준</b>: 리드 신호(찜·장바구니·PDP 재방문)는 <b>형성월 '+(co.formation_month||'-')+'</b>('+(co.formation||'-')+') 안에서만 측정 → 미래행동 누수 없음. 구매는 <b>'+(co.observation||'-')+'</b>(형성월부터 3개월) 관찰. 상품 단위·로그인 유저 distinct. 데이터 기준일 '+(co.built_on||D.meta.lastUpdate||'-')+'. 매 데일리 갱신 때 관찰시점 기준으로 코호트가 한 칸씩 이동(rolling).</div>'+
     '<div class="note" style="margin-bottom:8px">🔬 <b>등급 사다리는 신호 경우의 수 전환율 실측으로 검증</b>(9개 가구 리드상품·3M 코호트): <b>장바구니(8~29%) ≫ 재방문(2%) &gt; 찜(1.2%)</b>. 구 "찜=2.2%"는 장바구니가 찜에 섞여 부풀려진 값 → 이번에 분리. 강신호 우선 배정, T1→T5 전환율 단조 상승(0.45%→28.8%, <b>64배</b>).</div>'+
+    '<div class="note" style="margin-bottom:8px">📌 <b>"실측 전환 %"의 뜻</b>: 그 등급에 든 사람이 반드시 산다는 게 아니라, <b>그 등급에 도달한 유저 중 실제로 3개월 내 산 비율(과거 관측치)</b>. 예: T5 ~29% = 장바구니+재방문한 100명 중 ~29명 구매·<b>~71명은 미구매(=미회수 = CRM 타겟)</b>. 또한 상관(원래 고의도라 높음)이지 "그 단계로 밀면 29% 산다"는 인과 보장이 아님.</div>'+
     '<table><thead><tr><th>등급</th><th>정의 (신호)</th><th class="num">실측 전환</th><th>의미 · 액션</th></tr></thead><tbody>'+
     '<tr><td><b style="color:#6C5CE7">🔥 T5 핫</b></td><td>장바구니 + PDP 재방문(2일↑)</td><td class="num"><b>~29%</b></td><td>구매 초읽기 → 쿠폰·재고·배송 리마인드로 즉시 회수</td></tr>'+
     '<tr><td><b style="color:#e84393">🛒 T4 장바구니</b></td><td>장바구니 담음 (재방문 X)</td><td class="num"><b>~8%</b></td><td>장바구니 이탈 = 최강 CRM 타겟 → 리마인드·한정딜</td></tr>'+
@@ -309,6 +310,19 @@ function viewLead(){
     '<div class="kpi"><div class="lbl">💰 가구 리드 1개 평균가치 (T3~T5 가중평균)</div><div class="val" style="color:#6C5CE7">'+(sm.lead_value_blended||0).toLocaleString()+'원</div><div class="sub">T3~T5(찜·장바구니) 실현GMV 합 ÷ T3~T5 리드. 상품별 편차 큼 → 아래 상품별 표가 실제</div></div>'+
     '<div class="kpi"><div class="lbl">🛒 가구 미회수 핫리드(T4·T5)</div><div class="val" style="color:#e84393">'+(sm.furniture_hot_uncaptured||0).toLocaleString()+'</div><div class="sub">코호트 3개월 내 안 산 장바구니(T4·T5) 리드 = 최우선 회수기회</div></div>'+
     '</div><div class="note">'+(LF.note||'')+'</div></div>';
+  if(sm.funnel_overall&&sm.funnel_overall.bands){
+    var fb=sm.funnel_overall.bands;
+    var frows=fb.map(function(b,idx){
+      return '<tr'+(idx===0?' style="font-weight:600;background:#F3F0FF"':'')+(idx===2?' style="background:#eefcf6"':'')+'><td>'+b.label+'</td>'+
+        '<td class="num">'+b.leads.toLocaleString()+'</td>'+
+        '<td class="num" style="color:#00b894"><b>'+b.buyers.toLocaleString()+'</b></td>'+
+        '<td class="num" style="color:var(--text3)">'+b.outstanding.toLocaleString()+'</td>'+
+        '<td class="num"><b>'+b.rate.toFixed(1)+'%</b></td></tr>';
+    }).join('');
+    head+='<div class="card"><h3>🔻 전체 리드 퍼널 전환 <span class="wbadge">현 코호트 '+(co.formation_month||'')+'</span></h3>'+
+      '<div class="note" style="margin-top:0">가구 리드 9종 합산. <b>"리드"를 어디까지로 보느냐(분모)에 따라 전환율이 크게 달라짐</b> — 조회자 전체 기준 <b>'+(fb[0]?fb[0].rate.toFixed(1):'-')+'%</b>지만 대부분이 1회조회(T1)라 희석된 값. 의도를 보인 <b>저장리드(T3~T5·찜·장바구니) 기준 '+(fb[2]?fb[2].rate.toFixed(1):'-')+'%</b>가 실질 전환. 구매자=리드수−미회수.</div>'+
+      '<table><thead><tr><th>리드 정의 (분모)</th><th class="num">리드수</th><th class="num">구매자</th><th class="num">미회수</th><th class="num">전환율</th></tr></thead><tbody>'+frows+'</tbody></table></div>';
+  }
   var rankRows=LF.products.slice().sort(function(a,b){return b.summary.saved_to_buy_rate-a.summary.saved_to_buy_rate;}).map(function(p){
     var r=p.summary.saved_to_buy_rate, bench=sm.bench_scrap_to_buy||6.9;
     return '<tr><td><b style="color:#6C5CE7">'+p.name+'</b><div style="font-size:10px;color:var(--text3)">'+p.pid+'</div></td>'+
@@ -371,7 +385,7 @@ function viewLead(){
         '<td class="num"'+(CART_TK[tk]?' style="color:#e84393;font-weight:700"':'')+'>'+t.outstanding.toLocaleString()+'</td></tr>';
     }).join('');
     return '<div class="card"><h3>🎯 '+p.name+' <span style="font-size:11px;color:var(--text3)">'+p.pid+'</span> <span class="wbadge">리드가치 '+(p.summary.lead_value||0).toLocaleString()+'원 · T3~T5→구매 '+p.summary.saved_to_buy_rate.toFixed(1)+'%</span></h3>'+
-      '<div class="note" style="margin-top:0;margin-bottom:6px">📅 형성월 <b>'+(co.formation_month||'-')+'</b> 신호(찜/장바구니·PDP재방문) → 구매관찰 <b>'+(co.observation||'-')+'</b> · 로그인 유저·상품단위 distinct · 리드수=코호트 유저수, 전환율=그 중 3개월 내 구매 %</div>'+
+      '<div class="note" style="margin-top:0;margin-bottom:6px">📅 형성월 <b>'+(co.formation_month||'-')+'</b> 신호(찜/장바구니·PDP재방문) → 구매관찰 <b>'+(co.observation||'-')+'</b> · 로그인 유저·상품단위 distinct · 리드수=코호트 유저수, 전환율=그 중 3개월 내 구매 %, <b>미회수=리드수−구매자</b>(아직 안 산 유저)</div>'+
       '<table><thead><tr><th>등급</th><th class="num">리드수</th><th>규모</th><th class="num">전환율</th><th class="num">리드가치</th><th class="num">미회수</th></tr></thead><tbody>'+trows+'</tbody></table>'+
       '<div class="note">🛒 장바구니 리드(T4·T5)가 전환 최고(8~29%) → 쿠폰·재고·배송 리마인드로 최우선 회수. 미회수(분홍)=CRM 타겟. T1 콜드는 태우지 말 것.</div></div>';
   }).join('');

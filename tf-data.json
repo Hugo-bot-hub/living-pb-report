@@ -91281,30 +91281,6 @@
     "cohortTrend": {
       "months": [
         {
-          "ym": "2025-10",
-          "matured": true,
-          "total_leads": 49803,
-          "saved_leads": 6894,
-          "saved_rate": 16.0,
-          "lead_value": 50328,
-          "cart_leads": 3817,
-          "cart_rate": 25.8,
-          "t5_leads": 1949,
-          "t5_rate": 37.2
-        },
-        {
-          "ym": "2025-11",
-          "matured": true,
-          "total_leads": 50497,
-          "saved_leads": 7396,
-          "saved_rate": 17.0,
-          "lead_value": 57973,
-          "cart_leads": 4183,
-          "cart_rate": 27.3,
-          "t5_leads": 2110,
-          "t5_rate": 38.5
-        },
-        {
           "ym": "2025-12",
           "matured": true,
           "total_leads": 53351,
@@ -91395,7 +91371,51 @@
     "summary": {
       "furniture_hot_uncaptured": 5565,
       "bench_scrap_to_buy": 6.9,
-      "lead_value_blended": 49480
+      "lead_value_blended": 49480,
+      "funnel_overall": {
+        "bands": [
+          {
+            "label": "전체 (T1~T5 · 조회 이상 전원)",
+            "leads": 86172,
+            "conv": 2044,
+            "buyers": 2044,
+            "outstanding": 84128,
+            "rate": 2.37
+          },
+          {
+            "label": "관심 이상 (T2~T5 · 재방문/찜/장바구니)",
+            "leads": 29047,
+            "conv": 1785,
+            "buyers": 1785,
+            "outstanding": 27262,
+            "rate": 6.15
+          },
+          {
+            "label": "저장 (T3~T5 · 찜·장바구니)",
+            "leads": 13583,
+            "conv": 1478,
+            "buyers": 1478,
+            "outstanding": 12105,
+            "rate": 10.88
+          },
+          {
+            "label": "장바구니 (T4~T5)",
+            "leads": 6880,
+            "conv": 1315,
+            "buyers": 1315,
+            "outstanding": 5565,
+            "rate": 19.11
+          },
+          {
+            "label": "핫 (T5 · 장바구니+재방문)",
+            "leads": 3667,
+            "conv": 1057,
+            "buyers": 1057,
+            "outstanding": 2610,
+            "rate": 28.82
+          }
+        ]
+      }
     },
     "note": "의도등급(강신호 우선·전환율 실측 단조·상호배타): T5 장바구니+재방문 / T4 장바구니 / T3 찜(장바구니X) / T2 재방문(찜/장바구니X) / T1 1회조회. 각 리드는 최고 신호 1개 등급에만 배정(중복없음). 신호는 전부 형성월[c0,c0+1M) 측정, 구매관찰 3개월. 리드가치 = T3~T5(찜·장바구니) 리드가 3개월 내 그 상품 산 실현 GMV ÷ T3~T5 리드(gross·상품매칭). vs 리드 CAC로 매체 판정. 미회수 핫리드=장바구니(T4·T5) 미전환=CRM 최우선. 로그인 유저 기준(비로그인 제외)."
   },
