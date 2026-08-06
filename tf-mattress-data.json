@@ -783,6 +783,64 @@
     }
   },
   "mat_to_frame_by_tier": {
+    "refine": {
+      "mat_users": 268,
+      "bought_frame": 162,
+      "our": 39,
+      "comp_only": 123,
+      "rate_pct": 60.4,
+      "leak_pct": 75.9,
+      "dest": [
+        {
+          "pid": "2093235",
+          "name": "[쿠폰가 5.4만] 로우슬립 저상형 침대프레임 MS/S/SS/D/Q/K/LK (높이선택)",
+          "brand": "바스포르",
+          "is_self": false,
+          "users": 16,
+          "gmv": 2103000
+        },
+        {
+          "pid": "3858646",
+          "name": "refine / 두 배 더 깊어진 빅수납 침대프레임 4colors, SS/D/Q,K",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 13,
+          "gmv": 8014000
+        },
+        {
+          "pid": "3652507",
+          "name": "refine / 오래 써도 튼튼한 수납형 침대프레임, 무헤드/패널헤드, SS/D/Q,K",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 11,
+          "gmv": 4939100
+        },
+        {
+          "pid": "1243313",
+          "name": "basic / 바른 수납 침대프레임, 무헤드/LED헤드, SS/Q",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 8,
+          "gmv": 2268900
+        },
+        {
+          "pid": "2993105",
+          "name": "[쿠폰가 18.9만] 베리엘 LED조명 3단 서랍 수납 침대프레임 SS/D/Q&K/LK",
+          "brand": "삼익가구",
+          "is_self": false,
+          "users": 6,
+          "gmv": 1370900
+        },
+        {
+          "pid": "2890947",
+          "name": "SLQK.노비스 무헤드 침대프레임 SS/Q/K/LK / 천연 무늬목",
+          "brand": "SLQK",
+          "is_self": false,
+          "users": 4,
+          "gmv": 2442500
+        }
+      ]
+    },
     "basic": {
       "mat_users": 1207,
       "bought_frame": 604,
@@ -896,64 +954,6 @@
           "is_self": true,
           "users": 2,
           "gmv": 1986000
-        }
-      ]
-    },
-    "refine": {
-      "mat_users": 268,
-      "bought_frame": 162,
-      "our": 39,
-      "comp_only": 123,
-      "rate_pct": 60.4,
-      "leak_pct": 75.9,
-      "dest": [
-        {
-          "pid": "2093235",
-          "name": "[쿠폰가 5.4만] 로우슬립 저상형 침대프레임 MS/S/SS/D/Q/K/LK (높이선택)",
-          "brand": "바스포르",
-          "is_self": false,
-          "users": 16,
-          "gmv": 2103000
-        },
-        {
-          "pid": "3858646",
-          "name": "refine / 두 배 더 깊어진 빅수납 침대프레임 4colors, SS/D/Q,K",
-          "brand": "오늘의집 layer",
-          "is_self": true,
-          "users": 13,
-          "gmv": 8014000
-        },
-        {
-          "pid": "3652507",
-          "name": "refine / 오래 써도 튼튼한 수납형 침대프레임, 무헤드/패널헤드, SS/D/Q,K",
-          "brand": "오늘의집 layer",
-          "is_self": true,
-          "users": 11,
-          "gmv": 4939100
-        },
-        {
-          "pid": "1243313",
-          "name": "basic / 바른 수납 침대프레임, 무헤드/LED헤드, SS/Q",
-          "brand": "오늘의집 layer",
-          "is_self": true,
-          "users": 8,
-          "gmv": 2268900
-        },
-        {
-          "pid": "2993105",
-          "name": "[쿠폰가 18.9만] 베리엘 LED조명 3단 서랍 수납 침대프레임 SS/D/Q&K/LK",
-          "brand": "삼익가구",
-          "is_self": false,
-          "users": 6,
-          "gmv": 1370900
-        },
-        {
-          "pid": "2890947",
-          "name": "SLQK.노비스 무헤드 침대프레임 SS/Q/K/LK / 천연 무늬목",
-          "brand": "SLQK",
-          "is_self": false,
-          "users": 4,
-          "gmv": 2442500
         }
       ]
     }
