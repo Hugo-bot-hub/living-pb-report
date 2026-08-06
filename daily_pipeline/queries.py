@@ -177,7 +177,7 @@ WHERE r.rank <= 15 ORDER BY r.kw, r.rank"""
 # ⚠️ user_pdp_facts.base_dt=date, user_scrap_facts.base_dt=VARCHAR. scan~3.3GB/run.
 _FURN_LEAD = '1089824,3607491,3121605,1243313,3748221,3898593,3898584,2518275,3858646'
 QUERIES['lead_funnel'] = f"""
-WITH cm AS (SELECT date_trunc('month',CURRENT_DATE)-interval '3' month AS c0),
+WITH cm AS (SELECT date_trunc('month',CURRENT_DATE)-interval '2' month AS c0),
 pdpf AS (  -- 재방문 = formation window 내 서로 다른 방문일 수(vd)
   SELECT CAST(p.user_id AS BIGINT) user_id, p.product_id, COUNT(DISTINCT p.base_dt) vd
   FROM ba_preserved.user_pdp_facts p, cm
@@ -197,7 +197,7 @@ buy AS (
   SELECT CAST(o.user_id AS BIGINT) user_id, CAST(o.product_id AS BIGINT) product_id, SUM(o.gmv) gmv
   FROM ba_preserved.commerce_gross_profit_orders o, cm
   WHERE CAST(o.product_id AS BIGINT) IN ({_FURN_LEAD})
-    AND o.base_dt>=cm.c0 AND o.base_dt<cm.c0+interval '3' month AND o.yyyymm>=date_format(cm.c0,'%Y%m') AND o.user_id IS NOT NULL
+    AND o.base_dt>=cm.c0 AND o.base_dt<cm.c0+interval '2' month AND o.yyyymm>=date_format(cm.c0,'%Y%m') AND o.user_id IS NOT NULL
   GROUP BY 1,2),
 leads AS (
   SELECT COALESCE(s.user_id,p.user_id) user_id, COALESCE(s.product_id,p.product_id) product_id,
@@ -222,9 +222,9 @@ SELECT date_format(c0,'%Y-%m') fmonth,
   date_format(c0,'%Y-%m-%d') form_start,
   date_format(c0+interval '1' month-interval '1' day,'%Y-%m-%d') form_end,
   date_format(c0,'%Y-%m-%d') obs_start,
-  date_format(c0+interval '3' month-interval '1' day,'%Y-%m-%d') obs_end,
+  date_format(c0+interval '2' month-interval '1' day,'%Y-%m-%d') obs_end,
   date_format(CURRENT_DATE,'%Y-%m-%d') built_on
-FROM (SELECT date_trunc('month',CURRENT_DATE)-interval '3' month c0)"""
+FROM (SELECT date_trunc('month',CURRENT_DATE)-interval '2' month c0)"""
 
 # ============ 리드 코호트 시계열: 형성월별 T1~T5 볼륨 + 3개월내 전환(성숙/관찰중) — 가구 합산 ============
 # 단일 4월 코호트 스냅샷이 아니라 형성월별로 같은 사다리를 반복 측정 → 전환 품질 추세.
@@ -260,7 +260,7 @@ ord AS (
   GROUP BY 1,2,3),
 cv AS (
   SELECT l.uid, l.pid, l.cm, MAX(CASE WHEN o.uid IS NOT NULL THEN 1 ELSE 0 END) bought, COALESCE(SUM(o.gmv),0) gmv
-  FROM leads l LEFT JOIN ord o ON l.uid=o.uid AND l.pid=o.pid AND o.om>=l.cm AND o.om<l.cm+interval '3' month
+  FROM leads l LEFT JOIN ord o ON l.uid=o.uid AND l.pid=o.pid AND o.om>=l.cm AND o.om<l.cm+interval '2' month
   GROUP BY 1,2,3)
 SELECT date_format(l.cm,'%Y-%m') ym,
   CASE WHEN l.cart=1 AND l.revisit=1 THEN 'T5' WHEN l.cart=1 THEN 'T4' WHEN l.scrap=1 THEN 'T3' WHEN l.revisit=1 THEN 'T2' ELSE 'T1' END tier,

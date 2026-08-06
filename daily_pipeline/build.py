@@ -156,8 +156,8 @@ def _cohort():
     import datetime
     def am(d,n):
         m=d.month-1+n; return datetime.date(d.year+m//12, m%12+1, 1)
-    t=datetime.date.today(); c0=am(t.replace(day=1),-3)
-    fe=am(c0,1)-datetime.timedelta(days=1); oe=am(c0,3)-datetime.timedelta(days=1)
+    t=datetime.date.today(); c0=am(t.replace(day=1),-2)
+    fe=am(c0,1)-datetime.timedelta(days=1); oe=am(c0,2)-datetime.timedelta(days=1)
     return {'formation_month':c0.strftime('%Y-%m'),'formation':c0.isoformat()+' ~ '+fe.isoformat(),
             'observation':c0.isoformat()+' ~ '+oe.isoformat(),'built_on':t.isoformat()}
 if lf is not None:
@@ -231,12 +231,12 @@ if lf is not None:
                 'cart_leads':cart,'cart_rate':round(cconv*100.0/cart,1) if cart else 0.0,
                 't5_leads':t5l,'t5_rate':round(t5c*100.0/t5l,1) if t5l else 0.0})
         cohort_trend = {'months':months,'matured_boundary':mb,
-            'note':'형성월별 코호트 반복측정(전환 품질 추세). 성숙=구매관찰 3개월 완료(형성월 ≤ '+mb+') / 관찰중=3개월 미도달(전환은 하한, 더 오를 것). T3~T5=찜·장바구니 리드. 주1회(월요일) 갱신.'}
-    D['leadFunnel'] = {'products':prods,'window':'찜/장바구니월→forward 3개월 성숙 코호트','tierKeys':TIER_KEYS,'cohort':cohort,'cohortTrend':cohort_trend,
+            'note':'형성월별 코호트 반복측정(전환 품질 추세). 성숙=구매관찰 2개월(60일) 완료(형성월 ≤ '+mb+') / 관찰중=2개월 미도달(전환은 하한, 더 오를 것). T3~T5=찜·장바구니 리드. 주1회(월요일) 갱신. ※관찰창 60일 근거: 가구 리드 전환의 90%가 신호 후 프레임 50일·매트리스 28일 내 발생(3월 코호트 실측).'}
+    D['leadFunnel'] = {'products':prods,'window':'찜/장바구니월→forward 2개월(60일) 성숙 코호트','tierKeys':TIER_KEYS,'cohort':cohort,'cohortTrend':cohort_trend,
         'summary':{'furniture_hot_uncaptured':total_hot_out,'bench_scrap_to_buy':6.9,
             'lead_value_blended':round(tot_saved_gmv/tot_saved_leads) if tot_saved_leads else 0,
             'funnel_overall':funnel_overall,'attribution':attribution},
-        'note':'의도등급(강신호 우선·전환율 실측 단조·상호배타): T5 장바구니+재방문 / T4 장바구니 / T3 찜(장바구니X) / T2 재방문(찜/장바구니X) / T1 1회조회. 각 리드는 최고 신호 1개 등급에만 배정(중복없음). 신호는 전부 형성월[c0,c0+1M) 측정, 구매관찰 3개월. 리드가치 = T3~T5(찜·장바구니) 리드가 3개월 내 그 상품 산 실현 GMV ÷ T3~T5 리드(gross·상품매칭). vs 리드 CAC로 매체 판정. 미회수 핫리드=장바구니(T4·T5) 미전환=CRM 최우선. 로그인 유저 기준(비로그인 제외).'}
+        'note':'의도등급(강신호 우선·전환율 실측 단조·상호배타): T5 장바구니+재방문 / T4 장바구니 / T3 찜(장바구니X) / T2 재방문(찜/장바구니X) / T1 1회조회. 각 리드는 최고 신호 1개 등급에만 배정(중복없음). 신호는 전부 형성월[c0,c0+1M) 측정, 구매관찰 2개월(60일). 리드가치 = T3~T5(찜·장바구니) 리드가 60일(형성월+1개월) 내 그 상품 산 실현 GMV ÷ T3~T5 리드(gross·상품매칭). vs 리드 CAC로 매체 판정. 미회수 핫리드=장바구니(T4·T5) 미전환=CRM 최우선. 로그인 유저 기준(비로그인 제외).'}
     changed.append('leadFunnel')
 
 # ---------- lead_growth (노출→리드 도달률 90일 + 월별 신규리드 성장추이 6개월) ----------

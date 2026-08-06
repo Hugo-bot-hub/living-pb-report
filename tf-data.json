@@ -90774,53 +90774,53 @@
         "name": "studio매트리스",
         "tiers": {
           "T1": {
-            "leads": 3669,
-            "conv": 7,
-            "gmv": 4999000,
+            "leads": 2716,
+            "conv": 5,
+            "gmv": 4009000,
             "rate": 0.2,
-            "value": 1362,
-            "outstanding": 3662
+            "value": 1476,
+            "outstanding": 2711
           },
           "T2": {
-            "leads": 910,
-            "conv": 16,
-            "gmv": 15409000,
+            "leads": 455,
+            "conv": 8,
+            "gmv": 1500000,
             "rate": 1.8,
-            "value": 16933,
-            "outstanding": 894
+            "value": 3297,
+            "outstanding": 447
           },
           "T3": {
-            "leads": 148,
-            "conv": 6,
-            "gmv": 5199000,
-            "rate": 4.1,
-            "value": 35128,
-            "outstanding": 142
+            "leads": 125,
+            "conv": 1,
+            "gmv": 0,
+            "rate": 0.8,
+            "value": 0,
+            "outstanding": 124
           },
           "T4": {
-            "leads": 116,
-            "conv": 10,
-            "gmv": 10920000,
-            "rate": 8.6,
-            "value": 94138,
-            "outstanding": 106
+            "leads": 76,
+            "conv": 4,
+            "gmv": 3999000,
+            "rate": 5.3,
+            "value": 52618,
+            "outstanding": 72
           },
           "T5": {
-            "leads": 104,
-            "conv": 37,
-            "gmv": 41604000,
-            "rate": 35.6,
-            "value": 400038,
-            "outstanding": 67
+            "leads": 72,
+            "conv": 33,
+            "gmv": 39433000,
+            "rate": 45.8,
+            "value": 547681,
+            "outstanding": 39
           }
         },
         "summary": {
-          "total_leads": 4947,
-          "saved_to_buy_rate": 14.4,
-          "saved_leads": 368,
-          "cart_leads": 220,
-          "lead_value": 156856,
-          "hot_uncaptured": 173
+          "total_leads": 3444,
+          "saved_to_buy_rate": 13.9,
+          "saved_leads": 273,
+          "cart_leads": 148,
+          "lead_value": 159092,
+          "hot_uncaptured": 111
         }
       },
       {
@@ -90828,161 +90828,53 @@
         "name": "코타평상",
         "tiers": {
           "T1": {
-            "leads": 3364,
-            "conv": 6,
-            "gmv": 6129900,
-            "rate": 0.2,
-            "value": 1822,
-            "outstanding": 3358
-          },
-          "T2": {
-            "leads": 1008,
-            "conv": 15,
-            "gmv": 14795700,
-            "rate": 1.5,
-            "value": 14678,
-            "outstanding": 993
-          },
-          "T3": {
-            "leads": 357,
-            "conv": 9,
-            "gmv": 7234000,
-            "rate": 2.5,
-            "value": 20263,
-            "outstanding": 348
-          },
-          "T4": {
-            "leads": 95,
-            "conv": 5,
-            "gmv": 5485800,
-            "rate": 5.3,
-            "value": 57745,
-            "outstanding": 90
-          },
-          "T5": {
-            "leads": 177,
-            "conv": 39,
-            "gmv": 40184700,
-            "rate": 22.0,
-            "value": 227032,
-            "outstanding": 138
-          }
-        },
-        "summary": {
-          "total_leads": 5001,
-          "saved_to_buy_rate": 8.4,
-          "saved_leads": 629,
-          "cart_leads": 272,
-          "lead_value": 84109,
-          "hot_uncaptured": 228
-        }
-      },
-      {
-        "pid": "3607491",
-        "name": "refine매트리스",
-        "tiers": {
-          "T1": {
-            "leads": 3198,
+            "leads": 3220,
             "conv": 8,
-            "gmv": 2847600,
-            "rate": 0.3,
-            "value": 890,
-            "outstanding": 3190
-          },
-          "T2": {
-            "leads": 768,
-            "conv": 13,
-            "gmv": 5689800,
-            "rate": 1.7,
-            "value": 7409,
-            "outstanding": 755
-          },
-          "T3": {
-            "leads": 153,
-            "conv": 6,
-            "gmv": 2588500,
-            "rate": 3.9,
-            "value": 16918,
-            "outstanding": 147
-          },
-          "T4": {
-            "leads": 203,
-            "conv": 22,
-            "gmv": 7599200,
-            "rate": 10.8,
-            "value": 37434,
-            "outstanding": 181
-          },
-          "T5": {
-            "leads": 191,
-            "conv": 75,
-            "gmv": 30620800,
-            "rate": 39.3,
-            "value": 160318,
-            "outstanding": 116
-          }
-        },
-        "summary": {
-          "total_leads": 4513,
-          "saved_to_buy_rate": 18.8,
-          "saved_leads": 547,
-          "cart_leads": 394,
-          "lead_value": 74604,
-          "hot_uncaptured": 297
-        }
-      },
-      {
-        "pid": "3898593",
-        "name": "코타수납",
-        "tiers": {
-          "T1": {
-            "leads": 8421,
-            "conv": 14,
-            "gmv": 16599500,
+            "gmv": 2672000,
             "rate": 0.2,
-            "value": 1971,
-            "outstanding": 8407
+            "value": 830,
+            "outstanding": 3212
           },
           "T2": {
-            "leads": 2539,
-            "conv": 21,
-            "gmv": 20673500,
-            "rate": 0.8,
-            "value": 8142,
-            "outstanding": 2518
+            "leads": 909,
+            "conv": 9,
+            "gmv": 7739600,
+            "rate": 1.0,
+            "value": 8514,
+            "outstanding": 900
           },
           "T3": {
-            "leads": 1057,
-            "conv": 15,
-            "gmv": 19489200,
-            "rate": 1.4,
-            "value": 18438,
-            "outstanding": 1042
+            "leads": 360,
+            "conv": 2,
+            "gmv": 2669900,
+            "rate": 0.6,
+            "value": 7416,
+            "outstanding": 358
           },
           "T4": {
-            "leads": 206,
-            "conv": 12,
-            "gmv": 10964000,
-            "rate": 5.8,
-            "value": 53223,
-            "outstanding": 194
+            "leads": 75,
+            "conv": 3,
+            "gmv": 2361900,
+            "rate": 4.0,
+            "value": 31492,
+            "outstanding": 72
           },
           "T5": {
-            "leads": 467,
-            "conv": 83,
-            "gmv": 84677700,
-            "rate": 17.8,
-            "value": 181323,
-            "outstanding": 384
+            "leads": 138,
+            "conv": 30,
+            "gmv": 32211300,
+            "rate": 21.7,
+            "value": 233415,
+            "outstanding": 108
           }
         },
         "summary": {
-          "total_leads": 12690,
-          "saved_to_buy_rate": 6.4,
-          "saved_leads": 1730,
-          "cart_leads": 673,
-          "lead_value": 66550,
-          "hot_uncaptured": 578
+          "total_leads": 4702,
+          "saved_to_buy_rate": 6.1,
+          "saved_leads": 573,
+          "cart_leads": 213,
+          "lead_value": 64997,
+          "hot_uncaptured": 180
         }
       },
       {
@@ -90990,53 +90882,161 @@
         "name": "페이브침대",
         "tiers": {
           "T1": {
-            "leads": 11757,
-            "conv": 15,
-            "gmv": 9389800,
+            "leads": 8155,
+            "conv": 7,
+            "gmv": 6068000,
             "rate": 0.1,
-            "value": 799,
-            "outstanding": 11742
+            "value": 744,
+            "outstanding": 8148
           },
           "T2": {
-            "leads": 2532,
-            "conv": 37,
-            "gmv": 34191500,
+            "leads": 1658,
+            "conv": 25,
+            "gmv": 21649700,
             "rate": 1.5,
-            "value": 13504,
-            "outstanding": 2495
+            "value": 13058,
+            "outstanding": 1633
           },
           "T3": {
-            "leads": 1578,
-            "conv": 20,
-            "gmv": 19125900,
-            "rate": 1.3,
-            "value": 12120,
-            "outstanding": 1558
+            "leads": 1077,
+            "conv": 17,
+            "gmv": 16377800,
+            "rate": 1.6,
+            "value": 15207,
+            "outstanding": 1060
           },
           "T4": {
-            "leads": 261,
+            "leads": 223,
             "conv": 9,
-            "gmv": 8001900,
-            "rate": 3.4,
-            "value": 30659,
-            "outstanding": 252
+            "gmv": 6717900,
+            "rate": 4.0,
+            "value": 30125,
+            "outstanding": 214
           },
           "T5": {
-            "leads": 492,
-            "conv": 100,
-            "gmv": 93124700,
-            "rate": 20.3,
-            "value": 189278,
-            "outstanding": 392
+            "leads": 375,
+            "conv": 89,
+            "gmv": 80443100,
+            "rate": 23.7,
+            "value": 214515,
+            "outstanding": 286
           }
         },
         "summary": {
-          "total_leads": 16620,
-          "saved_to_buy_rate": 5.5,
-          "saved_leads": 2331,
-          "cart_leads": 753,
-          "lead_value": 51588,
-          "hot_uncaptured": 644
+          "total_leads": 11488,
+          "saved_to_buy_rate": 6.9,
+          "saved_leads": 1675,
+          "cart_leads": 598,
+          "lead_value": 61814,
+          "hot_uncaptured": 500
+        }
+      },
+      {
+        "pid": "3898593",
+        "name": "코타수납",
+        "tiers": {
+          "T1": {
+            "leads": 8060,
+            "conv": 10,
+            "gmv": 10081900,
+            "rate": 0.1,
+            "value": 1251,
+            "outstanding": 8050
+          },
+          "T2": {
+            "leads": 2407,
+            "conv": 30,
+            "gmv": 31907400,
+            "rate": 1.2,
+            "value": 13256,
+            "outstanding": 2377
+          },
+          "T3": {
+            "leads": 1022,
+            "conv": 8,
+            "gmv": 11017900,
+            "rate": 0.8,
+            "value": 10781,
+            "outstanding": 1014
+          },
+          "T4": {
+            "leads": 191,
+            "conv": 7,
+            "gmv": 8900000,
+            "rate": 3.7,
+            "value": 46597,
+            "outstanding": 184
+          },
+          "T5": {
+            "leads": 385,
+            "conv": 64,
+            "gmv": 77389600,
+            "rate": 16.6,
+            "value": 201012,
+            "outstanding": 321
+          }
+        },
+        "summary": {
+          "total_leads": 12065,
+          "saved_to_buy_rate": 4.9,
+          "saved_leads": 1598,
+          "cart_leads": 576,
+          "lead_value": 60893,
+          "hot_uncaptured": 505
+        }
+      },
+      {
+        "pid": "3607491",
+        "name": "refine매트리스",
+        "tiers": {
+          "T1": {
+            "leads": 2826,
+            "conv": 11,
+            "gmv": 4190500,
+            "rate": 0.4,
+            "value": 1483,
+            "outstanding": 2815
+          },
+          "T2": {
+            "leads": 521,
+            "conv": 15,
+            "gmv": 6510500,
+            "rate": 2.9,
+            "value": 12496,
+            "outstanding": 506
+          },
+          "T3": {
+            "leads": 158,
+            "conv": 3,
+            "gmv": 1491500,
+            "rate": 1.9,
+            "value": 9440,
+            "outstanding": 155
+          },
+          "T4": {
+            "leads": 170,
+            "conv": 17,
+            "gmv": 6749600,
+            "rate": 10.0,
+            "value": 39704,
+            "outstanding": 153
+          },
+          "T5": {
+            "leads": 150,
+            "conv": 47,
+            "gmv": 19861700,
+            "rate": 31.3,
+            "value": 132411,
+            "outstanding": 103
+          }
+        },
+        "summary": {
+          "total_leads": 3825,
+          "saved_to_buy_rate": 14.0,
+          "saved_leads": 478,
+          "cart_leads": 320,
+          "lead_value": 58792,
+          "hot_uncaptured": 256
         }
       },
       {
@@ -91044,53 +91044,53 @@
         "name": "basic 침대프레임",
         "tiers": {
           "T1": {
-            "leads": 13607,
-            "conv": 78,
-            "gmv": 17250010,
+            "leads": 14542,
+            "conv": 80,
+            "gmv": 18640970,
             "rate": 0.6,
-            "value": 1268,
-            "outstanding": 13529
+            "value": 1282,
+            "outstanding": 14462
           },
           "T2": {
-            "leads": 2139,
-            "conv": 102,
-            "gmv": 23975650,
-            "rate": 4.8,
-            "value": 11209,
-            "outstanding": 2037
+            "leads": 2334,
+            "conv": 80,
+            "gmv": 22321900,
+            "rate": 3.4,
+            "value": 9564,
+            "outstanding": 2254
           },
           "T3": {
-            "leads": 1435,
-            "conv": 56,
-            "gmv": 16614620,
-            "rate": 3.9,
-            "value": 11578,
-            "outstanding": 1379
+            "leads": 1725,
+            "conv": 38,
+            "gmv": 10971000,
+            "rate": 2.2,
+            "value": 6360,
+            "outstanding": 1687
           },
           "T4": {
-            "leads": 878,
-            "conv": 83,
-            "gmv": 27022980,
-            "rate": 9.5,
-            "value": 30778,
-            "outstanding": 795
+            "leads": 956,
+            "conv": 101,
+            "gmv": 32019500,
+            "rate": 10.6,
+            "value": 33493,
+            "outstanding": 855
           },
           "T5": {
-            "leads": 1008,
-            "conv": 331,
-            "gmv": 103575390,
-            "rate": 32.8,
-            "value": 102753,
-            "outstanding": 677
+            "leads": 1114,
+            "conv": 354,
+            "gmv": 106545000,
+            "rate": 31.8,
+            "value": 95642,
+            "outstanding": 760
           }
         },
         "summary": {
-          "total_leads": 19067,
-          "saved_to_buy_rate": 14.2,
-          "saved_leads": 3321,
-          "cart_leads": 1886,
-          "lead_value": 44328,
-          "hot_uncaptured": 1472
+          "total_leads": 20671,
+          "saved_to_buy_rate": 13.0,
+          "saved_leads": 3795,
+          "cart_leads": 2070,
+          "lead_value": 39403,
+          "hot_uncaptured": 1615
         }
       },
       {
@@ -91098,53 +91098,53 @@
         "name": "basic매트리스",
         "tiers": {
           "T1": {
-            "leads": 8072,
-            "conv": 55,
-            "gmv": 10619000,
-            "rate": 0.7,
-            "value": 1316,
-            "outstanding": 8017
+            "leads": 8136,
+            "conv": 49,
+            "gmv": 10721700,
+            "rate": 0.6,
+            "value": 1318,
+            "outstanding": 8087
           },
           "T2": {
-            "leads": 1369,
-            "conv": 55,
-            "gmv": 10646500,
-            "rate": 4.0,
-            "value": 7777,
-            "outstanding": 1314
+            "leads": 1196,
+            "conv": 50,
+            "gmv": 10538000,
+            "rate": 4.2,
+            "value": 8811,
+            "outstanding": 1146
           },
           "T3": {
-            "leads": 624,
+            "leads": 674,
             "conv": 21,
-            "gmv": 3679600,
-            "rate": 3.4,
-            "value": 5897,
-            "outstanding": 603
+            "gmv": 3849800,
+            "rate": 3.1,
+            "value": 5712,
+            "outstanding": 653
           },
           "T4": {
-            "leads": 798,
-            "conv": 94,
-            "gmv": 20412100,
-            "rate": 11.8,
-            "value": 25579,
-            "outstanding": 704
+            "leads": 879,
+            "conv": 130,
+            "gmv": 27351100,
+            "rate": 14.8,
+            "value": 31116,
+            "outstanding": 749
           },
           "T5": {
-            "leads": 663,
-            "conv": 239,
-            "gmv": 50120500,
-            "rate": 36.0,
-            "value": 75597,
-            "outstanding": 424
+            "leads": 690,
+            "conv": 231,
+            "gmv": 48666700,
+            "rate": 33.5,
+            "value": 70531,
+            "outstanding": 459
           }
         },
         "summary": {
-          "total_leads": 11526,
+          "total_leads": 11575,
           "saved_to_buy_rate": 17.0,
-          "saved_leads": 2085,
-          "cart_leads": 1461,
-          "lead_value": 35593,
-          "hot_uncaptured": 1128
+          "saved_leads": 2243,
+          "cart_leads": 1569,
+          "lead_value": 35607,
+          "hot_uncaptured": 1208
         }
       },
       {
@@ -91152,53 +91152,53 @@
         "name": "refine빅수납",
         "tiers": {
           "T1": {
-            "leads": 9353,
-            "conv": 29,
-            "gmv": 11000480,
+            "leads": 9150,
+            "conv": 28,
+            "gmv": 11582600,
             "rate": 0.3,
-            "value": 1176,
-            "outstanding": 9324
+            "value": 1266,
+            "outstanding": 9122
           },
           "T2": {
-            "leads": 2305,
-            "conv": 29,
-            "gmv": 9398210,
-            "rate": 1.3,
-            "value": 4077,
-            "outstanding": 2276
+            "leads": 1621,
+            "conv": 34,
+            "gmv": 15304900,
+            "rate": 2.1,
+            "value": 9442,
+            "outstanding": 1587
           },
           "T3": {
-            "leads": 1970,
-            "conv": 24,
-            "gmv": 9727400,
-            "rate": 1.2,
-            "value": 4938,
-            "outstanding": 1946
+            "leads": 1900,
+            "conv": 21,
+            "gmv": 11384000,
+            "rate": 1.1,
+            "value": 5992,
+            "outstanding": 1879
           },
           "T4": {
-            "leads": 1089,
-            "conv": 36,
-            "gmv": 20957430,
-            "rate": 3.3,
-            "value": 19245,
-            "outstanding": 1053
+            "leads": 1204,
+            "conv": 28,
+            "gmv": 13127500,
+            "rate": 2.3,
+            "value": 10903,
+            "outstanding": 1176
           },
           "T5": {
-            "leads": 655,
-            "conv": 172,
-            "gmv": 85153050,
-            "rate": 26.3,
-            "value": 130005,
-            "outstanding": 483
+            "leads": 680,
+            "conv": 174,
+            "gmv": 92844900,
+            "rate": 25.6,
+            "value": 136537,
+            "outstanding": 506
           }
         },
         "summary": {
-          "total_leads": 15372,
-          "saved_to_buy_rate": 6.2,
-          "saved_leads": 3714,
-          "cart_leads": 1744,
-          "lead_value": 31190,
-          "hot_uncaptured": 1536
+          "total_leads": 14555,
+          "saved_to_buy_rate": 5.9,
+          "saved_leads": 3784,
+          "cart_leads": 1884,
+          "lead_value": 31014,
+          "hot_uncaptured": 1682
         }
       },
       {
@@ -91206,57 +91206,57 @@
         "name": "refine빅수납호텔",
         "tiers": {
           "T1": {
-            "leads": 2934,
+            "leads": 777,
             "conv": 2,
-            "gmv": 1099400,
-            "rate": 0.1,
-            "value": 375,
-            "outstanding": 2932
+            "gmv": 2090600,
+            "rate": 0.3,
+            "value": 2691,
+            "outstanding": 775
           },
           "T2": {
-            "leads": 409,
-            "conv": 7,
-            "gmv": -1715800,
-            "rate": 1.7,
-            "value": -4195,
-            "outstanding": 402
-          },
-          "T3": {
-            "leads": 316,
+            "leads": 64,
             "conv": 0,
             "gmv": 0,
             "rate": 0.0,
             "value": 0,
-            "outstanding": 316
+            "outstanding": 64
+          },
+          "T3": {
+            "leads": 68,
+            "conv": 1,
+            "gmv": 0,
+            "rate": 1.5,
+            "value": 0,
+            "outstanding": 67
           },
           "T4": {
-            "leads": 49,
-            "conv": 2,
-            "gmv": 684000,
-            "rate": 4.1,
-            "value": 13959,
-            "outstanding": 47
+            "leads": 11,
+            "conv": 0,
+            "gmv": 0,
+            "rate": 0.0,
+            "value": 0,
+            "outstanding": 11
           },
           "T5": {
-            "leads": 77,
-            "conv": 9,
-            "gmv": 4284000,
-            "rate": 11.7,
-            "value": 55636,
-            "outstanding": 68
+            "leads": 11,
+            "conv": 2,
+            "gmv": 1710200,
+            "rate": 18.2,
+            "value": 155473,
+            "outstanding": 9
           }
         },
         "summary": {
-          "total_leads": 3785,
-          "saved_to_buy_rate": 2.5,
-          "saved_leads": 442,
-          "cart_leads": 126,
-          "lead_value": 11240,
-          "hot_uncaptured": 115
+          "total_leads": 931,
+          "saved_to_buy_rate": 3.3,
+          "saved_leads": 90,
+          "cart_leads": 22,
+          "lead_value": 19002,
+          "hot_uncaptured": 20
         }
       }
     ],
-    "window": "찜/장바구니월→forward 3개월 성숙 코호트",
+    "window": "찜/장바구니월→forward 2개월(60일) 성숙 코호트",
     "tierKeys": [
       "T1",
       "T2",
@@ -91265,9 +91265,9 @@
       "T5"
     ],
     "cohort": {
-      "formation_month": "2026-05",
-      "formation": "2026-05-01 ~ 2026-05-31",
-      "observation": "2026-05-01 ~ 2026-07-31",
+      "formation_month": "2026-06",
+      "formation": "2026-06-01 ~ 2026-06-30",
+      "observation": "2026-06-01 ~ 2026-07-31",
       "built_on": "2026-08-06"
     },
     "cohortTrend": {
@@ -91277,146 +91277,146 @@
           "matured": true,
           "total_leads": 53351,
           "saved_leads": 7857,
-          "saved_rate": 14.1,
-          "lead_value": 48828,
+          "saved_rate": 13.8,
+          "lead_value": 47927,
           "cart_leads": 4033,
-          "cart_rate": 24.7,
+          "cart_rate": 24.2,
           "t5_leads": 2056,
-          "t5_rate": 36.4
+          "t5_rate": 36.0
         },
         {
           "ym": "2026-01",
           "matured": true,
           "total_leads": 56281,
           "saved_leads": 8321,
-          "saved_rate": 12.6,
-          "lead_value": 44035,
+          "saved_rate": 12.2,
+          "lead_value": 43025,
           "cart_leads": 4195,
-          "cart_rate": 22.9,
+          "cart_rate": 22.3,
           "t5_leads": 2200,
-          "t5_rate": 33.0
+          "t5_rate": 32.2
         },
         {
           "ym": "2026-02",
           "matured": true,
           "total_leads": 56627,
           "saved_leads": 8864,
-          "saved_rate": 11.7,
-          "lead_value": 39926,
+          "saved_rate": 11.3,
+          "lead_value": 37908,
           "cart_leads": 4632,
-          "cart_rate": 20.2,
+          "cart_rate": 19.7,
           "t5_leads": 2288,
-          "t5_rate": 30.6
+          "t5_rate": 30.2
         },
         {
           "ym": "2026-03",
           "matured": true,
           "total_leads": 76290,
           "saved_leads": 12837,
-          "saved_rate": 12.2,
-          "lead_value": 48527,
+          "saved_rate": 11.8,
+          "lead_value": 46159,
           "cart_leads": 6796,
-          "cart_rate": 20.7,
+          "cart_rate": 20.3,
           "t5_leads": 3651,
-          "t5_rate": 31.1
+          "t5_rate": 30.6
         },
         {
           "ym": "2026-04",
           "matured": true,
           "total_leads": 86172,
           "saved_leads": 13583,
-          "saved_rate": 10.9,
-          "lead_value": 49480,
+          "saved_rate": 10.4,
+          "lead_value": 46386,
           "cart_leads": 6880,
-          "cart_rate": 19.1,
+          "cart_rate": 18.5,
           "t5_leads": 3667,
-          "t5_rate": 28.8
+          "t5_rate": 28.3
         },
         {
           "ym": "2026-05",
           "matured": true,
           "total_leads": 93521,
           "saved_leads": 15167,
-          "saved_rate": 10.0,
-          "lead_value": 48068,
+          "saved_rate": 9.6,
+          "lead_value": 45658,
           "cart_leads": 7529,
-          "cart_rate": 18.0,
+          "cart_rate": 17.5,
           "t5_leads": 3834,
-          "t5_rate": 28.3
+          "t5_rate": 27.8
         },
         {
           "ym": "2026-06",
-          "matured": false,
+          "matured": true,
           "total_leads": 83256,
           "saved_leads": 14509,
           "saved_rate": 9.9,
-          "lead_value": 45523,
+          "lead_value": 45358,
           "cart_leads": 7400,
           "cart_rate": 17.9,
           "t5_leads": 3615,
-          "t5_rate": 28.4
+          "t5_rate": 28.3
         },
         {
           "ym": "2026-07",
           "matured": false,
           "total_leads": 104154,
           "saved_leads": 16444,
-          "saved_rate": 8.1,
-          "lead_value": 39475,
+          "saved_rate": 8.4,
+          "lead_value": 41225,
           "cart_leads": 8132,
-          "cart_rate": 15.3,
+          "cart_rate": 15.9,
           "t5_leads": 4091,
-          "t5_rate": 25.2
+          "t5_rate": 26.1
         }
       ],
-      "matured_boundary": "2026-05",
-      "note": "형성월별 코호트 반복측정(전환 품질 추세). 성숙=구매관찰 3개월 완료(형성월 ≤ 2026-05) / 관찰중=3개월 미도달(전환은 하한, 더 오를 것). T3~T5=찜·장바구니 리드. 주1회(월요일) 갱신."
+      "matured_boundary": "2026-06",
+      "note": "형성월별 코호트 반복측정(전환 품질 추세). 성숙=구매관찰 2개월(60일) 완료(형성월 ≤ 2026-06) / 관찰중=2개월 미도달(전환은 하한, 더 오를 것). T3~T5=찜·장바구니 리드. 주1회(월요일) 갱신. ※관찰창 60일 근거: 가구 리드 전환의 90%가 신호 후 프레임 50일·매트리스 28일 내 발생(3월 코호트 실측)."
     },
     "summary": {
-      "furniture_hot_uncaptured": 6171,
+      "furniture_hot_uncaptured": 6077,
       "bench_scrap_to_buy": 6.9,
-      "lead_value_blended": 48068,
+      "lead_value_blended": 45358,
       "funnel_overall": {
         "bands": [
           {
             "label": "전체 (T1~T5 · 조회 이상 전원)",
-            "leads": 93521,
-            "conv": 2024,
-            "buyers": 2024,
-            "outstanding": 91497,
-            "rate": 2.16
+            "leads": 83256,
+            "conv": 1886,
+            "buyers": 1886,
+            "outstanding": 81370,
+            "rate": 2.27
           },
           {
             "label": "관심 이상 (T2~T5 · 재방문/찜/장바구니)",
-            "leads": 29146,
-            "conv": 1810,
-            "buyers": 1810,
-            "outstanding": 27336,
-            "rate": 6.21
+            "leads": 25674,
+            "conv": 1686,
+            "buyers": 1686,
+            "outstanding": 23988,
+            "rate": 6.57
           },
           {
             "label": "저장 (T3~T5 · 찜·장바구니)",
-            "leads": 15167,
-            "conv": 1515,
-            "buyers": 1515,
-            "outstanding": 13652,
-            "rate": 9.99
+            "leads": 14509,
+            "conv": 1435,
+            "buyers": 1435,
+            "outstanding": 13074,
+            "rate": 9.89
           },
           {
             "label": "장바구니 (T4~T5)",
-            "leads": 7529,
-            "conv": 1358,
-            "buyers": 1358,
-            "outstanding": 6171,
-            "rate": 18.04
+            "leads": 7400,
+            "conv": 1323,
+            "buyers": 1323,
+            "outstanding": 6077,
+            "rate": 17.88
           },
           {
             "label": "핫 (T5 · 장바구니+재방문)",
-            "leads": 3834,
-            "conv": 1085,
-            "buyers": 1085,
-            "outstanding": 2749,
-            "rate": 28.3
+            "leads": 3615,
+            "conv": 1024,
+            "buyers": 1024,
+            "outstanding": 2591,
+            "rate": 28.33
           }
         ]
       },
@@ -91433,7 +91433,7 @@
         "rate_direct": 9.5
       }
     },
-    "note": "의도등급(강신호 우선·전환율 실측 단조·상호배타): T5 장바구니+재방문 / T4 장바구니 / T3 찜(장바구니X) / T2 재방문(찜/장바구니X) / T1 1회조회. 각 리드는 최고 신호 1개 등급에만 배정(중복없음). 신호는 전부 형성월[c0,c0+1M) 측정, 구매관찰 3개월. 리드가치 = T3~T5(찜·장바구니) 리드가 3개월 내 그 상품 산 실현 GMV ÷ T3~T5 리드(gross·상품매칭). vs 리드 CAC로 매체 판정. 미회수 핫리드=장바구니(T4·T5) 미전환=CRM 최우선. 로그인 유저 기준(비로그인 제외)."
+    "note": "의도등급(강신호 우선·전환율 실측 단조·상호배타): T5 장바구니+재방문 / T4 장바구니 / T3 찜(장바구니X) / T2 재방문(찜/장바구니X) / T1 1회조회. 각 리드는 최고 신호 1개 등급에만 배정(중복없음). 신호는 전부 형성월[c0,c0+1M) 측정, 구매관찰 2개월(60일). 리드가치 = T3~T5(찜·장바구니) 리드가 60일(형성월+1개월) 내 그 상품 산 실현 GMV ÷ T3~T5 리드(gross·상품매칭). vs 리드 CAC로 매체 판정. 미회수 핫리드=장바구니(T4·T5) 미전환=CRM 최우선. 로그인 유저 기준(비로그인 제외)."
   },
   "leadGrowth": {
     "products": [
