@@ -1,7 +1,7 @@
 {
   "meta": {
-    "lastUpdate": "2026-08-24",
-    "window": "프레임 합구매/attach=최근3개월, 매트리스 교차=최근6개월, 객단가=최근3개월 (유저단위·롤링, CURRENT_DATE 자동, 기준 2026-08-24)",
+    "lastUpdate": "2026-08-25",
+    "window": "프레임 합구매/attach=최근3개월, 매트리스 교차=최근6개월, 객단가=최근3개월 (유저단위·롤링, CURRENT_DATE 자동, 기준 2026-08-25)",
     "note": "매트리스 객단가는 표시가와 다름(사이즈×경도별). 방수커버 옵션 제외. attach=프레임과 함께 팔린 매트리스(매트리스 PID 매출엔 미포함).",
     "source": "commerce_gross_profit_orders × commerce_snapshot_production_options(옵션명 explain)",
     "cosellUpdate": "전 프레임 확장 2026-07-02"
@@ -559,80 +559,6 @@
     "note": "모수 착시였음(옵션매트 누락). 정정 44%로 시장(35%) 상위. 우리(옵션매트 포함) 포착 vs 경쟁 유출이 핵심. 옵션매트리스=자사 포착."
   },
   "cosell_by_tier": {
-    "refine": {
-      "frame_users": 1277,
-      "bought_mat": 640,
-      "our": 432,
-      "comp_only": 208,
-      "opt_mat": 384,
-      "rate_pct": 50.1,
-      "leak_pct": 32.5,
-      "dest": [
-        {
-          "pid": "opt",
-          "name": "프레임옵션 매트리스(자사)",
-          "brand": "오늘의집 layer",
-          "is_self": true,
-          "users": 384,
-          "qty": 453,
-          "gmv": 128267980
-        },
-        {
-          "pid": "1590911",
-          "name": "수면밀도",
-          "brand": "수면밀도",
-          "is_self": false,
-          "users": 58,
-          "qty": 103,
-          "gmv": 36537700
-        },
-        {
-          "pid": "3607491",
-          "name": "refine매트리스(우리)",
-          "brand": "오늘의집 layer",
-          "is_self": true,
-          "users": 31,
-          "qty": 55,
-          "gmv": 14603800
-        },
-        {
-          "pid": "858905",
-          "name": "웰퍼니쳐",
-          "brand": "웰퍼니쳐",
-          "is_self": false,
-          "users": 22,
-          "qty": 32,
-          "gmv": 8994300
-        },
-        {
-          "pid": "1089824",
-          "name": "basic매트리스(우리)",
-          "brand": "오늘의집 layer",
-          "is_self": true,
-          "users": 25,
-          "qty": 37,
-          "gmv": 6298600
-        },
-        {
-          "pid": "2737888",
-          "name": "지누스",
-          "brand": "지누스",
-          "is_self": false,
-          "users": 13,
-          "qty": 18,
-          "gmv": 3965100
-        },
-        {
-          "pid": "2447090",
-          "name": "웰퍼니쳐",
-          "brand": "웰퍼니쳐",
-          "is_self": false,
-          "users": 12,
-          "qty": 14,
-          "gmv": 1976900
-        }
-      ]
-    },
     "basic": {
       "frame_users": 2165,
       "bought_mat": 1120,
@@ -704,6 +630,80 @@
           "users": 43,
           "qty": 64,
           "gmv": 7503000
+        }
+      ]
+    },
+    "refine": {
+      "frame_users": 1277,
+      "bought_mat": 640,
+      "our": 432,
+      "comp_only": 208,
+      "opt_mat": 384,
+      "rate_pct": 50.1,
+      "leak_pct": 32.5,
+      "dest": [
+        {
+          "pid": "opt",
+          "name": "프레임옵션 매트리스(자사)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 384,
+          "qty": 453,
+          "gmv": 128267980
+        },
+        {
+          "pid": "1590911",
+          "name": "수면밀도",
+          "brand": "수면밀도",
+          "is_self": false,
+          "users": 58,
+          "qty": 103,
+          "gmv": 36537700
+        },
+        {
+          "pid": "3607491",
+          "name": "refine매트리스(우리)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 31,
+          "qty": 55,
+          "gmv": 14603800
+        },
+        {
+          "pid": "858905",
+          "name": "웰퍼니쳐",
+          "brand": "웰퍼니쳐",
+          "is_self": false,
+          "users": 22,
+          "qty": 32,
+          "gmv": 8994300
+        },
+        {
+          "pid": "1089824",
+          "name": "basic매트리스(우리)",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 25,
+          "qty": 37,
+          "gmv": 6298600
+        },
+        {
+          "pid": "2737888",
+          "name": "지누스",
+          "brand": "지누스",
+          "is_self": false,
+          "users": 13,
+          "qty": 18,
+          "gmv": 3965100
+        },
+        {
+          "pid": "2447090",
+          "name": "웰퍼니쳐",
+          "brand": "웰퍼니쳐",
+          "is_self": false,
+          "users": 12,
+          "qty": 14,
+          "gmv": 1976900
         }
       ]
     },
@@ -783,64 +783,6 @@
     }
   },
   "mat_to_frame_by_tier": {
-    "basic": {
-      "mat_users": 1469,
-      "bought_frame": 748,
-      "our": 113,
-      "comp_only": 635,
-      "rate_pct": 50.9,
-      "leak_pct": 84.9,
-      "dest": [
-        {
-          "pid": "2093235",
-          "name": "[오늘의집 단독] 로우슬립 저상형 침대프레임 MS/S/SS/D/Q/K/LK (높이선택)",
-          "brand": "바스포르",
-          "is_self": false,
-          "users": 119,
-          "gmv": 16462800
-        },
-        {
-          "pid": "1243313",
-          "name": "basic / 바른 수납 침대프레임, 무헤드/LED헤드, SS/Q",
-          "brand": "오늘의집 layer",
-          "is_self": true,
-          "users": 69,
-          "gmv": 22177060
-        },
-        {
-          "pid": "1786951",
-          "name": "[오늘의집 단독] 단하루 91,560원 노아 06 빅서랍 수납침대 프레임 SS/Q 매트선택",
-          "brand": "크라운퍼니쳐",
-          "is_self": false,
-          "users": 34,
-          "gmv": 6769000
-        },
-        {
-          "pid": "125056",
-          "name": "침대 프레임 매트리스 깔판 저상형 패밀리 받침대 미니싱글 600",
-          "brand": "노르웨이숲",
-          "is_self": false,
-          "users": 33,
-          "gmv": 2076500
-        },
-        {
-          "pid": "324336",
-          "name": "[오늘의집 단독] 협탁무료증정 에디트 헤드리스 평상형침대프레임 SS/Q,K 호환 매트선택",
-          "brand": "크라운퍼니쳐",
-          "is_self": false,
-          "users": 24,
-          "gmv": 4199000
-        },
-        {
-          "pid": "2352818",
-          "name": "[오늘의집 단독] 20%쿠폰ㅣ드레스덴 조야패브릭 호텔식 침대프레임 SS/Q/K/LK/CK",
-          "brand": "데일리리빙",
-          "is_self": false,
-          "users": 22,
-          "gmv": 6690000
-        }
-      ]
-    },
     "refine": {
       "mat_users": 330,
       "bought_frame": 196,
@@ -896,6 +838,64 @@
           "is_self": false,
           "users": 5,
           "gmv": 1537600
+        }
+      ]
+    },
+    "basic": {
+      "mat_users": 1469,
+      "bought_frame": 748,
+      "our": 113,
+      "comp_only": 635,
+      "rate_pct": 50.9,
+      "leak_pct": 84.9,
+      "dest": [
+        {
+          "pid": "2093235",
+          "name": "[오늘의집 단독] 로우슬립 저상형 침대프레임 MS/S/SS/D/Q/K/LK (높이선택)",
+          "brand": "바스포르",
+          "is_self": false,
+          "users": 119,
+          "gmv": 16462800
+        },
+        {
+          "pid": "1243313",
+          "name": "basic / 바른 수납 침대프레임, 무헤드/LED헤드, SS/Q",
+          "brand": "오늘의집 layer",
+          "is_self": true,
+          "users": 69,
+          "gmv": 22177060
+        },
+        {
+          "pid": "1786951",
+          "name": "[오늘의집 단독] 단하루 91,560원 노아 06 빅서랍 수납침대 프레임 SS/Q 매트선택",
+          "brand": "크라운퍼니쳐",
+          "is_self": false,
+          "users": 34,
+          "gmv": 6769000
+        },
+        {
+          "pid": "125056",
+          "name": "침대 프레임 매트리스 깔판 저상형 패밀리 받침대 미니싱글 600",
+          "brand": "노르웨이숲",
+          "is_self": false,
+          "users": 33,
+          "gmv": 2076500
+        },
+        {
+          "pid": "324336",
+          "name": "[오늘의집 단독] 협탁무료증정 에디트 헤드리스 평상형침대프레임 SS/Q,K 호환 매트선택",
+          "brand": "크라운퍼니쳐",
+          "is_self": false,
+          "users": 24,
+          "gmv": 4199000
+        },
+        {
+          "pid": "2352818",
+          "name": "[오늘의집 단독] 20%쿠폰ㅣ드레스덴 조야패브릭 호텔식 침대프레임 SS/Q/K/LK/CK",
+          "brand": "데일리리빙",
+          "is_self": false,
+          "users": 22,
+          "gmv": 6690000
         }
       ]
     },
