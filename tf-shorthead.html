@@ -165,7 +165,7 @@ function viewOverview(){
     '</tr>';
   }).join('');
   const insight = S.div==='living'
-    ? '리빙 자사 침구 3종. 60수·소프트워싱 = 인앱 SRP 전략, 알러지케어 = 외부 확장. 최근 7일 기준 관제.'
+    ? '리빙 자사 침구 5종. 60수·소프트워싱·면모달(이불세트·침대패드, 8/24 오픈) = 인앱 SRP 전략, 알러지케어 = 외부 확장. 최근 7일 기준 관제.'
     : '가구 자사 6종. 매트리스3 = 인앱 SRP, 침대프레임3 = 외부 전략. <b>실객단가는 표시가와 크게 다름</b>(사이즈·경도). 상세·객단가·합구매 탭 참조.';
   const trend='<div class="card"><h3>📈 상품별 지표 추세 <span class="wbadge">GMV·CTR·CVR 전체이력</span><span class="wbadge">SRP 최근60일</span></h3>'+
     sp.map(function(pid){return '<div style="margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #f0f1f5"><div style="font-size:13.5px;font-weight:700;margin-bottom:6px">'+(meta(pid).emoji||'')+' '+sn(pid)+'</div><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">'+
@@ -185,7 +185,7 @@ function viewOverview(){
 function viewRadar(){
   const RD=D.keywordRadar;
   if(!RD||!RD.data) return '<div class="ph">경쟁 레이더 데이터 없음 (다음 데일리 갱신 시 생성).</div>';
-  const FKW=['매트리스','침대프레임','수납침대'], LKW=['이불','차렵이불','냉감이불'];
+  const FKW=['매트리스','침대프레임','수납침대'], LKW=['이불','차렵이불','냉감이불','모달이불'];
   const kws=(S.div==='living'?LKW:FKW).filter(function(k){return RD.data[k];});
   const sm=RD.summary||{};
   function badge(x){
