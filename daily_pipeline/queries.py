@@ -134,13 +134,27 @@ WHERE q.date = (SELECT max(date) FROM search.query_qc_mart)
       AND item_id IN ({ALL_S}) AND query_product_imps_1w >= 30)
 GROUP BY q.search_keyword"""
 
-# srpKeywords 키워드추세: HTML에서 미렌더(dead) + 구 소스 동결. 유지하되 빈결과는 build.py rows_req가 보존.
+# srpKeywords 키워드추세(14d): HTML 현재 미렌더. 🔴 2026-10-12 구 동결 소스(v0_0_2)→신 마트 교체(노출가중, [[reference_srp_rank_source]]와 동일 규칙).
+#   rank=노출가중 평균 object_idx(0-based), best=P5, score=일 구매수(n_purchased). 스캔 ≈ 15GB/run.
 QUERIES['srp_kwtrend'] = f"""
-SELECT date dt, object_id pid, query_keyword kw, AVG(object_idx) rank, CAST(approx_percentile(object_idx,0.05) AS INT) best, AVG(monthly_sales_score) score
-FROM search.commerce_srp_dataset_daily_v0_0_2
-WHERE date >= CAST(DATE_ADD('day',-14,CURRENT_DATE) AS VARCHAR)
-  AND object_id IN ({SELF_S}) AND object_idx BETWEEN 0 AND 100
-GROUP BY date, object_id, query_keyword HAVING COUNT(*) >= 10"""
+WITH agg AS (
+  SELECT date dt, query_keyword kw, object_id pid,
+    SUM(avg_object_idx*n_impression)/SUM(n_impression) rank, SUM(n_impression) imp, SUM(n_purchased) buy
+  FROM search.query_object_metrics_with_order_mart
+  WHERE date >= CAST(DATE_ADD('day',-14,CURRENT_DATE) AS VARCHAR)
+    AND source='STORE_SRP' AND object_section='스토어 검색 결과' AND object_type='PRODUCTION'
+    AND object_id IN ({SELF_S})
+  GROUP BY date, query_keyword, object_id
+  HAVING SUM(n_impression) >= 10 AND SUM(avg_object_idx*n_impression)/SUM(n_impression) <= 100),
+p5 AS (
+  SELECT date dt, query_keyword kw, object_id pid, approx_percentile(CAST(object_idx AS INT),0.05) best
+  FROM search.search_object_with_order_mart
+  WHERE date >= CAST(DATE_ADD('day',-14,CURRENT_DATE) AS VARCHAR)
+    AND source='STORE_SRP' AND object_section='스토어 검색 결과' AND object_type='PRODUCTION'
+    AND object_id IN ({SELF_S}) AND TRY_CAST(object_idx AS INT) IS NOT NULL
+  GROUP BY date, query_keyword, object_id)
+SELECT a.dt, a.pid, a.kw, ROUND(a.rank,2) rank, CAST(COALESCE(p.best, round(a.rank)) AS INT) best, a.buy score
+FROM agg a LEFT JOIN p5 p ON a.dt=p.dt AND a.kw=p.kw AND a.pid=p.pid"""
 
 # ============ 경쟁 레이더: 핵심 키워드 신규경쟁자·부스트/광고 의심 자동감지 (7d 노출 기준) ============
 # 목적: 지정경쟁사만 보는 현 대시보드가 놓치는 신규 진입자/프로모·광고로 순위만 산 상품 감지.
@@ -339,22 +353,33 @@ FROM j GROUP BY pid
 ORDER BY pid, ym"""
 
 # scoreTs / featTs 60d — self/comp 분할 (18*60=1080>1000)
+# 🔴 2026-10-12 소스 교체: 구 search.commerce_srp_dataset_daily_v0_0_2 가 2026-07-06 동결 → scoreTs/srpFeatureTs가 3개월 박제됐었음.
+#   신 소스 = search.commerce_product_features_v0_1 (상품×일 피처 원장, 당일까지 적재, 1행/상품/일, ~15MB/일).
+#   동일일자(07-06) 대조: monthly_sales_score·review·sell28 값 구 소스와 완전 일치(구 소스는 이 원장을 노출단위로 복제한 것).
+#   qc_rank(검색어 경쟁강도)는 상품 피처가 아니라 노출 원장 search.commerce_srp_dataset_daily_v1_0_0 (2026-08-25~, 날짜 결손 있음)
+#   에서 노출가중 평균 → 결손일은 NULL(차트 spanGaps). 60d 스캔 ≈ 7GB.
 for tag, grp in [('self', SELF), ('comp', COMP)]:
-    gs = _in(grp)
+    gs = _in(grp); gb = _inb(grp)
     QUERIES[f'scorets_{tag}'] = f"""
-SELECT date dt, object_id pid, AVG(monthly_sales_score) score
-FROM search.commerce_srp_dataset_daily_v0_0_2
+SELECT date dt, CAST(id AS VARCHAR) pid, monthly_sales_score score
+FROM search.commerce_product_features_v0_1
 WHERE date >= CAST(DATE_ADD('day',-60,CURRENT_DATE) AS VARCHAR)
-  AND object_id IN ({gs}) AND object_idx BETWEEN 0 AND 100
-GROUP BY date, object_id"""
+  AND id IN ({gb})"""
     QUERIES[f'featts_{tag}'] = f"""
-SELECT date dt, object_id pid, AVG(review_count_score) review, AVG(sell_cnt_28_day_score) sell28,
-  AVG(view_cnt_28_day_score) view28, AVG(sell_per_view_28_day_score) spv28, AVG(wish_count_180_day_score) wish,
-  AVG(card_count_180_day_score) card, CAST(AVG(qc_rank_4w) AS DOUBLE) qc_rank
-FROM search.commerce_srp_dataset_daily_v0_0_2
-WHERE date >= CAST(DATE_ADD('day',-60,CURRENT_DATE) AS VARCHAR)
-  AND object_id IN ({gs}) AND object_idx BETWEEN 0 AND 100
-GROUP BY date, object_id"""
+WITH pf AS (
+  SELECT date dt, CAST(id AS VARCHAR) pid, review_count_score review, sell_cnt_28_day_score sell28,
+    view_cnt_28_day_score view28, sell_per_view_28_day_score spv28, wish_count_180_day_score wish,
+    card_count_180_day_score card
+  FROM search.commerce_product_features_v0_1
+  WHERE date >= CAST(DATE_ADD('day',-60,CURRENT_DATE) AS VARCHAR) AND id IN ({gb})),
+qc AS (
+  SELECT date dt, object_id pid, CAST(AVG(qc_rank_4w) AS DOUBLE) qc_rank
+  FROM search.commerce_srp_dataset_daily_v1_0_0
+  WHERE date >= CAST(DATE_ADD('day',-60,CURRENT_DATE) AS VARCHAR)
+    AND object_id IN ({gs}) AND object_idx BETWEEN 0 AND 100
+  GROUP BY date, object_id)
+SELECT pf.dt, pf.pid, pf.review, pf.sell28, pf.view28, pf.spv28, pf.wish, pf.card, qc.qc_rank
+FROM pf LEFT JOIN qc ON pf.dt=qc.dt AND pf.pid=qc.pid"""
 
 # ============ inflow 14d per-day — 4 윈도우 분할(18상품×14일×채널 >1000 방지) ============
 _INFLOW_CASE = """CASE WHEN COALESCE(inferred_page_id,page_id) LIKE 'SRP%' AND object_section_id IN ('SEARCH_CAROUSEL_HOME','STORE_SRP_AD_PRODUCTION','STORE_SRP_AD_MID') THEN '검색광고'

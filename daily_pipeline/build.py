@@ -285,7 +285,7 @@ if ff:
     for r in ff:
         ft.setdefault(str(r['pid']),[]).append({'dt':r['dt'],'review':round(f(r['review']),4),'sell28':round(f(r['sell28']),4),
             'view28':round(f(r['view28']),4),'spv28':round(f(r['spv28']),4),'wish':round(f(r['wish']),4),
-            'card':round(f(r['card']),4),'qc_rank':round(f(r['qc_rank']),2)})
+            'card':round(f(r['card']),4),'qc_rank':(round(f(r['qc_rank']),2) if r['qc_rank'] not in (None,'') else None)})
     for pid in ft: ft[pid].sort(key=lambda x:x['dt'])
     D['srpFeatureTs'] = ft; changed.append('srpFeatureTs')
 
