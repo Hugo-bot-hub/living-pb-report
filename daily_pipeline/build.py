@@ -575,7 +575,7 @@ M['meta']['window']='프레임 합구매/attach=최근3개월, 매트리스 교�
 # ---------- SRP 신선도 감시 (소스 동결 시 조용한 낡음 방지) ----------
 # srp_base14/kw_radar는 매일 실행. 소스(SRP 마트)가 동결되면 rows_req가 빈결과→기존값 보존(블랭크는 막지만 낡음).
 # 그 경우 해당 섹션이 changed에 없다 = 이번 런에서 갱신 실패 → WARN 출력(run.ps1이 tf-alert.log로 전달).
-_srp_crit=['srpMatrix','keywordRadar','srpKeywordRank']
+_srp_crit=['srpMatrix','keywordRadar','srpKeywordRank','scoreTs','srpFeatureTs']  # 2026-10-12: 셀링스코어/피처 3개월 무감지 재발 방지
 _srp_stale=[s for s in _srp_crit if s not in changed]
 if _srp_stale:
     D['meta']['srpStaleWarn']={'sections':_srp_stale,'since':D['meta'].get('srpRefreshed','?')}
