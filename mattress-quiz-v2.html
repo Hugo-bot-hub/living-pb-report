@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>매트리스 1분 진단 v2 · 오늘의집 × 오늘의집layer</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+:root{--ink:#2f3438;--sub:#828c94;--mut:#a3a9ad;--line:#eaedef;--soft:#f7f9fa;--blue:#35c5f0;--blue-d:#09addb;--red:#ff7777;--layer:#1b1b1b;--ok:#0aa36b;--shadow:0 24px 70px rgba(30,40,60,.20)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,'Apple SD Gothic Neo',sans-serif;color:var(--ink);background:linear-gradient(180deg,#f4f7f9,#e9eef2);min-height:100vh;padding:26px 18px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+.head{text-align:center;margin-bottom:22px}
+.head .bdg{display:inline-flex;gap:6px;align-items:center;background:#fff;border:1px solid var(--line);color:var(--sub);font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:99px;margin-bottom:10px}
+.head .bdg i{width:7px;height:7px;border-radius:50%;background:var(--ok);display:inline-block}
+.head h1{font-size:23px;margin:0 0 6px;letter-spacing:-.03em}
+.head p{margin:0;color:var(--sub);font-size:13.5px;line-height:1.65}
+.stage{display:grid;grid-template-columns:370px 1fr;gap:30px;align-items:start}
+@media(max-width:860px){.stage{grid-template-columns:1fr}}
+.phone{width:370px;margin:0 auto;background:#111;border-radius:50px;padding:11px;box-shadow:var(--shadow);position:sticky;top:16px}
+.screen{position:relative;width:100%;height:740px;background:#fff;border-radius:40px;overflow:hidden}
+.sbar{position:absolute;top:0;left:0;right:0;height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 26px 0 30px;font-size:13px;font-weight:700;z-index:50;background:#fff}
+.sbar .isl{position:absolute;left:50%;top:9px;transform:translateX(-50%);width:104px;height:28px;background:#111;border-radius:20px}
+.view{position:absolute;inset:40px 0 0 0;display:flex;flex-direction:column;background:#fff;opacity:0;pointer-events:none;transform:translateX(24px);transition:opacity .45s,transform .45s}
+.view.on{opacity:1;pointer-events:auto;transform:none}
+.scroll{flex:1;overflow-y:auto;scroll-behavior:smooth}
+.scroll::-webkit-scrollbar{display:none}
+/* SRP */
+.top{display:flex;align-items:center;gap:8px;padding:6px 12px 8px}
+.ic{width:24px;height:24px;flex:0 0 auto;color:var(--ink)}
+.sbox{flex:1;display:flex;align-items:center;gap:6px;background:var(--soft);border-radius:6px;padding:8px 10px;font-size:14px;height:36px}
+.sbox .cur{border-right:2px solid var(--blue);height:16px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{border-color:transparent}}
+.tabs{display:flex;gap:18px;padding:0 16px;border-bottom:1px solid var(--line);font-size:14px;color:var(--sub)}
+.tabs span{padding:9px 0}
+.tabs .on{color:var(--ink);font-weight:700;border-bottom:2px solid var(--ink)}
+.qf{display:flex;gap:6px;padding:10px 12px 6px;overflow-x:auto;white-space:nowrap}
+.qf::-webkit-scrollbar{display:none}
+.qbtn{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;border:1px solid #dadde0;border-radius:4px;padding:5px 9px;color:var(--ink);background:#fff}
+.qbtn.lay{border-color:#2f3438}
+.qbtn .lg{font-weight:800;font-size:11px;background:#111;color:#fff;border-radius:3px;padding:1px 4px}
+.tagnew{position:relative}
+.tagnew:after{content:'';position:absolute;top:-3px;right:-3px;width:6px;height:6px;border-radius:50%;background:var(--red)}
+.ac{display:flex;gap:6px;padding:4px 12px 10px;overflow-x:auto;white-space:nowrap}
+.ac::-webkit-scrollbar{display:none}
+.ac span{font-size:12.5px;background:var(--soft);border-radius:99px;padding:6px 11px;color:var(--ink)}
+.ac span.on{background:var(--ink);color:#fff}
+.cnt{display:flex;justify-content:space-between;padding:4px 14px 6px;font-size:12px;color:var(--sub)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 10px;padding:4px 12px 10px}
+.pc{cursor:pointer;min-width:0}
+.pimg{position:relative;width:100%;aspect-ratio:1/1;border-radius:6px;overflow:hidden;background:#f1f3f5}
+.pimg img{width:100%;height:100%;object-fit:cover;display:block}
+.only{position:absolute;top:6px;left:6px;background:#2f3438;color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px}
+.laybdg{position:absolute;top:6px;left:6px;background:#fff;color:#111;font-size:10px;font-weight:800;padding:2px 6px;border-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.pick{position:absolute;top:0;right:8px;background:#16a37a;color:#fff;font-size:9px;font-weight:800;padding:5px 4px 7px;line-height:1.1;text-align:center;clip-path:polygon(0 0,100% 0,100% 100%,50% 85%,0 100%)}
+.pb{font-size:11px;color:var(--sub);margin-top:7px}
+.pn{font-size:12.5px;line-height:1.35;margin:2px 0 3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pp{font-size:14.5px;font-weight:800}
+.pp .d{color:var(--red);margin-right:4px}
+.pr{font-size:11px;color:var(--sub);margin-top:2px}
+.pr b{color:var(--ink)}
+/* curator entry module */
+.cur-mod{margin:6px 12px 16px;border-radius:14px;padding:14px 14px 12px;background:linear-gradient(135deg,#eaf8fd,#f3f0ff);border:1px solid #d9eef8;position:relative;overflow:hidden;cursor:pointer}
+.cur-mod .t1{font-size:11px;font-weight:700;color:#3a8fb8;display:flex;align-items:center;gap:5px}
+.cur-mod .t2{font-size:16px;font-weight:800;margin:5px 0 3px;letter-spacing:-.02em}
+.cur-mod .t3{font-size:12px;color:var(--sub);line-height:1.5}
+.sugg{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.sugg span{background:#fff;border:1px solid #e1e8ee;border-radius:10px;padding:8px 10px;font-size:12.5px;display:flex;justify-content:space-between}
+.sugg span:after{content:'›';color:var(--mut)}
+.cur-mod.pulse{animation:glow 1.8s ease-out infinite}
+@keyframes glow{0%{box-shadow:0 0 0 0 rgba(53,197,240,.45)}100%{box-shadow:0 0 0 14px rgba(53,197,240,0)}}
+/* quiz */
+.qhead{padding:6px 14px 4px;display:flex;align-items:center;justify-content:space-between}
+.qhead .ttl{font-size:15px;font-weight:700}
+.prog{height:4px;background:var(--soft);margin:6px 18px 0;border-radius:9px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--blue);transition:width .4s}
+.qbody{flex:1;padding:20px 18px;display:flex;flex-direction:column}
+.qstep{font-size:12px;color:var(--blue-d);font-weight:700}
+.qq{font-size:20px;font-weight:800;letter-spacing:-.03em;margin:6px 0 4px;line-height:1.35}
+.qs{font-size:12.5px;color:var(--sub);margin-bottom:16px}
+.opts{display:grid;gap:9px}
+.opts.three{grid-template-columns:1fr 1fr 1fr}
+.opt{border:1.5px solid var(--line);border-radius:12px;padding:13px 12px;cursor:pointer;background:#fff;transition:.15s;font-size:14px;display:flex;align-items:center;gap:10px}
+.opts.three .opt{flex-direction:column;text-align:center;gap:6px;padding:14px 6px;font-size:13px}
+.opt svg{width:56px;height:40px;color:#9aa3a9}
+.opt.sel{border-color:var(--blue);background:#f0fbfe;color:var(--blue-d);font-weight:700}
+.opt.sel svg{color:var(--blue-d)}
+.opt small{display:block;font-size:11px;color:var(--mut);font-weight:500}
+.qnote{margin-top:auto;font-size:11.5px;color:var(--sub);background:var(--soft);border-radius:10px;padding:10px 12px;line-height:1.55}
+/* result */
+.rhead{padding:6px 14px 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
+.rhead .ttl{font-size:15px;font-weight:700;flex:1}
+.presc{margin:14px 14px 6px;border-radius:16px;padding:16px;background:#f2fbfe;border:1px solid #d5f0f9}
+.presc .l{font-size:11.5px;color:var(--blue-d);font-weight:700}
+.presc .b{font-size:22px;font-weight:800;letter-spacing:-.03em;margin:3px 0 10px}
+.gauge{position:relative;height:10px;border-radius:9px;background:linear-gradient(90deg,#cfeefc,#79d3f3,#2bb3e3,#1288b8,#0b5d82)}
+.gauge .rng{position:absolute;top:-4px;height:18px;border:2.5px solid #2f3438;border-radius:9px;background:rgba(255,255,255,.25);transition:left .6s,width .6s}
+.glab{display:flex;justify-content:space-between;font-size:10.5px;color:var(--sub);margin-top:6px}
+.why{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.why span{font-size:11px;background:#fff;border:1px solid #d5eef7;border-radius:99px;padding:3px 8px;color:#3b7f9c}
+.neu{margin:10px 14px 2px;font-size:11.5px;color:var(--sub);line-height:1.5;display:flex;gap:6px}
+.neu b{color:var(--ink)}
+.rlist{padding:6px 14px 4px}
+.rc{display:flex;gap:11px;padding:13px 0;border-bottom:1px solid var(--line);position:relative;opacity:0;transform:translateY(8px);animation:rise .45s forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+.rc .ri{width:92px;height:92px;border-radius:8px;overflow:hidden;flex:0 0 auto;position:relative;background:#f1f3f5;cursor:pointer}
+.rc .ri img{width:100%;height:100%;object-fit:cover}
+.rk{position:absolute;left:0;top:0;background:rgba(47,52,56,.88);color:#fff;font-size:11px;font-weight:800;padding:3px 7px;border-radius:0 0 7px 0}
+.rc.top1 .rk{background:var(--blue-d)}
+.rinfo{flex:1;min-width:0}
+.rb{font-size:11px;color:var(--sub);display:flex;align-items:center;gap:5px}
+.lp{background:#111;color:#fff;font-weight:800;font-size:9.5px;padding:1px 5px;border-radius:3px}
+.rn{font-size:12.5px;line-height:1.35;margin:2px 0 4px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.ropt{font-size:11.5px;font-weight:700;color:var(--blue-d)}
+.ropt em{font-style:normal;color:var(--sub);font-weight:500}
+.fit{display:flex;align-items:center;gap:6px;margin:5px 0 3px}
+.fit .bar{flex:1;height:5px;background:var(--soft);border-radius:9px;overflow:hidden}
+.fit .bar i{display:block;height:100%;background:linear-gradient(90deg,#79d3f3,#09addb);border-radius:9px}
+.fit b{font-size:11.5px;color:var(--blue-d);min-width:46px;text-align:right}
+.ev{font-size:10.5px;color:var(--sub);line-height:1.45}
+.rbot{display:flex;align-items:center;justify-content:space-between;margin-top:5px;gap:6px}.rbot .rpr{white-space:nowrap}.cmpchk{white-space:nowrap;flex:0 0 auto}
+.rpr{font-size:13.5px;font-weight:800}
+.rpr .d{color:var(--red);margin-right:3px}
+.cmpchk{font-size:11px;color:var(--sub);display:flex;align-items:center;gap:4px;cursor:pointer;user-select:none}
+.cmpchk i{width:15px;height:15px;border:1.5px solid #c8cdd1;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-size:10px;color:#fff}
+.cmpchk.on i{background:var(--blue);border-color:var(--blue)}
+.perk{display:inline-block;font-size:10px;font-weight:700;color:#0a7c56;background:#e7f8f0;border-radius:3px;padding:1px 5px;margin-right:3px}
+.askbar{position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:9px 12px 16px;z-index:5}
+.askchips{display:flex;gap:6px;overflow-x:auto;margin-bottom:8px}
+.askchips::-webkit-scrollbar{display:none}
+.askchips span{flex:0 0 auto;font-size:11.5px;border:1px solid #d9e9f1;color:#2d86ad;background:#f4fbfe;border-radius:99px;padding:5px 10px;cursor:pointer}
+.askrow{display:flex;gap:8px}
+.askin{flex:1;background:var(--soft);border-radius:20px;padding:9px 14px;font-size:12.5px;color:var(--mut)}
+.cmpbtn{background:var(--blue);color:#fff;border:none;border-radius:20px;padding:0 14px;font-size:12.5px;font-weight:700;cursor:pointer;opacity:.35;transition:.2s}
+.cmpbtn.on{opacity:1}
+/* sheet */
+.dim{position:absolute;inset:0;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:.3s;z-index:20}
+.dim.on{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;max-height:86%;background:#fff;border-radius:18px 18px 0 0;transform:translateY(105%);transition:transform .4s;z-index:21;display:flex;flex-direction:column}
+.sheet.on{transform:none}
+.sheet .hd{padding:10px 16px 8px;text-align:center;font-size:14.5px;font-weight:700;position:relative}
+.sheet .hd:before{content:'';display:block;width:36px;height:4px;background:#dfe3e6;border-radius:9px;margin:0 auto 10px}
+.sheet .hd small{display:block;font-size:11px;color:var(--sub);font-weight:500;margin-top:2px}
+.ctab{overflow:auto;padding:0 12px 18px}
+.ctab table{width:100%;border-collapse:collapse;font-size:11.5px;table-layout:fixed}
+.ctab th,.ctab td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:center;vertical-align:middle}
+.ctab th{color:var(--sub);font-weight:600;text-align:left;width:74px;font-size:11px}
+.ctab td img{width:64px;height:64px;object-fit:cover;border-radius:6px}
+.ctab .best{color:var(--blue-d);font-weight:800}
+.ctab .src{font-size:10px;color:var(--mut);text-align:left;padding-top:10px;line-height:1.5}
+/* PDP */
+.pdp-img{position:relative;aspect-ratio:1/1;background:#f1f3f5;overflow:hidden}
+.pdp-img .track{display:flex;height:100%;transition:transform .5s}
+.pdp-img img{width:100%;height:100%;object-fit:cover;flex:0 0 100%}
+.pdp-img .dots{position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,.45);color:#fff;font-size:11px;border-radius:99px;padding:2px 8px}
+.pdp-in{padding:14px 16px}
+.pdp-b{font-size:12.5px;color:var(--sub);display:flex;align-items:center;gap:6px}
+.pdp-n{font-size:16px;margin:4px 0 6px;line-height:1.4}
+.pdp-r{font-size:12px;color:var(--sub)}
+.pdp-r b{color:var(--blue-d)}
+.pdp-p{font-size:20px;font-weight:800;margin:8px 0 2px}
+.pdp-p .d{color:var(--red);margin-right:5px}
+.diagopt{margin:12px 0;border:1.5px solid var(--blue);background:#f2fbfe;border-radius:12px;padding:11px 12px}
+.diagopt .l{font-size:11px;font-weight:700;color:var(--blue-d)}
+.diagopt .v{font-size:14px;font-weight:800;margin-top:2px}
+.diagopt .s{font-size:11px;color:var(--sub);margin-top:3px}
+.aisum{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px}
+.aisum .l{font-size:12px;font-weight:800;display:flex;align-items:center;gap:6px}
+.aisum .l small{font-weight:600;color:var(--mut);font-size:10px}
+.aisum ul{margin:8px 0 0;padding-left:16px;font-size:12px;line-height:1.6;color:#4a5157}
+.split{display:flex;height:8px;border-radius:9px;overflow:hidden;margin:8px 0 4px}
+.split i{display:block;height:100%}
+.splitlab{display:flex;justify-content:space-between;font-size:10.5px;color:var(--sub)}
+.buy{position:absolute;left:0;right:0;bottom:0;padding:10px 14px 18px;background:#fff;border-top:1px solid var(--line);display:flex;gap:8px;z-index:5}
+.buy button{flex:1;height:46px;border-radius:6px;font-size:14.5px;font-weight:700;cursor:pointer}
+.buy .c{background:#fff;border:1px solid var(--blue);color:var(--blue-d)}
+.buy .o{background:var(--blue);border:none;color:#fff}
+.toast{position:absolute;left:12px;right:12px;bottom:84px;background:rgba(30,34,38,.95);color:#fff;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.55;z-index:60;opacity:0;transform:translateY(10px);transition:.3s;pointer-events:none}
+.toast.on{opacity:1;transform:none}
+.toast b{color:#7fe0ff}
+/* side */
+.side{display:flex;flex-direction:column;gap:12px}
+.ctrl{display:flex;gap:8px}
+.ctrl button{flex:1;font-size:13.5px;font-weight:700;border-radius:12px;padding:13px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink)}
+.ctrl button.pri{background:var(--ink);color:#fff;border-color:var(--ink)}
+.step{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:flex;gap:12px;opacity:.6;transition:.3s;cursor:pointer}
+.step.act{opacity:1;border-color:var(--blue);box-shadow:0 10px 26px rgba(9,173,219,.12)}
+.sno{width:30px;height:30px;border-radius:9px;background:var(--soft);color:var(--sub);font-weight:800;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.step.act .sno{background:var(--blue);color:#fff}
+.step h4{margin:0 0 4px;font-size:14px;letter-spacing:-.02em}
+.step p{margin:0;font-size:12px;color:var(--sub);line-height:1.6}
+.feat{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.feat span{font-size:10.5px;font-weight:700;border-radius:5px;padding:3px 7px;background:#f1f4f6;color:#4a5157}
+.feat span.live{background:#e7f8f0;color:#0a7c56}
+.feat span.wip{background:#fff4e0;color:#a86400}
+.feat span.chk{background:#eaf6fd;color:#1b7fae}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+.card h3{margin:0 0 10px;font-size:14.5px;letter-spacing:-.02em}
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;font-size:11px;text-align:center}
+.flow div{background:var(--soft);border-radius:10px;padding:10px 6px;line-height:1.45}
+.flow div b{display:block;font-size:12px;margin-bottom:2px}
+.flow div.hl{background:#eaf6fd}
+.ftbl{width:100%;border-collapse:collapse;font-size:11.5px}
+.ftbl td{padding:7px 4px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.5}
+.ftbl td:first-child{font-weight:700;white-space:nowrap;width:136px}
+.ftbl td:nth-child(2){white-space:nowrap;width:62px}
+.st{font-size:10px;font-weight:800;border-radius:4px;padding:2px 6px}
+.st.live{background:#e7f8f0;color:#0a7c56}.st.wip{background:#fff4e0;color:#a86400}.st.plan{background:#f1f4f6;color:#6b7378}
+.foot{margin-top:24px;color:var(--sub);font-size:11.5px;line-height:1.75;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="head">
+  <div class="bdg"><i></i>v2 · 실상품·실리뷰 데이터 반영 프로토타입</div>
+  <h1>매트리스 1분 진단: 오늘의집 앱에서 이렇게 동작한다</h1>
+  <p>쇼핑 검색결과(SRP) → <b>AI 큐레이터 질문 제안 모듈</b>로 진입 → 4문항 문진 → <b>리뷰 체감 경도 기반 중립 랭킹</b> → 비교 → PDP(맞춤 옵션 선택).<br>상품 사진·가격·리뷰 수는 10/22 실제 오늘의집 '매트리스' 검색결과, 체감 경도는 리뷰 원문 12만 건 집계입니다.</p>
+ </div>
+ <div class="stage">
+  <div><div class="phone"><div class="screen">
+   <div class="sbar"><span>9:41</span><div class="isl"></div><span>⌁ ▮</span></div>
+
+   <!-- SRP -->
+   <div class="view on" id="v-srp">
+    <div class="top">
+     <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+     <div class="sbox"><svg style="width:16px;height:16px;color:#a3a9ad" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><span id="stext"></span><span class="cur" id="scur"></span></div>
+     <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20.5" r="1.3"/><circle cx="17" cy="20.5" r="1.3"/></svg>
+    </div>
+    <div class="tabs"><span>통합</span><span class="on">쇼핑</span><span>콘텐츠</span><span>집들이</span><span>커뮤니티</span></div>
+    <div class="scroll" id="srpScroll">
+     <div class="qf">
+      <span class="qbtn"><svg style="width:13px;height:13px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>필터</span>
+      <span class="qbtn">원하는날도착</span><span class="qbtn">패키지할인</span>
+      <span class="qbtn lay tagnew" id="layQF"><span class="lg">layer</span>오늘의집 layer</span>
+     </div>
+     <div class="ac"><span class="on">전체</span><span>슈퍼싱글</span><span>퀸</span><span>더블</span><span>킹</span><span>낮은</span><span>슬림</span><span>높은</span></div>
+     <div class="cnt"><span>상품 20,909개</span><span>추천순 ⌄</span></div>
+     <div class="grid" id="grid1"></div>
+     <div class="cur-mod pulse" id="curMod" onclick="startQuiz()">
+      <div class="t1"><svg style="width:14px;height:14px" viewBox="0 0 24 24" fill="#3a8fb8"><path d="M12 2l2.2 6.3L20 10l-5.8 1.7L12 18l-2.2-6.3L4 10l5.8-1.7z"/></svg>AI 큐레이터 · 매트리스 진단</div>
+      <div class="t2">나한테 맞는 경도, 1분이면 찾아요</div>
+      <div class="t3">수면 자세·체중 4가지만 답하면 리뷰 12만 건의<br>실제 체감으로 맞는 매트리스를 골라드려요</div>
+      <div class="sugg"><span>옆으로 자는데 허리가 아파요</span><span>체중이 나가서 금방 꺼질까 걱정돼요</span></div>
+     </div>
+     <div class="grid" id="grid2"></div>
+    </div>
+   </div>
+
+   <!-- QUIZ -->
+   <div class="view" id="v-quiz">
+    <div class="qhead"><svg class="ic" onclick="go('srp')" style="cursor:pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg><span class="ttl">매트리스 진단</span><span style="width:24px"></span></div>
+    <div class="prog"><i id="pbar"></i></div>
+    <div class="qbody">
+     <div class="qstep" id="qstep">1 / 4</div>
+     <div class="qq" id="qq"></div>
+     <div class="qs" id="qs"></div>
+     <div class="opts" id="opts"></div>
+     <div class="qnote">"푹신한 게 좋아요" 같은 취향 대신 <b>바꿀 수 없는 사실</b>만 물어요. 경도는 답변으로 계산하고, 각 매트리스의 경도는 <b>제조사 라벨이 아니라 리뷰 체감</b>으로 채점해요.</div>
+    </div>
+   </div>
+
+   <!-- RESULT -->
+   <div class="view" id="v-res">
+    <div class="rhead"><svg class="ic" onclick="startQuiz()" style="cursor:pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg><span class="ttl">진단 결과</span><span style="font-size:12px;color:var(--sub);cursor:pointer" onclick="resetAll()">다시하기</span></div>
+    <div class="scroll" id="resScroll" style="padding-bottom:120px">
+     <div class="presc">
+      <div class="l">나에게 맞는 경도</div>
+      <div class="b" id="pres"></div>
+      <div class="gauge"><div class="rng" id="rng"></div></div>
+      <div class="glab"><span>소프트</span><span>미디엄소프트</span><span>미디엄</span><span>미디엄하드</span><span>하드</span></div>
+      <div class="why" id="why"></div>
+     </div>
+     <div class="neu">⚖️<span><b>중립 랭킹</b>이에요. 광고·브랜드와 무관하게 경도 적합도 순으로 보여주고, 옵션이 여러 개면 <b>맞는 옵션</b>을 골라 비교해요. 적합도가 같으면 낮은 가격 순.</span></div>
+     <div class="rlist" id="rlist"></div>
+    </div>
+    <div class="askbar">
+     <div class="askchips"><span onclick="askChip(this)">퀸 사이즈로 다시 보기</span><span onclick="askChip(this)">30만원 이하만</span><span onclick="askChip(this)">1·2위 차이가 뭐야?</span></div>
+     <div class="askrow"><div class="askin">AI 큐레이터에게 더 물어보기</div><button class="cmpbtn" id="cmpBtn" onclick="openCmp()">비교 0</button></div>
+    </div>
+   </div>
+
+   <!-- PDP -->
+   <div class="view" id="v-pdp">
+    <div class="top" style="padding-bottom:6px"><svg class="ic" onclick="go('res')" style="cursor:pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg><span style="flex:1"></span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20.5" r="1.3"/><circle cx="17" cy="20.5" r="1.3"/></svg></div>
+    <div class="scroll" id="pdpScroll" style="padding-bottom:80px"></div>
+    <div class="buy"><button class="c">장바구니</button><button class="o" onclick="buy()">바로구매</button></div>
+   </div>
+
+   <div class="dim" id="dim" onclick="closeCmp()"></div>
+   <div class="sheet" id="sheet"><div class="hd">상품 비교<small>AI 큐레이터 · 경험 C(상품 간 비교)</small></div><div class="ctab" id="ctab"></div></div>
+   <div class="toast" id="toast"></div>
+  </div></div></div>
+
+  <div class="side">
+   <div class="ctrl"><button class="pri" id="play" onclick="autoPlay()">▶ 자동 시연</button><button onclick="resetAll()">↺ 처음으로</button></div>
+   <div class="step act" id="s1" onclick="resetAll()"><div class="sno">1</div><div><h4>검색 순간: SRP 안에 진단 진입점</h4>
+    <p>'매트리스'를 검색하면 상품 목록 사이에 질문 제안 모듈이 뜬다. 지금 실제 SRP 구조(퀵필터, 속성 칩, 상품 카드) 그대로 위에 얹는 그림.</p>
+    <div class="feat"><span class="wip">AI 큐레이터 J2 진입점(설계안)</span><span class="live">layer 퀵필터 XPC-2426</span><span class="live">속성필터 자동매핑 XPC-2436</span><span class="chk">검증 ① 수요: 진입 CTR</span></div></div></div>
+   <div class="step" id="s2" onclick="startQuiz()"><div class="sno">2</div><div><h4>객관 사실 4문항 문진</h4>
+    <p>자세·체중·허리 통증·더위. 답으로 목표 경도 구간을 계산한다. 체형 데이터가 없어도 문진으로 해결.</p>
+    <div class="feat"><span>신규 화면(올리고로 제작)</span><span class="chk">검증 ① 완료율</span></div></div></div>
+   <div class="step" id="s3"><div class="sno">3</div><div><h4>리뷰 체감 경도로 중립 랭킹</h4>
+    <p>단일 경도 상품은 리뷰 속 '푹신 vs 탄탄' 언급 비율로 실제 체감 경도를 채점하고, 옵션이 여러 개인 상품은 맞는 옵션으로 비교한다. layer는 맞을 때만 위로 온다. 자동 시연(바로 누워·60~80kg·허리 통증)은 3P가 1~3위, layer refine·studio가 4~5위. 옆으로·60~80kg·통증 없음이면 layer basic이 1위.</p>
+    <div class="feat"><span class="live">리뷰 원문 집계(Athena)</span><span class="wip">AI 큐레이터 경험 C 비교</span><span class="chk">검증 ② 구매 증분 · ③ PB</span></div></div></div>
+   <div class="step" id="s4"><div class="sno">4</div><div><h4>PDP: 진단한 옵션이 미리 선택된 채로</h4>
+    <p>상세로 넘어가면 진단 결과 경도 옵션이 이미 골라져 있고, 리뷰 AI 요약에 내 경도에 대한 체감이 같이 보인다.</p>
+    <div class="feat"><span class="live">리뷰 AI 요약(PDP 운영 중)</span><span class="chk">옵션 프리셀렉트는 신규 요청 필요</span></div></div></div>
+
+   <div class="card"><h3>실제로 띄우는 길: 개발팀 일정 없이 올리고로</h3>
+    <div class="flow">
+     <div class="hl"><b>올리고</b>Hugo가 메이커로 대화형 제작 (ODS 화면)</div>
+     <div class="hl"><b>API 브릿지</b>상품·가격 조회 (9/23 사내 오픈)</div>
+     <div><b>사내 DB</b>문진 응답 저장 · 비로그인 가능</div>
+     <div><b>SRP 슬롯</b>큐레이션/광고 슬롯에 링크 연결</div>
+     <div><b>XPC</b>홀드아웃 3-arm 측정</div>
+    </div>
+    <p style="font-size:11.5px;color:var(--sub);line-height:1.6;margin:10px 0 0">올리고는 고객용 클러스터에 외부 공개 앱을 올릴 수 있고(무빙플래너·공간 멘토링 같은 고객용 앱이 이미 운영 중), 8월 이후 접수 건은 대부분 <b>2주 안에 운영 배포</b>까지 갔다. 결제가 없고 개인정보도 최소라 보안 Tier가 낮을 가능성이 크다.</p>
+   </div>
+
+   <div class="card"><h3>v2에 붙인 사내 기능 (10/22 노션 기준)</h3>
+    <table class="ftbl">
+     <tr><td>쇼핑 SRP layer 퀵필터</td><td><span class="st live">완료</span></td><td>앱 필터 헤더 '원하는날도착 > 패키지할인 > 오늘의집 layer'. layer 상품 2개 이상일 때 노출 (XPC-2426)</td></tr>
+     <tr><td>속성필터 자동 매핑</td><td><span class="st live">런칭</span></td><td>tail 검색어도 사이즈·높이 속성칩 노출. 신규 노출 검색어 필터 사용 +52% (XPC-2436)</td></tr>
+     <tr><td>AI 큐레이터 진입점</td><td><span class="st wip">재출시 준비</span></td><td>쇼핑 SRP 상품 목록 사이 질문 제안 모듈(J2). 현재 고객 노출은 전면 중단, MVP 재정의 중</td></tr>
+     <tr><td>AI 큐레이터 비교</td><td><span class="st wip">재출시 준비</span></td><td>경험 C: 후보 간 공통 속성 차이 설명, 근거 없는 속성은 단정 안 함</td></tr>
+     <tr><td>리뷰 AI 요약</td><td><span class="st live">운영</span></td><td>PDP 리뷰 요약. 여기선 '내 경도' 관점 요약으로 확장한 예시</td></tr>
+     <tr><td>올리고 + API 브릿지</td><td><span class="st live">운영</span></td><td>비개발자 앱 제작·배포 플랫폼(9월 말 앱 51개, 운영 24개). 브릿지는 승인된 사내 API만 열림. 상품 조회 API 포함 여부는 확인 필요</td></tr>
+    </table>
+   </div>
+  </div>
+ </div>
+ <div class="foot">상품명·사진·가격·평점·리뷰 수: 2026-10-22 오늘의집 '매트리스' 검색결과 및 상품 페이지 · 옵션 경도: 각 상품 옵션명<br>리뷰 체감 경도·허리 언급: 리뷰 원문(2026-10-19 스냅샷) 14개 상품 124,124건 키워드 집계. "푹신·부드러" vs "탄탄·단단·딱딱" 언급 비율이라 부정문 등 노이즈 있음 · 핏%·목표 경도 공식은 예시 알고리즘</div>
+</div>
+<script>
+const P = [{"id":1590911,"brand":"수면밀도","layer":false,"nm":"허리 디스크 환자가 만든 매트리스","line":null,"pick":false,"disc":62,"price":299000,"rating":4.9,"reviews":22602,"imgs":["https://prs.ohousecdn.com/apne2/any/uploads/productions/v1-346060453515392.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-361545633869952.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-361545492455488.jpg"],"st":"스프링","perks":["주문 후 제작/바로 출고"],"opts":[["미디엄",50],["미디엄하드",65],["하드",80]],"single":false,"rv":{"n":13595,"soft":2905,"firm":6573,"firmShare":69,"waistPos":41.6,"sag":4.9}},{"id":329364,"brand":"휴도","layer":false,"nm":"편안한 제주 25cm 본넬스프링 매트리스","line":null,"pick":false,"disc":66,"price":109000,"rating":4.7,"reviews":31940,"imgs":["https://prs.ohousecdn.com/apne2/any/uploads/productions/v1-494951194521728.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-390959417638912.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-390959323590784.jpg"],"st":"본넬스프링","perks":["지정일배송","무료설치"],"opts":[["단일 경도",53]],"single":true,"rv":{"n":25913,"soft":9091,"firm":6449,"firmShare":41,"waistPos":11.9,"sag":3.3}},{"id":858905,"brand":"웰퍼니쳐","layer":false,"nm":"더매직 허리부담완화 포켓스프링 매트리스","line":null,"pick":false,"disc":60,"price":299000,"rating":4.8,"reviews":20620,"imgs":["https://prs.ohousecdn.com/apne2/any/uploads/productions/v1-539191155732608.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-488172911198336.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-518013292531712.jpg"],"st":"포켓스프링","perks":[],"opts":[["미디엄",50],["미디엄하드",65],["하드",80]],"single":false,"rv":{"n":16281,"soft":4312,"firm":9276,"firmShare":68,"waistPos":37.1,"sag":4.8}},{"id":425266,"brand":"먼데이하우스","layer":false,"nm":"허리가 편안한 포켓스프링 매트리스 25cm","line":null,"pick":false,"disc":18,"price":88000,"rating":4.8,"reviews":26024,"imgs":["https://prs.ohousecdn.com/apne2/any/uploads/productions/v1-475571330867328.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-475571374284864.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-475571356188672.jpg"],"st":"포켓스프링","perks":[],"opts":[["단일 경도",48]],"single":true,"rv":{"n":20273,"soft":9353,"firm":4999,"firmShare":35,"waistPos":12.5,"sag":3.7}},{"id":1089824,"brand":"오늘의집 layer","layer":true,"nm":"바른 숙면 매트리스 본넬/포켓스프링","line":"basic","pick":true,"disc":70,"price":109900,"rating":4.8,"reviews":9562,"imgs":["https://prs.ohousecdn.com/apne2/any/uploads/productions/v1-534256553873536.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-462868203073664.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-467702215438400.jpg"],"st":"본넬/포켓","perks":["무료내림서비스"],"opts":[["소프트",20],["미디엄소프트",35],["미디엄 (Air)",50],["미디엄하드",65],["하드",80]],"single":false,"rv":{"n":7146,"soft":3894,"firm":1393,"firmShare":26,"waistPos":10.2,"sag":3.9}},{"id":2737888,"brand":"지누스","layer":false,"nm":"얼티마 하이브리드 스프링 매트리스 25cm","line":null,"pick":false,"disc":50,"price":199000,"rating":4.8,"reviews":8860,"imgs":["https://prs.ohousecdn.com/apne2/any/uploads/productions/v1-541304252194816.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-308753847074816.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-308753521033344.jpg"],"st":"하이브리드","perks":[],"opts":[["미디엄",50],["미디엄하드 (럭스S)",65]],"single":false,"rv":{"n":6556,"soft":3401,"firm":1960,"firmShare":37,"waistPos":12.8,"sag":3.3}},{"id":2447090,"brand":"웰퍼니쳐","layer":false,"nm":"허리엔 코어프로 탄탄한 매트리스 22cm","line":null,"pick":false,"disc":47,"price":99000,"rating":4.7,"reviews":2211,"imgs":["https://prs.ohousecdn.com/apne2/any/uploads/productions/v1-531414070141056.png","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-364053735981184.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-364053440839744.jpg"],"st":"스프링","perks":["무료내림"],"opts":[["단일 경도",73]],"single":true,"rv":{"n":1420,"soft":373,"firm":740,"firmShare":66,"waistPos":21.7,"sag":6.5}},{"id":853690,"brand":"삼익가구","layer":false,"nm":"프라임 유로탑 독립스프링 매트리스","line":null,"pick":false,"disc":31,"price":149000,"rating":4.8,"reviews":8026,"imgs":["https://prs.ohousecdn.com/apne2/any/uploads/productions/v1-531413752340608.png","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-400167489446016.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-531413774393472.jpg"],"st":"유로탑 독립스프링","perks":[],"opts":[["단일 경도",41]],"single":true,"rv":{"n":6867,"soft":3720,"firm":1306,"firmShare":26,"waistPos":9.2,"sag":3.4}},{"id":111255,"brand":"퀵슬립","layer":false,"nm":"Q4 15년보증 유로탑 매트리스 롤팩","line":null,"pick":false,"disc":53,"price":349700,"rating":4.8,"reviews":20653,"imgs":["https://prs.ohousecdn.com/apne2/any/uploads/productions/v1-460300076838976.png","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-460300190437440.png","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-460300118929536.png"],"st":"유로탑","perks":["100일 교환","15년 보증"],"opts":[["단일 경도",43]],"single":true,"rv":{"n":18343,"soft":10588,"firm":4232,"firmShare":29,"waistPos":15.2,"sag":4.7}},{"id":2166667,"brand":"금성침대","layer":false,"nm":"릴렉서 유로탑 매트리스","line":null,"pick":false,"disc":32,"price":279000,"rating":4.9,"reviews":2957,"imgs":["https://prs.ohousecdn.com/apne2/any/uploads/productions/v1-554770607902848.jpg"],"st":"유로탑","perks":["방수커버 증정"],"opts":[["미디엄",50],["미디엄하드",65]],"single":false,"rv":{"n":1840,"soft":709,"firm":1193,"firmShare":63,"waistPos":29.8,"sag":7.5}},{"id":1525743,"brand":"웰퍼니쳐","layer":false,"nm":"베어플러스 독립스프링 양모 필로우탑 25cm","line":null,"pick":false,"disc":50,"price":149000,"rating":4.8,"reviews":2433,"imgs":["https://prs.ohousecdn.com/apne2/any/uploads/productions/v1-531413097431168.png","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-283742685863936.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-531413120094336.jpg"],"st":"필로우탑","perks":["무료내림"],"opts":[["단일 경도",66]],"single":true,"rv":{"n":1816,"soft":789,"firm":1060,"firmShare":57,"waistPos":23.6,"sag":7.5}},{"id":2705559,"brand":"지누스","layer":false,"nm":"그린티 플러스 하이브리드 매트리스 20cm","line":null,"pick":false,"disc":50,"price":154000,"rating":4.8,"reviews":5226,"imgs":["https://prs.ohousecdn.com/apne2/any/uploads/productions/v1-452793506668544.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-308754441826304.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-308754137370624.jpg"],"st":"하이브리드","perks":[],"opts":[["단일 경도",48]],"single":true,"rv":{"n":3647,"soft":1881,"firm":1023,"firmShare":35,"waistPos":12.1,"sag":4.1}},{"id":3607491,"brand":"오늘의집 layer","layer":true,"nm":"리파인 허리가 편한 유로탑 매트리스 30cm","line":"refine","pick":false,"disc":33,"price":349900,"rating":4.9,"reviews":453,"imgs":["https://prs.ohousecdn.com/apne2/any/uploads/productions/v1-534254433988736.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-534233701806208.jpg","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-534254445883520.jpg"],"st":"유로탑 포켓","perks":[],"opts":[["미디엄소프트",35],["미디엄하드",65]],"single":false,"rv":{"n":219,"soft":114,"firm":126,"firmShare":53,"waistPos":27.4,"sag":10.5}},{"id":3121605,"brand":"오늘의집 layer","layer":true,"nm":"페이브 유로탑 매트리스 38cm","line":"studio","pick":false,"disc":0,"price":990000,"rating":4.8,"reviews":353,"imgs":["https://prs.ohousecdn.com/apne2/any/uploads/productions/v1-539568977301504.png","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-306139735715968.png","https://prs.ohousecdn.com/apne2/any/uploads/productions/images/v1-409058218094720.jpg"],"st":"유로탑","perks":["30일 무료체험"],"opts":[["미디엄소프트",35],["미디엄",50],["미디엄하드",65]],"single":false,"rv":{"n":208,"soft":102,"firm":100,"firmShare":50,"waistPos":27.9,"sag":11.5}}];
+const FL = ['소프트','미디엄소프트','미디엄','미디엄하드','하드'];
+const flab = f => f<28?'소프트':f<43?'미디엄소프트':f<58?'미디엄':f<73?'미디엄하드':'하드';
+const won = n => n.toLocaleString('ko-KR');
+const img = (u,w) => u + '?w=' + (w||360) + '&h=' + (w||360) + '&c=c';
+const $ = s => document.querySelector(s);
+const SV = {
+ side:'<svg viewBox="0 0 56 40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 33h48"/><circle cx="12" cy="20" r="4.5"/><path d="M17 23c6-4 14-5 22-2 4 1.5 7 4 9 8"/><path d="M30 22c-1 4 1 7 5 9"/></svg>',
+ back:'<svg viewBox="0 0 56 40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 33h48"/><circle cx="11" cy="24" r="4.5"/><path d="M16 27h32"/><path d="M22 27c3-3 9-3 12 0"/></svg>',
+ prone:'<svg viewBox="0 0 56 40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 33h48"/><circle cx="11" cy="25" r="4.5"/><path d="M16 29h32"/><path d="M22 29c4 2 9 2 13 0"/><path d="M16 29l6-6"/></svg>',
+ light:'<svg viewBox="0 0 56 40" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="14" y="10" width="28" height="22" rx="5"/><path d="M22 18a6 6 0 0 1 12 0"/><path d="M28 18l-4-3"/></svg>',
+ mid:'<svg viewBox="0 0 56 40" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="14" y="10" width="28" height="22" rx="5"/><path d="M22 18a6 6 0 0 1 12 0"/><path d="M28 18v-5"/></svg>',
+ heavy:'<svg viewBox="0 0 56 40" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="14" y="10" width="28" height="22" rx="5"/><path d="M22 18a6 6 0 0 1 12 0"/><path d="M28 18l4-3"/></svg>',
+};
+const Q = [
+ {id:'pos', q:'주로 어떤 자세로 주무세요?', s:'가장 오래 유지하는 자세를 골라주세요', three:true, o:[['side','옆으로'],['back','바로 누워'],['prone','엎드려']]},
+ {id:'w', q:'체중대를 알려주세요', s:'경도가 꺼지는 정도를 계산하는 데만 써요', three:true, o:[['light','60kg 미만'],['mid','60~80kg'],['heavy','80kg 이상']]},
+ {id:'pain', q:'자고 일어나면 허리가 뻐근한가요?', s:'허리 지지력 근거를 더 무겁게 봐요', o:[['yes','자주 그래요','허리 지지 리뷰 근거 가중'],['no','거의 없어요','경도 적합도만 반영']]},
+ {id:'hot', q:'잘 때 더위를 많이 타세요?', s:'통기성 구조(스프링 계열)를 우선해요', o:[['yes','네, 더워요','폼 위주 구조는 살짝 감점'],['no','아니요','구조 무관']]},
+];
+const A = {};
+let qi = 0, auto = false, cmp = [], ranked = [], tgt = 50, pdpI = 0;
+
+function card(p){
+ const badge = p.layer ? '<span class="laybdg">■ layer</span>' : (p.brand==='수면밀도'||p.brand==='휴도'?'':'<span class="only">Only</span>');
+ return '<div class="pc" onclick="openPdp('+p.id+',true)"><div class="pimg"><img loading="lazy" src="'+img(p.imgs[0])+'">'+badge+(p.pick?'<span class="pick">오늘의집<br>pick</span>':'')+'</div>'+
+  '<div class="pb">'+p.brand+'</div><div class="pn">'+p.nm+'</div>'+
+  '<div class="pp">'+(p.disc?'<span class="d">'+p.disc+'%</span>':'')+won(p.price)+'</div>'+
+  '<div class="pr">★ <b>'+p.rating+'</b> 리뷰 '+won(p.reviews)+'</div></div>';
+}
+function renderSrp(){
+ const order=[1590911,329364,858905,425266,1089824,2737888,2447090,853690,111255,2166667];
+ const L=order.map(id=>P.find(p=>p.id===id));
+ $('#grid1').innerHTML=L.slice(0,4).map(card).join('');
+ $('#grid2').innerHTML=L.slice(4).map(card).join('');
+}
+function go(v){
+ document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
+ $('#v-'+v).classList.add('on');
+ const n={srp:1,quiz:2,res:3,pdp:4}[v];
+ ['s1','s2','s3','s4'].forEach((s,i)=>$('#'+s).classList.toggle('act',i===n-1));
+ closeCmp();
+}
+function typeSearch(){
+ const t='매트리스'; let i=0; $('#stext').textContent=''; $('#scur').style.display='';
+ clearInterval(window._ty);
+ window._ty=setInterval(()=>{i++;$('#stext').textContent=t.slice(0,i);if(i>=t.length){clearInterval(window._ty);setTimeout(()=>$('#scur').style.display='none',400);}},160);
+}
+function startQuiz(){ qi=0; for(const k in A) delete A[k]; go('quiz'); renderQ(); }
+function renderQ(){
+ const q=Q[qi];
+ $('#qstep').textContent=(qi+1)+' / '+Q.length; $('#qq').textContent=q.q; $('#qs').textContent=q.s;
+ $('#pbar').style.width=(qi/Q.length*100)+'%';
+ const box=$('#opts'); box.className='opts'+(q.three?' three':''); box.innerHTML='';
+ q.o.forEach(o=>{
+  const d=document.createElement('div'); d.className='opt'; d.dataset.v=o[0];
+  d.innerHTML = q.three ? (SV[o[0]]||'')+'<span>'+o[1]+'</span>' : '<span>'+o[1]+'<small>'+o[2]+'</small></span>';
+  d.onclick=()=>answer(o[0],d); box.appendChild(d);
+ });
+}
+function answer(v,el){
+ A[Q[qi].id]=v; el.parentNode.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel')); el.classList.add('sel');
+ $('#pbar').style.width=((qi+1)/Q.length*100)+'%';
+ setTimeout(()=>{ qi++; qi<Q.length?renderQ():result(); }, auto?380:480);
+}
+function result(){
+ tgt = 50 + ({side:-12,back:5,prone:12})[A.pos] + ({light:-8,mid:0,heavy:12})[A.w] + (A.pain==='yes'?6:0);
+ tgt = Math.max(25,Math.min(82,tgt));
+ const lo=flab(tgt-7), hi=flab(tgt+7);
+ $('#pres').textContent = lo===hi ? lo : lo+' ~ '+hi;
+ const rng=$('#rng'); const L=Math.max(0,(tgt-10-10)/80*100), W=20/80*100; rng.style.left=L+'%'; rng.style.width=W+'%';
+ const why=[({side:'옆으로 자면 어깨·골반이 가라앉아야 해서 조금 부드럽게',back:'바로 누우면 허리 곡선 지지가 우선',prone:'엎드리면 허리가 꺼지지 않게 단단하게'})[A.pos],
+  ({light:'가벼운 체중은 같은 경도도 더 단단하게 느껴요',mid:'평균 체중',heavy:'체중이 실리면 꺼짐 방지로 한 단계 단단하게'})[A.w]];
+ if(A.pain==='yes') why.push('허리 지지 리뷰 근거 가중');
+ if(A.hot==='yes') why.push('통기 구조 우선');
+ $('#why').innerHTML=why.map(w=>'<span>'+w+'</span>').join('');
+ ranked = P.map(p=>{
+  let best=p.opts[0]; p.opts.forEach(o=>{ if(Math.abs(o[1]-tgt)<Math.abs(best[1]-tgt)) best=o; });
+  let fit = 98 - Math.abs(best[1]-tgt)*1.25;
+  if(A.pain==='yes') fit += Math.max(-4,Math.min(5,(p.rv.waistPos-15)/4));
+  if(A.w==='heavy' && best[1]<45) fit -= 6;
+  if(A.hot==='yes' && /하이브리드/.test(p.st)) fit -= 2;
+  fit = Math.round(Math.max(55,Math.min(99,fit)));
+  return {...p, best, fit};
+ }).sort((a,b)=>b.fit-a.fit || a.price-b.price).slice(0,6);
+ cmp=[]; updCmp();
+ const L2=$('#rlist'); L2.innerHTML='';
+ ranked.forEach((p,i)=>{
+  const d=document.createElement('div'); d.className='rc'+(i===0?' top1':''); d.style.animationDelay=(i*80)+'ms';
+  const ev = p.single ? '글 리뷰 '+won(p.rv.n)+'건 중 탄탄 언급 '+p.rv.firmShare+'% → 체감 '+flab(p.best[1]) : '경도 옵션 '+p.opts.length+'종 중 맞는 옵션 선택 · 리뷰 탄탄 언급 '+p.rv.firmShare+'%';
+  d.innerHTML='<div class="ri" onclick="openPdp('+p.id+')"><img src="'+img(p.imgs[0],220)+'"><span class="rk">'+(i+1)+'</span></div>'+
+   '<div class="rinfo"><div class="rb">'+(p.layer?'<span class="lp">layer</span>':'')+p.brand+'</div><div class="rn">'+p.nm+'</div>'+
+   '<div class="ropt">'+(p.single?'체감 '+flab(p.best[1]):'추천 옵션: '+p.best[0])+' <em>· '+p.st+'</em></div>'+
+   '<div class="fit"><span class="bar"><i style="width:'+p.fit+'%"></i></span><b>적합 '+p.fit+'%</b></div>'+
+   (p.perks[0]?'<div style="margin:3px 0 1px">'+p.perks.map(k=>'<span class="perk">'+k+'</span>').join('')+'</div>':'')+'<div class="ev">'+ev+(A.pain==='yes'?' · 허리 긍정 언급 '+p.rv.waistPos+'%':'')+'</div>'+
+   '<div class="rbot"><div class="rpr">'+(p.disc?'<span class="d">'+p.disc+'%</span>':'')+won(p.price)+'~</div>'+
+   '<span class="cmpchk" data-id="'+p.id+'" onclick="togCmp(this)"><i>✓</i>비교</span></div></div>';
+  L2.appendChild(d);
+ });
+ $('#resScroll').scrollTop=0; go('res');
+}
+function togCmp(el){
+ const id=+el.dataset.id; const i=cmp.indexOf(id);
+ if(i>=0){cmp.splice(i,1);el.classList.remove('on');} else { if(cmp.length>=3){toast('최대 3개까지 비교할 수 있어요');return;} cmp.push(id); el.classList.add('on'); }
+ updCmp();
+}
+function updCmp(){ const b=$('#cmpBtn'); b.textContent='비교 '+cmp.length; b.classList.toggle('on',cmp.length>=2); }
+function openCmp(){
+ if(cmp.length<2){toast('비교할 상품을 2개 이상 체크해 주세요');return;}
+ const L=cmp.map(id=>ranked.find(p=>p.id===id));
+ const mx=(f)=>Math.max(...L.map(f));
+ const row=(lab,f,bestF)=>'<tr><th>'+lab+'</th>'+L.map(p=>'<td'+(bestF&&bestF(p)?' class="best"':'')+'>'+f(p)+'</td>').join('')+'</tr>';
+ const fitMax=mx(p=>p.fit), wMax=mx(p=>p.rv.waistPos);
+ $('#ctab').innerHTML='<table><tr><th></th>'+L.map(p=>'<td><img src="'+img(p.imgs[0],160)+'"></td>').join('')+'</tr>'+
+  row('브랜드',p=>(p.layer?'<span class="lp">layer</span> ':'')+p.brand)+
+  row('진단 적합도',p=>p.fit+'%',p=>p.fit===fitMax)+
+  row('맞춤 경도',p=>p.single?'단일 ('+flab(p.best[1])+')':p.best[0])+
+  row('경도 선택지',p=>p.single?'1종':p.opts.length+'종')+
+  row('리뷰 체감',p=>'탄탄 '+p.rv.firmShare+'%<br><span style="color:var(--mut)">푹신 '+(100-p.rv.firmShare)+'%</span>')+
+  row('허리 긍정 언급',p=>p.rv.waistPos+'%',p=>p.rv.waistPos===wMax)+
+  row('구조',p=>p.st)+
+  row('체험·보증',p=>p.perks.length?p.perks.join('<br>'):'<span style="color:var(--mut)">표기 없음</span>')+
+  row('판매가',p=>won(p.price)+'원~')+
+  '</table><div class="src">근거: 옵션명·상세 표기, 리뷰 원문 키워드 집계. 확인 못 한 속성은 "표기 없음"으로 두고 우열을 단정하지 않아요.</div>';
+ $('#dim').classList.add('on'); $('#sheet').classList.add('on');
+}
+function closeCmp(){ $('#dim').classList.remove('on'); $('#sheet').classList.remove('on'); }
+function openPdp(id,fromSrp){
+ const p = ranked.find(x=>x.id===id) || {...P.find(x=>x.id===id), best:null, fit:null};
+ const opt = p.best;
+ const soft=100-p.rv.firmShare;
+ $('#pdpScroll').innerHTML='<div class="pdp-img"><div class="track" id="trk">'+p.imgs.map(u=>'<img src="'+img(u,720)+'">').join('')+'</div><span class="dots" id="dots">1 / '+p.imgs.length+'</span></div>'+
+  '<div class="pdp-in"><div class="pdp-b">'+(p.layer?'<span class="lp">layer</span>':'')+p.brand+' ›</div><div class="pdp-n">'+p.nm+'</div>'+
+  '<div class="pdp-r">★ <b>'+p.rating+'</b> · 리뷰 '+won(p.reviews)+'</div>'+
+  '<div class="pdp-p">'+(p.disc?'<span class="d">'+p.disc+'%</span>':'')+won(p.price)+'원~</div>'+
+  (opt?'<div class="diagopt"><div class="l">✓ 진단 결과로 옵션을 미리 골랐어요</div><div class="v">단단한 정도: '+opt[0]+'</div><div class="s">목표 경도 '+flab(tgt)+' · 적합도 '+p.fit+'% · 다른 옵션으로 바꿀 수 있어요</div></div>':'<div style="height:10px"></div>')+
+  '<div class="aisum"><div class="l">리뷰 AI 요약 <small>경도 관점 · 예시</small></div>'+
+  '<div class="split"><i style="width:'+soft+'%;background:#9adff6"></i><i style="width:'+p.rv.firmShare+'%;background:#0b6f99"></i></div><div class="splitlab"><span>푹신 언급 '+won(p.rv.soft)+'건</span><span>탄탄 언급 '+won(p.rv.firm)+'건</span></div>'+
+  '<ul><li>글 리뷰 '+won(p.rv.n)+'건 기준 체감은 <b>'+(p.rv.firmShare>=55?'탄탄한 편':p.rv.firmShare>=40?'중간':'푹신한 편')+'</b>이에요.</li>'+
+  (p.opts.length>1?'<li>경도 옵션이 '+p.opts.length+'종이라 리뷰 체감이 옵션별로 갈려요. 내 진단 경도 옵션을 기준으로 보세요.</li>':'')+
+  '<li>허리 관련 긍정 언급은 '+p.rv.waistPos+'%예요.</li>'+(p.perks.length?'<li>'+p.perks.join(', ')+' 표기가 있어요.</li>':'')+'</ul></div></div>';
+ pdpI=0; $('#pdpScroll').scrollTop=0; go('pdp');
+ clearInterval(window._sl); window._sl=setInterval(()=>{ const t=$('#trk'); if(!t||!$('#v-pdp').classList.contains('on')){clearInterval(window._sl);return;} pdpI=(pdpI+1)%p.imgs.length; t.style.transform='translateX(-'+pdpI*100+'%)'; $('#dots').textContent=(pdpI+1)+' / '+p.imgs.length; },2200);
+ window._pdpLayer=p.layer;
+}
+function buy(){ toast(window._pdpLayer?'실험에서는 여기서 <b>구매 증분(노출군 vs 홀드아웃)</b>과 <b>layer 회수(PB 성장)</b>를 함께 봐요.':'중립 랭킹이라 3P로도 보내요. 신뢰가 쌓여야 layer가 \'데이터가 고른 답\'이 돼요.'); }
+function askChip(el){ toast('AI 큐레이터가 <b>진단 조건을 유지한 채</b> "'+el.textContent+'"로 다시 찾아줘요. (큐레이터 경험 A: 조건 추가·교체)'); }
+function toast(h){ const t=$('#toast'); t.innerHTML=h; t.classList.add('on'); clearTimeout(window._ts); window._ts=setTimeout(()=>t.classList.remove('on'),3400); }
+function resetAll(){ auto=false; $('#play').textContent='▶ 자동 시연'; $('#play').disabled=false; for(const k in A) delete A[k]; cmp=[]; go('srp'); $('#srpScroll').scrollTop=0; typeSearch(); $('#toast').classList.remove('on'); }
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+async function autoPlay(){
+ if(auto) return; resetAll(); auto=true; const b=$('#play'); b.textContent='● 시연 중…'; b.disabled=true;
+ await wait(1700); const lq=$('#layQF'); lq.style.background='#f4f4f4'; await wait(500); lq.style.background='';
+ const sc=$('#srpScroll'); sc.scrollTop=$('#curMod').offsetTop-130; await wait(1500);
+ const cm=$('#curMod'); cm.style.transform='scale(.98)'; await wait(200); cm.style.transform=''; startQuiz(); await wait(900);
+ const ans=['back','mid','yes','no'];
+ for(const a of ans){ const el=[...document.querySelectorAll('#opts .opt')].find(x=>x.dataset.v===a); await wait(650); answer(a,el); await wait(900); }
+ await wait(1400); const rs=$('#resScroll'); rs.scrollTop=230; await wait(1300);
+ const chks=document.querySelectorAll('#rlist .cmpchk'); if(chks[0]){togCmp(chks[0]); await wait(450);} const li=ranked.findIndex(p=>p.layer); if(chks[li>0?li:1]){togCmp(chks[li>0?li:1]); await wait(600);}
+ openCmp(); await wait(3800); closeCmp(); await wait(600);
+ openPdp((ranked.find(p=>p.layer)||ranked[0]).id); await wait(2600); $('#pdpScroll').scrollTop=360; await wait(1800); buy(); await wait(3000);
+ b.textContent='▶ 다시 시연'; b.disabled=false; auto=false;
+}
+renderSrp(); typeSearch();
+</script>
+</body>
+</html>
