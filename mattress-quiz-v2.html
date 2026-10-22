@@ -87,13 +87,26 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,'Apple 
 .opt.sel{border-color:var(--blue);background:#f0fbfe;color:var(--blue-d);font-weight:700}
 .opt.sel svg{color:var(--blue-d)}
 .opt small{display:block;font-size:11px;color:var(--mut);font-weight:500}
+.opts.two{grid-template-columns:1fr 1fr}
+.opts.two .opt{flex-direction:column;text-align:center;gap:6px;padding:12px 6px;font-size:13px}
+.opt .ck{margin-left:auto;width:18px;height:18px;border-radius:5px;border:1.5px solid var(--line);flex:none}
+.opt.sel .ck{background:var(--blue);border-color:var(--blue)}
+.qnext{margin-top:14px;height:46px;border:0;border-radius:10px;background:var(--blue);color:#fff;font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.qnext:disabled{background:var(--line);color:var(--mut)}
 .qnote{margin-top:auto;font-size:11.5px;color:var(--sub);background:var(--soft);border-radius:10px;padding:10px 12px;line-height:1.55}
 /* result */
 .rhead{padding:6px 14px 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
 .rhead .ttl{font-size:15px;font-weight:700;flex:1}
 .presc{margin:14px 14px 6px;border-radius:16px;padding:16px;background:#f2fbfe;border:1px solid #d5f0f9}
 .presc .l{font-size:11.5px;color:var(--blue-d);font-weight:700}
-.presc .b{font-size:22px;font-weight:800;letter-spacing:-.03em;margin:3px 0 10px}
+.presc .b{font-size:21px;font-weight:800;letter-spacing:-.03em;margin:3px 0 2px}
+.presc .b2{font-size:12.5px;color:var(--sub);margin-bottom:10px}
+.presc .b2 b{color:var(--ink)}
+.slot{margin-top:10px;display:flex;gap:10px;align-items:center;background:#fff;border:1px solid #d5eef7;border-radius:12px;padding:9px 11px;font-size:11.5px;line-height:1.5;color:var(--sub)}
+.slot .n{flex:none;width:38px;height:38px;border-radius:10px;background:var(--ink);color:#fff;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;flex-direction:column;line-height:1}
+.slot .n small{font-size:8.5px;font-weight:600;opacity:.7}
+.slot b{color:var(--ink)}
+.slot code{font-family:inherit;background:var(--soft);border-radius:4px;padding:0 4px;color:var(--ink)}
 .gauge{position:relative;height:10px;border-radius:9px;background:linear-gradient(90deg,#cfeefc,#79d3f3,#2bb3e3,#1288b8,#0b5d82)}
 .gauge .rng{position:absolute;top:-4px;height:18px;border:2.5px solid #2f3438;border-radius:9px;background:rgba(255,255,255,.25);transition:left .6s,width .6s}
 .glab{display:flex;justify-content:space-between;font-size:10.5px;color:var(--sub);margin-top:6px}
@@ -215,7 +228,7 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,'Apple 
  <div class="head">
   <div class="bdg"><i></i>v2 · 실상품·실리뷰 데이터 반영 프로토타입</div>
   <h1>매트리스 1분 진단: 오늘의집 앱에서 이렇게 동작한다</h1>
-  <p>쇼핑 검색결과(SRP) → <b>AI 큐레이터 질문 제안 모듈</b>로 진입 → 4문항 문진 → <b>리뷰 체감 경도 기반 중립 랭킹</b> → 비교 → PDP(맞춤 옵션 선택).<br>상품 사진·가격·리뷰 수는 10/22 실제 오늘의집 '매트리스' 검색결과, 체감 경도는 리뷰 원문 12만 건 집계입니다.</p>
+  <p>쇼핑 검색결과(SRP) → <b>AI 큐레이터 질문 제안 모듈</b>로 진입 → 10문항 문진(경도·표면·소재) → <b>리뷰 체감 경도 기반 중립 랭킹</b> → 비교 → PDP(맞춤 옵션 선택).<br>상품 사진·가격·리뷰 수는 10/22 실제 오늘의집 '매트리스' 검색결과, 체감 경도는 리뷰 원문 12만 건 집계입니다.</p>
  </div>
  <div class="stage">
   <div><div class="phone"><div class="screen">
@@ -241,7 +254,7 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,'Apple 
      <div class="cur-mod pulse" id="curMod" onclick="startQuiz()">
       <div class="t1"><svg style="width:14px;height:14px" viewBox="0 0 24 24" fill="#3a8fb8"><path d="M12 2l2.2 6.3L20 10l-5.8 1.7L12 18l-2.2-6.3L4 10l5.8-1.7z"/></svg>AI 큐레이터 · 매트리스 진단</div>
       <div class="t2">나한테 맞는 경도, 1분이면 찾아요</div>
-      <div class="t3">수면 자세·체중 4가지만 답하면 리뷰 12만 건의<br>실제 체감으로 맞는 매트리스를 골라드려요</div>
+      <div class="t3">10문항에 답하면 경도·표면·소재를 정하고<br>리뷰 12만 건의 실제 체감으로 맞는 매트리스를 골라드려요</div>
       <div class="sugg"><span>옆으로 자는데 허리가 아파요</span><span>체중이 나가서 금방 꺼질까 걱정돼요</span></div>
      </div>
      <div class="grid" id="grid2"></div>
@@ -253,11 +266,12 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,'Apple 
     <div class="qhead"><svg class="ic" onclick="go('srp')" style="cursor:pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg><span class="ttl">매트리스 진단</span><span style="width:24px"></span></div>
     <div class="prog"><i id="pbar"></i></div>
     <div class="qbody">
-     <div class="qstep" id="qstep">1 / 4</div>
+     <div class="qstep" id="qstep">1 / 10</div>
      <div class="qq" id="qq"></div>
      <div class="qs" id="qs"></div>
      <div class="opts" id="opts"></div>
-     <div class="qnote">"푹신한 게 좋아요" 같은 취향 대신 <b>바꿀 수 없는 사실</b>만 물어요. 경도는 답변으로 계산하고, 각 매트리스의 경도는 <b>제조사 라벨이 아니라 리뷰 체감</b>으로 채점해요.</div>
+     <button class="qnext" id="qnext" hidden onclick="nextQ()">다음</button>
+     <div class="qnote" id="qnote"></div>
     </div>
    </div>
 
@@ -266,11 +280,13 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,'Apple 
     <div class="rhead"><svg class="ic" onclick="startQuiz()" style="cursor:pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg><span class="ttl">진단 결과</span><span style="font-size:12px;color:var(--sub);cursor:pointer" onclick="resetAll()">다시하기</span></div>
     <div class="scroll" id="resScroll" style="padding-bottom:120px">
      <div class="presc">
-      <div class="l">나에게 맞는 경도</div>
+      <div class="l">나에게 맞는 매트리스</div>
       <div class="b" id="pres"></div>
+      <div class="b2" id="pres2"></div>
       <div class="gauge"><div class="rng" id="rng"></div></div>
       <div class="glab"><span>소프트</span><span>미디엄소프트</span><span>미디엄</span><span>미디엄하드</span><span>하드</span></div>
       <div class="why" id="why"></div>
+      <div class="slot" id="slot"></div>
      </div>
      <div class="neu">⚖️<span><b>중립 랭킹</b>이에요. 광고·브랜드와 무관하게 경도 적합도 순으로 보여주고, 옵션이 여러 개면 <b>맞는 옵션</b>을 골라 비교해요. 적합도가 같으면 낮은 가격 순.</span></div>
      <div class="rlist" id="rlist"></div>
@@ -298,11 +314,11 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,'Apple 
    <div class="step act" id="s1" onclick="resetAll()"><div class="sno">1</div><div><h4>검색 순간: SRP 안에 진단 진입점</h4>
     <p>'매트리스'를 검색하면 상품 목록 사이에 질문 제안 모듈이 뜬다. 지금 실제 SRP 구조(퀵필터, 속성 칩, 상품 카드) 그대로 위에 얹는 그림.</p>
     <div class="feat"><span class="wip">AI 큐레이터 J2 진입점(설계안)</span><span class="live">layer 퀵필터 XPC-2426</span><span class="live">속성필터 자동매핑 XPC-2436</span><span class="chk">검증 ① 수요: 진입 CTR</span></div></div></div>
-   <div class="step" id="s2" onclick="startQuiz()"><div class="sno">2</div><div><h4>객관 사실 4문항 문진</h4>
-    <p>자세·체중·허리 통증·더위. 답으로 목표 경도 구간을 계산한다. 체형 데이터가 없어도 문진으로 해결.</p>
+   <div class="step" id="s2" onclick="startQuiz()"><div class="sno">2</div><div><h4>10문항 문진: 경도 × 표면 × 소재</h4>
+    <p>지금 매트리스가 어느 쪽으로 불편한지(가중 2배)·사용연수·체중·아침 통증으로 <b>경도 3단계</b>, 자세·어깨/골반 체형으로 <b>표면(타이트·유로·필로우탑)</b>, 더위·파트너 뒤척임·감촉으로 <b>소재(독립·본넬·폼)</b>를 정한다. 허리가 아프면 단단한 쪽이 아니라 중간 쪽으로 당긴다(Lancet 2003 RCT). 결과는 체험존 슬롯 1~10번과 온라인 필터로 바로 이어진다.</p>
     <div class="feat"><span>신규 화면(올리고로 제작)</span><span class="chk">검증 ① 완료율</span></div></div></div>
    <div class="step" id="s3"><div class="sno">3</div><div><h4>리뷰 체감 경도로 중립 랭킹</h4>
-    <p>단일 경도 상품은 리뷰 속 '푹신 vs 탄탄' 언급 비율로 실제 체감 경도를 채점하고, 옵션이 여러 개인 상품은 맞는 옵션으로 비교한다. layer는 맞을 때만 위로 온다. 자동 시연(바로 누워·60~80kg·허리 통증)은 3P가 1~3위, layer refine·studio가 4~5위. 옆으로·60~80kg·통증 없음이면 layer basic이 1위.</p>
+    <p>단일 경도 상품은 리뷰 속 '푹신 vs 탄탄' 언급 비율로 실제 체감 경도를 채점하고, 옵션이 여러 개인 상품은 맞는 옵션으로 비교한다. layer는 맞을 때만 위로 온다. 자동 시연(지금 것이 물러서·65~80kg·허리 뻐근·바로 누워·35만원 이하)은 <b>탄탄 · 유로탑 · 독립스프링</b>(체험존 2번)으로 나오고 3P 금성침대와 layer refine이 공동 1위. 같은 조건에서 옆으로 자고 불편이 없으면 중간 · 유로탑으로 바뀌고 layer studio·basic이 2·3위로 올라온다.</p>
     <div class="feat"><span class="live">리뷰 원문 집계(Athena)</span><span class="wip">AI 큐레이터 경험 C 비교</span><span class="chk">검증 ② 구매 증분 · ③ PB</span></div></div></div>
    <div class="step" id="s4"><div class="sno">4</div><div><h4>PDP: 진단한 옵션이 미리 선택된 채로</h4>
     <p>상세로 넘어가면 진단 결과 경도 옵션이 이미 골라져 있고, 리뷰 AI 요약에 내 경도에 대한 체감이 같이 보인다.</p>
@@ -348,14 +364,21 @@ const SV = {
  mid:'<svg viewBox="0 0 56 40" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="14" y="10" width="28" height="22" rx="5"/><path d="M22 18a6 6 0 0 1 12 0"/><path d="M28 18v-5"/></svg>',
  heavy:'<svg viewBox="0 0 56 40" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="14" y="10" width="28" height="22" rx="5"/><path d="M22 18a6 6 0 0 1 12 0"/><path d="M28 18l4-3"/></svg>',
 };
+SV.mix='<svg viewBox="0 0 56 40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 33h48"/><path d="M16 14a12 12 0 0 1 22-2"/><path d="M38 6v6h-6"/><path d="M40 24a12 12 0 0 1-22 2"/><path d="M18 32v-6h6"/></svg>';
 const Q = [
- {id:'pos', q:'주로 어떤 자세로 주무세요?', s:'가장 오래 유지하는 자세를 골라주세요', three:true, o:[['side','옆으로'],['back','바로 누워'],['prone','엎드려']]},
- {id:'w', q:'체중대를 알려주세요', s:'경도가 꺼지는 정도를 계산하는 데만 써요', three:true, o:[['light','60kg 미만'],['mid','60~80kg'],['heavy','80kg 이상']]},
- {id:'pain', q:'자고 일어나면 허리가 뻐근한가요?', s:'허리 지지력 근거를 더 무겁게 봐요', o:[['yes','자주 그래요','허리 지지 리뷰 근거 가중'],['no','거의 없어요','경도 적합도만 반영']]},
- {id:'hot', q:'잘 때 더위를 많이 타세요?', s:'통기성 구조(스프링 계열)를 우선해요', o:[['yes','네, 더워요','폼 위주 구조는 살짝 감점'],['no','아니요','구조 무관']]},
+ {id:'cur', q:'지금 쓰는 매트리스, 어떤 점이 불편하세요?', s:'가장 믿을 수 있는 답이라 2배로 반영해요', n:'"소프트·하드" 라벨은 브랜드마다 기준이 달라요. 대신 <b>지금 것이 어느 쪽으로 불편한지</b>는 정확하게 답할 수 있어요.', o:[['sag','물러서 허리가 내려앉는 느낌'],['hard','딱딱해서 어깨·엉덩이가 배겨요'],['ok','괜찮은데 오래돼서 바꿔요 / 잘 모르겠어요']]},
+ {id:'yrs', q:'지금 매트리스를 몇 년 쓰셨어요?', s:'바로 앞 답을 보정하는 데 써요', n:'오래 쓴 매트리스는 가운데가 꺼져서 "물렁하다"고 느끼기 쉬워요. 10년 넘었으면 앞 답을 덜 반영해요.', o:[['0','3년 미만'],['3','3~7년'],['8','8~10년'],['10','10년 이상'],['none','지금 매트리스가 없어요']]},
+ {id:'w', q:'몸무게를 알려주세요', s:'같은 매트리스도 체중에 따라 꺼지는 깊이가 달라요', n:'입력한 값은 경도 계산에만 쓰고 저장하지 않아요.', o:[['-2','50kg 미만'],['-1','50~65kg'],['0','65~80kg'],['1','80~95kg'],['2','95kg 이상']]},
+ {id:'ache', multi:true, q:'아침에 일어나면 불편한 곳이 있나요?', s:'해당하는 걸 모두 골라주세요', n:'허리가 뻐근하면 <b>딱딱한 쪽이 아니라 중간 쪽</b>으로 맞춰요. 만성 요통 환자 313명 실험에서 단단한 것보다 중간-단단이 통증이 덜했어요.', o:[['waist','허리가 뻐근해요'],['shoulder','어깨나 골반이 배기거나 저려요'],['neck','목이 불편해요'],['none','없어요']]},
+ {id:'pos', multi:true, icon:true, q:'주로 어떤 자세로 주무세요?', s:'여러 개 골라도 돼요', n:'자는 자세는 본인도 정확히 모르는 경우가 많아요. 확실하지 않으면 <b>자주 바뀐다</b>를 골라주세요.', o:[['side','옆으로'],['back','바로 누워'],['prone','엎드려'],['mix','자주 바뀐다']]},
+ {id:'frame', q:'어깨와 골반, 어느 쪽이 더 넓어 보이세요?', s:'옆으로 잘 때 어깨가 얼마나 눌리는지 가늠해요', n:'어깨가 넓으면 옆으로 누울 때 어깨에 압력이 몰려서 위층 쿠션이 더 필요해요.', o:[['shoulder','어깨가 눈에 띄게 넓어요'],['same','비슷해요'],['hip','골반이 넓어요']]},
+ {id:'hot', q:'잘 때 덥거나 땀이 나는 편인가요?', s:'몸에 닿는 면이 넓은 소재일수록 더워요', n:'몸을 감싸는 폼 소재는 스프링보다 등 쪽 온도가 최대 3°C, 습도는 2배까지 높았어요.', o:[['many','많이 그래요'],['some','가끔 그래요'],['no','아니요']]},
+ {id:'partner', q:'둘이 함께 주무세요? 상대 뒤척임에 깨시나요?', s:'흔들림이 옆으로 번지는 구조를 거를지 정해요', n:'함께 자는 사람은 밤에 깨는 횟수의 약 19%가 상대 뒤척임 때문이었어요.', o:[['wake','함께 자고, 뒤척임에 깨요'],['ok','함께 자지만 괜찮아요'],['alone','혼자 자요']]},
+ {id:'feel', q:'어떤 느낌을 더 좋아하세요?', s:'소재를 고를 때 참고로만 써요', n:'취향은 경도 계산에 넣지 않아요. 소재를 고를 때만 참고해요.', o:[['wrap','몸을 감싸주는 느낌'],['firm','바닥처럼 단단히 받쳐주는 느낌'],['unsure','잘 모르겠어요']]},
+ {id:'bud', q:'예산은 어느 정도 생각하세요?', s:'진단이 아니라 결과를 거르는 데만 써요', n:'예산 안의 상품을 먼저 보여주고, 모자라면 가까운 상품을 "예산 초과"로 붙여요.', o:[['15','15만원 이하'],['35','15~35만원'],['999','35만원 넘어도 괜찮아요']]},
 ];
 const A = {};
-let qi = 0, auto = false, cmp = [], ranked = [], tgt = 50, pdpI = 0;
+let qi = 0, auto = false, cmp = [], ranked = [], tgt = 50, pdpI = 0, DX = null;
 
 function card(p){
  const badge = p.layer ? '<span class="laybdg">■ layer</span>' : (p.brand==='수면밀도'||p.brand==='휴도'?'':'<span class="only">Only</span>');
@@ -385,40 +408,85 @@ function typeSearch(){
 function startQuiz(){ qi=0; for(const k in A) delete A[k]; go('quiz'); renderQ(); }
 function renderQ(){
  const q=Q[qi];
- $('#qstep').textContent=(qi+1)+' / '+Q.length; $('#qq').textContent=q.q; $('#qs').textContent=q.s;
+ $('#qstep').textContent=(qi+1)+' / '+Q.length; $('#qq').textContent=q.q; $('#qs').textContent=q.s; $('#qnote').innerHTML=q.n;
  $('#pbar').style.width=(qi/Q.length*100)+'%';
- const box=$('#opts'); box.className='opts'+(q.three?' three':''); box.innerHTML='';
+ const box=$('#opts'); box.className='opts'+(q.icon?' two':''); box.innerHTML='';
+ if(q.multi) A[q.id]=[];
  q.o.forEach(o=>{
   const d=document.createElement('div'); d.className='opt'; d.dataset.v=o[0];
-  d.innerHTML = q.three ? (SV[o[0]]||'')+'<span>'+o[1]+'</span>' : '<span>'+o[1]+'<small>'+o[2]+'</small></span>';
+  d.innerHTML = q.icon ? (SV[o[0]]||'')+'<span>'+o[1]+'</span>' : '<span>'+o[1]+'</span>'+(q.multi?'<i class="ck"></i>':'');
   d.onclick=()=>answer(o[0],d); box.appendChild(d);
  });
+ const nb=$('#qnext'); nb.hidden=!q.multi; nb.disabled=true;
 }
 function answer(v,el){
- A[Q[qi].id]=v; el.parentNode.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel')); el.classList.add('sel');
+ const q=Q[qi];
+ if(q.multi){
+  let L=A[q.id];
+  if(L.includes(v)) L=L.filter(x=>x!==v); else L = v==='none' ? [v] : L.filter(x=>x!=='none').concat(v);
+  A[q.id]=L; el.parentNode.querySelectorAll('.opt').forEach(x=>x.classList.toggle('sel',L.includes(x.dataset.v)));
+  $('#qnext').disabled=!L.length; return;
+ }
+ A[q.id]=v; el.parentNode.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel')); el.classList.add('sel');
+ nextQ();
+}
+function nextQ(){
  $('#pbar').style.width=((qi+1)/Q.length*100)+'%';
  setTimeout(()=>{ qi++; qi<Q.length?renderQ():result(); }, auto?380:480);
 }
+const BAND={firm:'탄탄',mid:'중간',soft:'부드러움'}, SURF={tight:'타이트탑',euro:'유로탑',pillow:'필로우탑'}, MAT={pocket:'독립스프링',bonnell:'본넬스프링',foam:'메모리폼/폼'};
+const surfOf=p=>/필로우탑/.test(p.st)?'pillow':/유로탑/.test(p.st)?'euro':'tight';
+const matsOf=p=>/본넬\/포켓/.test(p.st)?['bonnell','pocket']:/본넬/.test(p.st)?['bonnell']:/하이브리드/.test(p.st)?['foam','pocket']:['pocket'];
+function diagnose(){
+ const old=A.yrs==='10', waist=A.ache.includes('waist'), sh=A.ache.includes('shoulder');
+ const q1 = A.cur==='sag' ? (old?1:2) : A.cur==='hard' ? -2 : 0;
+ const sum = q1 + (+A.w) + (sh?-1:0);
+ let band = sum>=2?'firm':sum<=-2?'soft':'mid';
+ const rules=[];
+ if(A.cur==='sag'&&old) rules.push('10년 넘게 써서 꺼진 건 노후일 수 있어 "물렁하다"를 덜 반영');
+ if(waist&&band==='soft'){ band='mid'; rules.push('허리가 뻐근해서 부드러움 대신 중간으로'); }
+ const side=A.pos.includes('side'), mix=A.pos.includes('mix');
+ let surf = side&&(sh||A.frame==='shoulder') ? 'pillow' : (side||mix) ? 'euro' : 'tight';
+ if(waist&&band==='firm'&&surf==='tight'){ surf='euro'; rules.push('탄탄하게 받치되 허리가 뻐근해서 표면은 유로탑'); }
+ const exFoam=A.hot==='many', exBon=A.partner==='wake';
+ const mat = A.feel==='wrap'&&!exFoam ? 'foam' : A.feel==='firm'&&band==='firm'&&!exBon ? 'bonnell' : 'pocket';
+ if(exFoam) rules.push('더위를 많이 타서 폼 제외');
+ if(exBon) rules.push('뒤척임에 깨서 본넬 제외');
+ const base={firm:68,mid:52,soft:36}[band], ctr={firm:2.5,mid:0,soft:-3}[band];
+ const t = base + Math.max(-6,Math.min(6,(sum-ctr)*3));
+ const SL={pocket:{firm:{tight:1,euro:2,pillow:2},mid:{tight:5,euro:6,pillow:6},soft:{tight:8,euro:8,pillow:9}},foam:{firm:4,mid:7,soft:10},bonnell:{firm:3}};
+ const slot = mat==='pocket'?SL.pocket[band][surf]:SL[mat][band];
+ const exact = !(mat==='pocket'&&((band!=='soft'&&surf==='pillow')||(band==='soft'&&surf==='tight')));
+ return {sum,band,surf,mat,t,rules,exFoam,exBon,slot,exact,waist};
+}
 function result(){
- tgt = 50 + ({side:-12,back:5,prone:12})[A.pos] + ({light:-8,mid:0,heavy:12})[A.w] + (A.pain==='yes'?6:0);
- tgt = Math.max(25,Math.min(82,tgt));
+ DX=diagnose(); tgt=DX.t;
  const lo=flab(tgt-7), hi=flab(tgt+7);
- $('#pres').textContent = lo===hi ? lo : lo+' ~ '+hi;
+ $('#pres').textContent = BAND[DX.band]+' · '+(DX.mat==='pocket'?SURF[DX.surf]+' · ':'')+MAT[DX.mat];
+ $('#pres2').innerHTML = '경도 <b>'+(lo===hi?lo:lo+' ~ '+hi)+'</b>'+(DX.mat!=='pocket'?' · '+MAT[DX.mat].replace(/스프링|\/폼/,'')+'은 표면 구분 없이 봐요':'');
  const rng=$('#rng'); const L=Math.max(0,(tgt-10-10)/80*100), W=20/80*100; rng.style.left=L+'%'; rng.style.width=W+'%';
- const why=[({side:'옆으로 자면 어깨·골반이 가라앉아야 해서 조금 부드럽게',back:'바로 누우면 허리 곡선 지지가 우선',prone:'엎드리면 허리가 꺼지지 않게 단단하게'})[A.pos],
-  ({light:'가벼운 체중은 같은 경도도 더 단단하게 느껴요',mid:'평균 체중',heavy:'체중이 실리면 꺼짐 방지로 한 단계 단단하게'})[A.w]];
- if(A.pain==='yes') why.push('허리 지지 리뷰 근거 가중');
- if(A.hot==='yes') why.push('통기 구조 우선');
+ const why=[({sag:'지금 것이 물러서 → 더 단단하게',hard:'지금 것이 배겨서 → 더 부드럽게',ok:'지금 것에 불만 없음 → 체중 기준'})[A.cur],
+  ({'-2':'가벼운 체중','-1':'가벼운 편','0':'평균 체중','1':'체중이 실리는 편','2':'체중이 많이 실림'})[A.w],
+  ({pillow:'옆잠 + 어깨 압력 → 두꺼운 쿠션층',euro:'옆잠·뒤척임 → 적당한 쿠션층',tight:'바로·엎드려 → 얇은 표면'})[DX.surf]].concat(DX.rules);
  $('#why').innerHTML=why.map(w=>'<span>'+w+'</span>').join('');
- ranked = P.map(p=>{
+ const qr=['쿠션감='+({firm:'하드·약간하드',mid:'보통',soft:'소프트·약간소프트'})[DX.band],'소재='+MAT[DX.mat]].concat(DX.mat==='pocket'?['탑타입='+SURF[DX.surf]]:[]);
+ $('#slot').innerHTML='<span class="n">'+DX.slot+'<small>번</small></span><span>체험존에서는 <b>'+DX.slot+'번 매트리스</b>에 누워보세요'+(DX.exact?'.':' (가장 가까운 감각).')+'<br>결과지 QR은 '+qr.map(x=>'<code>'+x+'</code>').join(' ')+' 필터로 열려요.</span>';
+ const cap=+A.bud*10000;
+ const all = P.map(p=>{
   let best=p.opts[0]; p.opts.forEach(o=>{ if(Math.abs(o[1]-tgt)<Math.abs(best[1]-tgt)) best=o; });
-  let fit = 98 - Math.abs(best[1]-tgt)*1.25;
-  if(A.pain==='yes') fit += Math.max(-4,Math.min(5,(p.rv.waistPos-15)/4));
-  if(A.w==='heavy' && best[1]<45) fit -= 6;
-  if(A.hot==='yes' && /하이브리드/.test(p.st)) fit -= 2;
+  let fit = 91 - Math.abs(best[1]-tgt)*1.25;
+  const ps=surfOf(p), pm=matsOf(p);
+  if(DX.mat!=='foam') fit += ps===DX.surf?4 : (ps!=='tight'&&DX.surf!=='tight')?1 : -4;
+  fit += pm.includes(DX.mat)?3:0;
+  if(DX.exBon && pm.length===1 && pm[0]==='bonnell') fit -= 10;
+  if(DX.exFoam && pm.includes('foam')) fit -= 4;
+  if(DX.waist) fit += Math.max(-4,Math.min(5,(p.rv.waistPos-15)/4));
+  if(+A.w>=1 && best[1]<45) fit -= 6;
   fit = Math.round(Math.max(55,Math.min(99,fit)));
-  return {...p, best, fit};
- }).sort((a,b)=>b.fit-a.fit || a.price-b.price).slice(0,6);
+  return {...p, best, fit, over:p.price>cap};
+ }).sort((a,b)=>b.fit-a.fit || a.price-b.price);
+ const inB=all.filter(p=>!p.over);
+ ranked = (inB.length>=3 ? inB : inB.concat(all.filter(p=>p.over).slice(0,3-inB.length))).slice(0,6);
  cmp=[]; updCmp();
  const L2=$('#rlist'); L2.innerHTML='';
  ranked.forEach((p,i)=>{
@@ -428,7 +496,7 @@ function result(){
    '<div class="rinfo"><div class="rb">'+(p.layer?'<span class="lp">layer</span>':'')+p.brand+'</div><div class="rn">'+p.nm+'</div>'+
    '<div class="ropt">'+(p.single?'체감 '+flab(p.best[1]):'추천 옵션: '+p.best[0])+' <em>· '+p.st+'</em></div>'+
    '<div class="fit"><span class="bar"><i style="width:'+p.fit+'%"></i></span><b>적합 '+p.fit+'%</b></div>'+
-   (p.perks[0]?'<div style="margin:3px 0 1px">'+p.perks.map(k=>'<span class="perk">'+k+'</span>').join('')+'</div>':'')+'<div class="ev">'+ev+(A.pain==='yes'?' · 허리 긍정 언급 '+p.rv.waistPos+'%':'')+'</div>'+
+   ((p.perks[0]||p.over)?'<div style="margin:3px 0 1px">'+(p.over?'<span class="perk" style="color:var(--red)">예산 초과</span>':'')+p.perks.map(k=>'<span class="perk">'+k+'</span>').join('')+'</div>':'')+'<div class="ev">'+ev+(DX.waist?' · 허리 긍정 언급 '+p.rv.waistPos+'%':'')+'</div>'+
    '<div class="rbot"><div class="rpr">'+(p.disc?'<span class="d">'+p.disc+'%</span>':'')+won(p.price)+'~</div>'+
    '<span class="cmpchk" data-id="'+p.id+'" onclick="togCmp(this)"><i>✓</i>비교</span></div></div>';
   L2.appendChild(d);
@@ -453,6 +521,7 @@ function openCmp(){
   row('맞춤 경도',p=>p.single?'단일 ('+flab(p.best[1])+')':p.best[0])+
   row('경도 선택지',p=>p.single?'1종':p.opts.length+'종')+
   row('리뷰 체감',p=>'탄탄 '+p.rv.firmShare+'%<br><span style="color:var(--mut)">푹신 '+(100-p.rv.firmShare)+'%</span>')+
+  row('표면·소재',p=>SURF[surfOf(p)]+'<br><span style="color:var(--mut)">'+matsOf(p).map(m=>MAT[m]).join('·')+'</span>')+
   row('허리 긍정 언급',p=>p.rv.waistPos+'%',p=>p.rv.waistPos===wMax)+
   row('구조',p=>p.st)+
   row('체험·보증',p=>p.perks.length?p.perks.join('<br>'):'<span style="color:var(--mut)">표기 없음</span>')+
@@ -489,8 +558,8 @@ async function autoPlay(){
  await wait(1700); const lq=$('#layQF'); lq.style.background='#f4f4f4'; await wait(500); lq.style.background='';
  const sc=$('#srpScroll'); sc.scrollTop=$('#curMod').offsetTop-130; await wait(1500);
  const cm=$('#curMod'); cm.style.transform='scale(.98)'; await wait(200); cm.style.transform=''; startQuiz(); await wait(900);
- const ans=['back','mid','yes','no'];
- for(const a of ans){ const el=[...document.querySelectorAll('#opts .opt')].find(x=>x.dataset.v===a); await wait(650); answer(a,el); await wait(900); }
+ const ans=['sag','3','0',['waist'],['back'],'same','no','ok','unsure','35'];
+ for(const a of ans){ const vs=[].concat(a); for(const v of vs){ const el=[...document.querySelectorAll('#opts .opt')].find(x=>x.dataset.v===v); await wait(500); answer(v,el); } if(Array.isArray(a)){ await wait(450); nextQ(); } await wait(750); }
  await wait(1400); const rs=$('#resScroll'); rs.scrollTop=230; await wait(1300);
  const chks=document.querySelectorAll('#rlist .cmpchk'); if(chks[0]){togCmp(chks[0]); await wait(450);} const li=ranked.findIndex(p=>p.layer); if(chks[li>0?li:1]){togCmp(chks[li>0?li:1]); await wait(600);}
  openCmp(); await wait(3800); closeCmp(); await wait(600);
