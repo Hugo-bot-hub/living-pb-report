@@ -58,6 +58,14 @@ if ($srpWarn) {
   Log "[daily-batch] SRP stale WARN → tf-alert.log 전달"
 }
 
+$qcAlert = @($buildOut | Select-String 'ALERT: QC')
+if ($qcAlert.Count -gt 0) {
+  $qcLines = @($qcAlert | ForEach-Object { $_.Line -replace '^ALERT: QC ','' })
+  $qcLines | ForEach-Object { Add-Content $alert "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] [ALERT] QC $_" -Encoding UTF8 }
+  & powershell -NoProfile -ExecutionPolicy Bypass -File "$repo\daily_pipeline\notify.ps1" -Message (($qcLines | Select-Object -First 3) -join ' / ')
+  Log "[daily-batch] QC ALERT $($qcAlert.Count)건 - 해당 섹션 직전값 유지"
+}
+
 if ($ok) {
   & git add tf-data.json tf-mattress-data.json *>> $log
   & git commit -m "data: 데일리 전섹션 자동 재추출 (배치 파이프라인)" *>> $log
@@ -68,5 +76,6 @@ if ($ok) {
 } else {
   Log "######## [daily-batch] BUILD 실패 - 커밋 안함(라이브 무손상) ########"
   Add-Content $alert "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] [ALERT] daily-batch BUILD 실패 (batch exit=$batchCode)" -Encoding UTF8
+  & powershell -NoProfile -ExecutionPolicy Bypass -File "$repo\daily_pipeline\notify.ps1" -Message "빌드 실패로 오늘 대시보드 갱신이 안 됐습니다"
   exit 1
 }

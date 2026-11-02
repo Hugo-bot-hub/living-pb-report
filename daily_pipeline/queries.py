@@ -493,9 +493,9 @@ QUERIES['decomp'] = f"""
 WITH mo AS (
   SELECT product_id, option_id, SUM(gmv) gmv, SUM(option_quantity) qty
   FROM ba_preserved.commerce_gross_profit_orders
-  WHERE product_id IN ({MAT_S}) AND yyyymm >= date_format(DATE_ADD('month',-3,CURRENT_DATE),'%Y%m')
+  WHERE product_id IN ({MAT_S}) AND yyyymm >= date_format(DATE_ADD('day',-90,CURRENT_DATE),'%Y%m') AND base_dt >= DATE_ADD('day',-90,CURRENT_DATE)
   GROUP BY product_id, option_id),
-nm AS {_opt_nm(120, ex2=True)}
+nm AS {_opt_nm(400, ex2=True)}
 SELECT mo.product_id pid, nm.explain, nm.explain2, mo.qty, mo.gmv,
   CAST(mo.gmv AS DOUBLE)/NULLIF(mo.qty,0) unit
 FROM mo LEFT JOIN nm ON CAST(mo.option_id AS BIGINT)=nm.id
@@ -527,12 +527,16 @@ GROUP BY fo.pid, fo.yyyymm, 3"""
 #       옵션명 스냅샷 400일 창(160일은 매칭 62%). 프레임 전수 = 수납침대+일반침대+깔판(refine 저상형).
 _FRAME_FILTER_LAYER = "brand_name='오늘의집 layer' AND cate_d2='침대' AND cate_d3 IN ('수납침대','일반침대','깔판') AND product_name NOT LIKE '%매트리스 포함%' AND product_name NOT LIKE '%사용 X%'"
 _FRAME_FILTER_ALL = "cate_d2='침대' AND cate_d3 IN ('수납침대','일반침대','깔판') AND product_name NOT LIKE '%매트리스 포함%' AND product_name NOT LIKE '%사용 X%'"
-_TIER = "CASE WHEN product_name LIKE '%basic /%' THEN 'basic' WHEN product_name LIKE '%refine /%' THEN 'refine' WHEN product_name LIKE '%studio /%' THEN 'studio' ELSE 'etc' END"
+# 2026-10-20 상품명에서 "basic /" 접두어가 빠지며 이름 판정이 전멸(프레임 구매자 4,556→11명) → 상품 ID 고정 + 이름은 신규상품 fallback.
+_TIER = ("CASE WHEN product_name LIKE '%basic /%' OR product_id IN (1243313,1800535) THEN 'basic' "
+         "WHEN product_name LIKE '%refine /%' OR product_id IN (1302615,2518275,3602793,3652507,3858646) THEN 'refine' "
+         "WHEN product_name LIKE '%studio /%' OR product_id IN (3116503,3146345,3146405,3146495,3146791,3748221,3898584,3898593,4048324,4186330,4186335) THEN 'studio' "
+         "ELSE 'etc' END")
 _ISMAT = _ismat('s.explain')  # 정본 단일화(구 인라인 정의와 동일 판정)
 _SNAP400 = "s.base_dt >= DATE_ADD('day',-400,CURRENT_DATE)"
-_MAT3 = "o.yyyymm >= date_format(DATE_ADD('month',-6,CURRENT_DATE),'%Y%m')"
-_FRAME3 = "o.yyyymm >= date_format(DATE_ADD('month',-3,CURRENT_DATE),'%Y%m')"
-_YM6O = "o.yyyymm >= date_format(DATE_ADD('month',-6,CURRENT_DATE),'%Y%m')"
+_MAT3 = "o.yyyymm >= date_format(DATE_ADD('day',-180,CURRENT_DATE),'%Y%m') AND o.base_dt >= DATE_ADD('day',-180,CURRENT_DATE)"
+_FRAME3 = "o.yyyymm >= date_format(DATE_ADD('day',-90,CURRENT_DATE),'%Y%m') AND o.base_dt >= DATE_ADD('day',-90,CURRENT_DATE)"
+_YM6O = "o.yyyymm >= date_format(DATE_ADD('day',-180,CURRENT_DATE),'%Y%m') AND o.base_dt >= DATE_ADD('day',-180,CURRENT_DATE)"
 
 # 프레임→매트리스 tier 요약 (옵션매트 복구 = mu OR has_opt)
 QUERIES['cosell_tier_summary'] = f"""
@@ -575,7 +579,7 @@ SELECT tier, pid, brand_name, users, qty, gmv FROM agg WHERE rn<=6"""
 # 역방향 매트리스→프레임 tier (프레임필터 전수화)
 QUERIES['m2f_summary'] = f"""
 WITH mu AS (SELECT DISTINCT CASE product_id WHEN '1089824' THEN 'basic' WHEN '3607491' THEN 'refine' WHEN '3121605' THEN 'studio' END tier, CAST(user_id AS BIGINT) uid
-  FROM ba_preserved.commerce_gross_profit_orders WHERE product_id IN ({MAT_S}) AND yyyymm >= date_format(DATE_ADD('month',-3,CURRENT_DATE),'%Y%m') AND option_quantity>0 AND user_id IS NOT NULL),
+  FROM ba_preserved.commerce_gross_profit_orders WHERE product_id IN ({MAT_S}) AND yyyymm >= date_format(DATE_ADD('day',-90,CURRENT_DATE),'%Y%m') AND base_dt >= DATE_ADD('day',-90,CURRENT_DATE) AND option_quantity>0 AND user_id IS NOT NULL),
 frames AS (SELECT CAST(product_id AS BIGINT) pid, CASE WHEN brand_name='오늘의집 layer' THEN 1 ELSE 0 END is_self
   FROM ba_preserved.comm_product_info_latest WHERE {_FRAME_FILTER_ALL}),
 fu AS (SELECT CAST(o.user_id AS BIGINT) uid, MAX(fr.is_self) any_our FROM ba_preserved.commerce_gross_profit_orders o JOIN frames fr ON CAST(o.product_id AS BIGINT)=fr.pid
@@ -588,7 +592,7 @@ FROM mu LEFT JOIN fu ON mu.uid=fu.uid WHERE mu.tier IS NOT NULL GROUP BY mu.tier
 
 QUERIES['m2f_dest'] = f"""
 WITH mu AS (SELECT DISTINCT CASE product_id WHEN '1089824' THEN 'basic' WHEN '3607491' THEN 'refine' WHEN '3121605' THEN 'studio' END tier, CAST(user_id AS BIGINT) uid
-  FROM ba_preserved.commerce_gross_profit_orders WHERE product_id IN ({MAT_S}) AND yyyymm >= date_format(DATE_ADD('month',-3,CURRENT_DATE),'%Y%m') AND option_quantity>0 AND user_id IS NOT NULL),
+  FROM ba_preserved.commerce_gross_profit_orders WHERE product_id IN ({MAT_S}) AND yyyymm >= date_format(DATE_ADD('day',-90,CURRENT_DATE),'%Y%m') AND base_dt >= DATE_ADD('day',-90,CURRENT_DATE) AND option_quantity>0 AND user_id IS NOT NULL),
 fp AS (SELECT CAST(o.user_id AS BIGINT) uid, CAST(o.product_id AS BIGINT) pid, p.product_name, p.brand_name, SUM(o.gmv) gmv
   FROM ba_preserved.commerce_gross_profit_orders o JOIN ba_preserved.comm_product_info_latest p ON CAST(o.product_id AS BIGINT)=p.product_id
   WHERE {_FRAME_FILTER_ALL} AND {_MAT3} AND o.option_quantity>0 AND o.user_id IS NOT NULL GROUP BY 1,2,3,4),
@@ -600,7 +604,7 @@ SELECT tier, pid, product_name, brand_name, users, gmv FROM agg WHERE rn<=6"""
 # 경쟁 프레임(데일리리빙) 구매자 → 매트리스 행선지
 QUERIES['q1_comp_frame_dest'] = f"""
 WITH fu AS (SELECT DISTINCT CAST(user_id AS BIGINT) uid FROM ba_preserved.commerce_gross_profit_orders
-  WHERE product_id='2352818' AND yyyymm >= date_format(DATE_ADD('month',-3,CURRENT_DATE),'%Y%m') AND option_quantity>0 AND user_id IS NOT NULL),
+  WHERE product_id='2352818' AND yyyymm >= date_format(DATE_ADD('day',-90,CURRENT_DATE),'%Y%m') AND base_dt >= DATE_ADD('day',-90,CURRENT_DATE) AND option_quantity>0 AND user_id IS NOT NULL),
 mp AS (SELECT CAST(o.user_id AS BIGINT) uid, CAST(o.product_id AS BIGINT) pid, p.product_name, p.brand_name, SUM(o.gmv) gmv
   FROM ba_preserved.commerce_gross_profit_orders o JOIN ba_preserved.comm_product_info_latest p ON CAST(o.product_id AS BIGINT)=p.product_id
   WHERE p.cate_d2='매트리스(150T이상)' AND {_YM6O} AND o.option_quantity>0 AND o.user_id IS NOT NULL GROUP BY 1,2,3,4),
@@ -611,7 +615,7 @@ SELECT (SELECT COUNT(*) FROM fu) buyers, pid, product_name, brand_name, users, g
 # 경쟁 매트리스(수면밀도) 구매자 → 프레임 행선지 (프레임 전수화)
 QUERIES['q2_comp_mat_dest'] = f"""
 WITH mu AS (SELECT DISTINCT CAST(user_id AS BIGINT) uid FROM ba_preserved.commerce_gross_profit_orders
-  WHERE product_id='1590911' AND yyyymm >= date_format(DATE_ADD('month',-3,CURRENT_DATE),'%Y%m') AND option_quantity>0 AND user_id IS NOT NULL),
+  WHERE product_id='1590911' AND yyyymm >= date_format(DATE_ADD('day',-90,CURRENT_DATE),'%Y%m') AND base_dt >= DATE_ADD('day',-90,CURRENT_DATE) AND option_quantity>0 AND user_id IS NOT NULL),
 fp AS (SELECT CAST(o.user_id AS BIGINT) uid, CAST(o.product_id AS BIGINT) pid, p.product_name, p.brand_name, SUM(o.gmv) gmv
   FROM ba_preserved.commerce_gross_profit_orders o JOIN ba_preserved.comm_product_info_latest p ON CAST(o.product_id AS BIGINT)=p.product_id
   WHERE {_FRAME_FILTER_ALL} AND {_YM6O} AND o.option_quantity>0 AND o.user_id IS NOT NULL GROUP BY 1,2,3,4),
@@ -655,7 +659,7 @@ QUERIES['q4_attach_detail'] = f"""
 WITH frames AS (SELECT product_id pid_b, {_TIER} tier FROM ba_preserved.comm_product_info_latest WHERE {_FRAME_FILTER_LAYER}),
 fo AS (SELECT o.product_id, f.tier, o.option_id, SUM(o.gmv) gmv, SUM(o.option_quantity) qty
   FROM ba_preserved.commerce_gross_profit_orders o JOIN frames f ON CAST(o.product_id AS BIGINT)=f.pid_b
-  WHERE o.yyyymm >= date_format(DATE_ADD('month',-3,CURRENT_DATE),'%Y%m') AND o.option_quantity>0
+  WHERE o.yyyymm >= date_format(DATE_ADD('day',-90,CURRENT_DATE),'%Y%m') AND o.base_dt >= DATE_ADD('day',-90,CURRENT_DATE) AND o.option_quantity>0
   GROUP BY o.product_id, f.tier, o.option_id),
 nm AS {_OPT_NM}
 SELECT fo.product_id frame_pid, fo.tier, nm.explain option_name, fo.qty, fo.gmv

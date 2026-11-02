@@ -44,6 +44,7 @@ def f(x):
 
 with open(TF, encoding='utf-8') as fp: D = json.load(fp)
 with open(MAT, encoding='utf-8') as fp: M = json.load(fp)
+import copy; OLD_D=copy.deepcopy({k:D[k] for k in D if k!='daily'}); OLD_M=copy.deepcopy(M)
 changed = []
 
 # ---------- daily (funnel∩UV + GMV leftjoin, history 보존) ----------
@@ -503,12 +504,15 @@ if cs is not None and cd is not None:
         dst=sorted(dst,key=lambda x:(-x['gmv'],str(x['pid'])))
         out[t]={'frame_users':fu,'bought_mat':bm,'our':om,'comp_only':co,'opt_mat':op,
             'rate_pct':round(bm/fu*100,1) if fu else 0.0,'leak_pct':round(co/bm*100,1) if bm else 0.0,'dest':dst}
+    _etc=sum(i(r['frame_users']) for r in cs if r['tier'] not in ('basic','refine','studio'))
+    if _etc>tot[0]*0.05:  # 등급 미분류 급증 = 상품명 변경 등으로 집계 붕괴
+        print('  [ALERT] cosell 등급 미분류 %d명 (분류 %d명) — queries.py _TIER 점검' % (_etc,tot[0]))
     M['cosell_by_tier']=out
     M['cosell_summary']={'method':'유저단위(별도 매트리스PID OR 프레임옵션 매트리스). 전 layer 침대프레임(수납/일반/깔판).',
         'frame_users':tot[0],'bought_mat':tot[1],'rate_pct':round(tot[1]/tot[0]*100,1) if tot[0] else 0.0,
         'our':tot[2],'comp_only':tot[3],'opt_mat':tot[4],'leak_pct':round(tot[3]/tot[1]*100,1) if tot[1] else 0.0,
         'market_rate_pct':35.1,'window':'프레임 최근3개월 / 매트리스 최근6개월 (유저단위, 옵션매트 복구·400일창)',
-        'note':'모수 착시였음(옵션매트 누락). 정정 44%로 시장(35%) 상위. 우리(옵션매트 포함) 포착 vs 경쟁 유출이 핵심. 옵션매트리스=자사 포착.'}
+        'note':'우리(옵션매트 포함) 포착 vs 경쟁 유출이 핵심. 옵션매트리스=자사 포착.'}
     changed.append('cosell_by_tier')
 
 # ---------- mat_to_frame_by_tier (역방향, 프레임 전수) ----------
@@ -583,6 +587,59 @@ if _srp_stale:
 else:
     D['meta'].pop('srpStaleWarn',None)
     D['meta']['srpRefreshed']=last
+
+# ---------- 품질 검문 (2026-11-02) ----------
+# 쿼리가 성공해도 값이 무너지면 라이브에 올리지 않는다. 직전 정상값과 비교해 이상이면 그 섹션만 직전값 유지 + 알림.
+# 큰 변화가 진짜 사실이면 환경변수 QC_ACCEPT=1 로 1회 통과시켜 기준값을 갱신한다.
+import datetime as _dt
+def _n(d,*ks):
+    for k in ks:
+        d=d.get(k) if isinstance(d,dict) else None
+    return d
+_checks=[]
+for _t in ('basic','refine','studio'):
+    _checks.append(('합구매 프레임구매자 '+_t,'M',('cosell_by_tier','cosell_summary'),lambda m,t=_t:_n(m,'cosell_by_tier',t,'frame_users')))
+    _checks.append(('합구매 매트리스구매 '+_t,'M',('cosell_by_tier','cosell_summary'),lambda m,t=_t:_n(m,'cosell_by_tier',t,'bought_mat')))
+    _checks.append(('매트리스→프레임 구매자 '+_t,'M',('mat_to_frame_by_tier',),lambda m,t=_t:_n(m,'mat_to_frame_by_tier',t,'mat_users')))
+_checks+=[('경쟁프레임 구매자','M',('comp_frame_dest',),lambda m:_n(m,'comp_frame_dest','buyers')),
+  ('경쟁매트리스 구매자','M',('comp_mattress_dest',),lambda m:_n(m,'comp_mattress_dest','buyers')),
+  ('객단가 옵션수','M',('decomp',),lambda m:sum(len(v) for v in (m.get('decomp') or {}).values())),
+  ('브랜드 생태계 행수','M',('brand_ecosystem',),lambda m:len(m.get('brand_ecosystem') or [])),
+  ('부착 상세 행수','M',('attach_frame_option_detail',),lambda m:len(_n(m,'attach_frame_option_detail','items') or [])),
+  ('부착 프레임수','M',('attach_rate_by_frame',),lambda m:len(_n(m,'attach_rate_by_frame','products') or [])),
+  ('SRP 매트릭스 행수','D',('srpMatrix',),lambda d:len(d.get('srpMatrix') or [])),
+  ('유입 행수','D',('inflow',),lambda d:len(d.get('inflow') or [])),
+  ('리드퍼널 상품수','D',('leadFunnel',),lambda d:len(_n(d,'leadFunnel','products') or [])),
+  ('경쟁레이더 키워드','D',('keywordRadar',),lambda d:len(_n(d,'keywordRadar','keywords') or [])),
+  ('셀링스코어 상품수','D',('scoreTs',),lambda d:len(d.get('scoreTs') or {}))]
+_qc=[]; _bad=set()
+for lb,fo,secs,fn in _checks:
+    nv=fn(M if fo=='M' else D) or 0; ov=fn(OLD_M if fo=='M' else OLD_D) or 0
+    if ov and (nv<ov*0.6 or nv>ov*1.67):
+        _qc.append('%s %s→%s'%(lb,format(ov,','),format(nv,',')))
+        _bad.update((fo,s) for s in secs)
+_dv=[x for r in (M.get('decomp') or {}).values() for x in r]
+_bk=sum(1 for x in _dv if not x.get('name'))/len(_dv) if _dv else 1.0
+if _bk>0.1:
+    _qc.append('객단가 옵션명 빈칸 %.0f%%'%(_bk*100)); _bad.add(('M','decomp'))
+_cs=rows('cosell_tier_summary',['tier','frame_users','bought_mat','our_mat','comp_only','opt_mat']) or []
+_etc=sum(i(r['frame_users']) for r in _cs if r['tier'] not in ('basic','refine','studio'))
+_all=sum(i(r['frame_users']) for r in _cs)
+if _all and _etc>_all*0.05:
+    _qc.append('등급 미분류 프레임 구매자 %s명 — queries.py _TIER에 상품 ID 추가 필요'%format(_etc,','))
+    _bad.update([('M','cosell_by_tier'),('M','cosell_summary')])
+_cut=(_dt.date.fromisoformat(str(last)[:10])-_dt.timedelta(days=7)).isoformat()
+for _p in SELF:
+    _dd=[r['dt'] for r in D['daily'].get(_p,[])]
+    if not _dd or max(_dd)<_cut: _qc.append('일별 데이터 7일 이상 끊김 %s'%_p)
+if _qc and os.environ.get('QC_ACCEPT')!='1':
+    for fo,sec in _bad:
+        (M if fo=='M' else D)[sec]=(OLD_M if fo=='M' else OLD_D).get(sec)
+    D['meta']['qcWarn']={'date':str(last),'items':_qc}
+    for _q in _qc: print('ALERT: QC '+_q)
+else:
+    D['meta'].pop('qcWarn',None)
+    print('QC OK' if not _qc else 'QC ACCEPTED: '+' / '.join(_qc))
 
 # ---------- 불변식 검증 ----------
 assert isinstance(D['srpMatrix'],list) and isinstance(D['inflow'],list) and isinstance(D['ages']['buyer'],list)
