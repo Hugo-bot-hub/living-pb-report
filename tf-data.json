@@ -60,7 +60,17 @@
     "srpKeywordRankWindow": "통합검색 2주(≈14일)",
     "qcSource": "INTEGRATED(통합검색)",
     "srpSource": "query_object_metrics_with_order_mart(노출가중)+search_object_with_order_mart(P5)",
-    "srpRefreshed": "2026-11-05"
+    "srpRefreshed": "2026-11-05",
+    "srpStaleWarn": {
+      "sections": [
+        "srpMatrix",
+        "keywordRadar",
+        "srpKeywordRank",
+        "scoreTs",
+        "srpFeatureTs"
+      ],
+      "since": "2026-11-05"
+    }
   },
   "products": {
     "442026": {
